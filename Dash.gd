@@ -7,7 +7,27 @@ var timer
 var pause
 var play
 var playspeedx2
-var texturebutton
+
+var bayern
+var bawu
+var thur
+
+var bawuButton
+var bayernButton
+var berlinButton
+var brandButton
+var bremenButton
+var hambButton
+var hessenButton
+var meckPomButton
+var niedersButton
+var nrwButton
+var rlpButton
+var saarButton
+var sachsenButton
+var sacanhButton
+var schlHolButton
+var thurButton
 
 var tenthsec
 
@@ -21,35 +41,28 @@ func _ready():
 	play = get_node("Play")
 	playspeedx2 = get_node("PlaySpeedx2")
 	
-	texturebutton = get_node("TextureButton")
+#	bayernButton = get_node("Map/BayernButton")
 	
 	pause.connect("pressed", self, "_on_Pause_pressed")
 	play.connect("pressed", self, "_on_Play_pressed")
 	playspeedx2.connect("pressed", self, "_on_PlaySpeedx2_pressed")
 	
-	texturebutton.connect("pressed", self, "_on_TextureButton_pressed")
+#	bayernButton.connect("pressed", self, "_on_TextureButton_pressed")
 	
 	timer.set_wait_time(0.1)
 	timer.connect("timeout", self, "_on_Time_timeout")
 	
 	
-# Bitmap erstellen für Click Mask
-	var bayern_image = Image.new()
-	bayern_image.load("res://resources/Deutschland_Lage_von_Bayern.png")
-	var bayern_bitmap = BitMap.new()
-	bayern_bitmap.create_from_image_alpha(bayern_image)
-#	for i in range(0,bayern_bitmap.get_size().x):
-#		for j in range(0,bayern_bitmap.get_size().y):
-#			print(String(bayern_bitmap.get_bit( Vector2(i,j) )))
-#			print(i,j)
-		
-	texturebutton.texture_click_mask = bayern_bitmap
-#	print(bayern_bitmap)
+
 	
-#	var loadedImage = Image.new()
-#	loadedImage.load("res://icon.png")
-#	var tst = BitMap.new()
-#	tst.create_from_image_alpha(loadedImage)
+	bayern = State.new("Bayern", 10000, get_node("Map/BayernButton"))
+	bawu = State.new("Baden-Württemberg", 10000, get_node("Map/BaWuButton"))
+	thur = State.new("Thüringen", 10000, get_node("Map/ThuringenButton"))
+#	print(bayern.name, " ", bayern.population)
+	
+
+
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

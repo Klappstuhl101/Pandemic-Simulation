@@ -9,10 +9,45 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node",
+"class": "Button_Management",
+"language": "GDScript",
+"path": "res://objects/button_management.gd"
+}, {
+"base": "Control",
+"class": "Chart",
+"language": "GDScript",
+"path": "res://addons/easy_charts/Utilities/Scripts/chart.gd"
+}, {
+"base": "Node2D",
+"class": "Chart2D",
+"language": "GDScript",
+"path": "res://addons/easy_charts/Utilities/Scripts/chart2d.gd"
+}, {
+"base": "Chart",
+"class": "ColumnChart",
+"language": "GDScript",
+"path": "res://addons/easy_charts/ColumnChart/column_chart.gd"
+}, {
+"base": "Chart2D",
+"class": "ColumnChart2D",
+"language": "GDScript",
+"path": "res://addons/easy_charts/ColumnChart2D/column_chart2D.gd"
+}, {
 "base": "HBoxContainer",
 "class": "ContributorClass",
 "language": "GDScript",
 "path": "res://addons/github-integration/scripts/ContributorClass.gd"
+}, {
+"base": "State",
+"class": "Country",
+"language": "GDScript",
+"path": "res://objects/country.gd"
+}, {
+"base": "Reference",
+"class": "DataFrame",
+"language": "GDScript",
+"path": "res://addons/easy_charts/Utilities/Data/data_frame.gd"
 }, {
 "base": "PanelContainer",
 "class": "GistItem",
@@ -24,21 +59,119 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/github-integration/scripts/InvitationItem.gd"
 }, {
+"base": "VBoxContainer",
+"class": "LegendElement",
+"language": "GDScript",
+"path": "res://addons/easy_charts/Utilities/Legend/function_legend.gd"
+}, {
+"base": "ScatterChartBase",
+"class": "LineChart",
+"language": "GDScript",
+"path": "res://addons/easy_charts/LineChart/line_chart.gd"
+}, {
+"base": "Chart2D",
+"class": "LineChart2D",
+"language": "GDScript",
+"path": "res://addons/easy_charts/LineChart2D/line_chart2D.gd"
+}, {
+"base": "Reference",
+"class": "Matrix",
+"language": "GDScript",
+"path": "res://addons/easy_charts/Utilities/Data/matrix.gd"
+}, {
+"base": "Reference",
+"class": "MatrixGenerator",
+"language": "GDScript",
+"path": "res://addons/easy_charts/Utilities/Data/matrix_generator.gd"
+}, {
+"base": "Chart",
+"class": "PieChart",
+"language": "GDScript",
+"path": "res://addons/easy_charts/PieChart/pie_chart.gd"
+}, {
+"base": "Control",
+"class": "Point",
+"language": "GDScript",
+"path": "res://addons/easy_charts/Utilities/Point/point.gd"
+}, {
+"base": "PanelContainer",
+"class": "PointData",
+"language": "GDScript",
+"path": "res://addons/easy_charts/Utilities/Point/point_data.gd"
+}, {
+"base": "Chart",
+"class": "RadarChart",
+"language": "GDScript",
+"path": "res://addons/easy_charts/RadarChart/radar_chart.gd"
+}, {
 "base": "PanelContainer",
 "class": "RepositoryItem",
 "language": "GDScript",
 "path": "res://addons/github-integration/scripts/RepositoryItem.gd"
+}, {
+"base": "ScatterChartBase",
+"class": "ScatterChart",
+"language": "GDScript",
+"path": "res://addons/easy_charts/ScatterChart/scatter_chart.gd"
+}, {
+"base": "Chart2D",
+"class": "ScatterChart2D",
+"language": "GDScript",
+"path": "res://addons/easy_charts/ScatterChart2D/scatter_chart2D.gd"
+}, {
+"base": "Spatial",
+"class": "ScatterChart3D",
+"language": "GDScript",
+"path": "res://addons/easy_charts/ScatterChart3D/scatter_chart3D.gd"
+}, {
+"base": "Chart",
+"class": "ScatterChartBase",
+"language": "GDScript",
+"path": "res://addons/easy_charts/Utilities/Scripts/scatter_chart_base.gd"
+}, {
+"base": "Reference",
+"class": "Slice",
+"language": "GDScript",
+"path": "res://addons/easy_charts/Utilities/Slice/slice.gd"
+}, {
+"base": "Node",
+"class": "State",
+"language": "GDScript",
+"path": "res://objects/state.gd"
 } ]
 _global_script_class_icons={
+"Button_Management": "",
+"Chart": "",
+"Chart2D": "",
+"ColumnChart": "",
+"ColumnChart2D": "",
 "ContributorClass": "",
+"Country": "",
+"DataFrame": "",
 "GistItem": "",
 "InvitationItem": "",
-"RepositoryItem": ""
+"LegendElement": "",
+"LineChart": "",
+"LineChart2D": "",
+"Matrix": "",
+"MatrixGenerator": "",
+"PieChart": "",
+"Point": "",
+"PointData": "",
+"RadarChart": "",
+"RepositoryItem": "",
+"ScatterChart": "",
+"ScatterChart2D": "",
+"ScatterChart3D": "",
+"ScatterChartBase": "",
+"Slice": "",
+"State": ""
 }
 
 [application]
 
 config/name="Corona-Simulation-Dashboard"
+run/main_scene="res://Dash.tscn"
 config/icon="res://icon.png"
 
 [autoload]
@@ -47,10 +180,17 @@ PluginSettings="*res://addons/github-integration/scripts/PluginSettings.gd"
 IconLoaderGithub="*res://addons/github-integration/scripts/IconLoaderGithub.gd"
 UserData="*res://addons/github-integration/scripts/user_data.gd"
 RestHandler="*res://addons/github-integration/scenes/RestHandler.tscn"
+Utilities="*res://addons/easy_charts/Utilities/Scripts/utilities.gd"
+Constants="*res://constants.gd"
+
+[display]
+
+window/size/width=1920
+window/size/height=1080
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/github-integration/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/easy_charts/plugin.cfg", "res://addons/github-integration/plugin.cfg" )
 
 [physics]
 

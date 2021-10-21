@@ -1,5 +1,29 @@
 extends Panel
 
+#class_name Dash
+
+const LABEL = "Label"
+
+#const BAW = "Baden-Württemberg"
+#const BAY = "Bayern"
+#const BER = "Berlin"
+#const BRA = "Brandenburg"
+#const BRE = "Bremen"
+#const HAM = "Hamburg"
+#const HES = "Hessen"
+#const MVP = "Mecklenburg-Vorpommern"
+#const NIE = "Niedersachsen"
+#const NRW = "Nordrhein-Westfalen"
+#const RLP = "Rheinland-Pfalz"
+#const SAA = "Saarland"
+#const SCN = "Sachsen"
+#const SCA = "Sachsen-Anhalt"
+#const SLH = "Schleswig-Holstein"
+#const THU = "Thüringen"
+
+#const DEU = "Deutschland"
+
+
 var label
 
 var timer
@@ -8,28 +32,30 @@ var pause
 var play
 var playspeedx2
 
-var bayern
 var bawu
+var bayern
+var berlin
+var brand
+var bremen
+var hamb
+var hessen
+var meckPom
+var nieders
+var nrw
+var rlp
+var saar
+var sachsen
+var sacanh
+var schlHol
 var thur
 
-var bawuButton
-var bayernButton
-var berlinButton
-var brandButton
-var bremenButton
-var hambButton
-var hessenButton
-var meckPomButton
-var niedersButton
-var nrwButton
-var rlpButton
-var saarButton
-var sachsenButton
-var sacanhButton
-var schlHolButton
-var thurButton
+var deu
+
+var buttons
 
 var tenthsec
+
+var statOutput = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -37,30 +63,41 @@ func _ready():
 	
 	timer = get_node("Time")
 	
-	pause = get_node("Pause")
-	play = get_node("Play")
-	playspeedx2 = get_node("PlaySpeedx2")
+	pause = get_node("TimeControls/Pause")
+	play = get_node("TimeControls/Play")
+	playspeedx2 = get_node("TimeControls/PlaySpeedx2")
 	
-#	bayernButton = get_node("Map/BayernButton")
 	
 	pause.connect("pressed", self, "_on_Pause_pressed")
 	play.connect("pressed", self, "_on_Play_pressed")
 	playspeedx2.connect("pressed", self, "_on_PlaySpeedx2_pressed")
 	
-#	bayernButton.connect("pressed", self, "_on_TextureButton_pressed")
-	
 	timer.set_wait_time(0.1)
 	timer.connect("timeout", self, "_on_Time_timeout")
 	
+	statOutput[Constants.LABEL] = label
 	
-
+	bawu = State.new(Constants.BAW, 11103043, get_node("Map/BaWuButton"), statOutput)
+	bayern = State.new(Constants.BAY, 10000, get_node("Map/BayernButton"), statOutput)
+	berlin = State.new(Constants.BER, 10000, get_node("Map/BerlinButton"), statOutput)
+	brand = State.new(Constants.BRA, 10000, get_node("Map/BrandenburgButton"), statOutput)
+	bremen = State.new(Constants.BRE, 10000, get_node("Map/BremenButton"), statOutput)
+	hamb = State.new(Constants.HAM, 10000, get_node("Map/HamburgButton"), statOutput)
+	hessen = State.new(Constants.HES, 10000, get_node("Map/HessenButton"), statOutput)
+	meckPom = State.new(Constants.MVP, 10000, get_node("Map/MeckPomButton"), statOutput)
+	nieders = State.new(Constants.NIE, 10000, get_node("Map/NiedersachsenButton"), statOutput)
+	nrw = State.new(Constants.NRW, 10000, get_node("Map/NrwButton"), statOutput)
+	rlp = State.new(Constants.RLP, 10000, get_node("Map/RlpButton"), statOutput)
+	saar = State.new(Constants.SAA, 10000, get_node("Map/SaarlandButton"), statOutput)
+	sachsen = State.new(Constants.SCN, 10000, get_node("Map/SachsenButton"), statOutput)
+	sacanh = State.new(Constants.SCA, 10000, get_node("Map/SachsenAnhaltButton"), statOutput)
+	schlHol = State.new(Constants.SLH, 10000, get_node("Map/SchlHolButton"), statOutput)
+	thur = State.new(Constants.THU, 10000, get_node("Map/ThuringenButton"), statOutput)
 	
-	bayern = State.new("Bayern", 10000, get_node("Map/BayernButton"))
-	bawu = State.new("Baden-Württemberg", 10000, get_node("Map/BaWuButton"))
-	thur = State.new("Thüringen", 10000, get_node("Map/ThuringenButton"))
-#	print(bayern.name, " ", bayern.population)
+#	deu = Country.new()
 	
-
+	buttons = Button_Management.new()
+	
 
 
 
@@ -68,8 +105,6 @@ func _ready():
 func _process(delta):
 	pass
 
-func _on_TextureButton_pressed():
-	label.text = "Bayern"
 
 func _on_Pause_pressed():
 	label.text = "Pause"
@@ -88,9 +123,3 @@ func _on_PlaySpeedx2_pressed():
 
 func _on_Time_timeout():
 	label.text = "Hallo"
-#	pass
-#	tenthsec += 1
-#	if tenthsec == 10:
-#		sec +=1
-#		tenthsec = 0
-#	label.text = str(sec) + "," + str(tenthsec) + " seconds elapsed since button press"

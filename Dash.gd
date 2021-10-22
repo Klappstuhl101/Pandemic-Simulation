@@ -102,7 +102,8 @@ func _ready():
 	 Constants.BRE:bremen, Constants.HAM:hamb, Constants.HES:hessen, Constants.MVP:meckPom,
 	 Constants.NIE:nieders, Constants.NRW:nrw, Constants.RLP:rlp, Constants.SAA:saar,
 	 Constants.SCN:sachsen, Constants.SCA:sacanh, Constants.SLH:schlHol, Constants.THU:thur, 
-	 Constants.DEU: deu}, 
+	 #Constants.DEU: deu
+	 }, 
 	 statOutput)
 	
 	

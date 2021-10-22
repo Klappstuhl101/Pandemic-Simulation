@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://resources/control_buttons/Fast-forward-thin-outlined-symbol-in-circular-button.svg" type="Texture" id=1]
 [ext_resource path="res://resources/control_buttons/Pause-thin-rounded-button.svg" type="Texture" id=2]
@@ -39,6 +39,7 @@
 [ext_resource path="res://resources/map/SchlHol_pressed.png" type="Texture" id=37]
 [ext_resource path="res://objects/state.gd" type="Script" id=38]
 [ext_resource path="res://objects/country.gd" type="Script" id=39]
+[ext_resource path="res://resources/Deutschland_Lage_von_Bremen.svg" type="Texture" id=40]
 
 [node name="Panel" type="Panel"]
 margin_left = 1.0
@@ -80,8 +81,12 @@ __meta__ = {
 }
 
 [node name="DeutschButton" type="TextureButton" parent="Map"]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_left = 598.625
+margin_top = -45.1587
+margin_right = 780.625
+margin_bottom = 200.841
+texture_normal = ExtResource( 40 )
+expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

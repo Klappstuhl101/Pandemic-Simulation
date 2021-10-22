@@ -51,7 +51,7 @@ var thur
 
 var deu
 
-var buttons
+var mapButtons
 
 var tenthsec
 
@@ -59,14 +59,15 @@ var statOutput = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+#	Statistics shown
 	label = get_node("Label")
 	
 	timer = get_node("Time")
 	
+#	Time Control Buttons
 	pause = get_node("TimeControls/Pause")
 	play = get_node("TimeControls/Play")
 	playspeedx2 = get_node("TimeControls/PlaySpeedx2")
-	
 	
 	pause.connect("pressed", self, "_on_Pause_pressed")
 	play.connect("pressed", self, "_on_Play_pressed")
@@ -77,6 +78,7 @@ func _ready():
 	
 	statOutput[Constants.LABEL] = label
 	
+#	Map Buttons
 	bawu = State.new(Constants.BAW, 11103043, get_node("Map/BaWuButton"), statOutput)
 	bayern = State.new(Constants.BAY, 10000, get_node("Map/BayernButton"), statOutput)
 	berlin = State.new(Constants.BER, 10000, get_node("Map/BerlinButton"), statOutput)
@@ -96,7 +98,13 @@ func _ready():
 	
 #	deu = Country.new()
 	
-	buttons = Button_Management.new()
+	mapButtons = Button_Management.new({Constants.BAW:bawu, Constants.BAY:bayern, Constants.BER:berlin, Constants.BRA:brand,
+	 Constants.BRE:bremen, Constants.HAM:hamb, Constants.HES:hessen, Constants.MVP:meckPom,
+	 Constants.NIE:nieders, Constants.NRW:nrw, Constants.RLP:rlp, Constants.SAA:saar,
+	 Constants.SCN:sachsen, Constants.SCA:sacanh, Constants.SLH:schlHol, Constants.THU:thur, 
+	 Constants.DEU: deu}, 
+	 statOutput)
+	
 	
 
 

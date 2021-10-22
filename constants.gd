@@ -20,3 +20,6 @@ const SLH = "Schleswig-Holstein"
 const THU = "Thüringen"
 
 const DEU = "Deutschland"
+
+const STATMODE = "Stats"
+const ACTIONMODE = "Action"

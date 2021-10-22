@@ -31,7 +31,7 @@ func _init(initName, initPopulation, initButton, initOutput):
 	self.name = initName
 	self.population = initPopulation
 	self.mapButton = initButton
-	self.ui_output = initOutput
+#	self.ui_output = initOutput
 	
 	
 	var image = Image.new()

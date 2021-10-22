@@ -300,6 +300,31 @@ __meta__ = {
 margin_right = 40.0
 margin_bottom = 40.0
 
+[node name="MaskMandate" type="Button" parent="PlayControls"]
+margin_left = 1615.22
+margin_top = 337.659
+margin_right = 1740.22
+margin_bottom = 444.659
+text = "Mask Mandate"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ModeControl" type="Panel" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StatMode" type="Button" parent="ModeControl"]
+margin_right = 12.0
+margin_bottom = 20.0
+
+[node name="ActionMode" type="Button" parent="ModeControl"]
+margin_right = 12.0
+margin_bottom = 20.0
+
 [node name="State" type="Node" parent="."]
 script = ExtResource( 38 )
 

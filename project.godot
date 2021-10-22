@@ -9,7 +9,7 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "Node",
+"base": "Object",
 "class": "Button_Management",
 "language": "GDScript",
 "path": "res://objects/button_management.gd"
@@ -134,7 +134,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/easy_charts/Utilities/Slice/slice.gd"
 }, {
-"base": "Node",
+"base": "Object",
 "class": "State",
 "language": "GDScript",
 "path": "res://objects/state.gd"

@@ -3,10 +3,10 @@ extends State
 class_name Country
 
 
-var states
+var states # dict of states
 
 
-func _init(initStates).(name, population, mapButton, ui_output):
+func _init(initStates, initName, initButton, initOutput).(initName, 0, initButton, initOutput):
 	self.states = initStates
 	recalculatePop()
 	
@@ -14,5 +14,5 @@ func _init(initStates).(name, population, mapButton, ui_output):
 	
 func recalculatePop():
 	self.population = 0
-	for state in states:
-		self.population += self.population + state.population
+	for state in states.values():
+		self.population += state.population

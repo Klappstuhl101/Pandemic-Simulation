@@ -50,6 +50,7 @@ var schlHol
 var thur
 
 var deu
+var states
 
 var mapButtons
 
@@ -96,13 +97,22 @@ func _ready():
 	schlHol = State.new(Constants.SLH, 10000, get_node("Map/SchlHolButton"), statOutput)
 	thur = State.new(Constants.THU, 10000, get_node("Map/ThuringenButton"), statOutput)
 	
-#	deu = Country.new()
+	states = {Constants.BAW:bawu, Constants.BAY:bayern, Constants.BER:berlin, Constants.BRA:brand,
+	 Constants.BRE:bremen, Constants.HAM:hamb, Constants.HES:hessen, Constants.MVP:meckPom,
+	 Constants.NIE:nieders, Constants.NRW:nrw, Constants.RLP:rlp, Constants.SAA:saar,
+	 Constants.SCN:sachsen, Constants.SCA:sacanh, Constants.SLH:schlHol, Constants.THU:thur}
+	
+	
+	# Herausfinden wie man Objekte von Unterklassen richtig erstellt
+#	deu = State.new(Constants.DEU, 0, get_node("Map/DeutschButton"), statOutput)
+	deu = Country.new(states, Constants.DEU, get_node("Map/DeutschButton"), statOutput)
+	print(deu.name)
 	
 	mapButtons = Button_Management.new({Constants.BAW:bawu, Constants.BAY:bayern, Constants.BER:berlin, Constants.BRA:brand,
 	 Constants.BRE:bremen, Constants.HAM:hamb, Constants.HES:hessen, Constants.MVP:meckPom,
 	 Constants.NIE:nieders, Constants.NRW:nrw, Constants.RLP:rlp, Constants.SAA:saar,
 	 Constants.SCN:sachsen, Constants.SCA:sacanh, Constants.SLH:schlHol, Constants.THU:thur, 
-	 #Constants.DEU: deu
+	 Constants.DEU: deu
 	 }, 
 	 statOutput)
 	

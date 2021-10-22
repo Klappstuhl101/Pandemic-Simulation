@@ -1,4 +1,4 @@
-extends Node
+extends Object
 
 class_name Button_Management
 
@@ -10,13 +10,12 @@ var ui_output # ui_output for stats
 func _init(initEntities, initOutput):
 	self.entities = initEntities
 	self.ui_output = initOutput
-	print("Button init")
 	connectButtons()
 	
 	
 func connectButtons():
 	for entity in entities.values():
-		print(entity)
+		print(entity.name)
 		match entity.name:
 			Constants.BAW:
 				entity.mapButton.connect("toggled", self, "_on_BAW_press")
@@ -51,7 +50,8 @@ func connectButtons():
 			Constants.THU:
 				entity.mapButton.connect("toggled", self, "_on_THU_press")
 			Constants.DEU:
-				entity.mapButton.connect("toggled", self, "on_DEU_press")
+				print("connected Deutschland")
+				entity.mapButton.connect("toggled", self, "_on_DEU_press")
 
 func resetAll(exception = ""):
 	for entity in entities.values():
@@ -134,6 +134,7 @@ func _on_THU_press(toggle):
 		activate()
 	
 func _on_DEU_press(toggle):
+	print("Deutschland pressed")
 	if toggle:
 		active = entities.get(Constants.DEU)
 		activate()

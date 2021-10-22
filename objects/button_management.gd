@@ -7,10 +7,13 @@ var active # active state / country
 var mode # StatsMode or ActionMode
 var ui_output # ui_output for stats
 
+var previous # previous activated button
+
 func _init(initEntities, initOutput):
 	self.entities = initEntities
 	self.ui_output = initOutput
 	connectButtons()
+	previous = entities.get(Constants.DEU)
 	
 	
 func connectButtons():
@@ -65,77 +68,65 @@ func showStats():
 	pass
 
 func activate():
-	showStats()
-	pass
+	if previous.name != active.name:
+		previous = active
+		showStats()
+	else:
+		print("else")
+		active = entities.get(Constants.DEU)
+		previous = active
+		showStats()
 
 func _on_BAW_press(toggle):
-	if toggle:
-		active = entities.get(Constants.BAW)
-		activate()
+	active = entities.get(Constants.BAW)
+	activate()
 func _on_BAY_press(toggle):
-	if toggle:
-		active = entities.get(Constants.BAY)
-		activate()
+	active = entities.get(Constants.BAY)
+	activate()
 func _on_BER_press(toggle):
-	if toggle:
-		active = entities.get(Constants.BER)
-		activate()
+	active = entities.get(Constants.BER)
+	activate()
 func _on_BRA_press(toggle):
-	if toggle:
-		active = entities.get(Constants.BRA)
-		activate()
+	active = entities.get(Constants.BRA)
+	activate()
 func _on_BRE_press(toggle):
-	if toggle:
-		active = entities.get(Constants.BRE)
-		activate()
+	active = entities.get(Constants.BRE)
+	activate()
 func _on_HAM_press(toggle):
-	if toggle:
-		active = entities.get(Constants.HAM)
-		activate()
+	active = entities.get(Constants.HAM)
+	activate()
 func _on_HES_press(toggle):
-	if toggle:
-		active = entities.get(Constants.HES)
-		activate()
+	active = entities.get(Constants.HES)
+	activate()
 func _on_MVP_press(toggle):
-	if toggle:
-		active = entities.get(Constants.MVP)
-		activate()
+	active = entities.get(Constants.MVP)
+	activate()
 func _on_NIE_press(toggle):
-	if toggle:
-		active = entities.get(Constants.NIE)
-		activate()
+	active = entities.get(Constants.NIE)
+	activate()
 func _on_NRW_press(toggle):
-	if toggle:
-		active = entities.get(Constants.NRW)
-		activate()
+	active = entities.get(Constants.NRW)
+	activate()
 func _on_RLP_press(toggle):
-	if toggle:
-		active = entities.get(Constants.RLP)
-		activate()
+	active = entities.get(Constants.RLP)
+	activate()
 func _on_SAA_press(toggle):
-	if toggle:
-		active = entities.get(Constants.SAA)
-		activate()
+	active = entities.get(Constants.SAA)
+	activate()
 func _on_SCN_press(toggle):
-	if toggle:
-		active = entities.get(Constants.SCN)
-		activate()
+	active = entities.get(Constants.SCN)
+	activate()
 func _on_SCA_press(toggle):
-	if toggle:
-		active = entities.get(Constants.SCA)
-		activate()
+	active = entities.get(Constants.SCA)
+	activate()
 func _on_SLH_press(toggle):
-	if toggle:
-		active = entities.get(Constants.SLH)
-		activate()
+	active = entities.get(Constants.SLH)
+	activate()
 func _on_THU_press(toggle):
-	if toggle:
-		active = entities.get(Constants.THU)
-		activate()
+	active = entities.get(Constants.THU)
+	activate()
 	
 func _on_DEU_press(toggle):
-	print("Deutschland pressed")
-	if toggle:
-		active = entities.get(Constants.DEU)
-		activate()
+	active = entities.get(Constants.DEU)
+	activate()
 

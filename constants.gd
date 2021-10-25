@@ -1,5 +1,7 @@
 extends Node
 
+class_name CONSTANTS
+
 const LABEL = "Label"
 
 const BAW = "Baden-Württemberg"

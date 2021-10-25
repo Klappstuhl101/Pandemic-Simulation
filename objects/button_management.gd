@@ -13,46 +13,46 @@ func _init(initEntities, initOutput):
 	self.entities = initEntities
 	self.ui_output = initOutput
 	connectButtons()
-	previous = entities.get(Constants.DEU)
+	previous = entities.get(CONSTANTS.DEU)
 	
 	
 func connectButtons():
 	for entity in entities.values():
 		print(entity.name)
 		match entity.name:
-			Constants.BAW:
+			CONSTANTS.BAW:
 				entity.mapButton.connect("toggled", self, "_on_BAW_press")
-			Constants.BAY:
+			CONSTANTS.BAY:
 				entity.mapButton.connect("toggled", self, "_on_BAY_press")
-			Constants.BER:
+			CONSTANTS.BER:
 				entity.mapButton.connect("toggled", self, "_on_BER_press")
-			Constants.BRA:
+			CONSTANTS.BRA:
 				entity.mapButton.connect("toggled", self, "_on_BRA_press")
-			Constants.BRE:
+			CONSTANTS.BRE:
 				entity.mapButton.connect("toggled", self, "_on_BRE_press")
-			Constants.HAM:
+			CONSTANTS.HAM:
 				entity.mapButton.connect("toggled", self, "_on_HAM_press")
-			Constants.HES:
+			CONSTANTS.HES:
 				entity.mapButton.connect("toggled", self, "_on_HES_press")
-			Constants.MVP:
+			CONSTANTS.MVP:
 				entity.mapButton.connect("toggled", self, "_on_MVP_press")
-			Constants.NIE:
+			CONSTANTS.NIE:
 				entity.mapButton.connect("toggled", self, "_on_NIE_press")
-			Constants.NRW:
+			CONSTANTS.NRW:
 				entity.mapButton.connect("toggled", self, "_on_NRW_press")
-			Constants.RLP:
+			CONSTANTS.RLP:
 				entity.mapButton.connect("toggled", self, "_on_RLP_press")
-			Constants.SAA:
+			CONSTANTS.SAA:
 				entity.mapButton.connect("toggled", self, "_on_SAA_press")
-			Constants.SCN:
+			CONSTANTS.SCN:
 				entity.mapButton.connect("toggled", self, "_on_SCN_press")
-			Constants.SCA:
+			CONSTANTS.SCA:
 				entity.mapButton.connect("toggled", self, "_on_SCA_press")
-			Constants.SLH:
+			CONSTANTS.SLH:
 				entity.mapButton.connect("toggled", self, "_on_SLH_press")
-			Constants.THU:
+			CONSTANTS.THU:
 				entity.mapButton.connect("toggled", self, "_on_THU_press")
-			Constants.DEU:
+			CONSTANTS.DEU:
 				print("connected Deutschland")
 				entity.mapButton.connect("toggled", self, "_on_DEU_press")
 
@@ -64,69 +64,121 @@ func resetAll(exception = ""):
 func showStats():
 #	print(active.name)
 	resetAll(active.name)
-	ui_output[Constants.LABEL].text = active.name
+	ui_output[CONSTANTS.LABEL].text = active.name
 	pass
 
 func activate():
-	if previous.name != active.name:
-		previous = active
-		showStats()
-	else:
-		print("else")
-		active = entities.get(Constants.DEU)
-		previous = active
-		showStats()
+	showStats()
+#	if previous.name != active.name:
+#		previous = active
+#		showStats()
+#	else:
+#		print("else")
+#		active = entities.get(CONSTANTS.DEU)
+#		previous = active
+#		showStats()
 
 func _on_BAW_press(toggle):
-	active = entities.get(Constants.BAW)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.BAW)
+		activate()
+	else:
+		active.mapButton.pressed = true
 func _on_BAY_press(toggle):
-	active = entities.get(Constants.BAY)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.BAY)
+		activate()
+	else:
+		active.mapButton.pressed = true
 func _on_BER_press(toggle):
-	active = entities.get(Constants.BER)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.BER)
+		activate()
+	else:
+		active.mapButton.pressed = true
 func _on_BRA_press(toggle):
-	active = entities.get(Constants.BRA)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.BRA)
+		activate()
+	else:
+		active.mapButton.pressed = true
 func _on_BRE_press(toggle):
-	active = entities.get(Constants.BRE)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.BRE)
+		activate()
+	else:
+		active.mapButton.pressed = true
 func _on_HAM_press(toggle):
-	active = entities.get(Constants.HAM)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.HAM)
+		activate()
+	else:
+		active.mapButton.pressed = true
 func _on_HES_press(toggle):
-	active = entities.get(Constants.HES)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.HES)
+		activate()
+	else:
+		active.mapButton.pressed = true
 func _on_MVP_press(toggle):
-	active = entities.get(Constants.MVP)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.MVP)
+		activate()
+	else:
+		active.mapButton.pressed = true
 func _on_NIE_press(toggle):
-	active = entities.get(Constants.NIE)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.NIE)
+		activate()
+	else:
+		active.mapButton.pressed = true
 func _on_NRW_press(toggle):
-	active = entities.get(Constants.NRW)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.NRW)
+		activate()
+	else:
+		active.mapButton.pressed = true
 func _on_RLP_press(toggle):
-	active = entities.get(Constants.RLP)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.RLP)
+		activate()
+	else:
+		active.mapButton.pressed = true
 func _on_SAA_press(toggle):
-	active = entities.get(Constants.SAA)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.SAA)
+		activate()
+	else:
+		active.mapButton.pressed = true
 func _on_SCN_press(toggle):
-	active = entities.get(Constants.SCN)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.SCN)
+		activate()
+	else:
+		active.mapButton.pressed = true
 func _on_SCA_press(toggle):
-	active = entities.get(Constants.SCA)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.SCA)
+		activate()
+	else:
+		active.mapButton.pressed = true
 func _on_SLH_press(toggle):
-	active = entities.get(Constants.SLH)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.SLH)
+		activate()
+	else:
+		active.mapButton.pressed = true
 func _on_THU_press(toggle):
-	active = entities.get(Constants.THU)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.THU)
+		activate()
+	else:
+		active.mapButton.pressed = true
 	
 func _on_DEU_press(toggle):
-	active = entities.get(Constants.DEU)
-	activate()
+	if toggle:
+		active = entities.get(CONSTANTS.DEU)
+		activate()
+	else:
+		active.mapButton.pressed = true
 

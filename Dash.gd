@@ -77,42 +77,42 @@ func _ready():
 	timer.set_wait_time(0.1)
 	timer.connect("timeout", self, "_on_Time_timeout")
 	
-	statOutput[Constants.LABEL] = label
+	statOutput[CONSTANTS.LABEL] = label
 	
 #	Map Buttons
-	bawu = State.new(Constants.BAW, 11103043, get_node("Map/BaWuButton"), statOutput)
-	bayern = State.new(Constants.BAY, 10000, get_node("Map/BayernButton"), statOutput)
-	berlin = State.new(Constants.BER, 10000, get_node("Map/BerlinButton"), statOutput)
-	brand = State.new(Constants.BRA, 10000, get_node("Map/BrandenburgButton"), statOutput)
-	bremen = State.new(Constants.BRE, 10000, get_node("Map/BremenButton"), statOutput)
-	hamb = State.new(Constants.HAM, 10000, get_node("Map/HamburgButton"), statOutput)
-	hessen = State.new(Constants.HES, 10000, get_node("Map/HessenButton"), statOutput)
-	meckPom = State.new(Constants.MVP, 10000, get_node("Map/MeckPomButton"), statOutput)
-	nieders = State.new(Constants.NIE, 10000, get_node("Map/NiedersachsenButton"), statOutput)
-	nrw = State.new(Constants.NRW, 10000, get_node("Map/NrwButton"), statOutput)
-	rlp = State.new(Constants.RLP, 10000, get_node("Map/RlpButton"), statOutput)
-	saar = State.new(Constants.SAA, 10000, get_node("Map/SaarlandButton"), statOutput)
-	sachsen = State.new(Constants.SCN, 10000, get_node("Map/SachsenButton"), statOutput)
-	sacanh = State.new(Constants.SCA, 10000, get_node("Map/SachsenAnhaltButton"), statOutput)
-	schlHol = State.new(Constants.SLH, 10000, get_node("Map/SchlHolButton"), statOutput)
-	thur = State.new(Constants.THU, 10000, get_node("Map/ThuringenButton"), statOutput)
+	bawu = State.new(CONSTANTS.BAW, 11103043, get_node("Map/BaWuButton"), statOutput)
+	bayern = State.new(CONSTANTS.BAY, 10000, get_node("Map/BayernButton"), statOutput)
+	berlin = State.new(CONSTANTS.BER, 10000, get_node("Map/BerlinButton"), statOutput)
+	brand = State.new(CONSTANTS.BRA, 10000, get_node("Map/BrandenburgButton"), statOutput)
+	bremen = State.new(CONSTANTS.BRE, 10000, get_node("Map/BremenButton"), statOutput)
+	hamb = State.new(CONSTANTS.HAM, 10000, get_node("Map/HamburgButton"), statOutput)
+	hessen = State.new(CONSTANTS.HES, 10000, get_node("Map/HessenButton"), statOutput)
+	meckPom = State.new(CONSTANTS.MVP, 10000, get_node("Map/MeckPomButton"), statOutput)
+	nieders = State.new(CONSTANTS.NIE, 10000, get_node("Map/NiedersachsenButton"), statOutput)
+	nrw = State.new(CONSTANTS.NRW, 10000, get_node("Map/NrwButton"), statOutput)
+	rlp = State.new(CONSTANTS.RLP, 10000, get_node("Map/RlpButton"), statOutput)
+	saar = State.new(CONSTANTS.SAA, 10000, get_node("Map/SaarlandButton"), statOutput)
+	sachsen = State.new(CONSTANTS.SCN, 10000, get_node("Map/SachsenButton"), statOutput)
+	sacanh = State.new(CONSTANTS.SCA, 10000, get_node("Map/SachsenAnhaltButton"), statOutput)
+	schlHol = State.new(CONSTANTS.SLH, 10000, get_node("Map/SchlHolButton"), statOutput)
+	thur = State.new(CONSTANTS.THU, 10000, get_node("Map/ThuringenButton"), statOutput)
 	
-	states = {Constants.BAW:bawu, Constants.BAY:bayern, Constants.BER:berlin, Constants.BRA:brand,
-	 Constants.BRE:bremen, Constants.HAM:hamb, Constants.HES:hessen, Constants.MVP:meckPom,
-	 Constants.NIE:nieders, Constants.NRW:nrw, Constants.RLP:rlp, Constants.SAA:saar,
-	 Constants.SCN:sachsen, Constants.SCA:sacanh, Constants.SLH:schlHol, Constants.THU:thur}
+	states = {CONSTANTS.BAW:bawu, CONSTANTS.BAY:bayern, CONSTANTS.BER:berlin, CONSTANTS.BRA:brand,
+	 CONSTANTS.BRE:bremen, CONSTANTS.HAM:hamb, CONSTANTS.HES:hessen, CONSTANTS.MVP:meckPom,
+	 CONSTANTS.NIE:nieders, CONSTANTS.NRW:nrw, CONSTANTS.RLP:rlp, CONSTANTS.SAA:saar,
+	 CONSTANTS.SCN:sachsen, CONSTANTS.SCA:sacanh, CONSTANTS.SLH:schlHol, CONSTANTS.THU:thur}
 	
 	
 	# Herausfinden wie man Objekte von Unterklassen richtig erstellt
-#	deu = State.new(Constants.DEU, 0, get_node("Map/DeutschButton"), statOutput)
-	deu = Country.new(states, Constants.DEU, get_node("Map/DeutschButton"), statOutput)
+#	deu = State.new(CONSTANTS.DEU, 0, get_node("Map/DeutschButton"), statOutput)
+	deu = Country.new(states, CONSTANTS.DEU, get_node("Map/DeutschButton"), statOutput)
 	print(deu.name)
 	
-	mapButtons = Button_Management.new({Constants.BAW:bawu, Constants.BAY:bayern, Constants.BER:berlin, Constants.BRA:brand,
-	 Constants.BRE:bremen, Constants.HAM:hamb, Constants.HES:hessen, Constants.MVP:meckPom,
-	 Constants.NIE:nieders, Constants.NRW:nrw, Constants.RLP:rlp, Constants.SAA:saar,
-	 Constants.SCN:sachsen, Constants.SCA:sacanh, Constants.SLH:schlHol, Constants.THU:thur, 
-	 Constants.DEU: deu
+	mapButtons = Button_Management.new({CONSTANTS.BAW:bawu, CONSTANTS.BAY:bayern, CONSTANTS.BER:berlin, CONSTANTS.BRA:brand,
+	 CONSTANTS.BRE:bremen, CONSTANTS.HAM:hamb, CONSTANTS.HES:hessen, CONSTANTS.MVP:meckPom,
+	 CONSTANTS.NIE:nieders, CONSTANTS.NRW:nrw, CONSTANTS.RLP:rlp, CONSTANTS.SAA:saar,
+	 CONSTANTS.SCN:sachsen, CONSTANTS.SCA:sacanh, CONSTANTS.SLH:schlHol, CONSTANTS.THU:thur, 
+	 CONSTANTS.DEU: deu
 	 }, 
 	 statOutput)
 	

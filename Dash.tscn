@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://resources/control_buttons/Fast-forward-thin-outlined-symbol-in-circular-button.svg" type="Texture" id=1]
 [ext_resource path="res://resources/control_buttons/Pause-thin-rounded-button.svg" type="Texture" id=2]
@@ -37,21 +37,25 @@
 [ext_resource path="res://resources/map/Schleswig-Holstein.png" type="Texture" id=35]
 [ext_resource path="res://resources/map/Sachsen-Anhalt.png" type="Texture" id=36]
 [ext_resource path="res://resources/map/SchlHol_pressed.png" type="Texture" id=37]
+[ext_resource path="res://objects/state.gd" type="Script" id=38]
+[ext_resource path="res://objects/country.gd" type="Script" id=39]
+[ext_resource path="res://resources/map/Deutschland.png" type="Texture" id=40]
+[ext_resource path="res://resources/map/Deutschland_pressed.png" type="Texture" id=41]
 
 [node name="Panel" type="Panel"]
 margin_left = 1.0
-margin_right = 1281.0
-margin_bottom = 720.0
+margin_right = 1921.0
+margin_bottom = 1080.0
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="."]
-margin_left = 622.0
-margin_top = 241.0
-margin_right = 756.0
-margin_bottom = 347.0
+margin_left = 951.15
+margin_top = 787.129
+margin_right = 1085.15
+margin_bottom = 893.129
 text = "Test"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -59,41 +63,11 @@ __meta__ = {
 
 [node name="Time" type="Timer" parent="."]
 
-[node name="Pause" type="Button" parent="."]
-margin_left = 10.0
-margin_top = 639.0
-margin_right = 90.0
-margin_bottom = 719.0
-icon = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Play" type="Button" parent="."]
-margin_left = 106.0
-margin_top = 638.0
-margin_right = 186.0
-margin_bottom = 718.0
-icon = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="PlaySpeedx2" type="Button" parent="."]
-margin_left = 206.0
-margin_top = 638.0
-margin_right = 286.0
-margin_bottom = 718.0
-icon = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="Map" type="Panel" parent="."]
-margin_left = 676.74
-margin_top = 13.4319
-margin_right = 1267.74
-margin_bottom = 813.432
+margin_left = 5.0
+margin_top = 80.0
+margin_right = 596.0
+margin_bottom = 880.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -112,9 +86,10 @@ margin_left = 201.0
 margin_top = 464.0
 margin_right = 527.0
 margin_bottom = 800.0
-toggle_mode = true
 texture_normal = ExtResource( 5 )
 texture_pressed = ExtResource( 6 )
+expand = true
+stretch_mode = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -126,6 +101,8 @@ margin_right = 300.0
 margin_bottom = 770.0
 texture_normal = ExtResource( 7 )
 texture_pressed = ExtResource( 8 )
+expand = true
+stretch_mode = 4
 
 [node name="BerlinButton" type="TextureButton" parent="Map"]
 margin_left = 460.687
@@ -134,6 +111,8 @@ margin_right = 500.687
 margin_bottom = 281.105
 texture_normal = ExtResource( 10 )
 texture_pressed = ExtResource( 9 )
+expand = true
+stretch_mode = 4
 
 [node name="BrandenburgButton" type="TextureButton" parent="Map"]
 margin_left = 345.68
@@ -142,6 +121,8 @@ margin_right = 569.68
 margin_bottom = 374.22
 texture_normal = ExtResource( 13 )
 texture_pressed = ExtResource( 12 )
+expand = true
+stretch_mode = 4
 
 [node name="BremenButton" type="TextureButton" parent="Map"]
 margin_left = 175.3
@@ -150,14 +131,18 @@ margin_right = 215.3
 margin_bottom = 209.546
 texture_normal = ExtResource( 19 )
 texture_pressed = ExtResource( 21 )
+expand = true
+stretch_mode = 4
 
 [node name="HamburgButton" type="TextureButton" parent="Map"]
-margin_left = 250.709
-margin_top = 136.925
-margin_right = 290.709
-margin_bottom = 176.925
+margin_left = 251.0
+margin_top = 137.0
+margin_right = 285.0
+margin_bottom = 172.0
 texture_normal = ExtResource( 18 )
 texture_pressed = ExtResource( 14 )
+expand = true
+stretch_mode = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -169,6 +154,8 @@ margin_right = 282.02
 margin_bottom = 580.646
 texture_normal = ExtResource( 16 )
 texture_pressed = ExtResource( 17 )
+expand = true
+stretch_mode = 4
 
 [node name="MeckPomButton" type="TextureButton" parent="Map"]
 margin_left = 304.622
@@ -177,6 +164,8 @@ margin_right = 536.622
 margin_bottom = 198.617
 texture_normal = ExtResource( 27 )
 texture_pressed = ExtResource( 20 )
+expand = true
+stretch_mode = 4
 
 [node name="NiedersachsenButton" type="TextureButton" parent="Map"]
 margin_left = 61.4833
@@ -185,6 +174,8 @@ margin_right = 365.483
 margin_bottom = 386.569
 texture_normal = ExtResource( 22 )
 texture_pressed = ExtResource( 29 )
+expand = true
+stretch_mode = 4
 
 [node name="NrwButton" type="TextureButton" parent="Map"]
 margin_left = 1.26994
@@ -193,6 +184,8 @@ margin_right = 231.27
 margin_bottom = 479.053
 texture_normal = ExtResource( 15 )
 texture_pressed = ExtResource( 25 )
+expand = true
+stretch_mode = 4
 
 [node name="RlpButton" type="TextureButton" parent="Map"]
 margin_left = 11.4431
@@ -201,6 +194,8 @@ margin_right = 167.443
 margin_bottom = 623.938
 texture_normal = ExtResource( 30 )
 texture_pressed = ExtResource( 23 )
+expand = true
+stretch_mode = 4
 
 [node name="SaarlandButton" type="TextureButton" parent="Map"]
 margin_left = 24.9633
@@ -209,6 +204,8 @@ margin_right = 91.9633
 margin_bottom = 606.6
 texture_normal = ExtResource( 26 )
 texture_pressed = ExtResource( 28 )
+expand = true
+stretch_mode = 4
 
 [node name="SachsenButton" type="TextureButton" parent="Map"]
 margin_left = 390.079
@@ -217,6 +214,8 @@ margin_right = 591.079
 margin_bottom = 499.645
 texture_normal = ExtResource( 32 )
 texture_pressed = ExtResource( 31 )
+expand = true
+stretch_mode = 4
 
 [node name="SachsenAnhaltButton" type="TextureButton" parent="Map"]
 margin_left = 304.389
@@ -225,14 +224,18 @@ margin_right = 470.389
 margin_bottom = 420.59
 texture_normal = ExtResource( 36 )
 texture_pressed = ExtResource( 34 )
+expand = true
+stretch_mode = 4
 
 [node name="SchlHolButton" type="TextureButton" parent="Map"]
-margin_left = 140.43
-margin_top = 0.543594
-margin_right = 345.43
-margin_bottom = 174.544
+margin_left = 140.194
+margin_top = 0.855171
+margin_right = 345.194
+margin_bottom = 174.856
 texture_normal = ExtResource( 35 )
 texture_pressed = ExtResource( 37 )
+expand = true
+stretch_mode = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -244,3 +247,92 @@ margin_right = 438.381
 margin_bottom = 497.891
 texture_normal = ExtResource( 24 )
 texture_pressed = ExtResource( 33 )
+expand = true
+stretch_mode = 4
+
+[node name="DeutschButton" type="TextureButton" parent="Map"]
+margin_left = 391.113
+margin_top = -696.379
+margin_right = 983.113
+margin_bottom = 104.621
+texture_normal = ExtResource( 40 )
+texture_pressed = ExtResource( 41 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Statistics" type="Panel" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="TimeControls" type="Panel" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Pause" type="Button" parent="TimeControls"]
+margin_left = 21.9865
+margin_top = 994.099
+margin_right = 101.986
+margin_bottom = 1074.1
+icon = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Play" type="Button" parent="TimeControls"]
+margin_left = 129.973
+margin_top = 990.102
+margin_right = 209.973
+margin_bottom = 1070.1
+icon = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlaySpeedx2" type="Button" parent="TimeControls"]
+margin_left = 219.485
+margin_top = 990.102
+margin_right = 299.485
+margin_bottom = 1070.1
+icon = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlayControls" type="Panel" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="MaskMandate" type="Button" parent="PlayControls"]
+margin_left = 1615.22
+margin_top = 337.659
+margin_right = 1740.22
+margin_bottom = 444.659
+text = "Mask Mandate"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ModeControl" type="Panel" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StatMode" type="Button" parent="ModeControl"]
+margin_right = 12.0
+margin_bottom = 20.0
+
+[node name="ActionMode" type="Button" parent="ModeControl"]
+margin_right = 12.0
+margin_bottom = 20.0
+
+[node name="State" type="Node" parent="."]
+script = ExtResource( 38 )
+
+[node name="Country" type="Node" parent="."]
+script = ExtResource( 39 )

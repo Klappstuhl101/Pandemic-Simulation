@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://resources/control_buttons/Fast-forward-thin-outlined-symbol-in-circular-button.svg" type="Texture" id=1]
 [ext_resource path="res://resources/control_buttons/Pause-thin-rounded-button.svg" type="Texture" id=2]
@@ -41,6 +41,27 @@
 [ext_resource path="res://objects/country.gd" type="Script" id=39]
 [ext_resource path="res://resources/map/Deutschland.png" type="Texture" id=40]
 [ext_resource path="res://resources/map/Deutschland_pressed.png" type="Texture" id=41]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform float blue = 1.0;
+uniform float green = 0.0;
+
+uniform vec3 testcolor = vec3(0.0,0.0,0.0);
+
+void fragment() {
+	COLOR = texture(TEXTURE, UV);
+	COLOR.b = testcolor.b;
+	COLOR.g = testcolor.g;
+	COLOR.r = testcolor.r;
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/blue = 1.0
+shader_param/green = 0.0
+shader_param/testcolor = Vector3( 0, 0, 0 )
 
 [node name="Panel" type="Panel"]
 margin_left = 1.0
@@ -168,6 +189,7 @@ expand = true
 stretch_mode = 4
 
 [node name="NiedersachsenButton" type="TextureButton" parent="Map"]
+material = SubResource( 2 )
 margin_left = 61.4833
 margin_top = 120.569
 margin_right = 365.483
@@ -176,6 +198,9 @@ texture_normal = ExtResource( 22 )
 texture_pressed = ExtResource( 29 )
 expand = true
 stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="NrwButton" type="TextureButton" parent="Map"]
 margin_left = 1.26994
@@ -324,12 +349,21 @@ __meta__ = {
 }
 
 [node name="StatMode" type="Button" parent="ModeControl"]
-margin_right = 12.0
-margin_bottom = 20.0
+margin_left = 1136.45
+margin_top = 153.71
+margin_right = 1226.45
+margin_bottom = 245.71
+text = "Stats"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ActionMode" type="Button" parent="ModeControl"]
-margin_right = 12.0
-margin_bottom = 20.0
+margin_left = 995.337
+margin_top = 157.49
+margin_right = 1091.34
+margin_bottom = 234.49
+text = "Action"
 
 [node name="State" type="Node" parent="."]
 script = ExtResource( 38 )

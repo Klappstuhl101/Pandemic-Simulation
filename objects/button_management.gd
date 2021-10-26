@@ -60,6 +60,8 @@ func resetAll(exception = ""):
 	for entity in entities.values():
 		if (entity.name != exception):
 			entity.mapButton.pressed = false
+			if (entity.name == CONSTANTS.NIE):
+				entity.mapButton.material.set_shader_param("testcolor", Vector3(0.0,1.0,0.0))
 
 func showStats():
 #	print(active.name)
@@ -69,14 +71,6 @@ func showStats():
 
 func activate():
 	showStats()
-#	if previous.name != active.name:
-#		previous = active
-#		showStats()
-#	else:
-#		print("else")
-#		active = entities.get(CONSTANTS.DEU)
-#		previous = active
-#		showStats()
 
 func _on_BAW_press(toggle):
 	if toggle:
@@ -129,6 +123,8 @@ func _on_MVP_press(toggle):
 func _on_NIE_press(toggle):
 	if toggle:
 		active = entities.get(CONSTANTS.NIE)
+#		self.material.set_shader_param("testcolor", Color(1.0,0.0,0.0))
+		active.mapButton.material.set_shader_param("testcolor", Vector3(1.0,0.0,0.0))
 		activate()
 	else:
 		active.mapButton.pressed = true

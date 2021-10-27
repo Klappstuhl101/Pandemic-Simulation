@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=2]
+[gd_scene load_steps=45 format=2]
 
 [ext_resource path="res://resources/control_buttons/Fast-forward-thin-outlined-symbol-in-circular-button.svg" type="Texture" id=1]
 [ext_resource path="res://resources/control_buttons/Pause-thin-rounded-button.svg" type="Texture" id=2]
@@ -41,20 +41,23 @@
 [ext_resource path="res://objects/country.gd" type="Script" id=39]
 [ext_resource path="res://resources/map/Deutschland.png" type="Texture" id=40]
 [ext_resource path="res://resources/map/Deutschland_pressed.png" type="Texture" id=41]
+[ext_resource path="res://resources/gradients/red-green.tres" type="Gradient" id=42]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
+render_mode unshaded;
 
 uniform float blue = 1.0;
 uniform float green = 0.0;
 
 uniform vec3 testcolor = vec3(0.0,0.0,0.0);
 
+uniform sampler2D gradient: hint_black;
+uniform float mix_amount = 1.0;
+
 void fragment() {
-	COLOR = texture(TEXTURE, UV);
-	COLOR.b = testcolor.b;
-	COLOR.g = testcolor.g;
-	COLOR.r = testcolor.r;
+	float alpha = texture(TEXTURE, UV).a;
+	COLOR = vec4(0.5*UV.y, 0.5*(1.0-UV.y), 0, alpha);
 }"
 
 [sub_resource type="ShaderMaterial" id=2]
@@ -62,6 +65,8 @@ shader = SubResource( 1 )
 shader_param/blue = 1.0
 shader_param/green = 0.0
 shader_param/testcolor = Vector3( 0, 0, 0 )
+shader_param/mix_amount = 1.0
+shader_param/gradient = ExtResource( 42 )
 
 [node name="Panel" type="Panel"]
 margin_left = 1.0
@@ -276,12 +281,14 @@ expand = true
 stretch_mode = 4
 
 [node name="DeutschButton" type="TextureButton" parent="Map"]
-margin_left = 391.113
-margin_top = -696.379
-margin_right = 983.113
-margin_bottom = 104.621
+margin_left = 6.9646
+margin_top = 4.5793
+margin_right = 112.965
+margin_bottom = 148.579
 texture_normal = ExtResource( 40 )
 texture_pressed = ExtResource( 41 )
+expand = true
+stretch_mode = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }

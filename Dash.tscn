@@ -81,7 +81,7 @@ vec3 colorValues(float UVy) {
 	if (UVy <= 0.5) {
 		return vec3((1.0-vaccinated)*(1.0-UVy), 1, (1.0-vaccinated)*(1.0-UVy)); // nah dran an Lösung
 	} else if (UVy > 0.5) {
-		return vec3(1, (1.0-infected)*2.0*(1.0-UVy), (1.0-infected)*2.0*(1.0-UVy));
+		return vec3(1, (1.0-infected)*2.0*(1.0-UVy), (1.0-infected)*2.0*(1.0-UVy)); // auch nah dran
 	}
 	return vec3(0,0,0);
 }

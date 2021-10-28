@@ -98,6 +98,7 @@ vec3 colorValues2(float UVy, float UVx) {
 		} else {
 			return vec3(1,1,1);
 		}
+//		return vec3(1, (1.0-infected)*3.0*(1.0-UVy), (1.0-infected)*3.0*(1.0-UVy)); // auch nah dran
 	}
 }
 
@@ -337,10 +338,10 @@ expand = true
 stretch_mode = 4
 
 [node name="DeutschButton" type="TextureButton" parent="Map"]
-margin_left = 6.9646
-margin_top = 4.5793
-margin_right = 112.965
-margin_bottom = 148.579
+margin_left = 14.6742
+margin_top = -0.660645
+margin_right = 108.674
+margin_bottom = 127.339
 texture_normal = ExtResource( 40 )
 texture_pressed = ExtResource( 41 )
 expand = true

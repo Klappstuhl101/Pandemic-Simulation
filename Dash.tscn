@@ -46,7 +46,7 @@
 code = "shader_type canvas_item;
 render_mode unshaded;
 
-uniform float vaccinated=0.0; // use for color and height of color
+uniform float vaccinated=0.1; // use for color and height of color
 uniform float infected=0.1; // use same as vaccinated 
 
 uniform vec3 testcolor = vec3(0.0,0.0,0.0);
@@ -78,13 +78,29 @@ float redValue(float UVy) {
 }
 
 vec3 colorValues(float UVy) {
-	if (UVy <= 0.5) {
-		return vec3((1.0-vaccinated)*(1.0-UVy), 1, (1.0-vaccinated)*(1.0-UVy)); // nah dran an Lösung
-	} else if (UVy > 0.5) {
+	if (UVy <= 0.4) {
+		return vec3((1.0-vaccinated)*(UVy), (1.0-vaccinated)*1.0, (1.0-vaccinated)*(UVy)); // nah dran an Lösung
+	} else {
 		return vec3(1, (1.0-infected)*2.0*(1.0-UVy), (1.0-infected)*2.0*(1.0-UVy)); // auch nah dran
 	}
-	return vec3(0,0,0);
 }
+
+vec3 colorValues2(float UVy, float UVx) {
+	if (UVy <= 0.3) {
+		if (UVx <= vaccinated) {
+			return vec3(0,1,0);
+		} else {
+			return vec3(1,1,1);
+		}
+	} else {
+		if((1.0-UVy) <= infected) {
+			return vec3(1,0,0);
+		} else {
+			return vec3(1,1,1);
+		}
+	}
+}
+
 
 void fragment() {
 	float alpha = texture(TEXTURE, UV).a;
@@ -94,7 +110,8 @@ void fragment() {
 //		COLOR = vec4(infected*UV.y , vaccinated*(1.0-UV.y) , blueValue(UV.y)*UV.y, alpha);
 //		COLOR = vec4(infected*UV.y , vaccinated*(1.0-UV.y) , 0, alpha);
 //		COLOR = vec4(infected*redValue(UV.y), vaccinated*greenValue(UV.y), 0, alpha);
-		COLOR = vec4(colorValues(UV.y), alpha);
+//		COLOR = vec4(colorValues(UV.y), alpha);
+		COLOR = vec4(colorValues2(UV.y, UV.x), alpha);
 	}
 }
 
@@ -297,9 +314,9 @@ expand = true
 stretch_mode = 4
 
 [node name="SchlHolButton" type="TextureButton" parent="Map"]
-margin_left = 140.194
+margin_left = 165.489
 margin_top = 0.855171
-margin_right = 345.194
+margin_right = 370.489
 margin_bottom = 174.856
 texture_normal = ExtResource( 35 )
 texture_pressed = ExtResource( 37 )

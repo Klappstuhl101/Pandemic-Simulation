@@ -9,6 +9,8 @@ var ui_output # ui_output for stats
 
 var previous # previous activated button
 
+var counter = 0
+
 func _init(initEntities, initOutput):
 	self.entities = initEntities
 	self.ui_output = initOutput
@@ -90,8 +92,10 @@ func _on_NIE_press(toggle):
 	if toggle:
 		active = entities.get(CONSTANTS.NIE)
 #		self.material.set_shader_param("testcolor", Color(1.0,0.0,0.0))
-		active.mapButton.material.set_shader_param("vaccinated", 0.001)
-		active.mapButton.material.set_shader_param("infected", 0.001)
+		active.mapButton.material.set_shader_param("vaccinated", counter)
+		active.mapButton.material.set_shader_param("infected", sin(counter))
+		print(counter)
+		counter += 0.01
 		activate()
 	else:
 		active.mapButton.pressed = true

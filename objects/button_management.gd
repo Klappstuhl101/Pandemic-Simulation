@@ -93,7 +93,7 @@ func _on_NIE_press(toggle):
 		active = entities.get(CONSTANTS.NIE)
 #		self.material.set_shader_param("testcolor", Color(1.0,0.0,0.0))
 		active.mapButton.material.set_shader_param("vaccinated", counter)
-		active.mapButton.material.set_shader_param("infected", sin(counter))
+		active.mapButton.material.set_shader_param("infected", sin(counter*PI))
 		print(counter)
 		counter += 0.01
 		activate()

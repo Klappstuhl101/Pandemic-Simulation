@@ -46,6 +46,8 @@
 code = "shader_type canvas_item;
 render_mode unshaded;
 
+uniform float green_space = 3.0;
+
 uniform float vaccinated=0.1; // use for color and height of color
 uniform float infected=0.1; // use same as vaccinated 
 
@@ -86,15 +88,15 @@ vec3 colorValues(float UVy) {
 }
 
 vec3 colorValues2(float UVy, float UVx) {
-	if (UVy <= 0.3) {
+	if (UVy <= (1.0/green_space)) {
 		if (UVx <= vaccinated) {
-			return vec3(0,1,0);
+			return vec3(UVy*green_space,1,UVy*green_space);
 		} else {
 			return vec3(1,1,1);
 		}
 	} else {
 		if((1.0-UVy) <= infected) {
-			return vec3(1,0,0);
+			return vec3((1.0-infected)*1.0,0,infected); // fade-out fehlt noch
 		} else {
 			return vec3(1,1,1);
 		}
@@ -121,6 +123,7 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
+shader_param/green_space = 3.0
 shader_param/vaccinated = 0.0
 shader_param/infected = 0.1
 shader_param/testcolor = Vector3( 0, 0, 0 )

@@ -94,6 +94,8 @@ func _on_NIE_press(toggle):
 #		self.material.set_shader_param("testcolor", Color(1.0,0.0,0.0))
 		active.mapButton.material.set_shader_param("vaccinated", counter)
 		active.mapButton.material.set_shader_param("infected", counter)
+		var color = active.mapButton.material.get_shader_param("infectGradient").get_gradient().interpolate(counter)
+		active.mapButton.material.get_shader_param("twoColorGradient").get_gradient().set_color(0,color)
 		print(counter)
 		counter += 0.01
 		activate()

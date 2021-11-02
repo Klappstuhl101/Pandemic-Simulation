@@ -8,8 +8,7 @@ uniform float vaccinated=0.4; // use for color and height of color
 uniform float infected=0.5; // use same as vaccinated 
 
 uniform sampler2D infectGradient;
-
-uniform vec3 testcolor = vec3(0.0,0.0,0.0);
+uniform sampler2D twoColorGradient;
 
 //vec3 colorValues(float UVy) {
 //	if (UVy <= 0.4) {
@@ -18,9 +17,9 @@ uniform vec3 testcolor = vec3(0.0,0.0,0.0);
 //		return vec3(1, (1.0-infected)*2.0*(1.0-UVy), (1.0-infected)*2.0*(1.0-UVy)); // auch nah dran
 //	}
 //}
-
-float meanColor(float color) {
-	return (infected*color + (1.0-infected))/2.0;
+//
+float meanColor(float color, float sampledUVY) {
+	return ((1.0-sampledUVY)+(sampledUVY*color))/2.0;
 }
 
 vec3 colorValues2(float UVy, float UVx) {
@@ -35,26 +34,21 @@ vec3 colorValues2(float UVy, float UVx) {
 		
 		float infect_height = 1.0 - (infected*red_space);
 		
-		
 		vec3 sampled_color = texture(infectGradient, vec2(infected, 0)).rgb;
 		
-		vec3 sampled = vec3(meanColor(sampled_color.r), meanColor(sampled_color.g), meanColor(sampled_color.b));
 		
 		if(UVy >= infect_height) {
-			return sampled_color;
+			float neg_gradient_uvy = (UVy - (1.0/green_space)) * (1.0/red_space); // Höhe von [0,1] innerhalb red_space
+			float gradient_uvy = 1.0 - neg_gradient_uvy;
+			vec3 sampled = texture(twoColorGradient, vec2(gradient_uvy,0)).rgb;
+//			vec3 sampled = vec3(sampled_color.r*gradient_uvy, sampled_color.g*gradient_uvy, sampled_color.b*gradient_uvy);
+//			vec3 sampled = sampled_color;
+//			vec3 sampled = vec3(meanColor(sampled_color.r,gradient_uvy), meanColor(sampled_color.g, gradient_uvy), meanColor(sampled_color.b,gradient_uvy));
+			return sampled;
 		} else {
 			return vec3(1,1,1);
 		}
 		
-//		vec3 sampled = vec3(sampled_color.r, sampled_color.g, sampled_color.b);
-//		vec3 sampled_color = texture(infectGradient, vec2(1.0-UVy, 1.0-UVx)).rgb;
-//		return sampled_color;
-//		if((1.0-UVy) <= infected) {
-//			return vec3((1.0-infected)*1.0,0,infected); // fade-out fehlt noch
-//		} else {
-//			return vec3(1,1,1);
-//		}
-//		return vec3(1, (1.0-infected)*3.0*(1.0-UVy), (1.0-infected)*3.0*(1.0-UVy)); // auch nah dran
 	}
 }
 

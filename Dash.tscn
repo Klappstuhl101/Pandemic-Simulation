@@ -270,6 +270,7 @@ __meta__ = {
 }
 
 [node name="Statistics" type="Panel" parent="."]
+visible = false
 margin_left = 1318.05
 margin_top = 640.639
 margin_right = 1730.05

@@ -52,7 +52,7 @@ var thur
 var deu
 var states
 
-var mapButtons
+var game_manager
 
 var tenthsec
 
@@ -108,7 +108,7 @@ func _ready():
 	deu = Country.new(states, CONSTANTS.DEU, get_node("Map/DeutschButton"), statOutput)
 	print(deu.name)
 	
-	mapButtons = Button_Management.new({CONSTANTS.BAW:bawu, CONSTANTS.BAY:bayern, CONSTANTS.BER:berlin, CONSTANTS.BRA:brand,
+	game_manager = Game_Management.new({CONSTANTS.BAW:bawu, CONSTANTS.BAY:bayern, CONSTANTS.BER:berlin, CONSTANTS.BRA:brand,
 	 CONSTANTS.BRE:bremen, CONSTANTS.HAM:hamb, CONSTANTS.HES:hessen, CONSTANTS.MVP:meckPom,
 	 CONSTANTS.NIE:nieders, CONSTANTS.NRW:nrw, CONSTANTS.RLP:rlp, CONSTANTS.SAA:saar,
 	 CONSTANTS.SCN:sachsen, CONSTANTS.SCA:sacanh, CONSTANTS.SLH:schlHol, CONSTANTS.THU:thur, 

@@ -1,6 +1,6 @@
 extends Object
 
-class_name Button_Management
+class_name Game_Management
 
 var entities # states + country
 var active # active state / country

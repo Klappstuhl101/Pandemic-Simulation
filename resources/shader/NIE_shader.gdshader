@@ -18,14 +18,9 @@ vec3 colorValues(float UVy, float UVx) {
 		}
 	} else {
 		float red_space = (1.0-(1.0/green_space)); // Höhe des roten Anzeigebereichs
-		
 		float infect_height = 1.0 - (infected*red_space);
 		
-		vec3 sampled_color = texture(infectGradient, vec2(infected, 0)).rgb;
-		
-		
 		if(UVy >= infect_height) {
-			float neg_gradient_uvy = (UVy - (1.0/green_space)) * (1.0/red_space); 
 			float gradient_uvy = (UVy - infect_height)*(1.0/(1.0-infect_height));
 			vec3 sampled = texture(twoColorGradient, vec2(1.0-gradient_uvy,0)).rgb;
 			return sampled;
@@ -45,6 +40,3 @@ void fragment() {
 		COLOR = vec4(colorValues(UV.y, UV.x), alpha);
 	}
 }
-
-
-	

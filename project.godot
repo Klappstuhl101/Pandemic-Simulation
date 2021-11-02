@@ -9,11 +9,6 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "Object",
-"class": "Button_Management",
-"language": "GDScript",
-"path": "res://objects/button_management.gd"
-}, {
 "base": "Node",
 "class": "CONSTANTS",
 "language": "GDScript",
@@ -48,6 +43,11 @@ _global_script_classes=[ {
 "class": "DataFrame",
 "language": "GDScript",
 "path": "res://addons/easy_charts/Utilities/Data/data_frame.gd"
+}, {
+"base": "Object",
+"class": "Game_Management",
+"language": "GDScript",
+"path": "res://objects/game_management.gd"
 }, {
 "base": "VBoxContainer",
 "class": "LegendElement",
@@ -125,7 +125,6 @@ _global_script_classes=[ {
 "path": "res://objects/state.gd"
 } ]
 _global_script_class_icons={
-"Button_Management": "",
 "CONSTANTS": "",
 "Chart": "",
 "Chart2D": "",
@@ -133,6 +132,7 @@ _global_script_class_icons={
 "ColumnChart2D": "",
 "Country": "",
 "DataFrame": "",
+"Game_Management": "",
 "LegendElement": "",
 "LineChart": "",
 "LineChart2D": "",

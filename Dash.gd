@@ -1,30 +1,7 @@
 extends Panel
 
-#class_name Dash
-
-const LABEL = "Label"
-
-#const BAW = "Baden-Württemberg"
-#const BAY = "Bayern"
-#const BER = "Berlin"
-#const BRA = "Brandenburg"
-#const BRE = "Bremen"
-#const HAM = "Hamburg"
-#const HES = "Hessen"
-#const MVP = "Mecklenburg-Vorpommern"
-#const NIE = "Niedersachsen"
-#const NRW = "Nordrhein-Westfalen"
-#const RLP = "Rheinland-Pfalz"
-#const SAA = "Saarland"
-#const SCN = "Sachsen"
-#const SCA = "Sachsen-Anhalt"
-#const SLH = "Schleswig-Holstein"
-#const THU = "Thüringen"
-
-#const DEU = "Deutschland"
-
-
 var label
+var pieChart
 
 var timer
 
@@ -62,6 +39,17 @@ var statOutput = {}
 func _ready():
 #	Statistics shown
 	label = get_node("Label")
+	
+	var stats = [[1,2,3],[4,5,6],[7,8,9]]
+	
+#	pieChart = get_node("Statistics/PieChart")
+#	pieChart.plot_from_array(stats)
+	
+	
+	
+#	var data =  DataFrame.new(stats, ["1","2","3"], ["4","5","6"])
+	
+#	columnChart.plot_from_array(stats)
 	
 	timer = get_node("Time")
 	

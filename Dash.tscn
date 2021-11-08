@@ -42,7 +42,7 @@
 [ext_resource path="res://resources/map/Deutschland.png" type="Texture" id=40]
 [ext_resource path="res://resources/map/Deutschland_pressed.png" type="Texture" id=41]
 [ext_resource path="res://resources/shader/NIE.tres" type="Material" id=42]
-[ext_resource path="res://addons/easy_charts/PieChart/pie_chart.gd" type="Script" id=43]
+[ext_resource path="res://addons/easy_charts/PieChart/pie_chart.tscn" type="PackedScene" id=43]
 
 [node name="Panel" type="Panel"]
 margin_left = 1.0
@@ -276,26 +276,7 @@ margin_top = 640.639
 margin_right = 1730.05
 margin_bottom = 879.639
 
-[node name="PieChart" type="Control" parent="Statistics"]
-margin_left = 102.415
-margin_top = 37.6025
-margin_right = 307.415
-margin_bottom = 189.603
-script = ExtResource( 43 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-source = "res://addons/easy_charts/file.samples/pie.csv"
-delimiter = ","
-Chart_Properties/are_values_columns = false
-Chart_Properties/labels_index = 0
-Chart_Properties/show_x_values_as_labels = true
-Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/font = null
-Chart_Style/bold_font = null
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/template = 0
-Chart_Modifiers/rotation = 0.0
+[node name="PieChart" parent="Statistics" instance=ExtResource( 43 )]
 
 [node name="TimeControls" type="Panel" parent="."]
 margin_right = 40.0

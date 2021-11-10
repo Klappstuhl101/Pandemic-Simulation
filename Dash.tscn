@@ -277,6 +277,8 @@ margin_right = 1730.05
 margin_bottom = 879.639
 
 [node name="PieChart" parent="Statistics" instance=ExtResource( 43 )]
+Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="TimeControls" type="Panel" parent="."]
 margin_right = 40.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=2]
+[gd_scene load_steps=45 format=2]
 
 [ext_resource path="res://resources/control_buttons/Fast-forward-thin-outlined-symbol-in-circular-button.svg" type="Texture" id=1]
 [ext_resource path="res://resources/control_buttons/Pause-thin-rounded-button.svg" type="Texture" id=2]
@@ -43,11 +43,13 @@
 [ext_resource path="res://resources/map/Deutschland_pressed.png" type="Texture" id=41]
 [ext_resource path="res://resources/shader/NIE.tres" type="Material" id=42]
 [ext_resource path="res://addons/easy_charts/PieChart/pie_chart.tscn" type="PackedScene" id=43]
+[ext_resource path="res://resources/standard_theme.theme" type="Theme" id=44]
 
 [node name="Panel" type="Panel"]
 margin_left = 1.0
-margin_right = 1921.0
-margin_bottom = 1080.0
+margin_right = 1601.0
+margin_bottom = 900.0
+theme = ExtResource( 44 )
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -58,6 +60,7 @@ margin_left = 951.15
 margin_top = 787.129
 margin_right = 1085.15
 margin_bottom = 893.129
+theme = ExtResource( 44 )
 text = "Test"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -67,9 +70,9 @@ __meta__ = {
 
 [node name="Map" type="Panel" parent="."]
 margin_left = 5.0
-margin_top = 80.0
+margin_top = 5.0
 margin_right = 596.0
-margin_bottom = 880.0
+margin_bottom = 805.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -222,6 +225,9 @@ texture_normal = ExtResource( 32 )
 texture_pressed = ExtResource( 31 )
 expand = true
 stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="SachsenAnhaltButton" type="TextureButton" parent="Map"]
 margin_left = 304.389
@@ -270,48 +276,50 @@ __meta__ = {
 }
 
 [node name="Statistics" type="Panel" parent="."]
-visible = false
-margin_left = 1318.05
-margin_top = 640.639
-margin_right = 1730.05
-margin_bottom = 879.639
+margin_left = 1083.29
+margin_top = 489.318
+margin_right = 1495.29
+margin_bottom = 728.318
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="PieChart" parent="Statistics" instance=ExtResource( 43 )]
-Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+margin_right = -412.0
+margin_bottom = -237.407
 
-[node name="TimeControls" type="Panel" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
+[node name="TimeControls" type="GridContainer" parent="."]
+margin_left = 5.0
+margin_top = 810.0
+margin_right = 265.0
+margin_bottom = 890.0
+columns = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Pause" type="Button" parent="TimeControls"]
-margin_left = 21.9865
-margin_top = 994.099
-margin_right = 101.986
-margin_bottom = 1074.1
+margin_right = 64.0
+margin_bottom = 68.0
 icon = ExtResource( 2 )
+align = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Play" type="Button" parent="TimeControls"]
-margin_left = 129.973
-margin_top = 990.102
-margin_right = 209.973
-margin_bottom = 1070.1
+margin_left = 68.0
+margin_right = 132.0
+margin_bottom = 68.0
 icon = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="PlaySpeedx2" type="Button" parent="TimeControls"]
-margin_left = 219.485
-margin_top = 990.102
-margin_right = 299.485
-margin_bottom = 1070.1
+margin_left = 136.0
+margin_right = 200.0
+margin_bottom = 68.0
 icon = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -322,10 +330,10 @@ margin_right = 40.0
 margin_bottom = 40.0
 
 [node name="MaskMandate" type="Button" parent="PlayControls"]
-margin_left = 1615.22
-margin_top = 337.659
-margin_right = 1740.22
-margin_bottom = 444.659
+margin_left = 1347.93
+margin_top = 316.446
+margin_right = 1472.93
+margin_bottom = 423.446
 text = "Mask Mandate"
 __meta__ = {
 "_edit_use_anchors_": false

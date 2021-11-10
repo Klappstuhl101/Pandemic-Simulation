@@ -163,8 +163,8 @@ Constants="*res://constants.gd"
 
 [display]
 
-window/size/width=1920
-window/size/height=1080
+window/size/width=1600
+window/size/height=900
 
 [editor_plugins]
 

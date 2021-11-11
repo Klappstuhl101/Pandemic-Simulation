@@ -40,7 +40,9 @@ func _ready():
 #	Statistics shown
 	label = get_node("Label")
 	
-	var stats = [[1,2,3],[4,5,6],[7,8,9]]
+	pieChart = get_node("Statistics/PieChart")
+	pieChart.plot()
+#	var stats = [["Country","Votes"],[7,"Germany"],[15,"GB"],[10,"Canada"]]
 	
 #	pieChart = get_node("Statistics/PieChart")
 #	pieChart.plot_from_array(stats)

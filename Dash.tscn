@@ -1,8 +1,8 @@
 [gd_scene load_steps=45 format=2]
 
-[ext_resource path="res://resources/control_buttons/Fast-forward-thin-outlined-symbol-in-circular-button.svg" type="Texture" id=1]
-[ext_resource path="res://resources/control_buttons/Pause-thin-rounded-button.svg" type="Texture" id=2]
-[ext_resource path="res://resources/control_buttons/Play-rounded-button-outline.svg" type="Texture" id=3]
+[ext_resource path="res://resources/control_buttons/Pause-thin-rounded-button-white.png" type="Texture" id=1]
+[ext_resource path="res://resources/control_buttons/Play-rounded-button-outline-white.png" type="Texture" id=2]
+[ext_resource path="res://resources/control_buttons/Fast-forward-thin-outlined-symbol-in-circular-button-white.png" type="Texture" id=3]
 [ext_resource path="res://Dash.gd" type="Script" id=4]
 [ext_resource path="res://resources/map/Bayern.png" type="Texture" id=5]
 [ext_resource path="res://resources/map/Bayern_pressed.png" type="Texture" id=6]
@@ -276,17 +276,20 @@ __meta__ = {
 }
 
 [node name="Statistics" type="Panel" parent="."]
-margin_left = 1083.29
-margin_top = 489.318
-margin_right = 1495.29
-margin_bottom = 728.318
+margin_left = 1122.89
+margin_top = 571.342
+margin_right = 1372.89
+margin_bottom = 821.342
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="PieChart" parent="Statistics" instance=ExtResource( 43 )]
-margin_right = -412.0
-margin_bottom = -237.407
+margin_bottom = 1.66632
+source = "res://addons/easy_charts/file.samples/pie.csv"
+delimiter = ","
+Chart_Style/function_colors = PoolColorArray( 0.976471, 0.145098, 0.145098, 1, 0.0745098, 0.498039, 0.231373, 1, 0.839216, 0.729412, 0.12549, 1, 0.0862745, 0.243137, 0.603922, 1, 0.396078, 0.152941, 0.823529, 1, 0.941176, 0.439216, 0.0745098, 1, 0.67451, 0.678431, 0.772549, 1, 0.196078, 0.423529, 0.588235, 1 )
+Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="TimeControls" type="GridContainer" parent="."]
 margin_left = 5.0
@@ -301,7 +304,7 @@ __meta__ = {
 [node name="Pause" type="Button" parent="TimeControls"]
 margin_right = 64.0
 margin_bottom = 68.0
-icon = ExtResource( 2 )
+icon = ExtResource( 1 )
 align = 0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -311,7 +314,7 @@ __meta__ = {
 margin_left = 68.0
 margin_right = 132.0
 margin_bottom = 68.0
-icon = ExtResource( 3 )
+icon = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -320,7 +323,7 @@ __meta__ = {
 margin_left = 136.0
 margin_right = 200.0
 margin_bottom = 68.0
-icon = ExtResource( 1 )
+icon = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

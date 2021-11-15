@@ -114,6 +114,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/easy_charts/Utilities/Scripts/scatter_chart_base.gd"
 }, {
+"base": "Object",
+"class": "Simulation",
+"language": "GDScript",
+"path": "res://simulation.gd"
+}, {
 "base": "Reference",
 "class": "Slice",
 "language": "GDScript",
@@ -146,6 +151,7 @@ _global_script_class_icons={
 "ScatterChart2D": "",
 "ScatterChart3D": "",
 "ScatterChartBase": "",
+"Simulation": "",
 "Slice": "",
 "State": ""
 }

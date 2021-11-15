@@ -30,6 +30,7 @@ var deu
 var states
 
 var game_manager
+var sim
 
 var tenthsec
 
@@ -69,22 +70,22 @@ func _ready():
 	statOutput[CONSTANTS.LABEL] = label
 	
 #	Map Buttons
-	bawu = State.new(CONSTANTS.BAW, 11103043, get_node("Map/BaWuButton"), statOutput)
-	bayern = State.new(CONSTANTS.BAY, 10000, get_node("Map/BayernButton"), statOutput)
-	berlin = State.new(CONSTANTS.BER, 10000, get_node("Map/BerlinButton"), statOutput)
-	brand = State.new(CONSTANTS.BRA, 10000, get_node("Map/BrandenburgButton"), statOutput)
-	bremen = State.new(CONSTANTS.BRE, 10000, get_node("Map/BremenButton"), statOutput)
-	hamb = State.new(CONSTANTS.HAM, 10000, get_node("Map/HamburgButton"), statOutput)
-	hessen = State.new(CONSTANTS.HES, 10000, get_node("Map/HessenButton"), statOutput)
-	meckPom = State.new(CONSTANTS.MVP, 10000, get_node("Map/MeckPomButton"), statOutput)
-	nieders = State.new(CONSTANTS.NIE, 10000, get_node("Map/NiedersachsenButton"), statOutput)
-	nrw = State.new(CONSTANTS.NRW, 10000, get_node("Map/NrwButton"), statOutput)
-	rlp = State.new(CONSTANTS.RLP, 10000, get_node("Map/RlpButton"), statOutput)
-	saar = State.new(CONSTANTS.SAA, 10000, get_node("Map/SaarlandButton"), statOutput)
-	sachsen = State.new(CONSTANTS.SCN, 10000, get_node("Map/SachsenButton"), statOutput)
-	sacanh = State.new(CONSTANTS.SCA, 10000, get_node("Map/SachsenAnhaltButton"), statOutput)
-	schlHol = State.new(CONSTANTS.SLH, 10000, get_node("Map/SchlHolButton"), statOutput)
-	thur = State.new(CONSTANTS.THU, 10000, get_node("Map/ThuringenButton"), statOutput)
+	bawu = State.new(CONSTANTS.BAW, 11103043, get_node("Map/BaWuButton"))
+	bayern = State.new(CONSTANTS.BAY, 10000, get_node("Map/BayernButton"))
+	berlin = State.new(CONSTANTS.BER, 10000, get_node("Map/BerlinButton"))
+	brand = State.new(CONSTANTS.BRA, 10000, get_node("Map/BrandenburgButton"))
+	bremen = State.new(CONSTANTS.BRE, 10000, get_node("Map/BremenButton"))
+	hamb = State.new(CONSTANTS.HAM, 10000, get_node("Map/HamburgButton"))
+	hessen = State.new(CONSTANTS.HES, 10000, get_node("Map/HessenButton"))
+	meckPom = State.new(CONSTANTS.MVP, 10000, get_node("Map/MeckPomButton"))
+	nieders = State.new(CONSTANTS.NIE, 10000, get_node("Map/NiedersachsenButton"))
+	nrw = State.new(CONSTANTS.NRW, 10000, get_node("Map/NrwButton"))
+	rlp = State.new(CONSTANTS.RLP, 10000, get_node("Map/RlpButton"))
+	saar = State.new(CONSTANTS.SAA, 10000, get_node("Map/SaarlandButton"))
+	sachsen = State.new(CONSTANTS.SCN, 10000, get_node("Map/SachsenButton"))
+	sacanh = State.new(CONSTANTS.SCA, 10000, get_node("Map/SachsenAnhaltButton"))
+	schlHol = State.new(CONSTANTS.SLH, 10000, get_node("Map/SchlHolButton"))
+	thur = State.new(CONSTANTS.THU, 10000, get_node("Map/ThuringenButton"))
 	
 	states = {CONSTANTS.BAW:bawu, CONSTANTS.BAY:bayern, CONSTANTS.BER:berlin, CONSTANTS.BRA:brand,
 	 CONSTANTS.BRE:bremen, CONSTANTS.HAM:hamb, CONSTANTS.HES:hessen, CONSTANTS.MVP:meckPom,
@@ -93,17 +94,15 @@ func _ready():
 	
 	
 	# Herausfinden wie man Objekte von Unterklassen richtig erstellt
-#	deu = State.new(CONSTANTS.DEU, 0, get_node("Map/DeutschButton"), statOutput)
-	deu = Country.new(states, CONSTANTS.DEU, get_node("Map/DeutschButton"), statOutput)
-	print(deu.name)
+	deu = Country.new(states, CONSTANTS.DEU, get_node("Map/DeutschButton"))
 	
-	game_manager = Game_Management.new({CONSTANTS.BAW:bawu, CONSTANTS.BAY:bayern, CONSTANTS.BER:berlin, CONSTANTS.BRA:brand,
+	sim = Simulation.new({CONSTANTS.BAW:bawu, CONSTANTS.BAY:bayern, CONSTANTS.BER:berlin, CONSTANTS.BRA:brand,
 	 CONSTANTS.BRE:bremen, CONSTANTS.HAM:hamb, CONSTANTS.HES:hessen, CONSTANTS.MVP:meckPom,
 	 CONSTANTS.NIE:nieders, CONSTANTS.NRW:nrw, CONSTANTS.RLP:rlp, CONSTANTS.SAA:saar,
 	 CONSTANTS.SCN:sachsen, CONSTANTS.SCA:sacanh, CONSTANTS.SLH:schlHol, CONSTANTS.THU:thur, 
 	 CONSTANTS.DEU: deu
-	 }, 
-	 statOutput)
+	 })
+	game_manager = Game_Management.new(sim, statOutput)
 	
 	
 

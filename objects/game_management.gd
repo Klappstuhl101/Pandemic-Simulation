@@ -6,20 +6,22 @@ var entities # states + country
 var active # active state / country
 var mode # StatsMode or ActionMode
 var ui_output # ui_output for stats
+var sim # simulation class
 
 var previous # previous activated button
 
 var counter = 0
 
-func _init(initEntities, initOutput):
-	self.entities = initEntities
+func _init(initSim,  initOutput):
+	self.sim = initSim
+	self.entities = sim.entities
 	self.ui_output = initOutput
 	connectButtons()
 	previous = entities.get(CONSTANTS.DEU)
 	
 	
 
-func _update():
+func update():
 #	HIER DIE UPDATES FÜR STATS ETC. AUCH SHADER
 	pass
 
@@ -27,17 +29,19 @@ func resetAll(exception = ""):
 	for entity in entities.values():
 		if (entity.name != exception):
 			entity.mapButton.pressed = false
-#			if (entity.name == CONSTANTS.NIE):
-#				entity.mapButton.material.set_shader_param("testcolor", Vector3(0.0,1.0,0.0))
 
 func showStats():
-#	print(active.name)
-	resetAll(active.name)
+#	HIERHER DIE GANZEN SHADER EINSTELLUNGEN UND ÜBERGABE
+#	active.mapButton.material.set_shader_param("vaccinated", counter)
+#	active.mapButton.material.set_shader_param("infected", counter)
+#	var color = active.mapButton.material.get_shader_param("infectGradient").get_gradient().interpolate(counter)
+#	active.mapButton.material.get_shader_param("twoColorGradient").get_gradient().set_color(0,color)
 	ui_output[CONSTANTS.LABEL].text = active.name
 	pass
 
 func activate():
-#	HIERHER DIE GANZEN SHADER EINSTELLUNGEN UND ÜBERGABE
+	resetAll(active.name)
+
 	showStats()
 
 func _on_BAW_press(toggle):

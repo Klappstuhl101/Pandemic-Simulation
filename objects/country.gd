@@ -6,7 +6,7 @@ class_name Country
 var states # dict of states
 
 
-func _init(initStates, initName, initButton, initOutput).(initName, 0, initButton, initOutput):
+func _init(initStates, initName, initButton).(initName, 0, initButton):
 	self.states = initStates
 	recalculatePop()
 	

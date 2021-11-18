@@ -289,7 +289,6 @@ margin_bottom = 1.66632
 source = "res://addons/easy_charts/file.samples/pie.csv"
 delimiter = ","
 Chart_Style/function_colors = PoolColorArray( 0.976471, 0.145098, 0.145098, 1, 0.0745098, 0.498039, 0.231373, 1, 0.839216, 0.729412, 0.12549, 1, 0.0862745, 0.243137, 0.603922, 1, 0.396078, 0.152941, 0.823529, 1, 0.941176, 0.439216, 0.0745098, 1, 0.67451, 0.678431, 0.772549, 1, 0.196078, 0.423529, 0.588235, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="TimeControls" type="GridContainer" parent="."]
 margin_left = 5.0

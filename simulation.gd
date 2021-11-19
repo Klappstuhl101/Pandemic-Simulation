@@ -9,6 +9,12 @@ var I
 var R
 var D
 
+var infectRate
+var recRate
+var deathRate
+
+var rnd = RandomNumberGenerator.new()
+
 # Recovered nach gewisser Zeit wieder ansteckbar, Impfschutz nachlassen, kann man auch simulieren
 
 func _init(initEntities):
@@ -19,13 +25,79 @@ func _init(initEntities):
 	R = 0
 	D = 0
 	
+	infectRate = 0.2
+	recRate = 0.02
+	deathRate = 0.01
+	
+	rnd.randomize()
+	
 	
 func simulate():
+	if I <= 0: # pandemic over
+		return
 	var t = 0
+#	var args = [t,S,I,R,D]
 	while t<1:
-		gillespieIteration()
-	
-	pass
+		t = gillespieIteration(t)
+#		t = args[0]
+#		S = args[1]
+#		I = args[2]
+#		R = args[3]
+#		D = args[4]
+#		args = [t,S,I,R,D]
+		print(t, " S ", S, " I ", I, " R ", R, " D ", D, " ", I+S+R+D)
+		
 
-func gillespieIteration():
-	pass
+func gillespieIteration(t):
+	var r1 = rnd.randf()
+	var reactionRates = updateReactionRates()
+	var reactTotal = sum(reactionRates)
+	
+	var waitTime = -log(r1)/reactTotal
+	t = t + waitTime
+	
+	
+	reactionRates.sort()
+	var r2 = rnd.randf()
+	
+	for i in range(reactionRates.size()):
+		for j in range(1,i):
+			reactionRates[i] += reactionRates[j]
+			
+	print(r2, " ",reactionRates)
+#	läuft noch nicht hier, die reactionRates noch umrechnen auf passendes Intervall
+	
+	var rule
+	for i in range(reactionRates.size()):
+		if(r2 <= reactionRates[i]):
+			rule = i
+			break
+	
+	updatePersonNumbers(rule)
+	
+	return t
+
+func updatePersonNumbers(rule):
+	match rule:
+		0: # Neu Infizierte
+			S-=1
+			I+=1
+		1: # Genesene
+			I-=1
+			R+=1
+		2: # Tote
+			I-=1
+			D+=1
+
+func updateReactionRates():
+	var rates = []
+	rates.append((infectRate/N)*S*I)
+	rates.append(recRate*I)
+	rates.append(deathRate*I)
+	return rates
+	
+func sum(arr):
+	var sum = 0
+	for i in range(arr.size()):
+		sum += arr[i]
+	return sum

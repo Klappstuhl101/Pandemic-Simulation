@@ -104,7 +104,9 @@ func _ready():
 	 })
 	game_manager = Game_Management.new(sim, statOutput)
 	
-	
+	for i in range(300):
+		print("TAG " + String(i))
+		sim.simulate()
 
 
 

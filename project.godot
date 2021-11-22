@@ -117,7 +117,7 @@ _global_script_classes=[ {
 "base": "Object",
 "class": "Simulation",
 "language": "GDScript",
-"path": "res://simulation.gd"
+"path": "res://objects/simulation.gd"
 }, {
 "base": "Reference",
 "class": "Slice",

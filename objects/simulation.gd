@@ -104,6 +104,6 @@ func sum(arr):
 func cumulative_sum(arr):
 	for i in range(arr.size()):
 		for j in range(i+1):
-			print("cumsum", arr[i])
+#			print("cumsum", arr[i])
 			arr[i] += arr[j]
 	return arr

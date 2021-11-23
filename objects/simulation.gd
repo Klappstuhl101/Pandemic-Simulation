@@ -57,14 +57,16 @@ func gillespieIteration(t):
 	t = t + waitTime
 	
 	
-	reactionRates.sort()
+#	reactionRates.sort()x
 	var r2 = rnd.randf()
 	
 	var reactionRatesCumSum = cumulative_sum(reactionRates)
 	for i in range(reactionRatesCumSum.size()):
 		reactionRatesCumSum[i] = reactionRatesCumSum[i] / reactTotal
-	print(r2, " ",reactionRates, " ", reactionRatesCumSum)
+	print(r2," ", reactTotal, " ",reactionRates, " ", reactionRatesCumSum)
 #	läuft noch nicht hier, die reactionRates noch umrechnen auf passendes Intervall
+
+# ZEIT OVERFLOW MITNEHMEN IN NÄCHSTEN TAG, EVENT NOCH AUSFÜHREN
 	
 	var rule
 	for i in range(reactionRates.size()):
@@ -103,7 +105,7 @@ func sum(arr):
 
 func cumulative_sum(arr):
 	for i in range(arr.size()):
-		for j in range(i+1):
+		for j in range(1,i):
 #			print("cumsum", arr[i])
 			arr[i] += arr[j]
 	return arr

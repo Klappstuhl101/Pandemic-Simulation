@@ -2,6 +2,7 @@ extends Panel
 
 var label
 var pieChart
+var lineChart
 
 var timer
 
@@ -35,6 +36,7 @@ var sim
 var tenthsec
 
 var statOutput = {}
+var statButtons = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -42,16 +44,13 @@ func _ready():
 	label = get_node("Label")
 	
 	pieChart = get_node("Statistics/PieChart")
+	lineChart = get_node("Statistics/LineChart")
 #	pieChart.plot()
-	var stats = [["Country","Votes"],["Germany",7],["GB",15],["Canada",10],["Sweden",3]]
+	var stats = [["Country","Population"],["Germany",7],["GB",15],["Canada",10],["Sweden",3]]
 	
 	pieChart.plot_from_array(stats)
 	
 	
-	
-#	var data =  DataFrame.new(stats, ["1","2","3"], ["4","5","6"])
-	
-#	columnChart.plot_from_array(stats)
 	
 	timer = get_node("Time")
 	
@@ -68,6 +67,10 @@ func _ready():
 	timer.connect("timeout", self, "_on_Time_timeout")
 	
 	statOutput[CONSTANTS.LABEL] = label
+	statOutput[CONSTANTS.PIE] = pieChart
+	statOutput[CONSTANTS.LINE] = lineChart
+	
+	statButtons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
 	
 #	Map Buttons
 	bawu = State.new(CONSTANTS.BAW, 11103043, get_node("Map/BaWuButton"))
@@ -102,7 +105,7 @@ func _ready():
 	 CONSTANTS.SCN:sachsen, CONSTANTS.SCA:sacanh, CONSTANTS.SLH:schlHol, CONSTANTS.THU:thur, 
 	 CONSTANTS.DEU: deu
 	 })
-	game_manager = Game_Management.new(sim, statOutput)
+	game_manager = Game_Management.new(sim, statOutput, statButtons)
 	
 	for i in range(100):
 		print("TAG " + String(i))

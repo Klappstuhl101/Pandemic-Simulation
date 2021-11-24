@@ -3,6 +3,8 @@ extends Node
 class_name CONSTANTS
 
 const LABEL = "Label"
+const PIE = "Pie"
+const LINE = "Line"
 
 const BAW = "Baden-Württemberg"
 const BAY = "Bayern"
@@ -25,3 +27,5 @@ const DEU = "Deutschland"
 
 const STATMODE = "Stats"
 const ACTIONMODE = "Action"
+
+const STATBUTTON = "StatButton"

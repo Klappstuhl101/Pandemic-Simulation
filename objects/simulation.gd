@@ -9,9 +9,18 @@ var I
 var R
 var D
 
+var days = ["Days"]
+var sStats = ["S"]
+var iStats = ["I"]
+var rStats = ["R"]
+var dStats = ["D"]
+
+
 var infectRate
 var recRate
 var deathRate
+
+var timeDifference
 
 var rnd = RandomNumberGenerator.new()
 
@@ -25,9 +34,14 @@ func _init(initEntities):
 	R = 0
 	D = 0
 	
+	for i in range(100):
+		days.append(i)
+		
 	infectRate = 0.2
 	recRate = 0.02
 	deathRate = 0.01
+	
+	timeDifference = 0
 	
 	rnd.randomize()
 	
@@ -35,18 +49,18 @@ func _init(initEntities):
 func simulate():
 	if I <= 0: # pandemic over
 		return
-	var t = 0
-#	var args = [t,S,I,R,D]
+	var t = timeDifference
 	while t<1:
 		t = gillespieIteration(t)
-#		t = args[0]
-#		S = args[1]
-#		I = args[2]
-#		R = args[3]
-#		D = args[4]
-#		args = [t,S,I,R,D]
 		print(t, " S ", S, " I ", I, " R ", R, " D ", D, " ", I+S+R+D)
-		
+		if(t>1):
+			timeDifference = fmod(t,1)
+			continue
+#		print(t, " S ", S, " I ", I, " R ", R, " D ", D, " ", I+S+R+D)
+	sStats.append(S)
+	iStats.append(I)
+	rStats.append(R)
+	dStats.append(D)
 
 func gillespieIteration(t):
 	var r1 = rnd.randf()
@@ -56,14 +70,12 @@ func gillespieIteration(t):
 	var waitTime = -log(r1)/reactTotal
 	t = t + waitTime
 	
-	
-#	reactionRates.sort()x
 	var r2 = rnd.randf()
 	
 	var reactionRatesCumSum = cumulative_sum(reactionRates)
 	for i in range(reactionRatesCumSum.size()):
 		reactionRatesCumSum[i] = reactionRatesCumSum[i] / reactTotal
-	print(r2," ", reactTotal, " ",reactionRates, " ", reactionRatesCumSum)
+#	print(r2," ", reactTotal, " ",reactionRates, " ", reactionRatesCumSum)
 #	läuft noch nicht hier, die reactionRates noch umrechnen auf passendes Intervall
 
 # ZEIT OVERFLOW MITNEHMEN IN NÄCHSTEN TAG, EVENT NOCH AUSFÜHREN

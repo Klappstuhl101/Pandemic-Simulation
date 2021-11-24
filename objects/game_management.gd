@@ -5,19 +5,24 @@ class_name Game_Management
 var entities # states + country
 var active # active state / country
 var mode # StatsMode or ActionMode
-var ui_output # ui_output for stats
+var stat_output # stat_output for stats
+var statButtons
 var sim # simulation class
 
 var previous # previous activated button
 
 var counter = 0
 
-func _init(initSim,  initOutput):
+func _init(initSim,  initStatOutput, initStatButtons):
 	self.sim = initSim
 	self.entities = sim.entities
-	self.ui_output = initOutput
+	self.stat_output = initStatOutput
+	self.statButtons = initStatButtons
 	connectButtons()
 	previous = entities.get(CONSTANTS.DEU)
+	
+#	var lineChart = stat_output[CONSTANTS.LINE]
+#	lineChart.plot_from_array([sim.days, sim.sStats, sim.iStats, sim.rStats, sim.dStats])
 	
 	
 
@@ -36,7 +41,7 @@ func showStats():
 #	active.mapButton.material.set_shader_param("infected", counter)
 #	var color = active.mapButton.material.get_shader_param("infectGradient").get_gradient().interpolate(counter)
 #	active.mapButton.material.get_shader_param("twoColorGradient").get_gradient().set_color(0,color)
-	ui_output[CONSTANTS.LABEL].text = active.name
+	stat_output[CONSTANTS.LABEL].text = active.name
 	pass
 
 func activate():
@@ -154,8 +159,14 @@ func _on_DEU_press(toggle):
 		activate()
 	else:
 		active.mapButton.pressed = true
+		
+func _on_statButton_press():
+	var lineChart = stat_output[CONSTANTS.LINE]
+	lineChart.plot_from_array([sim.days, sim.sStats, sim.iStats, sim.rStats, sim.dStats])
+	
 
 func connectButtons():
+	statButtons[CONSTANTS.STATBUTTON].connect("pressed", self, "_on_statButton_press")
 	for entity in entities.values():
 		match entity.name:
 			CONSTANTS.BAW:

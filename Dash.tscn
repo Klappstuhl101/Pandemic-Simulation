@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://resources/control_buttons/Pause-thin-rounded-button-white.png" type="Texture" id=1]
 [ext_resource path="res://resources/control_buttons/Play-rounded-button-outline-white.png" type="Texture" id=2]
@@ -44,6 +44,7 @@
 [ext_resource path="res://resources/shader/NIE.tres" type="Material" id=42]
 [ext_resource path="res://addons/easy_charts/PieChart/pie_chart.tscn" type="PackedScene" id=43]
 [ext_resource path="res://resources/standard_theme.theme" type="Theme" id=44]
+[ext_resource path="res://addons/easy_charts/LineChart/line_chart.tscn" type="PackedScene" id=45]
 
 [node name="Panel" type="Panel"]
 margin_right = 1366.0
@@ -289,6 +290,19 @@ source = "res://addons/easy_charts/file.samples/pie.csv"
 delimiter = ","
 Chart_Style/function_colors = PoolColorArray( 0.976471, 0.145098, 0.145098, 1, 0.0745098, 0.498039, 0.231373, 1, 0.839216, 0.729412, 0.12549, 1, 0.0862745, 0.243137, 0.603922, 1, 0.396078, 0.152941, 0.823529, 1, 0.941176, 0.439216, 0.0745098, 1, 0.67451, 0.678431, 0.772549, 1, 0.196078, 0.423529, 0.588235, 1 )
 
+[node name="LineChart" parent="Statistics" instance=ExtResource( 45 )]
+margin_left = -286.0
+margin_top = -362.0
+margin_right = -11.0
+margin_bottom = -362.0
+source = "res://addons/easy_charts/file.samples/linechart (rows).csv"
+delimiter = ","
+Chart_Style/function_colors = PoolColorArray( 0.0156863, 0.690196, 0.027451, 1, 0.952941, 0.0588235, 0.0588235, 1, 0.0509804, 0.737255, 0.721569, 1, 0, 0, 0, 1 )
+Chart_Style/box_color = Color( 0.431373, 0.415686, 0.415686, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+
 [node name="TimeControls" type="GridContainer" parent="."]
 margin_left = 601.982
 margin_top = 673.241
@@ -327,10 +341,10 @@ __meta__ = {
 }
 
 [node name="PlayControls" type="Panel" parent="."]
-margin_left = 734.101
-margin_top = 242.324
-margin_right = 774.101
-margin_bottom = 282.324
+margin_left = 599.282
+margin_top = 239.654
+margin_right = 639.282
+margin_bottom = 279.654
 
 [node name="MaskMandate" type="Button" parent="PlayControls"]
 margin_left = 76.5743
@@ -343,10 +357,10 @@ __meta__ = {
 }
 
 [node name="ModeControl" type="Panel" parent="."]
-margin_left = 700.516
-margin_top = 74.3353
-margin_right = 740.516
-margin_bottom = 114.335
+margin_left = 567.032
+margin_top = 44.9688
+margin_right = 607.032
+margin_bottom = 84.9685
 __meta__ = {
 "_edit_use_anchors_": false
 }

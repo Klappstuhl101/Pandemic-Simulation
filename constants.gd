@@ -29,3 +29,10 @@ const STATMODE = "Stats"
 const ACTIONMODE = "Action"
 
 const STATBUTTON = "StatButton"
+
+const TRYOUT_DAYS = 100
+
+const SUSCEPTIBLE = "Susceptible"
+const INFECTED = "Infected"
+const RECOVERED = "Recovered"
+const DEAD = "Dead"

@@ -161,45 +161,30 @@ func _on_DEU_press(toggle):
 		active.mapButton.pressed = true
 		
 func _on_statButton_press():
+	
+	
 	var lineChart = stat_output[CONSTANTS.LINE]
-	lineChart.plot_from_array([sim.days, sim.sStats, sim.iStats, sim.rStats, sim.dStats])
+	lineChart.plot_from_array([sim.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
 	
 
 func connectButtons():
 	statButtons[CONSTANTS.STATBUTTON].connect("pressed", self, "_on_statButton_press")
-	for entity in entities.values():
-		match entity.name:
-			CONSTANTS.BAW:
-				entity.mapButton.connect("toggled", self, "_on_BAW_press")
-			CONSTANTS.BAY:
-				entity.mapButton.connect("toggled", self, "_on_BAY_press")
-			CONSTANTS.BER:
-				entity.mapButton.connect("toggled", self, "_on_BER_press")
-			CONSTANTS.BRA:
-				entity.mapButton.connect("toggled", self, "_on_BRA_press")
-			CONSTANTS.BRE:
-				entity.mapButton.connect("toggled", self, "_on_BRE_press")
-			CONSTANTS.HAM:
-				entity.mapButton.connect("toggled", self, "_on_HAM_press")
-			CONSTANTS.HES:
-				entity.mapButton.connect("toggled", self, "_on_HES_press")
-			CONSTANTS.MVP:
-				entity.mapButton.connect("toggled", self, "_on_MVP_press")
-			CONSTANTS.NIE:
-				entity.mapButton.connect("toggled", self, "_on_NIE_press")
-			CONSTANTS.NRW:
-				entity.mapButton.connect("toggled", self, "_on_NRW_press")
-			CONSTANTS.RLP:
-				entity.mapButton.connect("toggled", self, "_on_RLP_press")
-			CONSTANTS.SAA:
-				entity.mapButton.connect("toggled", self, "_on_SAA_press")
-			CONSTANTS.SCN:
-				entity.mapButton.connect("toggled", self, "_on_SCN_press")
-			CONSTANTS.SCA:
-				entity.mapButton.connect("toggled", self, "_on_SCA_press")
-			CONSTANTS.SLH:
-				entity.mapButton.connect("toggled", self, "_on_SLH_press")
-			CONSTANTS.THU:
-				entity.mapButton.connect("toggled", self, "_on_THU_press")
-			CONSTANTS.DEU:
-				entity.mapButton.connect("toggled", self, "_on_DEU_press")
+	
+	# Buttons for Map
+	entities[CONSTANTS.BAW].mapButton.connect("toggled", self, "_on_BAW_press")
+	entities[CONSTANTS.BAY].mapButton.connect("toggled", self, "_on_BAY_press")
+	entities[CONSTANTS.BER].mapButton.connect("toggled", self, "_on_BER_press")
+	entities[CONSTANTS.BRA].mapButton.connect("toggled", self, "_on_BRA_press")
+	entities[CONSTANTS.BRE].mapButton.connect("toggled", self, "_on_BRE_press")
+	entities[CONSTANTS.HAM].mapButton.connect("toggled", self, "_on_HAM_press")
+	entities[CONSTANTS.HES].mapButton.connect("toggled", self, "_on_HES_press")
+	entities[CONSTANTS.MVP].mapButton.connect("toggled", self, "_on_MVP_press")
+	entities[CONSTANTS.NIE].mapButton.connect("toggled", self, "_on_NIE_press")
+	entities[CONSTANTS.NRW].mapButton.connect("toggled", self, "_on_NRW_press")
+	entities[CONSTANTS.RLP].mapButton.connect("toggled", self, "_on_RLP_press")
+	entities[CONSTANTS.SAA].mapButton.connect("toggled", self, "_on_SAA_press")
+	entities[CONSTANTS.SCN].mapButton.connect("toggled", self, "_on_SCN_press")
+	entities[CONSTANTS.SCA].mapButton.connect("toggled", self, "_on_SCA_press")
+	entities[CONSTANTS.SLH].mapButton.connect("toggled", self, "_on_SLH_press")
+	entities[CONSTANTS.THU].mapButton.connect("toggled", self, "_on_THU_press")
+	entities[CONSTANTS.DEU].mapButton.connect("toggled", self, "_on_DEU_press")

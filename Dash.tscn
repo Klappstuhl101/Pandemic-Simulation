@@ -297,11 +297,11 @@ margin_right = -11.0
 margin_bottom = -362.0
 source = "res://addons/easy_charts/file.samples/linechart (rows).csv"
 delimiter = ","
-Chart_Style/function_colors = PoolColorArray( 0.0156863, 0.690196, 0.027451, 1, 0.952941, 0.0588235, 0.0588235, 1, 0.0509804, 0.737255, 0.721569, 1, 0, 0, 0, 1 )
-Chart_Style/box_color = Color( 0.431373, 0.415686, 0.415686, 1 )
+Chart_Style/function_colors = PoolColorArray( 0.266667, 0.74902, 0.133333, 1, 0.878431, 0.12549, 0.12549, 1, 0.105882, 0.592157, 0.858824, 1, 0, 0, 0, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/font_color = Color( 1, 1, 1, 1 )
 
 [node name="TimeControls" type="GridContainer" parent="."]
 margin_left = 601.982

@@ -73,22 +73,22 @@ func _ready():
 	statButtons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
 	
 #	Map Buttons
-	bawu = State.new(CONSTANTS.BAW, 11103043, get_node("Map/BaWuButton"))
-	bayern = State.new(CONSTANTS.BAY, 10000, get_node("Map/BayernButton"))
-	berlin = State.new(CONSTANTS.BER, 10000, get_node("Map/BerlinButton"))
-	brand = State.new(CONSTANTS.BRA, 10000, get_node("Map/BrandenburgButton"))
-	bremen = State.new(CONSTANTS.BRE, 10000, get_node("Map/BremenButton"))
-	hamb = State.new(CONSTANTS.HAM, 10000, get_node("Map/HamburgButton"))
-	hessen = State.new(CONSTANTS.HES, 10000, get_node("Map/HessenButton"))
-	meckPom = State.new(CONSTANTS.MVP, 10000, get_node("Map/MeckPomButton"))
-	nieders = State.new(CONSTANTS.NIE, 10000, get_node("Map/NiedersachsenButton"))
-	nrw = State.new(CONSTANTS.NRW, 10000, get_node("Map/NrwButton"))
-	rlp = State.new(CONSTANTS.RLP, 10000, get_node("Map/RlpButton"))
-	saar = State.new(CONSTANTS.SAA, 10000, get_node("Map/SaarlandButton"))
-	sachsen = State.new(CONSTANTS.SCN, 10000, get_node("Map/SachsenButton"))
-	sacanh = State.new(CONSTANTS.SCA, 10000, get_node("Map/SachsenAnhaltButton"))
-	schlHol = State.new(CONSTANTS.SLH, 10000, get_node("Map/SchlHolButton"))
-	thur = State.new(CONSTANTS.THU, 10000, get_node("Map/ThuringenButton"))
+	bawu = State.new(CONSTANTS.BAW,		11103043, get_node("Map/BaWuButton"))
+	bayern = State.new(CONSTANTS.BAY,	13140183, get_node("Map/BayernButton"))
+	berlin = State.new(CONSTANTS.BER,	3664088, get_node("Map/BerlinButton"))
+	brand = State.new(CONSTANTS.BRA, 	2531071, get_node("Map/BrandenburgButton"))
+	bremen = State.new(CONSTANTS.BRE, 	680130, get_node("Map/BremenButton"))
+	hamb = State.new(CONSTANTS.HAM, 	1852478, get_node("Map/HamburgButton"))
+	hessen = State.new(CONSTANTS.HES, 	6293154, get_node("Map/HessenButton"))
+	meckPom = State.new(CONSTANTS.MVP, 	1610774, get_node("Map/MeckPomButton"))
+	nieders = State.new(CONSTANTS.NIE, 	8003421, get_node("Map/NiedersachsenButton"))
+	nrw = State.new(CONSTANTS.NRW, 		17925570, get_node("Map/NrwButton"))
+	rlp = State.new(CONSTANTS.RLP, 		4098391, get_node("Map/RlpButton"))
+	saar = State.new(CONSTANTS.SAA, 	983991, get_node("Map/SaarlandButton"))
+	sachsen = State.new(CONSTANTS.SCN, 	4056941, get_node("Map/SachsenButton"))
+	sacanh = State.new(CONSTANTS.SCA, 	2180684, get_node("Map/SachsenAnhaltButton"))
+	schlHol = State.new(CONSTANTS.SLH, 	2910875, get_node("Map/SchlHolButton"))
+	thur = State.new(CONSTANTS.THU, 	2120237, get_node("Map/ThuringenButton"))
 	
 	states = {CONSTANTS.BAW:bawu, CONSTANTS.BAY:bayern, CONSTANTS.BER:berlin, CONSTANTS.BRA:brand,
 	 CONSTANTS.BRE:bremen, CONSTANTS.HAM:hamb, CONSTANTS.HES:hessen, CONSTANTS.MVP:meckPom,
@@ -107,9 +107,10 @@ func _ready():
 	 })
 	game_manager = Game_Management.new(sim, statOutput, statButtons)
 	
-	for i in range(100):
+	for i in range(CONSTANTS.TRYOUT_DAYS):
 		print("TAG " + String(i))
-		sim.simulate()
+#		sim.simulate()
+		deu.simulateALL()
 
 
 

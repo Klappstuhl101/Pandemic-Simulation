@@ -71,6 +71,9 @@ func gillespieIteration(t):
 	var reactionRates = updateReactionRates()
 	var reactTotal = sum(reactionRates)
 	
+	if reactTotal == 0:
+		return 1
+		
 	var waitTime = -log(r1)/reactTotal
 	t = t + waitTime
 	

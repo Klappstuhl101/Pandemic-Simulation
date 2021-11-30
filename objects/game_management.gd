@@ -161,10 +161,21 @@ func _on_DEU_press(toggle):
 		active.mapButton.pressed = true
 		
 func _on_statButton_press():
+	var l1 = stat_output[CONSTANTS.LINE]
+	l1.plot_from_array([sim.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
+	
+	var l2 = stat_output[CONSTANTS.LINE2]
+	l2.plot_from_array([sim.days, entities[CONSTANTS.DEU].sus0, entities[CONSTANTS.DEU].inf0, entities[CONSTANTS.DEU].rec0, entities[CONSTANTS.DEU].dead0])
+
+	var l3 = stat_output[CONSTANTS.LINE3]
+	l3.plot_from_array([sim.days, entities[CONSTANTS.DEU].sus1, entities[CONSTANTS.DEU].inf1, entities[CONSTANTS.DEU].rec1, entities[CONSTANTS.DEU].dead1])
+
+	var l4 = stat_output[CONSTANTS.LINE4]
+	l4.plot_from_array([sim.days, entities[CONSTANTS.DEU].sus2, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
 	
 	
-	var lineChart = stat_output[CONSTANTS.LINE]
-	lineChart.plot_from_array([sim.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
+#	var lineChart = stat_output[CONSTANTS.LINE]
+#	lineChart.plot_from_array([sim.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
 	
 
 func connectButtons():

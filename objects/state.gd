@@ -58,6 +58,7 @@ func _init(initName, initPopulation, initButton):
 #	self.D = 0
 	
 	self.I = [3,0,0]
+#	self.I = [16000,0,0]
 	self.S = [self.population - self.I[0],0,0]
 	self.R = [0,0,0]
 	self.D = [0,0,0]
@@ -138,8 +139,10 @@ func gillespieIteration(t):
 		if(r2 <= reactionRatesCumSum[i]):
 			rule = i
 			break
-
+	
 	updatePersonNumbers(rule)
+	
+#	print(t, " t    r ", rule)
 	
 	return t
 

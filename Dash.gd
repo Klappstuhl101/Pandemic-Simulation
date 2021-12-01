@@ -36,7 +36,9 @@ var states
 var game_manager
 var sim
 
-var tenthsec
+var tenthsec = 0
+var sec = 0
+var minute = 0
 
 var statOutput = {}
 var statButtons = {}
@@ -81,7 +83,8 @@ func _ready():
 	
 	statButtons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
 	
-#	Map Buttons
+#	#Map Buttons
+#	# Test data
 	bawu = State.new(CONSTANTS.BAW,		1000, get_node("Map/BaWuButton"))
 	bayern = State.new(CONSTANTS.BAY,	1000, get_node("Map/BayernButton"))
 	berlin = State.new(CONSTANTS.BER,	1000, get_node("Map/BerlinButton"))
@@ -99,7 +102,7 @@ func _ready():
 	schlHol = State.new(CONSTANTS.SLH, 	1000, get_node("Map/SchlHolButton"))
 	thur = State.new(CONSTANTS.THU, 	1000, get_node("Map/ThuringenButton"))
 	
-	
+#	# Real Data
 #	bawu = State.new(CONSTANTS.BAW,		11103043, get_node("Map/BaWuButton"))
 #	bayern = State.new(CONSTANTS.BAY,	13140183, get_node("Map/BayernButton"))
 #	berlin = State.new(CONSTANTS.BER,	3664088, get_node("Map/BerlinButton"))
@@ -134,10 +137,12 @@ func _ready():
 	 })
 	game_manager = Game_Management.new(sim, statOutput, statButtons)
 	
+	print(OS.get_ticks_msec()/1000, " sec")
 	for i in range(CONSTANTS.TRYOUT_DAYS):
 		print("TAG " + String(i))
 #		sim.simulate()
 		deu.simulateALL()
+		print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes")
 
 
 
@@ -162,4 +167,11 @@ func _on_PlaySpeedx2_pressed():
 
 
 func _on_Time_timeout():
-	label.text = "Hallo"
+	tenthsec += 1
+	if tenthsec == 10:
+		sec +=1
+		tenthsec = 0
+	
+	if sec == 60:
+		sec = 0
+		minute += 1

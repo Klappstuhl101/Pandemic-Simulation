@@ -20,6 +20,9 @@ var infectRate
 var recRate
 var deathRate
 
+var hospitalBeds
+var hospitalRate
+
 var testRate
 var informationLoss
 var sus0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]
@@ -38,6 +41,12 @@ var dead2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.DEAD]
 var timeDifference
 
 var rnd = RandomNumberGenerator.new()
+
+# Indizierung für SIRD:
+# 0: Ungetestet
+# 1: Getestet
+# 2: Unbewusste Krankheitsänderung
+# 3: Hospitalisierte
 
 
 func _init(initName, initPopulation, initButton):
@@ -59,6 +68,10 @@ func _init(initName, initPopulation, initButton):
 	
 	self.I = [3,0,0]
 #	self.I = [16000,0,0]
+
+	# für Hospitalisierung
+#	self.I = [3,0,0,0,0]
+
 	self.S = [self.population - self.I[0],0,0]
 	self.R = [0,0,0]
 	self.D = [0,0,0]
@@ -74,6 +87,16 @@ func _init(initName, initPopulation, initButton):
 	
 	testRate = [0.04,0.04,0.04]
 	informationLoss = 0.02
+	
+#	# für Hospitalisierung
+#	infectRate = [0.2,0.2,0.2,0.1]
+#	recRate = [0.02,0.02,0.02,0.024]
+#	deathRate = [0.01,0.01,0.01,0.001]
+#	testRate = [0.04,0.04,0.04,1]
+#	hospitalBeds = 500
+#	hospitalRate = 1
+	
+	
 	
 	
 	timeDifference = 0
@@ -203,6 +226,38 @@ func updatePersonNumbers(rule):
 		17:
 			R[2] -= 1
 			R[0] += 1
+		
+		18:
+			S[0] -= 1
+			I[0] += 1
+		
+		19:
+			S[1] -= 1
+			I[1] += 1
+		
+		20:
+			S[2] -= 1
+			I[2] += 1
+		
+		21:
+			I[0] -= 1
+			I[3] += 1
+		
+		22:
+			I[1] -= 1
+			I[3] += 1
+		
+		23:
+			I[2] -= 1
+			I[3] += 1
+		
+		24:
+			I[3] -= 1
+			R[1] += 1
+		
+		25:
+			I[3] -= 1
+			D[1] += 1
 	
 #	# Standardmodell
 #	match rule:
@@ -251,6 +306,24 @@ func updateReactionRates():
 	rates.append(informationLoss*I[2])
 	rates.append(informationLoss*R[2])
 	
+	
+#	# Ab hier Raten für Hospitalisierung
+#	Davon ausgehen 100% Testrate im Krankenhaus, Genesene aus Krankenhaus in Getestet/Genesen stecken
+	# 18 19 20 Ansteckungen an Hospitalisierten
+	rates.append((infectRate[3]/population)*S[0]*I[3])
+	rates.append((infectRate[3]/population)*S[1]*I[3])
+	rates.append((infectRate[3]/population)*S[2]*I[3])
+	
+	# 21 22 23 Hospitalisierungsrate
+	rates.append(hospitalRate*(hospitalBeds-I[3])/population * I[0])
+	rates.append(hospitalRate*(hospitalBeds-I[3])/population * I[1])
+	rates.append(hospitalRate*(hospitalBeds-I[3])/population * I[2])
+	
+	# 24 Genesung Hospitalisierte
+	rates.append(recRate[3]*I[3])
+	
+	# 25 Tod Hospitalisierte
+	rates.append(deathRate[3]*I[3])
 	
 	
 #	Standardmodell

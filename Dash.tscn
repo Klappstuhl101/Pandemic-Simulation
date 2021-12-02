@@ -290,7 +290,6 @@ margin_bottom = 1.66632
 source = "res://addons/easy_charts/file.samples/pie.csv"
 delimiter = ","
 Chart_Style/function_colors = PoolColorArray( 0.976471, 0.145098, 0.145098, 1, 0.0745098, 0.498039, 0.231373, 1, 0.839216, 0.729412, 0.12549, 1, 0.0862745, 0.243137, 0.603922, 1, 0.396078, 0.152941, 0.823529, 1, 0.941176, 0.439216, 0.0745098, 1, 0.67451, 0.678431, 0.772549, 1, 0.196078, 0.423529, 0.588235, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="LineChart" parent="Statistics" instance=ExtResource( 45 )]
 margin_left = -286.0
@@ -300,10 +299,6 @@ margin_bottom = -362.0
 source = "res://addons/easy_charts/file.samples/linechart (rows).csv"
 delimiter = ","
 Chart_Style/function_colors = PoolColorArray( 0.0117647, 0.956863, 0.0705882, 1, 0.905882, 0.0901961, 0.0901961, 1, 0.0823529, 0.388235, 0.913725, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="LineChart2" parent="Statistics" instance=ExtResource( 45 )]
 margin_left = -1065.27
@@ -311,10 +306,6 @@ margin_top = 314.754
 margin_right = -791.269
 margin_bottom = 314.754
 Chart_Style/function_colors = PoolColorArray( 0.364706, 0.768627, 0.109804, 1, 0.901961, 0.0980392, 0.0980392, 1, 0.121569, 0.407843, 0.854902, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="LineChart3" parent="Statistics" instance=ExtResource( 45 )]
 margin_left = -477.78
@@ -322,10 +313,6 @@ margin_top = 321.448
 margin_right = -183.78
 margin_bottom = 321.448
 Chart_Style/function_colors = PoolColorArray( 0.152941, 0.803922, 0.117647, 1, 0.984314, 0.0431373, 0.0431373, 1, 0.0627451, 0.321569, 0.87451, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="LineChart4" parent="Statistics" instance=ExtResource( 45 )]
 margin_left = 125.645
@@ -333,10 +320,6 @@ margin_top = 297.015
 margin_right = 392.645
 margin_bottom = 297.015
 Chart_Style/function_colors = PoolColorArray( 0.152941, 0.65098, 0.0823529, 1, 0.909804, 0.0941176, 0.0941176, 1, 0.0901961, 0.337255, 0.854902, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="TimeControls" type="GridContainer" parent="."]
 margin_left = 601.982

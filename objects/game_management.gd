@@ -173,6 +173,9 @@ func _on_statButton_press():
 	var l4 = stat_output[CONSTANTS.LINE4]
 	l4.plot_from_array([sim.days, entities[CONSTANTS.DEU].sus2, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
 	
+	var l5 = stat_output[CONSTANTS.LINE5]
+	l5.plot_from_array([sim.days,entities[CONSTANTS.DEU].beds, entities[CONSTANTS.DEU].hosp])
+	
 	
 #	var lineChart = stat_output[CONSTANTS.LINE]
 #	lineChart.plot_from_array([sim.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])

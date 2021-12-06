@@ -6,6 +6,7 @@ var lineChart
 var lineChart2
 var lineChart3
 var lineChart4
+var lineChart5
 
 var timer
 
@@ -53,6 +54,7 @@ func _ready():
 	lineChart2 = get_node("Statistics/LineChart2")
 	lineChart3 = get_node("Statistics/LineChart3")
 	lineChart4 = get_node("Statistics/LineChart4")
+	lineChart5 = get_node("Statistics/LineChart5")
 #	pieChart.plot()
 	var stats = [["Country","Population"],["Germany",7],["GB",15],["Canada",10],["Sweden",3]]
 	
@@ -80,6 +82,7 @@ func _ready():
 	statOutput[CONSTANTS.LINE2] = lineChart2
 	statOutput[CONSTANTS.LINE3] = lineChart3
 	statOutput[CONSTANTS.LINE4] = lineChart4
+	statOutput[CONSTANTS.LINE5] = lineChart5
 	
 	statButtons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
 	

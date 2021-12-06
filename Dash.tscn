@@ -321,6 +321,17 @@ margin_right = 392.645
 margin_bottom = 297.015
 Chart_Style/function_colors = PoolColorArray( 0.152941, 0.65098, 0.0823529, 1, 0.909804, 0.0941176, 0.0941176, 1, 0.0901961, 0.337255, 0.854902, 1, 0.117647, 0.117647, 0.117647, 1 )
 
+[node name="LineChart5" parent="Statistics" instance=ExtResource( 45 )]
+margin_left = 279.047
+margin_top = -5.49829
+margin_right = 565.047
+margin_bottom = -5.49829
+Chart_Style/function_colors = PoolColorArray( 0.72549, 0.0470588, 0.0470588, 1, 0.992157, 0.67451, 0.00392157, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+
 [node name="TimeControls" type="GridContainer" parent="."]
 margin_left = 601.982
 margin_top = 673.241

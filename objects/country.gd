@@ -5,10 +5,19 @@ class_name Country
 
 var states # dict of states
 
+var beds = []
+
 
 func _init(initStates, initName, initButton).(initName, 0, initButton):
 	self.states = initStates
 	recalculatePop()
+	recalculateHospitalBeds()
+	
+	
+	# Hospital Bed array zum Anzeigen
+	for i in range(CONSTANTS.TRYOUT_DAYS):
+		beds.append(hospitalBeds)
+	
 	
 	
 	
@@ -17,10 +26,15 @@ func recalculatePop():
 	for state in states.values():
 		self.population += state.population
 
+func recalculateHospitalBeds():
+	self.hospitalBeds = 0
+	for state in states.values():
+		self.hospitalBeds += state.hospitalBeds
+
 
 func simulateALL():
 	S = [0,0,0]
-	I = [0,0,0]
+	I = [0,0,0,0]
 	R = [0,0,0]
 	D = [0,0,0]
 	
@@ -48,6 +62,8 @@ func simulateALL():
 	dead0.append(D[0])
 	dead1.append(D[1])
 	dead2.append(D[2])
+	
+	hosp.append(I[3])
 	
 #	# Standardsimulation
 #	S = 0

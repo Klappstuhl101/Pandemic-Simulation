@@ -38,6 +38,8 @@ var dead0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.DEAD]
 var dead1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.DEAD]
 var dead2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.DEAD]
 
+var hosp = [CONSTANTS.HOSPITALISED]
+
 var timeDifference
 
 var rnd = RandomNumberGenerator.new()
@@ -61,40 +63,48 @@ func _init(initName, initPopulation, initButton):
 	mapButton.texture_click_mask = bitmap
 	mapButton.toggle_mode = true
 	
+#	# StandardSimulation
 #	self.I = 3
 #	self.S = self.population - self.I
 #	self.R = 0
 #	self.D = 0
-	
-	self.I = [3,0,0]
-#	self.I = [16000,0,0]
-
-	# für Hospitalisierung
-#	self.I = [3,0,0,0,0]
-
-	self.S = [self.population - self.I[0],0,0]
-	self.R = [0,0,0]
-	self.D = [0,0,0]
 	
 #	infectRate = 0.2
 #	recRate = 0.02
 #	deathRate = 0.005
 #	deathRate = 0.01
 	
-	infectRate = [0.2,0.2,0.2]
-	recRate = [0.02,0.02,0.02]
-	deathRate = [0.01,0.01,0.01]
 	
-	testRate = [0.04,0.04,0.04]
+#	# Test-Simulation
+#	self.I = [3,0,0]
+#	self.I = [16000,0,0]
+	
+#	# Hospitalisierung
+	self.I = [3,0,0,0]
+	
+	
+	# für Test und Hospitalisierung
+	self.S = [self.population - self.I[0],0,0]
+	self.R = [0,0,0]
+	self.D = [0,0,0]
 	informationLoss = 0.02
 	
+#	# Test-Simulation
+#	infectRate = [0.2,0.2,0.2]
+#	recRate = [0.02,0.02,0.02]
+#	deathRate = [0.01,0.01,0.01]
+#	testRate = [0.04,0.04,0.04]
+
+	
+	
+	
 #	# für Hospitalisierung
-#	infectRate = [0.2,0.2,0.2,0.1]
-#	recRate = [0.02,0.02,0.02,0.024]
-#	deathRate = [0.01,0.01,0.01,0.001]
-#	testRate = [0.04,0.04,0.04,1]
-#	hospitalBeds = 500
-#	hospitalRate = 1
+	infectRate = [0.2,0.2,0.2,0.1]
+	recRate = [0.02,0.02,0.02,0.024]
+	deathRate = [0.01,0.01,0.01,0.001]
+	testRate = [0.04,0.04,0.04]
+	hospitalBeds = 20
+	hospitalRate = 0.6
 	
 	
 	
@@ -133,6 +143,8 @@ func simulate():
 	dead0.append(D[0])
 	dead1.append(D[1])
 	dead2.append(D[2])
+	
+	hosp.append(I[3])
 	
 #	# Standardsimulation
 #	suscept.append(S)
@@ -306,22 +318,22 @@ func updateReactionRates():
 	rates.append(informationLoss*I[2])
 	rates.append(informationLoss*R[2])
 	
-	
-#	# Ab hier Raten für Hospitalisierung
-#	Davon ausgehen 100% Testrate im Krankenhaus, Genesene aus Krankenhaus in Getestet/Genesen stecken
+
+	# Ab hier Raten für Hospitalisierung
+	# Davon ausgehen 100% Testrate im Krankenhaus, Genesene aus Krankenhaus in Getestet/Genesen stecken
 	# 18 19 20 Ansteckungen an Hospitalisierten
 	rates.append((infectRate[3]/population)*S[0]*I[3])
 	rates.append((infectRate[3]/population)*S[1]*I[3])
 	rates.append((infectRate[3]/population)*S[2]*I[3])
-	
+
 	# 21 22 23 Hospitalisierungsrate
 	rates.append(hospitalRate*(hospitalBeds-I[3])/population * I[0])
 	rates.append(hospitalRate*(hospitalBeds-I[3])/population * I[1])
 	rates.append(hospitalRate*(hospitalBeds-I[3])/population * I[2])
-	
+
 	# 24 Genesung Hospitalisierte
 	rates.append(recRate[3]*I[3])
-	
+
 	# 25 Tod Hospitalisierte
 	rates.append(deathRate[3]*I[3])
 	

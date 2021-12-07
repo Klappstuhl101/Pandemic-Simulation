@@ -23,6 +23,10 @@ var deathRate
 var hospitalBeds
 var hospitalRate
 
+var baseInfect
+var lockdown = false
+var lockdownStrictness
+
 var testRate
 var informationLoss
 var sus0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]
@@ -63,13 +67,15 @@ func _init(initName, initPopulation, initButton):
 	mapButton.texture_click_mask = bitmap
 	mapButton.toggle_mode = true
 	
+	
+	baseInfect = 0.2
 #	# StandardSimulation
 #	self.I = 3
 #	self.S = self.population - self.I
 #	self.R = 0
 #	self.D = 0
 	
-#	infectRate = 0.2
+#	infectRate = baseInfect
 #	recRate = 0.02
 #	deathRate = 0.005
 #	deathRate = 0.01
@@ -90,7 +96,7 @@ func _init(initName, initPopulation, initButton):
 	informationLoss = 0.02
 	
 #	# Test-Simulation
-#	infectRate = [0.2,0.2,0.2]
+#	infectRate = [baseInfect,baseInfect,baseInfect]
 #	recRate = [0.02,0.02,0.02]
 #	deathRate = [0.01,0.01,0.01]
 #	testRate = [0.04,0.04,0.04]
@@ -99,24 +105,30 @@ func _init(initName, initPopulation, initButton):
 	
 	
 #	# für Hospitalisierung
-	infectRate = [0.2,0.2,0.2,0.1]
+	infectRate = [baseInfect,baseInfect,baseInfect,baseInfect*0.5]
 	recRate = [0.02,0.02,0.02,0.024]
 	deathRate = [0.01,0.01,0.01,0.001]
 	testRate = [0.04,0.04,0.04]
 	hospitalBeds = 20
 	hospitalRate = 0.6
 	
-	
-	
+#	# für Lockdown
+	lockdownStrictness = 0.9
 	
 	timeDifference = 0
 	
 	rnd.randomize()
 
+func getInfectRate():
+	if lockdown:
+		return baseInfect * (1-lockdownStrictness)
+	else:
+		return baseInfect
 
 func simulate():
 #	if I <= 0: # pandemic over
 #		return
+	infectRate = [getInfectRate(), getInfectRate(), getInfectRate(), getInfectRate()*0.5]
 	var t = timeDifference
 	while t<1:
 		t = gillespieIteration(t)

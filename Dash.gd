@@ -143,6 +143,10 @@ func _ready():
 	print(OS.get_ticks_msec()/1000, " sec")
 	for i in range(CONSTANTS.TRYOUT_DAYS):
 		print("TAG " + String(i))
+		if 25 == i:
+			deu.imposeLockdown()
+		if i == 50:
+			deu.stopLockdown()
 #		sim.simulate()
 		deu.simulateALL()
 		print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes")

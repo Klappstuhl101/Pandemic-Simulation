@@ -31,6 +31,16 @@ func recalculateHospitalBeds():
 	for state in states.values():
 		self.hospitalBeds += state.hospitalBeds
 
+func imposeLockdown():
+	self.lockdown = true
+	for state in states.values():
+		state.lockdown = true
+
+func stopLockdown():
+	self.lockdown = false
+	for state in states.values():
+		state.lockdown = false
+	
 
 func simulateALL():
 	S = [0,0,0]

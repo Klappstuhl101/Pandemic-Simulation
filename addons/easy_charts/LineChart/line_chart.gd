@@ -40,3 +40,4 @@ func draw_lines():
 					2,
 					false)
 		_function += 1
+#		AUSKOMMENTIERT WEIL NUR SO DYNAMISCHE PLOTS FUNKTIONIEREN

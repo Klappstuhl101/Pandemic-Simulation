@@ -150,6 +150,7 @@ func _ready():
 #		sim.simulate()
 		deu.simulateALL()
 		print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes")
+#		lineChart.plot_from_array([sim.days, deu.suscept, deu.infect, deu.recov, deu.dead])
 
 
 
@@ -164,6 +165,8 @@ func _on_Pause_pressed():
 	pass
 	
 func _on_Play_pressed():
+#	deu.simulateALL()
+#	lineChart.plot_from_array([sim.days, deu.suscept, deu.infect, deu.recov, deu.dead])
 	label.text = "Play"
 	timer.start()
 	pass

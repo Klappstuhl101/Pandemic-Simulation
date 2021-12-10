@@ -37,9 +37,9 @@ func _init(initEntities):
 	R = 0
 	D = 0
 	
-	for i in range(CONSTANTS.TRYOUT_DAYS):
-		days.append(i)
-		
+#	for i in range(CONSTANTS.TRYOUT_DAYS):
+#		days.append(i)
+#
 	infectRate = 0.2
 	recRate = 0.02
 	deathRate = 0.01

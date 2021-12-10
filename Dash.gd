@@ -41,6 +41,8 @@ var tenthsec = 0
 var sec = 0
 var minute = 0
 
+var counter = 0
+
 var statOutput = {}
 var statButtons = {}
 
@@ -143,12 +145,13 @@ func _ready():
 	print(OS.get_ticks_msec()/1000, " sec")
 	for i in range(CONSTANTS.TRYOUT_DAYS):
 		print("TAG " + String(i))
-		if 25 == i:
-			deu.imposeLockdown()
-		if i == 50:
-			deu.stopLockdown()
-#		sim.simulate()
-		deu.simulateALL()
+#		sim.days.append(i)
+#		if 25 == i:
+#			deu.imposeLockdown()
+#		if i == 50:
+#			deu.stopLockdown()
+##		sim.simulate()
+#		deu.simulateALL()
 		print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes")
 #		lineChart.plot_from_array([sim.days, deu.suscept, deu.infect, deu.recov, deu.dead])
 
@@ -165,10 +168,13 @@ func _on_Pause_pressed():
 	pass
 	
 func _on_Play_pressed():
-#	deu.simulateALL()
-#	lineChart.plot_from_array([sim.days, deu.suscept, deu.infect, deu.recov, deu.dead])
-	label.text = "Play"
-	timer.start()
+	sim.days.append(counter)
+	counter+=1
+	label.text = String(counter)
+	deu.simulateALL()
+	lineChart.plot_from_array([sim.days, deu.suscept, deu.infect, deu.recov, deu.dead])
+#	label.text = "Play"
+#	timer.start()
 	pass
 	
 func _on_PlaySpeedx2_pressed():

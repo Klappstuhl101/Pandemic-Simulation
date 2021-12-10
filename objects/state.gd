@@ -16,6 +16,14 @@ var I
 var R
 var D
 
+var V
+
+# Indizierung V:
+# 0: S:
+#	0: 
+#
+#
+
 var infectRate
 var recRate
 var deathRate
@@ -53,6 +61,8 @@ var rnd = RandomNumberGenerator.new()
 # 1: Getestet
 # 2: Unbewusste Krankheitsänderung
 # 3: Hospitalisierte
+# 4: erste Impfung
+# 5: zweite Impfung (dann kein 2G+ möglich) extrem kleine Rate für unbewusst Infizierte
 
 
 func _init(initName, initPopulation, initButton):
@@ -95,7 +105,7 @@ func _init(initName, initPopulation, initButton):
 	self.D = [0,0,0]
 	informationLoss = 0.02
 	
-#	# Test-Simulation
+#	# nur Test-Simulation
 #	infectRate = [baseInfect,baseInfect,baseInfect]
 #	recRate = [0.02,0.02,0.02]
 #	deathRate = [0.01,0.01,0.01]

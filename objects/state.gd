@@ -16,13 +16,13 @@ var I
 var R
 var D
 
-var V
-
-# Indizierung V:
-# 0: S:
-#	0: 
+#var V
 #
-#
+## Indizierung V:
+## 0: S:
+##	0: 
+##
+##
 
 var infectRate
 var recRate

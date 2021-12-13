@@ -16,13 +16,26 @@ var I
 var R
 var D
 
-#var V
-#
-## Indizierung V:
-## 0: S:
-##	0: 
-##
-##
+# Indizierung für SIRD:
+# 0: Ungetestet
+# 1: Getestet
+# 2: Unbewusste Krankheitsänderung
+# 3: Hospitalisierte (nur Infizierte)
+
+var V1
+var V2
+
+# Indizierung V (einmal geimpft, zweimal geimpft): (Genesene und Infizierte werden nicht geimpft)
+# 0: ungetestet
+# 1: getestet
+# 2: unbewusst Infiziert
+# 3: Infiziert
+# 4: Hospitalisiert
+# 5: Gestorben
+
+var VinfectRate
+var VrecRate
+var VdeathRate
 
 var infectRate
 var recRate
@@ -32,6 +45,10 @@ var hospitalBeds
 var hospitalRate
 
 var baseInfect
+var baseRec
+var baseDeath
+var baseTest
+
 var lockdown = false
 var lockdownStrictness
 
@@ -56,15 +73,6 @@ var timeDifference
 
 var rnd = RandomNumberGenerator.new()
 
-# Indizierung für SIRD:
-# 0: Ungetestet
-# 1: Getestet
-# 2: Unbewusste Krankheitsänderung
-# 3: Hospitalisierte
-# 4: erste Impfung
-# 5: zweite Impfung (dann kein 2G+ möglich) extrem kleine Rate für unbewusst Infizierte
-
-
 func _init(initName, initPopulation, initButton):
 	self.name = initName
 	self.population = initPopulation
@@ -79,6 +87,9 @@ func _init(initName, initPopulation, initButton):
 	
 	
 	baseInfect = 0.2
+	baseRec = 0.02
+	baseDeath = 0.01
+	baseTest = 0.04
 #	# StandardSimulation
 #	self.I = 3
 #	self.S = self.population - self.I
@@ -116,14 +127,23 @@ func _init(initName, initPopulation, initButton):
 	
 #	# für Hospitalisierung
 	infectRate = [baseInfect,baseInfect,baseInfect,baseInfect*0.5]
-	recRate = [0.02,0.02,0.02,0.024]
-	deathRate = [0.01,0.01,0.01,0.001]
-	testRate = [0.04,0.04,0.04]
+	recRate = [baseRec, baseRec, baseRec, baseRec*1.2]
+	deathRate = [baseDeath, baseDeath, baseDeath, baseDeath/10]
+	testRate = [baseTest, baseTest, baseTest]
 	hospitalBeds = 20
 	hospitalRate = 0.6
 	
 #	# für Lockdown
 	lockdownStrictness = 0.9
+	
+	# für Impfung
+	self.V1 = [0,0,0,0,0]
+	self.V2 = [0,0,0,0,0]
+	
+	VinfectRate = [baseInfect, baseInfect, baseInfect]
+	VdeathRate = [baseDeath, baseDeath, baseDeath]
+	VrecRate = [baseRec, baseRec, baseRec]
+	
 	
 	timeDifference = 0
 	

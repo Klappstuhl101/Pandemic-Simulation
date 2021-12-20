@@ -23,10 +23,17 @@ var D
 # 3: Hospitalisierte (nur Infizierte)
 
 var V1
+var V1eligible
 var V2
+
+var vacRate1
+var vacRate2
+var waitDay = 0
+#var vacDelay
 
 # Indizierung V (einmal geimpft, zweimal geimpft): (Genesene und Infizierte werden nicht geimpft)
 # 0: ungetestet
+# Wohl eher ohne Testen, zu verwinkelt, zu beliebig komplex
 # 1: getestet
 # 2: unbewusst Infiziert
 # 3: Infiziert
@@ -136,13 +143,19 @@ func _init(initName, initPopulation, initButton):
 #	# für Lockdown
 	lockdownStrictness = 0.9
 	
+	var vacDelayArr = CONSTANTS.zeroes(CONSTANTS.VACDELAY)
 	# für Impfung
-	self.V1 = [0,0,0,0,0]
-	self.V2 = [0,0,0,0,0]
+	self.V1 = [vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr] # "Förderband-Methode" für vacDelay um genau zu tracken
+	self.V1eligible = [0,0,0,0,0,0]
+	self.V2 = [0,0,0,0,0,0]
 	
 	VinfectRate = [baseInfect, baseInfect, baseInfect]
 	VdeathRate = [baseDeath, baseDeath, baseDeath]
 	VrecRate = [baseRec, baseRec, baseRec]
+	
+	vacRate1 = 2
+	vacRate2 = 18
+#	vacDelay = 42
 	
 	
 	timeDifference = 0
@@ -187,6 +200,10 @@ func simulate():
 	dead2.append(D[2])
 	
 	hosp.append(I[3])
+	
+	waitDay += 1
+	if waitDay == CONSTANTS.VACDELAY:
+		waitDay = 0
 	
 #	# Standardsimulation
 #	suscept.append(S)
@@ -378,6 +395,9 @@ func updateReactionRates():
 
 	# 25 Tod Hospitalisierte
 	rates.append(deathRate[3]*I[3])
+	
+	# Übergang zu erster Impfung
+	rates.append()
 	
 	
 #	Standardmodell

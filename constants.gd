@@ -48,6 +48,8 @@ const TESTED = "Tested"
 const NTESTED = "Not Tested"
 const UNAWARE = "Unaware"
 
+const VACDELAY = 42
+
 # add the entries of two same length arrays
 static func add_arrays(arr1, arr2):
 	var new = []
@@ -56,3 +58,9 @@ static func add_arrays(arr1, arr2):
 		new.append(arr1[counter] + arr2[counter])
 		counter += 1
 	return new
+
+static func zeroes(length : int):
+	var arr = []
+	for i in range(length):
+		arr.append(0)
+	return arr

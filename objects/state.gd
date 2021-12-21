@@ -32,13 +32,12 @@ var waitDay = 0
 #var vacDelay
 
 # Indizierung V (einmal geimpft, zweimal geimpft): (Genesene und Infizierte werden nicht geimpft)
-# 0: ungetestet
+# 0: Ansteckbar
 # Wohl eher ohne Testen, zu verwinkelt, zu beliebig komplex
-# 1: getestet
-# 2: unbewusst Infiziert
-# 3: Infiziert
-# 4: Hospitalisiert
-# 5: Gestorben
+# 1: Infiziert
+# 2: Hospitalisiert
+# 3: Genesen (nur erste Impfung, danach Genesene ganz normal zu zweimal Geimpften zählen)
+# 4: Gestorben
 
 var VinfectRate
 var VrecRate
@@ -61,20 +60,20 @@ var lockdownStrictness
 
 var testRate
 var informationLoss
-var sus0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]
-var sus1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]
-var sus2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]
-var inf0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]
-var inf1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]
-var inf2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.INFECTED]
-var rec0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.RECOVERED]
-var rec1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.RECOVERED]
-var rec2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.RECOVERED]
-var dead0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.DEAD]
-var dead1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.DEAD]
-var dead2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.DEAD]
+var sus0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]	# ungetestet ansteckbar
+var sus1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]		# getestet ansteckbar
+var sus2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]	# unbewusst ansteckbar (WIRD GESTRICHEN, NICHT MÖGLICH)
+var inf0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]		# ungetestet infiziert
+var inf1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]		# getestet infiziert
+var inf2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.INFECTED]		# unbewusst infiziert
+var rec0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# ungetestet genesen 
+var rec1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# getestet genesen
+var rec2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# unbewusst genesen
+var dead0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.DEAD]			# ungetestet tot
+var dead1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.DEAD]			# getestet tot
+var dead2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.DEAD]			# unbewusst tot
 
-var hosp = [CONSTANTS.HOSPITALISED]
+var hosp = [CONSTANTS.HOSPITALISED]		# Hospitalisierte
 
 var timeDifference
 
@@ -145,9 +144,9 @@ func _init(initName, initPopulation, initButton):
 	
 	var vacDelayArr = CONSTANTS.zeroes(CONSTANTS.VACDELAY)
 	# für Impfung
-	self.V1 = [vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr] # "Förderband-Methode" für vacDelay um genau zu tracken
-	self.V1eligible = [0,0,0,0,0,0]
-	self.V2 = [0,0,0,0,0,0]
+	self.V1 = [vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr] # "Förderband-Methode" für vacDelay um genau zu tracken
+	self.V1eligible = [0,0,0,0,0]
+	self.V2 = [0,0,0,0,0]
 	
 	VinfectRate = [baseInfect, baseInfect, baseInfect]
 	VdeathRate = [baseDeath, baseDeath, baseDeath]
@@ -397,7 +396,7 @@ func updateReactionRates():
 	rates.append(deathRate[3]*I[3])
 	
 	# Übergang zu erster Impfung
-	rates.append()
+#	rates.append()
 	
 	
 #	Standardmodell

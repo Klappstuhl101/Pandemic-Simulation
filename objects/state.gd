@@ -29,7 +29,8 @@ var V2
 var vacRate1
 var vacRate2
 var waitDay = 0
-#var vacDelay
+
+var avlbVax
 
 # Indizierung V (einmal geimpft, zweimal geimpft): (Genesene und Infizierte werden nicht geimpft)
 # 0: Ansteckbar
@@ -76,6 +77,7 @@ var dead2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.DEAD]			# unbewusst tot
 var hosp = [CONSTANTS.HOSPITALISED]		# Hospitalisierte
 
 var timeDifference
+var timeDifferenceV1
 
 var rnd = RandomNumberGenerator.new()
 
@@ -132,7 +134,7 @@ func _init(initName, initPopulation, initButton):
 	
 	
 #	# für Hospitalisierung
-	infectRate = [baseInfect,baseInfect,baseInfect,baseInfect*0.5]
+	infectRate = [getInfectRate(), getInfectRate(), getInfectRate(), getInfectRate()*0.5]
 	recRate = [baseRec, baseRec, baseRec, baseRec*1.2]
 	deathRate = [baseDeath, baseDeath, baseDeath, baseDeath/10]
 	testRate = [baseTest, baseTest, baseTest]
@@ -154,10 +156,10 @@ func _init(initName, initPopulation, initButton):
 	
 	vacRate1 = 2
 	vacRate2 = 18
-#	vacDelay = 42
 	
 	
 	timeDifference = 0
+	timeDifferenceV1 = 0
 	
 	rnd.randomize()
 
@@ -213,7 +215,7 @@ func simulate():
 func gillespieIteration(t):
 	var r1 = rnd.randf()
 	var reactionRates = updateReactionRates()
-	var reactTotal = sum(reactionRates)
+	var reactTotal = CONSTANTS.sum(reactionRates)
 	
 	if reactTotal == 0:
 		return 1
@@ -223,7 +225,7 @@ func gillespieIteration(t):
 	
 	var r2 = rnd.randf()
 	
-	var reactionRatesCumSum = cumulative_sum(reactionRates)
+	var reactionRatesCumSum = CONSTANTS.cumulative_sum(reactionRates)
 	for i in range(reactionRatesCumSum.size()):
 		reactionRatesCumSum[i] = reactionRatesCumSum[i] / reactTotal
 	
@@ -396,7 +398,13 @@ func updateReactionRates():
 	rates.append(deathRate[3]*I[3])
 	
 	# Übergang zu erster Impfung
-#	rates.append()
+	# 26 27 von S zu V1
+#	rates.append(vacRate1*avlbVax*S[0])
+#	rates.append(vacRate1*avlbVax*S[1])
+#
+#	# 28 29 von V1 zu V2 (nur noch nicht Angesteckte und Genesene bekommen zweite Impfung)
+#	rates.append(vacRate2*avlbVax*V1eligible[0])
+#	rates.append(vacRate2*avlbVax*V1eligible[3])
 	
 	
 #	Standardmodell
@@ -406,13 +414,69 @@ func updateReactionRates():
 	
 	return rates
 	
-func sum(arr):
-	var sum = 0
-	for i in range(arr.size()):
-		sum += arr[i]
-	return sum
 
-func cumulative_sum(arr):
-	for i in range(1,arr.size()):
-		arr[i] += arr[i-1]
-	return arr
+
+func simulateV1():
+	infectRate = [getInfectRate(), getInfectRate(), getInfectRate(), getInfectRate()*0.5]
+	var t = timeDifferenceV1
+	for i in V1.size():
+		while t < 1:
+			gillespieV1(t, i)
+			if(t>1):
+				timeDifferenceV1 = fmod(t,1)
+				continue
+		
+	
+func gillespieV1(t, block):
+	var r1 = rnd.randf()
+	var reactionRates = updateReactionRatesV1()
+	var reactTotal = CONSTANTS.sum(reactionRates)
+	
+	if reactTotal == 0:
+		return 1
+		
+	var waitTime = -log(r1)/reactTotal
+	t = t + waitTime
+	
+	var r2 = rnd.randf()
+	
+	var reactionRatesCumSum = CONSTANTS.cumulative_sum(reactionRates)
+	for i in range(reactionRatesCumSum.size()):
+		reactionRatesCumSum[i] = reactionRatesCumSum[i] / reactTotal
+	
+	var rule
+	for i in range(reactionRatesCumSum.size()):
+		if(r2 <= reactionRatesCumSum[i]):
+			rule = i
+			break
+	
+	updatePersonNumbersV1(rule, block)
+	
+#	print(t, " t    r ", rule)
+	
+	return t
+
+
+# TODO HIER GESCHEITE REGELN AUFSTELLEN BZW GESCHEITE RATEN 
+func updateReactionRatesV1():
+	var rates = []
+	# 1 gesunde zu Infizierten
+	rates.append((infectRate/population)*S*I)
+	
+	# 2 Genesung von Infizierten
+	rates.append(recRate*I)
+	
+	# 3 Tode von Infizierten
+	rates.append(deathRate*I)
+	
+	# 4 Hospitalisierung von Infizierten
+	
+	
+	return rates
+	
+
+func updatePersonNumbersV1(rule, block):
+	match rule:
+		1:
+			pass
+	pass

@@ -50,6 +50,18 @@ const UNAWARE = "Unaware"
 
 const VACDELAY = 42
 
+
+static func sum(arr):
+	var sum = 0
+	for i in range(arr.size()):
+		sum += arr[i]
+	return sum
+
+static func cumulative_sum(arr):
+	for i in range(1,arr.size()):
+		arr[i] += arr[i-1]
+	return arr
+
 # add the entries of two same length arrays
 static func add_arrays(arr1, arr2):
 	var new = []

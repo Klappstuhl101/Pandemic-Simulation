@@ -37,6 +37,7 @@ var avlbVax
 # Wohl eher ohne Testen, zu verwinkelt, zu beliebig komplex
 # 1: Infiziert
 # 2: Hospitalisiert
+# Wohl auch eher ohne Hospitalisierungen, macht das Tracking der Nummern unnötig kompliziert
 # 3: Genesen (nur erste Impfung, danach Genesene ganz normal zu zweimal Geimpften zählen)
 # 4: Gestorben
 
@@ -460,17 +461,18 @@ func gillespieV1(t, block):
 # TODO HIER GESCHEITE REGELN AUFSTELLEN BZW GESCHEITE RATEN 
 func updateReactionRatesV1():
 	var rates = []
-	# 1 gesunde zu Infizierten
-	rates.append((infectRate/population)*S*I)
+	# 1 gesunde zu Infizierten NOCH ANDERE INFECTRATE
+	# Summe von allen normalen S, allen einaml geimpften S, und zweimal Geimpften
+	rates.append((infectRate[0]/population) * (CONSTANTS.sum(S)+CONSTANTS.sum(V1[0]) + V1eligible[0] + V2[0]) * (CONSTANTS.sum(I) + CONSTANTS.sum(V1[1]) + CONSTANTS.sum(V1[2]) + V1eligible[1] + V1eligible[2] + V2[1] + V2[2]))
 	
 	# 2 Genesung von Infizierten
-	rates.append(recRate*I)
+	rates.append(recRate[0] * (CONSTANTS.sum(I) + CONSTANTS.sum(V1[1]) + CONSTANTS.sum(V1[2]) + V1eligible[1] + V1eligible[2] + V2[1] + V2[2]))
 	
 	# 3 Tode von Infizierten
-	rates.append(deathRate*I)
+	rates.append(deathRate[0] * (CONSTANTS.sum(I) + CONSTANTS.sum(V1[1]) + CONSTANTS.sum(V1[2]) + V1eligible[1] + V1eligible[2] + V2[1] + V2[2]))
 	
 	# 4 Hospitalisierung von Infizierten
-	
+#	rates.append()
 	
 	return rates
 	

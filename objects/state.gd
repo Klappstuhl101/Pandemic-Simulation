@@ -36,10 +36,8 @@ var avlbVax
 # 0: Ansteckbar
 # Wohl eher ohne Testen, zu verwinkelt, zu beliebig komplex
 # 1: Infiziert
-# 2: Hospitalisiert
-# Wohl auch eher ohne Hospitalisierungen, macht das Tracking der Nummern unnötig kompliziert
-# 3: Genesen (nur erste Impfung, danach Genesene ganz normal zu zweimal Geimpften zählen)
-# 4: Gestorben
+# 2: Genesen (nur erste Impfung, danach Genesene ganz normal zu zweimal Geimpften zählen)
+# 3: Gestorben
 
 var VinfectRate
 var VrecRate
@@ -147,7 +145,7 @@ func _init(initName, initPopulation, initButton):
 	
 	var vacDelayArr = CONSTANTS.zeroes(CONSTANTS.VACDELAY)
 	# für Impfung
-	self.V1 = [vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr] # "Förderband-Methode" für vacDelay um genau zu tracken
+	self.V1 = [vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr] # "Förderband-Methode" für vacDelay um genau zu tracken
 	self.V1eligible = [0,0,0,0,0]
 	self.V2 = [0,0,0,0,0]
 	
@@ -183,6 +181,8 @@ func simulate():
 			continue
 			
 	
+	simulateV1()
+	
 	suscept.append(S[0] + S[1] + S[2])
 	infect.append(I[0] + I[1] + I[2])
 	recov.append(R[0] + R[1] + R[2])
@@ -204,7 +204,7 @@ func simulate():
 	hosp.append(I[3])
 	
 	waitDay += 1
-	if waitDay == CONSTANTS.VACDELAY:
+	if waitDay == CONSTANTS.VACDELAY - 1:
 		waitDay = 0
 	
 #	# Standardsimulation
@@ -422,7 +422,7 @@ func simulateV1():
 	var t = timeDifferenceV1
 	for i in V1.size():
 		while t < 1:
-			gillespieV1(t, i)
+			t = gillespieV1(t, i)
 			if(t>1):
 				timeDifferenceV1 = fmod(t,1)
 				continue
@@ -480,5 +480,9 @@ func updateReactionRatesV1():
 func updatePersonNumbersV1(rule, block):
 	match rule:
 		1:
+			pass
+		2:
+			pass
+		3:
 			pass
 	pass

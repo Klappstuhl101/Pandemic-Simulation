@@ -32,13 +32,6 @@ var waitDay = 0
 
 var avlbVax
 
-# Indizierung V (einmal geimpft, zweimal geimpft): (Genesene und Infizierte werden nicht geimpft)
-# 0: Ansteckbar
-# Wohl eher ohne Testen, zu verwinkelt, zu beliebig komplex
-# 1: Infiziert
-# 2: Genesen (nur erste Impfung, danach Genesene ganz normal zu zweimal Geimpften zählen)
-# 3: Gestorben
-
 var VinfectRate
 var VrecRate
 var VdeathRate
@@ -146,8 +139,22 @@ func _init(initName, initPopulation, initButton):
 	var vacDelayArr = CONSTANTS.zeroes(CONSTANTS.VACDELAY)
 	# für Impfung
 	self.V1 = [vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr] # "Förderband-Methode" für vacDelay um genau zu tracken
-	self.V1eligible = [0,0,0,0,0]
+	self.V1eligible = [0,0,0,0]
+	
+	# Indizierung V1 und V1eligible (einmal geimpft): (Genesene und Infizierte werden nicht geimpft)
+	# 0: Ansteckbar (S)
+	# 1: Infiziert (I)
+	# 2: Genesen (nur erste Impfung, danach Genesene ganz normal zu zweimal Geimpften zählen) (R)
+	# 3: Gestorben (D)
+	
 	self.V2 = [0,0,0,0,0]
+	
+	# Indizierung V2 (zweimal geimpft)
+	# 0: Ansteckbar (S)
+	# 1: Infiziert (I)
+	# 2: Hospitalisiert (H)
+	# 3: Genesen (R)
+	# 4: Gestorben (D)
 	
 	VinfectRate = [baseInfect, baseInfect, baseInfect]
 	VdeathRate = [baseDeath, baseDeath, baseDeath]
@@ -182,6 +189,12 @@ func simulate():
 			
 	
 	simulateV1()
+	print(V1)
+	
+	V1eligible[0] += V1[0][waitDay]
+	V1eligible[1] += V1[1][waitDay] 
+	V1eligible[2] += V1[2][waitDay] 
+	V1eligible[3] += V1[3][waitDay] 
 	
 	suscept.append(S[0] + S[1] + S[2])
 	infect.append(I[0] + I[1] + I[2])
@@ -463,16 +476,14 @@ func updateReactionRatesV1():
 	var rates = []
 	# 1 gesunde zu Infizierten NOCH ANDERE INFECTRATE
 	# Summe von allen normalen S, allen einaml geimpften S, und zweimal Geimpften
-	rates.append((infectRate[0]/population) * (CONSTANTS.sum(S)+CONSTANTS.sum(V1[0]) + V1eligible[0] + V2[0]) * (CONSTANTS.sum(I) + CONSTANTS.sum(V1[1]) + CONSTANTS.sum(V1[2]) + V1eligible[1] + V1eligible[2] + V2[1] + V2[2]))
+	rates.append((infectRate[0]/population) * (CONSTANTS.sum(S)+CONSTANTS.sum(V1[0]) + V1eligible[0] + V2[0]) * (CONSTANTS.sum(I) + CONSTANTS.sum(V1[1]) + V1eligible[1] + V2[1]))
 	
 	# 2 Genesung von Infizierten
-	rates.append(recRate[0] * (CONSTANTS.sum(I) + CONSTANTS.sum(V1[1]) + CONSTANTS.sum(V1[2]) + V1eligible[1] + V1eligible[2] + V2[1] + V2[2]))
+	rates.append(recRate[0] * (CONSTANTS.sum(I) + CONSTANTS.sum(V1[1]) + V1eligible[1] + V2[1] + V2[2]))
 	
 	# 3 Tode von Infizierten
-	rates.append(deathRate[0] * (CONSTANTS.sum(I) + CONSTANTS.sum(V1[1]) + CONSTANTS.sum(V1[2]) + V1eligible[1] + V1eligible[2] + V2[1] + V2[2]))
+	rates.append(deathRate[0] * (CONSTANTS.sum(I) + CONSTANTS.sum(V1[1]) + V1eligible[1] + V2[1] + V2[2]))
 	
-	# 4 Hospitalisierung von Infizierten
-#	rates.append()
 	
 	return rates
 	
@@ -480,9 +491,13 @@ func updateReactionRatesV1():
 func updatePersonNumbersV1(rule, block):
 	match rule:
 		1:
-			pass
+			V1[0][block] -= 1
+			V1[1][block] += 1
 		2:
-			pass
+			V1[1][block] -= 1
+			V1[2][block] += 1
 		3:
-			pass
-	pass
+			V1[1][block] -= 1
+			V1[3][block] += 1
+
+

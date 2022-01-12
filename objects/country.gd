@@ -7,14 +7,20 @@ var states # dict of states
 
 var beds = []
 
+var vaxProduction
+
 
 func _init(initStates, initName, initButton).(initName, 0, initButton):
 	self.states = initStates
 	recalculatePop()
 	recalculateHospitalBeds()
 	
+	self.avlbVax = 0
+	setVaxProduction(0)
+	
 	
 	# Hospital Bed array zum Anzeigen
+	beds.append("Available Hospital-Beds")
 	for i in range(CONSTANTS.TRYOUT_DAYS):
 		beds.append(hospitalBeds)
 	
@@ -41,12 +47,29 @@ func stopLockdown():
 	for state in states.values():
 		state.lockdown = false
 	
+func produceVax():
+	self.avlbVax += vaxProduction
+
+func setVaxProduction(value):
+	self.vaxProduction = value
+
+func distributeVax():
+	var sumVax = 0
+	for state in states.values():
+		var distVax = floor(self.avlbVax * (state.population/self.population))
+		state.avlbVax += distVax
+		sumVax += distVax
+	self.avlbVax -= sumVax
+	
 
 func simulateALL():
 	S = [0,0,0]
 	I = [0,0,0,0]
 	R = [0,0,0]
 	D = [0,0,0]
+	
+	produceVax()
+	distributeVax()
 	
 	for state in states.values():
 		state.simulate()
@@ -55,14 +78,15 @@ func simulateALL():
 		R = CONSTANTS.add_arrays(R, state.R)
 		D = CONSTANTS.add_arrays(D, state.D)
 	
-	suscept.append(S[0] + S[1] + S[2])
+#	suscept.append(S[0] + S[1] + S[2])
+	suscept.append(S[0] + S[1])
 	infect.append(I[0] + I[1] + I[2])
 	recov.append(R[0] + R[1] + R[2])
 	dead.append(D[0] + D[1] + D[2])
 	
 	sus0.append(S[0])
 	sus1.append(S[1])
-	sus2.append(S[2])
+#	sus2.append(S[2])
 	inf0.append(I[0])
 	inf1.append(I[1])
 	inf2.append(I[2])

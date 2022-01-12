@@ -150,6 +150,7 @@ func _ready():
 			deu.imposeLockdown()
 		if i == 50:
 			deu.stopLockdown()
+			deu.setVaxProduction(1000000)
 #		sim.simulate()
 		deu.simulateALL()
 		print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes")

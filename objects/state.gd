@@ -90,6 +90,8 @@ func _init(initName, initPopulation, initButton):
 	baseRec = 0.02
 	baseDeath = 0.01
 	baseTest = 0.04
+	
+	self.avlbVax = 0
 #	# StandardSimulation
 #	self.I = 3
 #	self.S = self.population - self.I
@@ -111,7 +113,7 @@ func _init(initName, initPopulation, initButton):
 	
 	
 	# für Test und Hospitalisierung
-	self.S = [self.population - self.I[0],0,0]
+	self.S = [self.population - self.I[0],0]
 	self.R = [0,0,0]
 	self.D = [0,0,0]
 	informationLoss = 0.02
@@ -126,7 +128,7 @@ func _init(initName, initPopulation, initButton):
 	
 	
 #	# für Hospitalisierung
-	infectRate = [getInfectRate(), getInfectRate(), getInfectRate(), getInfectRate()*0.5]
+	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*0.5, getInfectRate()*0.4, getInfectRate()*0.2]
 	recRate = [baseRec, baseRec, baseRec, baseRec*1.2]
 	deathRate = [baseDeath, baseDeath, baseDeath, baseDeath/10]
 	testRate = [baseTest, baseTest, baseTest]
@@ -141,7 +143,7 @@ func _init(initName, initPopulation, initButton):
 	self.V1 = [vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr] # "Förderband-Methode" für vacDelay um genau zu tracken
 	self.V1eligible = [0,0,0,0]
 	
-	# Indizierung V1 und V1eligible (einmal geimpft): (Genesene und Infizierte werden nicht geimpft)
+	# Indizierung V1 (einmal geimpft): (Infizierte werden nicht geimpft)
 	# 0: Ansteckbar (S)
 	# 1: Infiziert (I)
 	# 2: Genesen (nur erste Impfung, danach Genesene ganz normal zu zweimal Geimpften zählen) (R)
@@ -149,16 +151,16 @@ func _init(initName, initPopulation, initButton):
 	
 	self.V2 = [0,0,0,0,0]
 	
-	# Indizierung V2 (zweimal geimpft)
+	# Indizierung V1eligible und V2 (zweimal geimpft)
 	# 0: Ansteckbar (S)
 	# 1: Infiziert (I)
 	# 2: Hospitalisiert (H)
 	# 3: Genesen (R)
 	# 4: Gestorben (D)
 	
-	VinfectRate = [baseInfect, baseInfect, baseInfect]
-	VdeathRate = [baseDeath, baseDeath, baseDeath]
-	VrecRate = [baseRec, baseRec, baseRec]
+#	VinfectRate = [baseInfect, baseInfect, baseInfect]
+#	VdeathRate = [baseDeath, baseDeath, baseDeath]
+#	VrecRate = [baseRec, baseRec, baseRec]
 	
 	vacRate1 = 2
 	vacRate2 = 18
@@ -178,7 +180,7 @@ func getInfectRate():
 func simulate():
 #	if I <= 0: # pandemic over
 #		return
-	infectRate = [getInfectRate(), getInfectRate(), getInfectRate(), getInfectRate()*0.5]
+	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*0.5, getInfectRate()*0.4, getInfectRate()*0.2] # Ungetestet, Getestet, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	var t = timeDifference
 	while t<1:
 		t = gillespieIteration(t)
@@ -196,14 +198,25 @@ func simulate():
 	V1eligible[2] += V1[2][waitDay] 
 	V1eligible[3] += V1[3][waitDay] 
 	
-	suscept.append(S[0] + S[1] + S[2])
+	V1[0][waitDay] = 0
+	V1[1][waitDay] = 0
+	V1[2][waitDay] = 0
+	V1[3][waitDay] = 0
+	
+	waitDay += 1
+	if waitDay == CONSTANTS.VACDELAY - 1:
+		waitDay = 0
+	
+	
+#	suscept.append(S[0] + S[1] + S[2])
+	suscept.append(S[0] + S[1])
 	infect.append(I[0] + I[1] + I[2])
 	recov.append(R[0] + R[1] + R[2])
 	dead.append(D[0] + D[1] + D[2])
 	
 	sus0.append(S[0])
 	sus1.append(S[1])
-	sus2.append(S[2])
+#	sus2.append(S[2])
 	inf0.append(I[0])
 	inf1.append(I[1])
 	inf2.append(I[2])
@@ -216,9 +229,7 @@ func simulate():
 	
 	hosp.append(I[3])
 	
-	waitDay += 1
-	if waitDay == CONSTANTS.VACDELAY - 1:
-		waitDay = 0
+	
 	
 #	# Standardsimulation
 #	suscept.append(S)
@@ -360,15 +371,19 @@ func updatePersonNumbers(rule):
 func updateReactionRates():
 	var rates = []
 #	Modell mit Tests
-	# 0 1 2 Infektion Ungetestete 
+	# 0 1 2 Infektion Ungetestete  Hier Raten anpassen mit V2?
 	rates.append((infectRate[0]/population)*S[0]*I[0])
 	rates.append((infectRate[0]/population)*S[0]*I[1])
 	rates.append((infectRate[0]/population)*S[0]*I[2])
+#	rates.append((infectRate[0]/population)*S[0]*V1eligible[1])
+#	rates.append((infectRate[0]/population)*S[0]*V2[1])
 	
 	# 3 4 5 Infektion Getestete
 	rates.append((infectRate[1]/population)*S[1]*I[0])
 	rates.append((infectRate[1]/population)*S[1]*I[1])
 	rates.append((infectRate[1]/population)*S[1]*I[2])
+#	rates.append((infectRate[1]/population)*S[1]*V1eligible[1])
+#	rates.append((infectRate[1]/population)*S[1]*V2[1])
 	
 	# 6 7 8 Genesung
 	rates.append(recRate[0]*I[0])
@@ -396,9 +411,10 @@ func updateReactionRates():
 	# Ab hier Raten für Hospitalisierung
 	# Davon ausgehen 100% Testrate im Krankenhaus, Genesene aus Krankenhaus in Getestet/Genesen stecken
 	# 18 19 20 Ansteckungen an Hospitalisierten
-	rates.append((infectRate[3]/population)*S[0]*I[3])
-	rates.append((infectRate[3]/population)*S[1]*I[3])
-	rates.append((infectRate[3]/population)*S[2]*I[3])
+	rates.append((infectRate[2]/population)*S[0]*I[3])
+	rates.append((infectRate[2]/population)*S[1]*I[3])
+#	rates.append((infectRate[2]/population)*S[2]*I[3])
+	rates.append(0) # ist noch hier, dass die Nummern der Regeln passen, da keine unbemerkt wieder Susceptible werden können
 
 	# 21 22 23 Hospitalisierungsrate
 	rates.append(hospitalRate*(hospitalBeds-I[3])/population * I[0])
@@ -415,11 +431,33 @@ func updateReactionRates():
 	# 26 27 von S zu V1
 #	rates.append(vacRate1*avlbVax*S[0])
 #	rates.append(vacRate1*avlbVax*S[1])
-#
-#	# 28 29 von V1 zu V2 (nur noch nicht Angesteckte und Genesene bekommen zweite Impfung)
-#	rates.append(vacRate2*avlbVax*V1eligible[0])
-#	rates.append(vacRate2*avlbVax*V1eligible[3])
 	
+	# 28 29	30 von R zu V1
+#	rates.append(vacRate1*avlbVax*R[0])
+#	rates.append(vacRate1*avlbVax*R[1])
+#	rates.append(vacRate1*avlbVax*R[2])
+#
+#	# 31 32 von V1eligible zu V2 (nur noch nicht Angesteckte und Genesene bekommen zweite Impfung)
+#	rates.append(vacRate2*avlbVax*V1eligible[0])
+#	rates.append(vacRate2*avlbVax*V1eligible[2])
+	
+	# Modell für V1eligible
+	# 33 34 35 Infektion einmal Geimpfter
+#	rates.append((infectRate[3]/population)*V1eligible[0]*I[0])
+#	rates.append((infectRate[3]/population)*V1eligible[0]*I[1])
+#	rates.append((infectRate[3]/population)*V1eligible[0]*I[2])
+#
+#	# Modell für zweimal Geimpfte
+#	# 33 34 35 Infektion Ansteckbarer zweifach Geimpfter
+#	rates.append((infectRate[4]/population)*V2[0]*I[0])
+#	rates.append((infectRate[4]/population)*V2[0]*I[1])
+#	rates.append((infectRate[4]/population)*V2[0]*I[2])
+#
+#	# 36 Genesung zweifach Geimpfter
+#	rates.append()
+#
+#	# 37 Hospitalisierung zweifach Geimpfter
+#	rates.append()
 	
 #	Standardmodell
 #	rates.append((infectRate/population)*S*I)
@@ -431,7 +469,7 @@ func updateReactionRates():
 
 
 func simulateV1():
-	infectRate = [getInfectRate(), getInfectRate(), getInfectRate(), getInfectRate()*0.5]
+	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*0.5, getInfectRate()*0.4, getInfectRate()*0.2]
 	var t = timeDifferenceV1
 	for i in V1.size():
 		while t < 1:

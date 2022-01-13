@@ -128,9 +128,9 @@ func _init(initName, initPopulation, initButton):
 	
 	
 #	# für Hospitalisierung
-	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*0.5, getInfectRate()*0.4, getInfectRate()*0.2]
-	recRate = [baseRec, baseRec, baseRec, baseRec*1.2]
-	deathRate = [baseDeath, baseDeath, baseDeath, baseDeath/10]
+	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*0.5, getInfectRate()*0.4, getInfectRate()*0.2] 	# Ungetestet, Getestet, Hospitalisiert, 1x Geimpft, 2x Geimpft
+	recRate = [baseRec, baseRec*1.2, baseRec, baseRec] 																# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
+	deathRate = [baseDeath, baseDeath/10, baseDeath, baseDeath]														# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	testRate = [baseTest, baseTest, baseTest]
 	hospitalBeds = 20
 	hospitalRate = 0.6
@@ -140,14 +140,15 @@ func _init(initName, initPopulation, initButton):
 	
 	var vacDelayArr = CONSTANTS.zeroes(CONSTANTS.VACDELAY)
 	# für Impfung
-	self.V1 = [vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr] # "Förderband-Methode" für vacDelay um genau zu tracken
-	self.V1eligible = [0,0,0,0]
+	self.V1 = [vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr, vacDelayArr] # "Förderband-Methode" für vacDelay um genau zu tracken
+	self.V1eligible = [0,0,0,0,0]
 	
 	# Indizierung V1 (einmal geimpft): (Infizierte werden nicht geimpft)
 	# 0: Ansteckbar (S)
 	# 1: Infiziert (I)
-	# 2: Genesen (nur erste Impfung, danach Genesene ganz normal zu zweimal Geimpften zählen) (R)
-	# 3: Gestorben (D)
+	# 2: Hospitalisiert (H)
+	# 3: Genesen (R)
+	# 4: Gestorben (D)
 	
 	self.V2 = [0,0,0,0,0]
 	
@@ -371,61 +372,141 @@ func updatePersonNumbers(rule):
 func updateReactionRates():
 	var rates = []
 #	Modell mit Tests
-	# 0 1 2 Infektion Ungetestete  Hier Raten anpassen mit V2?
-	rates.append((infectRate[0]/population)*S[0]*I[0])
-	rates.append((infectRate[0]/population)*S[0]*I[1])
-	rates.append((infectRate[0]/population)*S[0]*I[2])
-#	rates.append((infectRate[0]/population)*S[0]*V1eligible[1])
-#	rates.append((infectRate[0]/population)*S[0]*V2[1])
+	# 0 1 2 Infektion Ungetestete
+	rates.append((infectRate[0]/population)*S[0]*I[0]) 									# Ansteckung an Ungetestet Infizierten
+	rates.append((infectRate[1]/population)*S[0]*I[1]) 									# Ansteckung an Getestet Infizierten
+	rates.append((infectRate[0]/population)*S[0]*I[2]) 									# Ansteckung an Unbewusst Infizierten (ungetestet)
+#	rates.append((infectRate[2]/population)*S[0]*I[3]) 									# Ansteckung an Ungeimpften Hospitalisierten
+#	rates.append((infectRate[3]/population)*S[0]*CONSTANTS.sum(V1[1])) 					# Ansteckung an einfach Geimpften (noch ohne Zulassung zweite Impfung)
+#	rates.append((infectRate[2]*infectRate[3]/population)*S[0]*CONSTANTS.sum(V1[2]))	# Ansteckung an einfach Geimpften Hospitalisierten (noch ohne Zulassung zweite Impfung)
+#	rates.append((infectRate[3]/population)*S[0]*V1eligible[1]) 						# Ansteckung an einfach Geimpften
+#	rates.append((infectRate[2]*infectRate[3]/population)*S[0]*V1eligible[2])			# Ansteckung an einfach Geimpften Hospitalisierten
+#	rates.append((infectRate[4]/population)*S[0]*V2[1]) 								# Ansteckung an zweifach Geimpften
+#	rates.append((infectRate[2]*infectRate[4]/population)*S[0]*V2[2])					# Ansteckung an zweifach Geimpften Hospitalisierten
 	
 	# 3 4 5 Infektion Getestete
-	rates.append((infectRate[1]/population)*S[1]*I[0])
+	rates.append((infectRate[0]/population)*S[1]*I[0])
 	rates.append((infectRate[1]/population)*S[1]*I[1])
-	rates.append((infectRate[1]/population)*S[1]*I[2])
-#	rates.append((infectRate[1]/population)*S[1]*V1eligible[1])
-#	rates.append((infectRate[1]/population)*S[1]*V2[1])
+	rates.append((infectRate[0]/population)*S[1]*I[2])
+#	rates.append((infectRate[2]/population)*S[1]*I[3])
+#	rates.append((infectRate[3]/population)*S[1]*CONSTANTS.sum(V1[1]))
+#	rates.append((infectRate[2]*infectRate[3]/population)*S[1]*CONSTANTS.sum(V1[2]))
+#	rates.append((infectRate[3]/population)*S[1]*V1eligible[1])
+#	rates.append((infectRate[2]*infectRate[3]/population)*S[1]*V1eligible[2])
+#	rates.append((infectRate[4]/population)*S[1]*V2[1])
+#	rates.append((infectRate[2]*infectRate[4]/population)*S[1]*V2[2])
 	
-	# 6 7 8 Genesung
+#	# Infektion V1
+#	rates.append((infectRate[0]/population)*V1[0]*I[0])
+#	rates.append((infectRate[1]/population)*V1[0]*I[1])
+#	rates.append((infectRate[0]/population)*V1[0]*I[2])
+#	rates.append((infectRate[2]/population)*V1[0]*I[3])
+#	rates.append((infectRate[3]/population)*V1[0]*CONSTANTS.sum(V1[1]))
+#	rates.append((infectRate[2]*infectRate[3]/population)*V1[1]*CONSTANTS.sum(V1[2]))
+#	rates.append((infectRate[3]/population)*V1[0]*V1eligible[1])
+#	rates.append((infectRate[2]*infectRate[3]/population)*V1[1]*V1eligible[2])
+#	rates.append((infectRate[4]/population)*V1[0]*V2[1])
+#	rates.append((infectRate[2]*infectRate[4]/population)*V1[1]*V2[2])
+#
+#	# Infektion V1eligible
+#	rates.append((infectRate[0]/population)*V1eligible[0]*I[0])
+#	rates.append((infectRate[1]/population)*V1eligible[0]*I[1])
+#	rates.append((infectRate[0]/population)*V1eligible[0]*I[2])
+#	rates.append((infectRate[2]/population)*V1eligible[0]*I[3])
+#	rates.append((infectRate[3]/population)*V1eligible[0]*CONSTANTS.sum(V1[1]))
+#	rates.append((infectRate[2]*infectRate[3]/population)*V1eligible[1]*CONSTANTS.sum(V1[2]))
+#	rates.append((infectRate[3]/population)*V1eligible[0]*V1eligible[1])
+#	rates.append((infectRate[2]*infectRate[3]/population)*V1eligible[1]*V1eligible[2])
+#	rates.append((infectRate[4]/population)*V1eligible[0]*V2[1])
+#	rates.append((infectRate[2]*infectRate[4]/population)*V1eligible[1]*V2[2])
+#
+#	# Infektion V2
+#	rates.append((infectRate[0]/population)*V2[0]*I[0])
+#	rates.append((infectRate[1]/population)*V2[0]*I[1])
+#	rates.append((infectRate[0]/population)*V2[0]*I[2])
+#	rates.append((infectRate[2]/population)*V2[0]*I[3])
+#	rates.append((infectRate[3]/population)*V2[0]*CONSTANTS.sum(V1[1]))
+#	rates.append((infectRate[2]*infectRate[3]/population)*V2[1]*CONSTANTS.sum(V1[2]))
+#	rates.append((infectRate[3]/population)*V2[0]*V1eligible[1])
+#	rates.append((infectRate[2]*infectRate[3]/population)*V2[1]*V1eligible[2])
+#	rates.append((infectRate[4]/population)*V2[0]*V2[1])
+#	rates.append((infectRate[2]*infectRate[4]/population)*V2[1]*V2[2])
+	
+	
+	# 6 7 8 Genesung Infizierte I
 	rates.append(recRate[0]*I[0])
-	rates.append(recRate[1]*I[1])
-	rates.append(recRate[2]*I[2])
+	rates.append(recRate[0]*I[1])
+	rates.append(recRate[0]*I[2])
+#	rates.append(recRate[1]*I[3])
 	
-	# 9 10 11 Tod
+	# Genesung Infizierte V1
+#	rates.append(recRate[2]*CONSTANTS.sum(V1[1]))
+#	rates.append(((recRate[1]+recRate[2])/2) * CONSTANTS.sum(V1[2]))
+#
+#	# Genesung Infizierte V1eligible
+#	rates.append(recRate[2]*V1eligible[1])
+#	rates.append(((recRate[1]+recRate[2])/2) * V1eligible[2])
+#
+#	# Genesung Infizierte V2
+#	rates.append(recRate[3]*V2[1])
+#	rates.append(((recRate[1]+recRate[3])/2) * V2[2])
+	
+	# 9 10 11 Tod Inifizierte I
 	rates.append(deathRate[0]*I[0])
-	rates.append(deathRate[1]*I[1])
-	rates.append(deathRate[2]*I[2])
+	rates.append(deathRate[0]*I[1])
+	rates.append(deathRate[0]*I[2])
+#	rates.append(deathRate[1]*I[3])
 	
-	# 12 13 14 Testraten
+	# Tod Infizierte V1
+#	rates.append(deathRate[2] * CONSTANTS.sum(V1[1]))
+#	rates.append(deathRate[2] * deathRate[1] * CONSTANTS.sum(V1[2]))
+#
+#	# Tod Infizierte V1eligible
+#	rates.append(deathRate[2] * V1eligible[1])
+#	rates.append(deathRate[2] * deathRate[1] * V1eligible[2])
+#
+#	# Tod Infizierte V2
+#	rates.append(deathRate[3] * V2[1])
+#	rates.append(deathRate[3] * deathRate[1] * V2[2])
+	
+	# 12 13 14 Testraten BLEIBT
 	rates.append(testRate[0]*S[0])
 	rates.append(testRate[1]*I[0])
 	rates.append(testRate[2]*R[0])
 	
-	# 15 Loss of information, Getestete verlieren Getestetenstatus
+	# 15 Loss of information, Getestete verlieren Getestetenstatus BLEIBT
 	rates.append(informationLoss*S[1])
 	
-	# 16 17 unbemerkt Angesteckte und Genesene
+	# 16 17 unbemerkt Angesteckte und Genesene BLEIBT
 	rates.append(informationLoss*I[2])
 	rates.append(informationLoss*R[2])
 	
 
 	# Ab hier Raten für Hospitalisierung
 	# Davon ausgehen 100% Testrate im Krankenhaus, Genesene aus Krankenhaus in Getestet/Genesen stecken
-	# 18 19 20 Ansteckungen an Hospitalisierten
+	# 18 19 20 Ansteckungen an Hospitalisierten KOMMT RAUS
 	rates.append((infectRate[2]/population)*S[0]*I[3])
 	rates.append((infectRate[2]/population)*S[1]*I[3])
 #	rates.append((infectRate[2]/population)*S[2]*I[3])
 	rates.append(0) # ist noch hier, dass die Nummern der Regeln passen, da keine unbemerkt wieder Susceptible werden können
-
+	
+	
+	var occBeds = occupiedBeds()
 	# 21 22 23 Hospitalisierungsrate
-	rates.append(hospitalRate*(hospitalBeds-I[3])/population * I[0])
-	rates.append(hospitalRate*(hospitalBeds-I[3])/population * I[1])
-	rates.append(hospitalRate*(hospitalBeds-I[3])/population * I[2])
+	rates.append(hospitalRate*(hospitalBeds-occBeds)/population * I[0])
+	rates.append(hospitalRate*(hospitalBeds-occBeds)/population * I[1])
+	rates.append(hospitalRate*(hospitalBeds-occBeds)/population * I[2])
+	
+#	rates.append(hospitalRate*recRate[2]*(hospitalBeds-occBeds)/population * CONSTANTS.sum(V1[1])) 		# Hospitalisierung 1x Geimpfte
+#	rates.append(hospitalRate*recRate[2]*(hospitalBeds-occBeds)/population * V1eligible[1])				# Hospitalisierung 1x Geimpfte
+#	rates.append(hospitalRate*recRate[3]*(hospitalBeds-occBeds)/population * V2[1])						# Hospitalisierung 2x Geimpfte
+	
 
-	# 24 Genesung Hospitalisierte
-	rates.append(recRate[3]*I[3])
+	# 24 Genesung Hospitalisierte KOMMT WEG
+	rates.append(recRate[1]*I[3])
 
-	# 25 Tod Hospitalisierte
-	rates.append(deathRate[3]*I[3])
+	# 25 Tod Hospitalisierte KOMMT WEG
+	rates.append(deathRate[1]*I[3])
 	
 	# Übergang zu erster Impfung
 	# 26 27 von S zu V1
@@ -466,8 +547,11 @@ func updateReactionRates():
 	
 	return rates
 	
-
-
+	
+func occupiedBeds():
+	return I[3] + CONSTANTS.sum(V1[2]) + V1eligible[2] + V2[2]
+	
+	
 func simulateV1():
 	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*0.5, getInfectRate()*0.4, getInfectRate()*0.2]
 	var t = timeDifferenceV1

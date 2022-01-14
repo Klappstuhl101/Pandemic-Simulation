@@ -148,7 +148,7 @@ func _ready():
 		sim.days.append(i)
 		if 25 == i:
 			deu.imposeLockdown()
-			deu.setVaxProduction(1000000)
+			deu.setVaxProduction(100)
 		if i == 50:
 			deu.stopLockdown()
 			

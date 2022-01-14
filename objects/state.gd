@@ -140,7 +140,8 @@ func _init(initName, initPopulation, initButton):
 	
 	var vacDelayArr = CONSTANTS.zeroes(CONSTANTS.VACDELAY)
 	# für Impfung
-	self.V1 = [vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr, vacDelayArr] # "Förderband-Methode" für vacDelay um genau zu tracken
+#	self.V1 = [vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr, vacDelayArr] # "Förderband-Methode" für vacDelay um genau zu tracken
+	self.V1 = [CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY)]
 	self.V1eligible = [0,0,0,0,0]
 	
 	# Indizierung V1 (einmal geimpft): (Infizierte werden nicht geimpft)
@@ -195,7 +196,7 @@ func simulate():
 			
 	
 #	simulateV1()
-	print(V1)
+#	print(V1)
 	
 	waitDay += 1
 	waitDay = waitDay % CONSTANTS.VACDELAY

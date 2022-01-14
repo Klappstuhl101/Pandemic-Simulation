@@ -51,6 +51,8 @@ const UNAWARE = "Unaware"
 const VACDELAY = 42
 
 
+
+
 static func sum(arr):
 	var sum = 0
 	for i in range(arr.size()):

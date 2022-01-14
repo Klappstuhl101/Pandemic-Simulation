@@ -47,16 +47,20 @@ func stopLockdown():
 	for state in states.values():
 		state.lockdown = false
 	
-func produceVax():
-	self.avlbVax += vaxProduction
-
 func setVaxProduction(value):
 	self.vaxProduction = value
-
+	
+func produceVax():
+	self.avlbVax += vaxProduction
+	
 func distributeVax():
 	var sumVax = 0
+	var distVax = 0
 	for state in states.values():
-		var distVax = floor(self.avlbVax * (state.population/self.population))
+#		var anteilPopulation = state.getPopulation()/self.population
+#		var vorFloor = self.avlbVax * anteilPopulation
+		distVax = int(floor(self.avlbVax * (float(state.getPopulation())/float(self.population))))
+#		distVax = floor(vorFloor)
 		state.avlbVax += distVax
 		sumVax += distVax
 	self.avlbVax -= sumVax
@@ -98,23 +102,4 @@ func simulateALL():
 	dead2.append(D[2])
 	
 	hosp.append(I[3])
-	
-#	# Standardsimulation
-#	S = 0
-#	I = 0
-#	R = 0
-#	D = 0
-#
-#	for state in states.values():
-#		state.simulate()
-#		S += state.S
-#		I += state.I
-#		R += state.R
-#		D += state.D
-#
-#	suscept.append(S)
-#	infect.append(I)
-#	recov.append(R)
-#	dead.append(D)
-	
 	

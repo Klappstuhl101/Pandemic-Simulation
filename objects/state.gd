@@ -473,26 +473,32 @@ func updatePersonNumbers(rule):
 		82:
 			S[0] -= 1
 			V1[0][waitDay] += 1
+			self.avlbVax -= 1
 		
 		83:
 			S[1] -= 1
 			V1[0][waitDay] += 1
+			self.avlbVax -= 1
 		
 		84:
 			R[0] -= 1
 			V1[3][waitDay] += 1
+			self.avlbVax -= 1
 		
 		85:
 			R[1] -= 1
 			V1[3][waitDay] += 1
+			self.avlbVax -= 1
 		
 		86:
 			V1eligible[0] -= 1
 			V2[0] += 1
+			self.avlbVax -= 1
 		
 		87:
 			V1eligible[2] -= 1
 			V2[2] += 1
+			self.avlbVax -= 1
 		
 		
 		

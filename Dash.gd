@@ -7,6 +7,7 @@ var lineChart2
 var lineChart3
 var lineChart4
 var lineChart5
+var lineChart6
 
 var timer
 
@@ -57,6 +58,7 @@ func _ready():
 	lineChart3 = get_node("Statistics/LineChart3")
 	lineChart4 = get_node("Statistics/LineChart4")
 	lineChart5 = get_node("Statistics/LineChart5")
+	lineChart6 = get_node("Statistics/LineChart6")
 #	pieChart.plot()
 	var stats = [["Country","Population"],["Germany",7],["GB",15],["Canada",10],["Sweden",3]]
 	
@@ -85,6 +87,7 @@ func _ready():
 	statOutput[CONSTANTS.LINE3] = lineChart3
 	statOutput[CONSTANTS.LINE4] = lineChart4
 	statOutput[CONSTANTS.LINE5] = lineChart5
+	statOutput[CONSTANTS.LINE6] = lineChart6
 	
 	statButtons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
 	
@@ -146,11 +149,13 @@ func _ready():
 	for i in range(CONSTANTS.TRYOUT_DAYS):
 		print("TAG " + String(i))
 		sim.days.append(i)
+		deu.setVaxProduction(20)
 		if 25 == i:
 			deu.imposeLockdown()
+#			deu.setVaxProduction(20)
 		if i == 50:
 			deu.stopLockdown()
-			deu.setVaxProduction(5)
+#			deu.setVaxProduction(5)
 			
 #		sim.simulate()
 		deu.simulateALL()

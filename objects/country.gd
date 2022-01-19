@@ -71,6 +71,8 @@ func simulateALL():
 	I = [0,0,0,0]
 	R = [0,0,0]
 	D = [0,0,0]
+	V1 = [0,0,0,0,0]
+	V2 = [0,0,0,0,0]
 	
 	produceVax()
 	distributeVax()
@@ -81,7 +83,11 @@ func simulateALL():
 		I = CONSTANTS.add_arrays(I, state.I)
 		R = CONSTANTS.add_arrays(R, state.R)
 		D = CONSTANTS.add_arrays(D, state.D)
+		var stateV1 = [CONSTANTS.sum(state.V1[0]) + state.V1eligible[0], CONSTANTS.sum(state.V1[1]) + state.V1eligible[1], CONSTANTS.sum(state.V1[2]) + state.V1eligible[2], CONSTANTS.sum(state.V1[3]) + state.V1eligible[3], CONSTANTS.sum(state.V1[4]) + state.V1eligible[4]]
+		V1 = CONSTANTS.add_arrays(V1, stateV1)
+		V2 = CONSTANTS.add_arrays(V2, state.V2)
 	
+	# für Gesamtübersicht
 #	suscept.append(S[0] + S[1] + S[2])
 	suscept.append(S[0] + S[1])
 	infect.append(I[0] + I[1] + I[2])
@@ -100,6 +106,24 @@ func simulateALL():
 	dead0.append(D[0])
 	dead1.append(D[1])
 	dead2.append(D[2])
+	
+#	vax1sus.append(CONSTANTS.sum(V1[0]) + V1eligible[0])
+#	vax1inf.append(CONSTANTS.sum(V1[1]) + V1eligible[1])
+#	vax1hosp.append(CONSTANTS.sum(V1[2]) + V1eligible[2])
+#	vax1rec.append(CONSTANTS.sum(V1[3]) + V1eligible[3])
+#	vax1dead.append(CONSTANTS.sum(V1[4]) + V1eligible[4])
+	
+	vax1sus.append(V1[0])
+	vax1inf.append(V1[1])
+	vax1hosp.append(V1[2])
+	vax1rec.append(V1[3])
+	vax1dead.append(V1[4])
+	
+	vax2sus.append(V2[0])
+	vax2inf.append(V2[1])
+	vax2hosp.append(V2[2])
+	vax2rec.append(V2[3])
+	vax2dead.append(V2[4])
 	
 	hosp.append(I[3])
 	

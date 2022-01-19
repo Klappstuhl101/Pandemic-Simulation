@@ -175,9 +175,12 @@ func _on_statButton_press():
 	l4.plot_from_array([sim.days, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
 	
 	var l5 = stat_output[CONSTANTS.LINE5]
-	l5.plot_from_array([sim.days, entities[CONSTANTS.DEU].beds, entities[CONSTANTS.DEU].hosp])
+#	l5.plot_from_array([sim.days, entities[CONSTANTS.DEU].beds, entities[CONSTANTS.DEU].hosp])
+	l5.plot_from_array([sim.days, entities[CONSTANTS.DEU].vax2sus, entities[CONSTANTS.DEU].vax2inf, entities[CONSTANTS.DEU].vax2hosp, entities[CONSTANTS.DEU].vax2rec, entities[CONSTANTS.DEU].vax2dead])
 	
-	
+	var l6 = stat_output[CONSTANTS.LINE6]
+	l6.plot_from_array([sim.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf, entities[CONSTANTS.DEU].vax1hosp, entities[CONSTANTS.DEU].vax1rec, entities[CONSTANTS.DEU].vax1dead])
+#	l6.plot_from_array([sim.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf])
 #	var lineChart = stat_output[CONSTANTS.LINE]
 #	lineChart.plot_from_array([sim.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
 	

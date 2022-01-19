@@ -11,6 +11,7 @@ const LINE2 = "Line2"
 const LINE3 = "Line3"
 const LINE4 = "Line4"
 const LINE5 = "Line5"
+const LINE6 = "Line6"
 
 const BAW = "Baden-Württemberg"
 const BAY = "Bayern"
@@ -48,7 +49,10 @@ const TESTED = "Tested"
 const NTESTED = "Not Tested"
 const UNAWARE = "Unaware"
 
-const VACDELAY = 42
+const VAX1 = "1x Vaccinated"
+const VAX2 = "2x Vaccinated"
+
+const VACDELAY = 14
 
 
 

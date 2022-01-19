@@ -65,8 +65,18 @@ var rec2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# unbewusst 
 var dead0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.DEAD]			# ungetestet tot
 var dead1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.DEAD]			# getestet tot
 var dead2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.DEAD]			# unbewusst tot
+var vax1sus = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.SUSCEPTIBLE]	# 1x geimpft ansteckbar
+var vax1inf = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.INFECTED]		# 1x geimpft infiziert
+var vax1hosp = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.HOSPITALISED]	# 1x geimpft hospitalisiert
+var vax1rec = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.RECOVERED]		# 1x geimpft genesen
+var vax1dead = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.DEAD]			# 1x geimpft tot
+var vax2sus = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.SUSCEPTIBLE]	# 2x geimpft ansteckbar
+var vax2inf = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.INFECTED]		# 2x geimpft infiziert
+var vax2hosp = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.HOSPITALISED]	# 2x geimpft hospitalisiert
+var vax2rec = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.RECOVERED]		# 2x geimpft genesen
+var vax2dead = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.DEAD]			# 2x geimpft tot
 
-var hosp = [CONSTANTS.HOSPITALISED]		# Hospitalisierte
+var hosp = [CONSTANTS.HOSPITALISED]		# ungeimpfte Hospitalisierte
 
 var timeDifference
 var timeDifferenceV1
@@ -129,8 +139,8 @@ func _init(initName, initPopulation, initButton):
 	
 #	# für Hospitalisierung
 	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*0.5, getInfectRate()*0.4, getInfectRate()*0.2] 	# Ungetestet, Getestet, Hospitalisiert, 1x Geimpft, 2x Geimpft
-	recRate = [baseRec, baseRec*1.2, baseRec, baseRec] 																# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
-	deathRate = [baseDeath, baseDeath/10, baseDeath, baseDeath]														# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
+	recRate = [baseRec, baseRec*1.6, baseRec*1.3, baseRec*1.6] 																# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
+	deathRate = [baseDeath, baseDeath/5.0, baseDeath/5.0, baseDeath/10.0]														# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	testRate = [baseTest, baseTest, baseTest]
 	hospitalBeds = 20
 	hospitalRate = 0.6
@@ -232,6 +242,18 @@ func simulate():
 	dead0.append(D[0])
 	dead1.append(D[1])
 	dead2.append(D[2])
+	
+	vax1sus.append(CONSTANTS.sum(V1[0]) + V1eligible[0])
+	vax1inf.append(CONSTANTS.sum(V1[1]) + V1eligible[1])
+	vax1hosp.append(CONSTANTS.sum(V1[2]) + V1eligible[2])
+	vax1rec.append(CONSTANTS.sum(V1[3]) + V1eligible[3])
+	vax1dead.append(CONSTANTS.sum(V1[4]) + V1eligible[4])
+	
+	vax2sus.append(V2[0])
+	vax2inf.append(V2[1])
+	vax2hosp.append(V2[2])
+	vax2rec.append(V2[3])
+	vax2dead.append(V2[4])
 	
 	hosp.append(I[3])
 	

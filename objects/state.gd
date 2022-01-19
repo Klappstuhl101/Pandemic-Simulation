@@ -140,7 +140,7 @@ func _init(initName, initPopulation, initButton):
 #	# für Hospitalisierung
 	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*0.5, getInfectRate()*0.4, getInfectRate()*0.2] 	# Ungetestet, Getestet, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	recRate = [baseRec, baseRec*1.6, baseRec*1.3, baseRec*1.6] 																# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
-	deathRate = [baseDeath, baseDeath/5.0, baseDeath/5.0, baseDeath/10.0]														# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
+	deathRate = [baseDeath, baseDeath*0.5, baseDeath*0.2, baseDeath*0.1]														# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	testRate = [baseTest, baseTest, baseTest]
 	hospitalBeds = 20
 	hospitalRate = 0.6
@@ -148,7 +148,7 @@ func _init(initName, initPopulation, initButton):
 #	# für Lockdown
 	lockdownStrictness = 0.9
 	
-	var vacDelayArr = CONSTANTS.zeroes(CONSTANTS.VACDELAY)
+#	var vacDelayArr = CONSTANTS.zeroes(CONSTANTS.VACDELAY)
 	# für Impfung
 #	self.V1 = [vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr, vacDelayArr] # "Förderband-Methode" für vacDelay um genau zu tracken
 	self.V1 = [CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY)]

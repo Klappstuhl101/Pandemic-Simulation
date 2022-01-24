@@ -5,7 +5,11 @@ class_name State
 
 var name
 var population
+var neighbors
+
 var mapButton
+
+
 var suscept = [CONSTANTS.SUSCEPTIBLE]
 var infect = [CONSTANTS.INFECTED]
 var recov = [CONSTANTS.RECOVERED]
@@ -95,6 +99,8 @@ func _init(initName, initPopulation, initButton):
 	mapButton.texture_click_mask = bitmap
 	mapButton.toggle_mode = true
 	
+#	for neighbor in neighbors.values():
+#		pass
 	
 	baseInfect = 0.2
 	baseRec = 0.02

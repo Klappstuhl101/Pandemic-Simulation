@@ -55,12 +55,8 @@ func produceVax():
 	
 func distributeVax():
 	var sumVax = 0
-	var distVax = 0
 	for state in states.values():
-#		var anteilPopulation = state.getPopulation()/self.population
-#		var vorFloor = self.avlbVax * anteilPopulation
-		distVax = int(floor(self.avlbVax * (float(state.getPopulation())/float(self.population))))
-#		distVax = floor(vorFloor)
+		var distVax = int(floor(self.avlbVax * (float(state.getPopulation())/float(self.population))))
 		state.avlbVax += distVax
 		sumVax += distVax
 	self.avlbVax -= sumVax

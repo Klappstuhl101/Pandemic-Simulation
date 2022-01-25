@@ -10,7 +10,7 @@ var beds = []
 var vaxProduction
 
 
-func _init(initStates, initName, initButton).(initName, 0, initButton):
+func _init(initStates, initName, initButton).(initName, 0, initButton, [], 0):
 	self.states = initStates
 	recalculatePop()
 	recalculateHospitalBeds()
@@ -24,6 +24,7 @@ func _init(initStates, initName, initButton).(initName, 0, initButton):
 	for i in range(CONSTANTS.TRYOUT_DAYS):
 		beds.append(hospitalBeds)
 	
+	rnd.randomize()
 	
 	
 	
@@ -60,7 +61,32 @@ func distributeVax():
 		state.avlbVax += distVax
 		sumVax += distVax
 	self.avlbVax -= sumVax
-	
+
+func distributeCommuters():
+	for state in states.values():
+		var commuteCount = int(floor(state.getCommuteRate() * state.getPopulation()))
+		var modCommuter = commuteCount % state.neighbors.size()
+		commuteCount -= modCommuter
+		var neighborIndices = []
+		for neighborstate in state.neighbors:
+			neighborIndices.append(states.get(neighborstate).neighbors.find(state.name))
+		
+		while commuteCount > 0:
+			for i in range(neighborIndices):
+				var rand = rnd.randi_range(0, 15)
+				match rand:
+					0:
+#						TODO FOR TOMORROW
+						pass
+				
+				commuteCount -= 1
+		
+		
+		
+	pass
+
+func homeCommuters():
+	pass
 
 func simulateALL():
 	S = [0,0,0]

@@ -6,6 +6,8 @@ class_name State
 var name
 var population
 var neighbors
+var visitors
+var commuterRate
 
 var mapButton
 
@@ -87,10 +89,12 @@ var timeDifferenceV1
 
 var rnd = RandomNumberGenerator.new()
 
-func _init(initName, initPopulation, initButton):
+func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
 	self.name = initName
 	self.population = initPopulation
 	self.mapButton = initButton
+	self.neighbors = initNeighbors
+	self.commuterRate = initCommuter
 	
 	var image = Image.new()
 	image.load("res://resources/map/" + name + ".png")
@@ -154,31 +158,36 @@ func _init(initName, initPopulation, initButton):
 #	# für Lockdown
 	lockdownStrictness = 0.9
 	
-#	var vacDelayArr = CONSTANTS.zeroes(CONSTANTS.VACDELAY)
-	# für Impfung
-#	self.V1 = [vacDelayArr,vacDelayArr,vacDelayArr,vacDelayArr, vacDelayArr] # "Förderband-Methode" für vacDelay um genau zu tracken
 	self.V1 = [CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY)]
 	self.V1eligible = [0,0,0,0,0]
 	
-	# Indizierung V1 (einmal geimpft): (Infizierte werden nicht geimpft)
-	# 0: Ansteckbar (S)
-	# 1: Infiziert (I)
-	# 2: Hospitalisiert (H)
-	# 3: Genesen (R)
-	# 4: Gestorben (D)
 	
 	self.V2 = [0,0,0,0,0]
 	
-	# Indizierung V1eligible und V2 (zweimal geimpft)
+	# Indizierung V1, V1eligible und V2 (zweimal geimpft)
 	# 0: Ansteckbar (S)
 	# 1: Infiziert (I)
 	# 2: Hospitalisiert (H)
 	# 3: Genesen (R)
 	# 4: Gestorben (D)
 	
-#	VinfectRate = [baseInfect, baseInfect, baseInfect]
-#	VdeathRate = [baseDeath, baseDeath, baseDeath]
-#	VrecRate = [baseRec, baseRec, baseRec]
+	# Indizierung Visitors of Neighbors
+	# 0,1,2,3,... Auswahl Nachbar
+	# 	0: Name
+	# 	1: Array: 1.Stelle	2.Stelle: 0: Ungeimpft, 1: 1x geimpft, 2: 2x geimpft
+	#				0: S
+	#				1: I
+	#				2: R
+	#				3: D
+	#
+	#
+	
+	visitors = []
+	for i in range(neighbors.size()):
+		var vis = [CONSTANTS.zeroes(3), CONSTANTS.zeroes(3), CONSTANTS.zeroes(3), CONSTANTS.zeroes(3)]
+		var name = neighbors[i]
+		var arr = [name, vis]
+		visitors.append(arr)
 	
 	vacRate1 = 2
 	vacRate2 = 18
@@ -192,11 +201,17 @@ func _init(initName, initPopulation, initButton):
 func occupiedBeds():
 	return I[3] + CONSTANTS.sum(V1[2]) + V1eligible[2] + V2[2]
 
+func getPopulation():
+	return self.population
+
 func getInfectRate():
 	if lockdown:
 		return baseInfect * (1-lockdownStrictness)
 	else:
 		return baseInfect
+
+func getCommuteRate():
+	return commuterRate
 
 func simulate():
 #	if I <= 0: # pandemic over
@@ -869,6 +884,5 @@ func updateReactionRates():
 #			V1[1][block] -= 1
 #			V1[3][block] += 1
 
-func getPopulation():
-	return self.population
+
 

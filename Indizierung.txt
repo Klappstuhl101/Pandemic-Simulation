@@ -1,0 +1,31 @@
+# Indizierung für SIRD:
+# 0: Ungetestet
+# 1: Getestet
+# 2: Unbewusste Krankheitsänderung
+# 3: Hospitalisierte (nur Infizierte)
+
+
+# Indizierung V1 (einmal geimpft): (Infizierte werden nicht geimpft) (als Fließband, aber random einem Block zuordnen)
+	# 0: Ansteckbar (S)
+	# 1: Infiziert (I)
+	# 2: Hospitalisiert (H)
+	# 3: Genesen  (R)
+	# 4: Gestorben (D)
+
+
+# Indizierung V1eligible und V2 (zweimal geimpft)
+	# 0: Ansteckbar (S)
+	# 1: Infiziert (I)
+	# 2: Hospitalisiert (H)
+	# 3: Genesen (R)
+	# 4: Gestorben (D)
+
+# infectRate: Ungetestet, Getestet, (Hospitalisiert), 1x Geimpft, 2x Geimpft
+# recRate: Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft (keine Genesenen, da im Modell Genesene nicht mehr anstecken)
+# deathRate: Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
+
+# Indizierung Reisende/Pendler # 0: Ungeimpft 1: 1x geimpft 2: 2x geimpft
+# 0: S
+# 1: I
+# 2: R
+# 3: D

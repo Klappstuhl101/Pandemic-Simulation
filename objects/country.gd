@@ -67,18 +67,76 @@ func distributeCommuters():
 		var commuteCount = int(floor(state.getCommuteRate() * state.getPopulation()))
 		var modCommuter = commuteCount % state.neighbors.size()
 		commuteCount -= modCommuter
-		var neighborIndices = []
+		var neighborIndices = [] # Index in Array neighbors vom Nachbarland
 		for neighborstate in state.neighbors:
 			neighborIndices.append(states.get(neighborstate).neighbors.find(state.name))
 		
 		while commuteCount > 0:
-			for i in range(neighborIndices):
-				var rand = rnd.randi_range(0, 15)
+			var index = 0
+			for neighborstate in state.neighbors:
+				var rand = rnd.randi_range(0, 13)
 				match rand:
-					0:
-#						TODO FOR TOMORROW
-						pass
-				
+					# UNGEIMPFT
+					0: # aus S
+						state.S[0] -= 1
+						states.get(neighborstate).neighbors[neighborIndices[index]][1][0][0] += 1 
+					
+					1: 
+						state.S[1] -= 1
+						states.get(neighborstate).neighbors[neighborIndices[index]][1][0][0] += 1 
+					
+					2: 
+						state.I[0] -= 1
+						states.get(neighborstate).neighbors[neighborIndices[index]][1][1][0] += 1 
+					
+					3: 
+						state.I[1] -= 1
+						states.get(neighborstate).neighbors[neighborIndices[index]][1][1][0] += 1 
+					
+					4: 
+						state.I[2] -= 1
+						states.get(neighborstate).neighbors[neighborIndices[index]][1][1][0] += 1 
+					
+					5: 
+						state.R[0] -= 1
+						states.get(neighborstate).neighbors[neighborIndices[index]][1][2][0] += 1 
+					
+					6: 
+						state.R[1] -= 1
+						states.get(neighborstate).neighbors[neighborIndices[index]][1][2][0] += 1 
+					
+					7: 
+						state.R[2] -= 1
+						states.get(neighborstate).neighbors[neighborIndices[index]][1][2][0] += 1
+					
+					# 1x GEIMPFT
+					8: 
+						state.V1eligible[0] -= 1
+						states.get(neighborstate).neighbors[neighborIndices[index]][1][0][1] += 1 
+					
+					9: 
+						state.V1eligible[1] -= 1
+						states.get(neighborstate).neighbors[neighborIndices[index]][1][1][1] += 1 
+					
+					10:
+						state.V1eligible[3] -= 1
+						states.get(neighborstate).neighbors[neighborIndices[index]][1][2][1] += 1 
+					
+					11:
+						state.V2[0] -= 1
+						states.get(neighborstate).neighbors[neighborIndices[index]][1][0][2] += 1 
+					
+					12:
+						state.V2[1] -= 1
+						states.get(neighborstate).neighbors[neighborIndices[index]][1][1][2] += 1
+					
+					13:
+						state.V2[2] -= 1
+						states.get(neighborstate).neighbors[neighborIndices[index]][1][2][2] += 1
+					
+					
+						
+				index += 1
 				commuteCount -= 1
 		
 		
@@ -98,6 +156,7 @@ func simulateALL():
 	
 	produceVax()
 	distributeVax()
+	distributeCommuters()
 	
 	for state in states.values():
 		state.simulate()
@@ -108,6 +167,8 @@ func simulateALL():
 		var stateV1 = [CONSTANTS.sum(state.V1[0]) + state.V1eligible[0], CONSTANTS.sum(state.V1[1]) + state.V1eligible[1], CONSTANTS.sum(state.V1[2]) + state.V1eligible[2], CONSTANTS.sum(state.V1[3]) + state.V1eligible[3], CONSTANTS.sum(state.V1[4]) + state.V1eligible[4]]
 		V1 = CONSTANTS.add_arrays(V1, stateV1)
 		V2 = CONSTANTS.add_arrays(V2, state.V2)
+	
+	homeCommuters()
 	
 	# für Gesamtübersicht
 #	suscept.append(S[0] + S[1] + S[2])

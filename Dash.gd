@@ -119,7 +119,7 @@ func _ready():
 	hessen = State.new(CONSTANTS.HES, 	1000, get_node("Map/HessenButton"), [CONSTANTS.BAW, CONSTANTS.BAY, CONSTANTS.NIE, CONSTANTS.NRW, CONSTANTS.RLP, CONSTANTS.THU], 0.042)
 	meckPom = State.new(CONSTANTS.MVP, 	1000, get_node("Map/MeckPomButton"), [CONSTANTS.BRA, CONSTANTS.NIE, CONSTANTS.SLH], 0.046)
 	nieders = State.new(CONSTANTS.NIE, 	1000, get_node("Map/NiedersachsenButton"), [CONSTANTS.BRA, CONSTANTS.BRE, CONSTANTS.HAM,
-																					CONSTANTS.HES, CONSTANTS.MVP, CONSTANTS.NRW, CONSTANTS.SCA, CONSTANTS.THU], 0.055)
+																					CONSTANTS.HES, CONSTANTS.MVP, CONSTANTS.NRW, CONSTANTS.SCA, CONSTANTS.SLH, CONSTANTS.THU], 0.055)
 	nrw = State.new(CONSTANTS.NRW, 		1000, get_node("Map/NrwButton"), [CONSTANTS.HES, CONSTANTS.NIE, CONSTANTS.RLP], 0.019)
 	rlp = State.new(CONSTANTS.RLP, 		1000, get_node("Map/RlpButton"), [CONSTANTS.BAW, CONSTANTS.HES, CONSTANTS.NRW, CONSTANTS.SAA], 0.08)
 	saar = State.new(CONSTANTS.SAA, 	1000, get_node("Map/SaarlandButton"), [CONSTANTS.RLP], 0.035)
@@ -150,7 +150,6 @@ func _ready():
 	 CONSTANTS.BRE:bremen, CONSTANTS.HAM:hamb, CONSTANTS.HES:hessen, CONSTANTS.MVP:meckPom,
 	 CONSTANTS.NIE:nieders, CONSTANTS.NRW:nrw, CONSTANTS.RLP:rlp, CONSTANTS.SAA:saar,
 	 CONSTANTS.SCN:sachsen, CONSTANTS.SCA:sacanh, CONSTANTS.SLH:schlHol, CONSTANTS.THU:thur}
-	
 	
 	# Herausfinden wie man Objekte von Unterklassen richtig erstellt
 	deu = Country.new(states, CONSTANTS.DEU, get_node("Map/DeutschButton"))

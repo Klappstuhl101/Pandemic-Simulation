@@ -24,9 +24,9 @@
 # recRate: Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft (keine Genesenen, da im Modell Genesene nicht mehr anstecken)
 # deathRate: Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
 
-Keine Pendler während Wartezeit auf zweite Impfung
+Keine Pendler während Wartezeit auf zweite Impfung, keine Hospitalisierung von Pendlern, Impfung nur in eigenem Bundesland
 # Indizierung Reisende/Pendler # 0: Ungeimpft 1: 1x geimpft 2: 2x geimpft
 # 0: S
 # 1: I
 # 2: R
-# 3: D # Wahrscheinlich Tode nicht möglich während des Pendelns
+# 3: D # Tote werden zurück zu Wohnort gebracht

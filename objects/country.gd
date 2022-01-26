@@ -64,87 +64,141 @@ func distributeVax():
 
 func distributeCommuters():
 	for state in states.values():
+#		print(state.name)
+		
 		var commuteCount = int(floor(state.getCommuteRate() * state.getPopulation()))
 		var modCommuter = commuteCount % state.neighbors.size()
 		commuteCount -= modCommuter
 		var neighborIndices = [] # Index in Array neighbors vom Nachbarland
-		for neighborstate in state.neighbors:
-			neighborIndices.append(states.get(neighborstate).neighbors.find(state.name))
+		for neighborstateName in state.neighbors:
+#			print(neighborstateName)
+			neighborIndices.append(states.get(neighborstateName).neighbors.find(state.name))
 		
 		while commuteCount > 0:
 			var index = 0
 			for neighborstate in state.neighbors:
-				var rand = rnd.randi_range(0, 13)
+				var avlblCommuters = checkAvlblCommuters(state)
+				var rand = rnd.randi_range(0, avlblCommuters.size()-1)
+				
+				while !avlblCommuters[rand]:
+					rand = rnd.randi_range(0, avlblCommuters.size()-1)
+					
 				match rand:
 					# UNGEIMPFT
 					0: # aus S
 						state.S[0] -= 1
-						states.get(neighborstate).neighbors[neighborIndices[index]][1][0][0] += 1 
+						states.get(neighborstate).visitors[neighborIndices[index]][1][0][0] += 1 
 					
 					1: 
 						state.S[1] -= 1
-						states.get(neighborstate).neighbors[neighborIndices[index]][1][0][0] += 1 
+						states.get(neighborstate).visitors[neighborIndices[index]][1][0][0] += 1 
 					
 					2: 
 						state.I[0] -= 1
-						states.get(neighborstate).neighbors[neighborIndices[index]][1][1][0] += 1 
+						states.get(neighborstate).visitors[neighborIndices[index]][1][1][0] += 1 
 					
 					3: 
 						state.I[1] -= 1
-						states.get(neighborstate).neighbors[neighborIndices[index]][1][1][0] += 1 
+						states.get(neighborstate).visitors[neighborIndices[index]][1][1][0] += 1 
+					
+#					4: 
+#						state.I[2] -= 1
+#						states.get(neighborstate).visitors[neighborIndices[index]][1][1][0] += 1 
 					
 					4: 
-						state.I[2] -= 1
-						states.get(neighborstate).neighbors[neighborIndices[index]][1][1][0] += 1 
+						state.R[0] -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][2][0] += 1 
 					
 					5: 
-						state.R[0] -= 1
-						states.get(neighborstate).neighbors[neighborIndices[index]][1][2][0] += 1 
-					
-					6: 
 						state.R[1] -= 1
-						states.get(neighborstate).neighbors[neighborIndices[index]][1][2][0] += 1 
+						states.get(neighborstate).visitors[neighborIndices[index]][1][2][0] += 1 
 					
-					7: 
-						state.R[2] -= 1
-						states.get(neighborstate).neighbors[neighborIndices[index]][1][2][0] += 1
+#					7: 
+#						state.R[2] -= 1
+#						states.get(neighborstate).visitors[neighborIndices[index]][1][2][0] += 1
 					
 					# 1x GEIMPFT
-					8: 
+					6: 
 						state.V1eligible[0] -= 1
-						states.get(neighborstate).neighbors[neighborIndices[index]][1][0][1] += 1 
+						states.get(neighborstate).visitors[neighborIndices[index]][1][0][1] += 1 
 					
-					9: 
+					7: 
 						state.V1eligible[1] -= 1
-						states.get(neighborstate).neighbors[neighborIndices[index]][1][1][1] += 1 
+						states.get(neighborstate).visitors[neighborIndices[index]][1][1][1] += 1 
+					
+					8:
+						state.V1eligible[3] -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][2][1] += 1 
+					
+					9:
+						state.V2[0] -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][0][2] += 1 
 					
 					10:
-						state.V1eligible[3] -= 1
-						states.get(neighborstate).neighbors[neighborIndices[index]][1][2][1] += 1 
+						state.V2[1] -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][1][2] += 1
 					
 					11:
-						state.V2[0] -= 1
-						states.get(neighborstate).neighbors[neighborIndices[index]][1][0][2] += 1 
-					
-					12:
-						state.V2[1] -= 1
-						states.get(neighborstate).neighbors[neighborIndices[index]][1][1][2] += 1
-					
-					13:
-						state.V2[2] -= 1
-						states.get(neighborstate).neighbors[neighborIndices[index]][1][2][2] += 1
+						state.V2[3] -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][2][2] += 1
 					
 					
 						
 				index += 1
 				commuteCount -= 1
-		
-		
-		
-	pass
+
+func checkAvlblCommuters(state):
+	var dict = {}
+	
+	dict[0] = !(state.S[0] == 0)
+	dict[1] = !(state.S[1] == 0)
+	dict[2] = !(state.I[0] == 0)
+	dict[3] = !(state.I[1] == 0)
+#	dict[4] = !(state.I[2] == 0)
+	dict[4] = !(state.R[0] == 0)
+	dict[5] = !(state.R[1] == 0)
+#	dict[7] = !(state.R[2] == 0)
+	dict[6] = !(state.V1eligible[0] == 0)
+	dict[7] = !(state.V1eligible[1] == 0)
+	dict[8] = !(state.V1eligible[3] == 0)
+	dict[9] = !(state.V2[0] == 0)
+	dict[10] = !(state.V2[1] == 0)
+	dict[11] = !(state.V2[3] == 0)
+	
+	return dict
 
 func homeCommuters():
-	pass
+	for state in states.values():
+		for i in range(state.neighbors.size()):
+			var homeState = states.get(state.neighbors[i])
+			
+			homeState.S[0] += state.visitors[i][1][0][0]
+			state.visitors[i][1][0][0] = 0
+			homeState.I[0] += state.visitors[i][1][1][0]
+			state.visitors[i][1][1][0] = 0
+			homeState.R[0] += state.visitors[i][1][2][0]
+			state.visitors[i][1][2][0] = 0
+			homeState.D[0] += state.visitors[i][1][3][0]
+			state.visitors[i][1][3][0] = 0
+			
+			homeState.V1eligible[0] += state.visitors[i][1][0][1]
+			state.visitors[i][1][0][1] = 0
+			homeState.V1eligible[1] += state.visitors[i][1][1][1]
+			state.visitors[i][1][1][1] = 0
+			homeState.V1eligible[3] += state.visitors[i][1][2][1]
+			state.visitors[i][1][2][1] = 0
+			homeState.V1eligible[4] += state.visitors[i][1][3][1]
+			state.visitors[i][1][3][1] = 0
+			
+			homeState.V2[0] += state.visitors[i][1][0][2]
+			state.visitors[i][1][0][2] = 0
+			homeState.V2[1] += state.visitors[i][1][1][2]
+			state.visitors[i][1][1][2] = 0
+			homeState.V2[3] += state.visitors[i][1][2][2]
+			state.visitors[i][1][2][2] = 0
+			homeState.V2[4] += state.visitors[i][1][3][2]
+			state.visitors[i][1][3][2] = 0
+
 
 func simulateALL():
 	S = [0,0,0]
@@ -160,16 +214,28 @@ func simulateALL():
 	
 	for state in states.values():
 		state.simulate()
-		S = CONSTANTS.add_arrays(S, state.S)
-		I = CONSTANTS.add_arrays(I, state.I)
-		R = CONSTANTS.add_arrays(R, state.R)
-		D = CONSTANTS.add_arrays(D, state.D)
-		var stateV1 = [CONSTANTS.sum(state.V1[0]) + state.V1eligible[0], CONSTANTS.sum(state.V1[1]) + state.V1eligible[1], CONSTANTS.sum(state.V1[2]) + state.V1eligible[2], CONSTANTS.sum(state.V1[3]) + state.V1eligible[3], CONSTANTS.sum(state.V1[4]) + state.V1eligible[4]]
-		V1 = CONSTANTS.add_arrays(V1, stateV1)
-		V2 = CONSTANTS.add_arrays(V2, state.V2)
+#		S = CONSTANTS.add_arrays(S, state.S)
+#		I = CONSTANTS.add_arrays(I, state.I)
+#		R = CONSTANTS.add_arrays(R, state.R)
+#		D = CONSTANTS.add_arrays(D, state.D)
+#		var stateV1 = [CONSTANTS.sum(state.V1[0]) + state.V1eligible[0], CONSTANTS.sum(state.V1[1]) + state.V1eligible[1], CONSTANTS.sum(state.V1[2]) + state.V1eligible[2], CONSTANTS.sum(state.V1[3]) + state.V1eligible[3], CONSTANTS.sum(state.V1[4]) + state.V1eligible[4]]
+#		V1 = CONSTANTS.add_arrays(V1, stateV1)
+#		V2 = CONSTANTS.add_arrays(V2, state.V2)
 	
 	homeCommuters()
 	
+	getNumbers()
+	
+#	for state in states.values():
+#		S = CONSTANTS.add_arrays(S, state.S)
+#		I = CONSTANTS.add_arrays(I, state.I)
+#		R = CONSTANTS.add_arrays(R, state.R)
+#		D = CONSTANTS.add_arrays(D, state.D)
+#		var stateV1 = [CONSTANTS.sum(state.V1[0]) + state.V1eligible[0], CONSTANTS.sum(state.V1[1]) + state.V1eligible[1], CONSTANTS.sum(state.V1[2]) + state.V1eligible[2], CONSTANTS.sum(state.V1[3]) + state.V1eligible[3], CONSTANTS.sum(state.V1[4]) + state.V1eligible[4]]
+#		V1 = CONSTANTS.add_arrays(V1, stateV1)
+#		V2 = CONSTANTS.add_arrays(V2, state.V2)
+		
+		
 	# für Gesamtübersicht
 #	suscept.append(S[0] + S[1] + S[2])
 	suscept.append(S[0] + S[1])
@@ -210,3 +276,13 @@ func simulateALL():
 	
 	hosp.append(I[3])
 	
+		
+func getNumbers():
+	for state in states.values():
+		S = CONSTANTS.add_arrays(S, state.S)
+		I = CONSTANTS.add_arrays(I, state.I)
+		R = CONSTANTS.add_arrays(R, state.R)
+		D = CONSTANTS.add_arrays(D, state.D)
+		var stateV1 = [CONSTANTS.sum(state.V1[0]) + state.V1eligible[0], CONSTANTS.sum(state.V1[1]) + state.V1eligible[1], CONSTANTS.sum(state.V1[2]) + state.V1eligible[2], CONSTANTS.sum(state.V1[3]) + state.V1eligible[3], CONSTANTS.sum(state.V1[4]) + state.V1eligible[4]]
+		V1 = CONSTANTS.add_arrays(V1, stateV1)
+		V2 = CONSTANTS.add_arrays(V2, state.V2)

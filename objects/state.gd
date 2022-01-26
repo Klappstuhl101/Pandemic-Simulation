@@ -129,7 +129,7 @@ func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
 #	self.I = [16000,0,0]
 	
 #	# Hospitalisierung
-	self.I = [3,0,0,0]
+	self.I = [50,0,0,0]
 	
 	
 	# für Test und Hospitalisierung

@@ -37,7 +37,7 @@ const ACTIONMODE = "Action"
 
 const STATBUTTON = "StatButton"
 
-const TRYOUT_DAYS = 100
+const TRYOUT_DAYS = 20
 
 const SUSCEPTIBLE = "Susceptible"
 const INFECTED = "Infected"
@@ -52,7 +52,7 @@ const UNAWARE = "Unaware"
 const VAX1 = "1x Vaccinated"
 const VAX2 = "2x Vaccinated"
 
-const VACDELAY = 14
+const VACDELAY = 10
 
 
 

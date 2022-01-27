@@ -38,10 +38,6 @@ var waitDay = 0
 
 var avlbVax
 
-var VinfectRate
-var VrecRate
-var VdeathRate
-
 var infectRate
 var recRate
 var deathRate
@@ -129,7 +125,7 @@ func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
 #	self.I = [16000,0,0]
 	
 #	# Hospitalisierung
-	self.I = [50,0,0,0]
+	self.I = [3,0,0,0]
 	
 	
 	# für Test und Hospitalisierung
@@ -185,8 +181,8 @@ func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
 	visitors = []
 	for i in range(neighbors.size()):
 		var vis = [CONSTANTS.zeroes(3), CONSTANTS.zeroes(3), CONSTANTS.zeroes(3), CONSTANTS.zeroes(3)]
-		var name = neighbors[i]
-		var arr = [name, vis]
+		var neighborName = neighbors[i]
+		var arr = [neighborName, vis]
 		visitors.append(arr)
 	
 	vacRate1 = 2
@@ -277,14 +273,8 @@ func simulate():
 	vax2dead.append(V2[4])
 	
 	hosp.append(I[3])
-	
-	
-	
-#	# Standardsimulation
-#	suscept.append(S)
-#	infect.append(I)
-#	recov.append(R)
-#	dead.append(D)
+
+
 
 func gillespieIteration(t):
 	var r1 = rnd.randf()
@@ -317,15 +307,15 @@ func gillespieIteration(t):
 
 func updatePersonNumbers(rule):
 	match rule:
-		0, 1, 2, 3, 4, 5, 6, 7, 8, 9:
+		0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12: # Infektion Ungetestete Ungeimpfte
 			S[0] -= 1
 			I[0] += 1
 		
-		10, 11, 12, 13, 14, 15, 16, 17, 18, 19:
+		13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25: # Infektion Getestete Ungeimpfte
 			S[1] -= 1
 			I[2] += 1
 			
-		20, 21, 22, 23, 24, 25, 26, 27, 28, 29:
+		26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38: # Infektion V1
 			var randomDay = rnd.randi() % CONSTANTS.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
 				if V1[0][randomDay] != 0:
@@ -337,31 +327,70 @@ func updatePersonNumbers(rule):
 			V1[0][randomDay] -= 1
 			V1[1][randomDay] += 1
 		
-		30, 31, 32, 33, 34, 35, 36, 37, 38, 39:
+		39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51: # Infektion V1eligible
 			V1eligible[0] -= 1
 			V1eligible[1] += 1
 		
-		40, 41, 42, 43, 44, 45, 46, 47, 48, 49:
+		52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64: # Infektion V2
 			V2[0] -= 1
 			V2[1] += 1
 		
-		50:
+		# Infektion Pendler
+		65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77: # Infektion ungeimpfte Pendler
+			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
+			while true:
+				if visitors[randomNeighbor][1][0][0] != 0:
+					break
+				else:
+					randomNeighbor += 1
+					randomNeighbor = randomNeighbor % visitors.size()
+			
+			visitors[randomNeighbor][1][0][0] -= 1
+			visitors[randomNeighbor][1][1][0] += 1
+		
+		78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90: # Infektion 1x geimpfte Pendler
+			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
+			while true:
+				if visitors[randomNeighbor][1][0][1] != 0:
+					break
+				else:
+					randomNeighbor += 1
+					randomNeighbor = randomNeighbor % visitors.size()
+			
+			visitors[randomNeighbor][1][0][1] -= 1
+			visitors[randomNeighbor][1][1][1] += 1
+			
+		91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103: # Infektion 2x geimpfte Pendler
+			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
+			while true:
+				if visitors[randomNeighbor][1][0][2] != 0:
+					break
+				else:
+					randomNeighbor += 1
+					randomNeighbor = randomNeighbor % visitors.size()
+			
+			visitors[randomNeighbor][1][0][2] -= 1
+			visitors[randomNeighbor][1][1][2] += 1
+		
+		# Genesung Infizierte I
+		104:
 			I[0] -= 1
 			R[0] += 1
 			
-		51:
+		105:
 			I[1] -= 1
 			R[2] += 1
 			
-		52:
+		106:
 			I[2] -= 1
 			R[2] += 1
 		
-		53:
+		107:
 			I[3] -= 1
 			R[1] += 1
 		
-		54:
+		# Genesung Infizierte V1
+		108:
 			var randomDay = rnd.randi() % CONSTANTS.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
 				if V1[1][randomDay] != 0:
@@ -373,7 +402,7 @@ func updatePersonNumbers(rule):
 			V1[1][randomDay] -= 1
 			V1[3][randomDay] += 1
 		
-		55:
+		109:
 			var randomDay = rnd.randi() % CONSTANTS.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
 				if V1[2][randomDay] != 0:
@@ -384,40 +413,84 @@ func updatePersonNumbers(rule):
 			
 			V1[2][randomDay] -= 1
 			V1[3][randomDay] += 1
-			
-		56:
+		
+		# Genesung Infizierte V1eligible
+		110:
 			V1eligible[1] -= 1
 			V1eligible[3] += 1
 			
-		57:
+		111:
 			V1eligible[2] -= 1
 			V1eligible[3] += 1
 		
-		58:
+		# Genesung Infizierte V2
+		112:
 			V2[1] -= 1
 			V2[3] += 1
 		
-		59:
+		113:
 			V2[2] -= 1
 			V2[3] += 1
 		
-		60:
+		# Genesung Pendler
+		# Genesung ungeimpfte Pendler
+		114: 
+			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
+			while true:
+				if visitors[randomNeighbor][1][1][0] != 0:
+					break
+				else:
+					randomNeighbor += 1
+					randomNeighbor = randomNeighbor % visitors.size()
+			
+			visitors[randomNeighbor][1][1][0] -= 1
+			visitors[randomNeighbor][1][2][0] += 1
+		
+		# Genesung 1x geimpfte Pendler
+		115:
+			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
+			while true:
+				if visitors[randomNeighbor][1][1][1] != 0:
+					break
+				else:
+					randomNeighbor += 1
+					randomNeighbor = randomNeighbor % visitors.size()
+			
+			visitors[randomNeighbor][1][1][1] -= 1
+			visitors[randomNeighbor][1][2][1] += 1
+		
+		# Genesung 2x geimpfter Pendler
+		116:
+			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
+			while true:
+				if visitors[randomNeighbor][1][1][2] != 0:
+					break
+				else:
+					randomNeighbor += 1
+					randomNeighbor = randomNeighbor % visitors.size()
+			
+			visitors[randomNeighbor][1][1][2] -= 1
+			visitors[randomNeighbor][1][2][2] += 1
+			
+		# Tod Infizierte I
+		117:
 			I[0] -= 1
 			D[0] += 1
 		
-		61:
+		118:
 			I[1] -= 1
 			D[1] += 1
 		
-		62:
+		119:
 			I[2] -= 1
 			D[2] += 1
 		
-		63:
+		120:
 			I[3] -= 1
 			D[1] += 1
 		
-		64:
+		# Tod Infizierte V1
+		121:
 			var randomDay = rnd.randi() % CONSTANTS.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
 				if V1[1][randomDay] != 0:
@@ -429,7 +502,7 @@ func updatePersonNumbers(rule):
 			V1[1][randomDay] -= 1
 			V1[4][randomDay] += 1
 			
-		65:
+		122:
 			var randomDay = rnd.randi() % CONSTANTS.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
 				if V1[1][randomDay] != 0:
@@ -441,59 +514,106 @@ func updatePersonNumbers(rule):
 			V1[2][randomDay] -= 1
 			V1[4][randomDay] += 1
 		
-		66:
+		# Tod Infizierte V1eligible
+		123:
 			V1eligible[1] -= 1
 			V1eligible[4] += 1
 		
-		67:
+		124:
 			V1eligible[2] -= 1
 			V1eligible[4] += 1
-			
-		68:
+		
+		# Tod Infizierte V2
+		125:
 			V2[1] -= 1
 			V2[4] += 1
 		
-		69:
+		126:
 			V2[2] -= 1
 			V2[4] += 1
 		
-		70:
+		# Tod Pendler
+		# Tod ungeimpfter Pendler
+		127:
+			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
+			while true:
+				if visitors[randomNeighbor][1][1][0] != 0:
+					break
+				else:
+					randomNeighbor += 1
+					randomNeighbor = randomNeighbor % visitors.size()
+			
+			visitors[randomNeighbor][1][1][0] -= 1
+			visitors[randomNeighbor][1][3][0] += 1
+			
+		# Tod 1x geimpfter Pendler
+		128:
+			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
+			while true:
+				if visitors[randomNeighbor][1][1][1] != 0:
+					break
+				else:
+					randomNeighbor += 1
+					randomNeighbor = randomNeighbor % visitors.size()
+			
+			visitors[randomNeighbor][1][1][1] -= 1
+			visitors[randomNeighbor][1][3][1] += 1
+		
+		# Tod 2x geimpfter Pendler
+		129:
+			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
+			while true:
+				if visitors[randomNeighbor][1][1][2] != 0:
+					break
+				else:
+					randomNeighbor += 1
+					randomNeighbor = randomNeighbor % visitors.size()
+			
+			visitors[randomNeighbor][1][1][2] -= 1
+			visitors[randomNeighbor][1][3][2] += 1
+		
+		# Tests von Ungeimpften
+		130:
 			S[0] -= 1
 			S[1] += 1
 		
-		71:
+		131:
 			I[0] -= 1
 			I[1] += 1
 		
-		72:
+		132:
 			R[0] -= 1
 			R[1] += 1
 		
-		73:
+		# Verlust Getestetenstatus
+		133:
 			S[1] -= 1
 			S[0] += 1
 		
-		74:
-			I[2] -= 1
+		134:
+			I[1] -= 1
 			I[0] += 1
 		
-		75:
-			R[2] -= 1
+		135:
+			R[1] -= 1
 			R[0] += 1
 		
-		76:
+		# Hospitalisierungen
+		# Hospitalisierung Ungeimpfte
+		136:
 			I[0] -= 1
 			I[3] += 1
 		
-		77:
+		137:
 			I[1] -= 1
 			I[3] += 1
 		
-		78:
+		138:
 			I[2] -= 1
 			I[3] += 1
 		
-		79:
+		# Hospitalisierung V1
+		139:
 			var randomDay = rnd.randi() % CONSTANTS.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
 				if V1[1][randomDay] != 0:
@@ -505,150 +625,57 @@ func updatePersonNumbers(rule):
 			V1[1][randomDay] -= 1
 			V1[2][randomDay] += 1
 		
-		80:
+		# Hospitalisierung V1eligible
+		140:
 			V1eligible[1] -= 1
 			V1eligible[2] += 1
 		
-		81:
+		# Hospitalisierung V2
+		141:
 			V2[1] -= 1
 			V2[2] += 1
-			
-		82:
+		
+		# Impfungen
+		# ERSTE IMPFUNG
+		# von S zu V1
+		142:
 			S[0] -= 1
 			V1[0][waitDay] += 1
 			self.avlbVax -= 1
 		
-		83:
+		143:
 			S[1] -= 1
 			V1[0][waitDay] += 1
 			self.avlbVax -= 1
 		
-		84:
+		# von R zu V1
+		144:
 			R[0] -= 1
 			V1[3][waitDay] += 1
 			self.avlbVax -= 1
 		
-		85:
+		145:
 			R[1] -= 1
 			V1[3][waitDay] += 1
 			self.avlbVax -= 1
 		
-		86:
+		# ZWEITE IMPFUNG
+		# Impfung nur für gesunde und genesene, während Infektion keine Impfung
+		146:
 			V1eligible[0] -= 1
 			V2[0] += 1
 			self.avlbVax -= 1
 		
-		87:
+		147:
 			V1eligible[2] -= 1
 			V2[2] += 1
 			self.avlbVax -= 1
 		
-		
-		
-#		0, 1, 2:
-#			S[0] -= 1
-#			I[0] += 1
-#
-#		3, 4, 5:
-#			S[1] -= 1
-#			I[2] += 1
-#
-#		6:
-#			I[0] -= 1
-#			R[0] += 1
-#
-#		7:
-#			I[1] -= 1
-#			R[1] += 1
-#
-#		8:
-#			I[2] -= 1
-#			R[2] += 1
-#
-#		9:
-#			I[0] -= 1
-#			D[0] += 1
-#
-#		10:
-#			I[1] -= 1
-#			D[1] += 1
-#
-#		11:
-#			I[2] -= 1
-#			D[2] += 1
-#
-#		12:
-#			S[0] -= 1
-#			S[1] += 1
-#
-#		13:
-#			I[0] -= 1
-#			I[1] += 1
-#
-#		14:
-#			R[0] -= 1
-#			R[1] += 1
-#
-#		15:
-#			S[1] -= 1
-#			S[0] += 1
-#
-#		16:
-#			I[2] -= 1
-#			I[0] += 1
-#
-#		17:
-#			R[2] -= 1
-#			R[0] += 1
-#
-#		18:
-#			S[0] -= 1
-#			I[0] += 1
-#
-#		19:
-#			S[1] -= 1
-#			I[1] += 1
-#
-#		20:
-#			S[2] -= 1
-#			I[2] += 1
-#
-#		21:
-#			I[0] -= 1
-#			I[3] += 1
-#
-#		22:
-#			I[1] -= 1
-#			I[3] += 1
-#
-#		23:
-#			I[2] -= 1
-#			I[3] += 1
-#
-#		24:
-#			I[3] -= 1
-#			R[1] += 1
-#
-#		25:
-#			I[3] -= 1
-#			D[1] += 1
-	
-#	# Standardmodell
-#	match rule:
-#		0: # Neu Infizierte
-#			S-=1
-#			I+=1
-#		1: # Genesene
-#			I-=1
-#			R+=1
-#		2: # Tote
-#			I-=1
-#			D+=1
 
 func updateReactionRates():
 	var rates = []
 	
-	# 0 1 2 3 4 5 6 7 8 9 Infektion Ungetestete
+	# 0 1 2 3 4 5 6 7 8 9 10 11 12 Infektion Ungetestete
 	rates.append((infectRate[0]/population)*S[0]*I[0]) 									# Ansteckung an Ungetestet Infizierten
 	rates.append((infectRate[1]/population)*S[0]*I[1]) 									# Ansteckung an Getestet Infizierten
 	rates.append((infectRate[0]/population)*S[0]*I[2]) 									# Ansteckung an Unbewusst Infizierten (ungetestet)
@@ -659,8 +686,11 @@ func updateReactionRates():
 	rates.append((infectRate[2]*infectRate[3]/population)*S[0]*V1eligible[2])			# Ansteckung an einfach Geimpften Hospitalisierten
 	rates.append((infectRate[4]/population)*S[0]*V2[1]) 								# Ansteckung an zweifach Geimpften
 	rates.append((infectRate[2]*infectRate[4]/population)*S[0]*V2[2])					# Ansteckung an zweifach Geimpften Hospitalisierten
+	rates.append((infectRate[0]/population)*S[0]*sumVisitors(1,0))						# Ansteckung an ungeimpften, infizierten Pendlern
+	rates.append((infectRate[3]/population)*S[0]*sumVisitors(1,1))						# Ansteckung an 1x geimpften, infizierten Pendlern
+	rates.append((infectRate[4]/population)*S[0]*sumVisitors(1,2))						# Ansteckung an 2x geimpften, infizierten Pendlern
 	
-	# 10 11 12 13 14 15 16 17 18 19 Infektion Getestete
+	# 13 14 15 16 17 18 19 20 21 22 23 24 25 Infektion Getestete, also unbewusste Krankheitsänderung
 	rates.append((infectRate[0]/population)*S[1]*I[0])
 	rates.append((infectRate[1]/population)*S[1]*I[1])
 	rates.append((infectRate[0]/population)*S[1]*I[2])
@@ -671,8 +701,11 @@ func updateReactionRates():
 	rates.append((infectRate[2]*infectRate[3]/population)*S[1]*V1eligible[2])
 	rates.append((infectRate[4]/population)*S[1]*V2[1])
 	rates.append((infectRate[2]*infectRate[4]/population)*S[1]*V2[2])
+	rates.append((infectRate[0]/population)*S[1]*sumVisitors(1,0))
+	rates.append((infectRate[3]/population)*S[1]*sumVisitors(1,1))
+	rates.append((infectRate[4]/population)*S[1]*sumVisitors(1,2))
 	
-	# 20 21 22 23 24 25 26 27 28 29 Infektion V1
+	# 26 27 28 29 30 31 32 33 34 35 36 37 38 Infektion V1
 	rates.append((infectRate[0]/population)*CONSTANTS.sum(V1[0])*I[0])
 	rates.append((infectRate[1]/population)*CONSTANTS.sum(V1[0])*I[1])
 	rates.append((infectRate[0]/population)*CONSTANTS.sum(V1[0])*I[2])
@@ -683,8 +716,11 @@ func updateReactionRates():
 	rates.append((infectRate[2]*infectRate[3]/population)*CONSTANTS.sum(V1[0])*V1eligible[2])
 	rates.append((infectRate[4]/population)*CONSTANTS.sum(V1[0])*V2[1])
 	rates.append((infectRate[2]*infectRate[4]/population)*CONSTANTS.sum(V1[0])*V2[2])
+	rates.append((infectRate[0]/population)*CONSTANTS.sum(V1[0])*sumVisitors(1,0))
+	rates.append((infectRate[3]/population)*CONSTANTS.sum(V1[0])*sumVisitors(1,1))
+	rates.append((infectRate[4]/population)*CONSTANTS.sum(V1[0])*sumVisitors(1,2))
 
-	# 30 31 32 33 34 35 36 37 38 39 Infektion V1eligible
+	# 39 40 41 42 43 44 45 46 47 48 49 50 51 Infektion V1eligible
 	rates.append((infectRate[0]/population)*V1eligible[0]*I[0])
 	rates.append((infectRate[1]/population)*V1eligible[0]*I[1])
 	rates.append((infectRate[0]/population)*V1eligible[0]*I[2])
@@ -695,8 +731,11 @@ func updateReactionRates():
 	rates.append((infectRate[2]*infectRate[3]/population)*V1eligible[1]*V1eligible[2])
 	rates.append((infectRate[4]/population)*V1eligible[0]*V2[1])
 	rates.append((infectRate[2]*infectRate[4]/population)*V1eligible[1]*V2[2])
+	rates.append((infectRate[0]/population)*V1eligible[0]*sumVisitors(1,0))
+	rates.append((infectRate[3]/population)*V1eligible[0]*sumVisitors(1,1))
+	rates.append((infectRate[4]/population)*V1eligible[0]*sumVisitors(1,2))
 
-	# 40 41 42 43 44 45 46 47 48 49 Infektion V2
+	# 52 53 54 55 56 57 58 59 60 61 62 63 64 Infektion V2
 	rates.append((infectRate[0]/population)*V2[0]*I[0])
 	rates.append((infectRate[1]/population)*V2[0]*I[1])
 	rates.append((infectRate[0]/population)*V2[0]*I[2])
@@ -707,72 +746,127 @@ func updateReactionRates():
 	rates.append((infectRate[2]*infectRate[3]/population)*V2[1]*V1eligible[2])
 	rates.append((infectRate[4]/population)*V2[0]*V2[1])
 	rates.append((infectRate[2]*infectRate[4]/population)*V2[1]*V2[2])
+	rates.append((infectRate[0]/population)*V2[0]*sumVisitors(1,0))
+	rates.append((infectRate[3]/population)*V2[0]*sumVisitors(1,1))
+	rates.append((infectRate[4]/population)*V2[0]*sumVisitors(1,2))
 	
+	# Infektion Pendler/Visitors
+	# 65 66 67 68 69 70 71 72 73 74 75 76 77 Infektion ungeimpfte Pendler
+	rates.append((infectRate[0]/population)*sumVisitors(0,0)*I[0])
+	rates.append((infectRate[1]/population)*sumVisitors(0,0)*I[1])
+	rates.append((infectRate[0]/population)*sumVisitors(0,0)*I[2])
+	rates.append((infectRate[2]/population)*sumVisitors(0,0)*I[3])
+	rates.append((infectRate[3]/population)*sumVisitors(0,0)*CONSTANTS.sum(V1[1]))
+	rates.append((infectRate[2]*infectRate[3]/population)*sumVisitors(0,0)*CONSTANTS.sum(V1[2]))
+	rates.append((infectRate[3]/population)*sumVisitors(0,0)*V1eligible[1])
+	rates.append((infectRate[2]*infectRate[3]/population)*sumVisitors(0,0)*V1eligible[2])
+	rates.append((infectRate[4]/population)*sumVisitors(0,0)*V2[1])
+	rates.append((infectRate[2]*infectRate[4]/population)*sumVisitors(0,0)*V2[2])
+	rates.append((infectRate[0]/population)*sumVisitors(0,0)*sumVisitors(1,0))
+	rates.append((infectRate[3]/population)*sumVisitors(0,0)*sumVisitors(1,1))
+	rates.append((infectRate[4]/population)*sumVisitors(0,0)*sumVisitors(1,2))
+
+
+	# 78 79 80 81 82 83 84 85 86 87 88 89 90 Infektion 1x geimpfte Pendler
+	rates.append((infectRate[0]/population)*sumVisitors(0,1)*I[0])
+	rates.append((infectRate[1]/population)*sumVisitors(0,1)*I[1])
+	rates.append((infectRate[0]/population)*sumVisitors(0,1)*I[2])
+	rates.append((infectRate[2]/population)*sumVisitors(0,1)*I[3])
+	rates.append((infectRate[3]/population)*sumVisitors(0,1)*CONSTANTS.sum(V1[1]))
+	rates.append((infectRate[2]*infectRate[3]/population)*sumVisitors(0,1)*CONSTANTS.sum(V1[2]))
+	rates.append((infectRate[3]/population)*sumVisitors(0,1)*V1eligible[1])
+	rates.append((infectRate[2]*infectRate[3]/population)*sumVisitors(0,1)*V1eligible[2])
+	rates.append((infectRate[4]/population)*sumVisitors(0,1)*V2[1])
+	rates.append((infectRate[2]*infectRate[4]/population)*sumVisitors(0,0)*V2[2])
+	rates.append((infectRate[0]/population)*sumVisitors(0,1)*sumVisitors(1,0))
+	rates.append((infectRate[3]/population)*sumVisitors(0,1)*sumVisitors(1,1))
+	rates.append((infectRate[4]/population)*sumVisitors(0,1)*sumVisitors(1,2))
+
+	# 91 92 93 94 95 96 97 98 99 100 101 102 103 Infektion 2x geimpfte Pendler
+	rates.append((infectRate[0]/population)*sumVisitors(0,2)*I[0])
+	rates.append((infectRate[1]/population)*sumVisitors(0,2)*I[1])
+	rates.append((infectRate[0]/population)*sumVisitors(0,2)*I[2])
+	rates.append((infectRate[2]/population)*sumVisitors(0,2)*I[3])
+	rates.append((infectRate[3]/population)*sumVisitors(0,2)*CONSTANTS.sum(V1[1]))
+	rates.append((infectRate[2]*infectRate[3]/population)*sumVisitors(0,2)*CONSTANTS.sum(V1[2]))
+	rates.append((infectRate[3]/population)*sumVisitors(0,2)*V1eligible[1])
+	rates.append((infectRate[2]*infectRate[3]/population)*sumVisitors(0,2)*V1eligible[2])
+	rates.append((infectRate[4]/population)*sumVisitors(0,2)*V2[1])
+	rates.append((infectRate[2]*infectRate[4]/population)*sumVisitors(0,0)*V2[2])
+	rates.append((infectRate[0]/population)*sumVisitors(0,2)*sumVisitors(1,0))
+	rates.append((infectRate[3]/population)*sumVisitors(0,2)*sumVisitors(1,1))
+	rates.append((infectRate[4]/population)*sumVisitors(0,2)*sumVisitors(1,2))
 	
-	# 50 51 52 53 Genesung Infizierte I
+	# 104 105 106 107 Genesung Infizierte I
 	rates.append(recRate[0]*I[0])
 	rates.append(recRate[0]*I[1])
 	rates.append(recRate[0]*I[2])
 	rates.append(recRate[1]*I[3])
 	
-	# 54 55 Genesung Infizierte V1
+	# 108 109 Genesung Infizierte V1
 	rates.append(recRate[2]*CONSTANTS.sum(V1[1]))
 	rates.append(((recRate[1]+recRate[2])/2) * CONSTANTS.sum(V1[2]))
 	
-	# 56 57 Genesung Infizierte V1eligible
+	# 110 111 Genesung Infizierte V1eligible
 	rates.append(recRate[2]*V1eligible[1])
 	rates.append(((recRate[1]+recRate[2])/2) * V1eligible[2])
-
-	# 58 59 Genesung Infizierte V2
+	
+	# 112 113 Genesung Infizierte V2
 	rates.append(recRate[3]*V2[1])
 	rates.append(((recRate[1]+recRate[3])/2) * V2[2])
-
-
-
-	# 60 61 62 63 Tod Inifizierte I
+	
+	# Genesung Pendler/Visitors
+	# 114 Genesung ungeimpfte Pendler
+	rates.append(recRate[0]*sumVisitors(1,0))
+	
+	# 115 Genesung 1x geimpfte Pendler
+	rates.append(recRate[2]*sumVisitors(1,1))
+	
+	# 116 Genesung 2x geimpfte Pendler 
+	rates.append(recRate[3]*sumVisitors(1,2))
+	
+	
+	# 117 118 119 120 Tod Inifizierte I
 	rates.append(deathRate[0]*I[0])
 	rates.append(deathRate[0]*I[1])
 	rates.append(deathRate[0]*I[2])
 	rates.append(deathRate[1]*I[3])
 	
-	# 64 65 Tod Infizierte V1
+	# 121 122 Tod Infizierte V1
 	rates.append(deathRate[2] * CONSTANTS.sum(V1[1]))
 	rates.append(deathRate[2] * deathRate[1] * CONSTANTS.sum(V1[2]))
 
-	# 66 67 Tod Infizierte V1eligible
+	# 123 124 Tod Infizierte V1eligible
 	rates.append(deathRate[2] * V1eligible[1])
 	rates.append(deathRate[2] * deathRate[1] * V1eligible[2])
 
-	# 68 69 Tod Infizierte V2
+	# 125 126 Tod Infizierte V2
 	rates.append(deathRate[3] * V2[1])
 	rates.append(deathRate[3] * deathRate[1] * V2[2])
 	
+	# Tod Pendler/Visitors
+	# 127 Tod ungeimpfte Pendler
+	rates.append(deathRate[0] * sumVisitors(1,0))
 	
+	# 128 Tod 1x geimpfte Pendler
+	rates.append(deathRate[2] * sumVisitors(1,1))
 	
-	# 70 71 72 Testraten BLEIBT
+	# 129 Tod 2x geimpfte Pendler
+	rates.append(deathRate[3] * sumVisitors(1,2))
+	
+	# 130 131 132 Testraten
 	rates.append(testRate[0]*S[0])
 	rates.append(testRate[1]*I[0])
 	rates.append(testRate[2]*R[0])
 	
-	# 73 Loss of information, Getestete verlieren Getestetenstatus BLEIBT
+	# 133 134 135 Loss of information, Getestete verlieren Getestetenstatus
 	rates.append(informationLoss*S[1])
-	
-	# 74 75 unbemerkt Angesteckte und Genesene BLEIBT
-	rates.append(informationLoss*I[2])
-	rates.append(informationLoss*R[2])
-	
-
-	# Ab hier Raten für Hospitalisierung
-	# Davon ausgehen 100% Testrate im Krankenhaus, Genesene aus Krankenhaus in Getestet/Genesen stecken
-#	# 18 19 20 Ansteckungen an Hospitalisierten KOMMT RAUS
-#	rates.append((infectRate[2]/population)*S[0]*I[3])
-#	rates.append((infectRate[2]/population)*S[1]*I[3])
-##	rates.append((infectRate[2]/population)*S[2]*I[3])
-#	rates.append(0) # ist noch hier, dass die Nummern der Regeln passen, da keine unbemerkt wieder Susceptible werden können
+	rates.append(informationLoss*I[1])
+	rates.append(informationLoss*R[1])
 	
 	
 	var occBeds = occupiedBeds()
-	# 76 77 78 79 80 81 Hospitalisierungsrate
+	# 136 137 138 139 140 141 Hospitalisierungsrate
 	rates.append(hospitalRate*(hospitalBeds-occBeds)/population * I[0])									# Hospitalisierung Ungeimpfte
 	rates.append(hospitalRate*(hospitalBeds-occBeds)/population * I[1])									# Hospitalisierung Ungeimpfte
 	rates.append(hospitalRate*(hospitalBeds-occBeds)/population * I[2])									# Hospitalisierung Ungeimpfte
@@ -780,109 +874,27 @@ func updateReactionRates():
 	rates.append(hospitalRate*recRate[2]*(hospitalBeds-occBeds)/population * V1eligible[1])				# Hospitalisierung 1x Geimpfte
 	rates.append(hospitalRate*recRate[3]*(hospitalBeds-occBeds)/population * V2[1])						# Hospitalisierung 2x Geimpfte
 	
-
-#	# 24 Genesung Hospitalisierte KOMMT WEG
-#	rates.append(recRate[1]*I[3])
-#
-#	# 25 Tod Hospitalisierte KOMMT WEG
-#	rates.append(deathRate[1]*I[3])
-	
 	
 	# Impfungen
 	# Übergang zu erster Impfung
-	# 82 83 von S zu V1
+	# 142 143 von S zu V1
 	rates.append(vacRate1*avlbVax*S[0])
 	rates.append(vacRate1*avlbVax*S[1])
 	
-	# 84 85 von R zu V1
+	# 144 145 von R zu V1
 	rates.append(vacRate1*avlbVax*R[0])
 	rates.append(vacRate1*avlbVax*R[1])
 
-	# 86 87 von V1eligible zu V2 (nur noch nicht Angesteckte und Genesene bekommen zweite Impfung)
+	# 146 147 von V1eligible zu V2 (nur noch nicht Angesteckte und Genesene bekommen zweite Impfung)
 	rates.append(vacRate2*avlbVax*V1eligible[0])
 	rates.append(vacRate2*avlbVax*V1eligible[2])
-	
-	
-#	Standardmodell RAUS
-#	rates.append((infectRate/population)*S*I)
-#	rates.append(recRate*I)
-#	rates.append(deathRate*I)
 	
 	return rates
 	
 	
-
-	
-	
-#func simulateV1():
-#	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*0.5, getInfectRate()*0.4, getInfectRate()*0.2]
-#	var t = timeDifferenceV1
-#	for i in V1.size():
-#		while t < 1:
-#			t = gillespieV1(t, i)
-#			if(t>1):
-#				timeDifferenceV1 = fmod(t,1)
-#				continue
-#
-#
-#func gillespieV1(t, block):
-#	var r1 = rnd.randf()
-#	var reactionRates = updateReactionRatesV1()
-#	var reactTotal = CONSTANTS.sum(reactionRates)
-#
-#	if reactTotal == 0:
-#		return 1
-#
-#	var waitTime = -log(r1)/reactTotal
-#	t = t + waitTime
-#
-#	var r2 = rnd.randf()
-#
-#	var reactionRatesCumSum = CONSTANTS.cumulative_sum(reactionRates)
-#	for i in range(reactionRatesCumSum.size()):
-#		reactionRatesCumSum[i] = reactionRatesCumSum[i] / reactTotal
-#
-#	var rule
-#	for i in range(reactionRatesCumSum.size()):
-#		if(r2 <= reactionRatesCumSum[i]):
-#			rule = i
-#			break
-#
-#	updatePersonNumbersV1(rule, block)
-#
-##	print(t, " t    r ", rule)
-#
-#	return t
-#
-#
-## TODO HIER GESCHEITE REGELN AUFSTELLEN BZW GESCHEITE RATEN 
-#func updateReactionRatesV1():
-#	var rates = []
-#	# 1 gesunde zu Infizierten NOCH ANDERE INFECTRATE
-#	# Summe von allen normalen S, allen einaml geimpften S, und zweimal Geimpften
-#	rates.append((infectRate[0]/population) * (CONSTANTS.sum(S)+CONSTANTS.sum(V1[0]) + V1eligible[0] + V2[0]) * (CONSTANTS.sum(I) + CONSTANTS.sum(V1[1]) + V1eligible[1] + V2[1]))
-#
-#	# 2 Genesung von Infizierten
-#	rates.append(recRate[0] * (CONSTANTS.sum(I) + CONSTANTS.sum(V1[1]) + V1eligible[1] + V2[1] + V2[2]))
-#
-#	# 3 Tode von Infizierten
-#	rates.append(deathRate[0] * (CONSTANTS.sum(I) + CONSTANTS.sum(V1[1]) + V1eligible[1] + V2[1] + V2[2]))
-#
-#
-#	return rates
-#
-#
-#func updatePersonNumbersV1(rule, block):
-#	match rule:
-#		1:
-#			V1[0][block] -= 1
-#			V1[1][block] += 1
-#		2:
-#			V1[1][block] -= 1
-#			V1[2][block] += 1
-#		3:
-#			V1[1][block] -= 1
-#			V1[3][block] += 1
-
-
+func sumVisitors(condition, vaxStatus): # condition: Krankheitsstatus, Impfstatus
+	var sum = 0
+	for visitor in visitors:
+		sum += visitor[1][condition][vaxStatus]
+	return sum
 

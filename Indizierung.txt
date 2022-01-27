@@ -4,16 +4,7 @@
 # 2: Unbewusste Krankheitsänderung
 # 3: Hospitalisierte (nur Infizierte)
 
-
-# Indizierung V1 (einmal geimpft): (Infizierte werden nicht geimpft) (als Fließband, aber random einem Block zuordnen)
-	# 0: Ansteckbar (S)
-	# 1: Infiziert (I)
-	# 2: Hospitalisiert (H)
-	# 3: Genesen  (R)
-	# 4: Gestorben (D)
-
-
-# Indizierung V1eligible und V2 (zweimal geimpft)
+# Indizierung V1 (Fließband), V1eligible und V2 (zweimal geimpft)
 	# 0: Ansteckbar (S)
 	# 1: Infiziert (I)
 	# 2: Hospitalisiert (H)

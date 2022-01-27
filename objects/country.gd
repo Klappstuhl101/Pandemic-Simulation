@@ -101,10 +101,6 @@ func distributeCommuters():
 						state.I[1] -= 1
 						states.get(neighborstate).visitors[neighborIndices[index]][1][1][0] += 1 
 					
-#					4: 
-#						state.I[2] -= 1
-#						states.get(neighborstate).visitors[neighborIndices[index]][1][1][0] += 1 
-					
 					4: 
 						state.R[0] -= 1
 						states.get(neighborstate).visitors[neighborIndices[index]][1][2][0] += 1 
@@ -113,9 +109,6 @@ func distributeCommuters():
 						state.R[1] -= 1
 						states.get(neighborstate).visitors[neighborIndices[index]][1][2][0] += 1 
 					
-#					7: 
-#						state.R[2] -= 1
-#						states.get(neighborstate).visitors[neighborIndices[index]][1][2][0] += 1
 					
 					# 1x GEIMPFT
 					6: 

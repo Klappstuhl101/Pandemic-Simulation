@@ -34,7 +34,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/easy_charts/ColumnChart2D/column_chart2D.gd"
 }, {
-"base": "State",
+"base": "Object",
 "class": "Country",
 "language": "GDScript",
 "path": "res://objects/country.gd"

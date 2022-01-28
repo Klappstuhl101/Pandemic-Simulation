@@ -37,7 +37,7 @@ const ACTIONMODE = "Action"
 
 const STATBUTTON = "StatButton"
 
-const TRYOUT_DAYS = 200
+const TRYOUT_DAYS = 100
 
 const SUSCEPTIBLE = "Susceptible"
 const INFECTED = "Infected"

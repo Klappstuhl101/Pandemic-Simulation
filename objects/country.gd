@@ -1,16 +1,84 @@
-extends State
+#extends State
+extends Object
 
 class_name Country
 
 
 var states # dict of states
 
+
 var beds = []
 
 var vaxProduction
 
+# Variablen die zur Umstellung der Erbverhältnisse der Klasse gehören
+var name
+var population
 
-func _init(initStates, initName, initButton).(initName, 0, initButton, [], 0):
+var mapButton
+
+var hospitalBeds
+var rnd = RandomNumberGenerator.new()
+
+var avlbVax
+
+var lockdown = false
+
+var S
+var I
+var R
+var D
+var V1
+var V2
+
+var suscept = [CONSTANTS.SUSCEPTIBLE]
+var infect = [CONSTANTS.INFECTED]
+var recov = [CONSTANTS.RECOVERED]
+var dead = [CONSTANTS.DEAD]
+
+var sus0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]	# ungetestet ansteckbar
+var sus1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]		# getestet ansteckbar
+var sus2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]	# unbewusst ansteckbar (WIRD GESTRICHEN, NICHT MÖGLICH)
+var inf0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]		# ungetestet infiziert
+var inf1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]		# getestet infiziert
+var inf2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.INFECTED]		# unbewusst infiziert
+var rec0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# ungetestet genesen 
+var rec1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# getestet genesen
+var rec2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# unbewusst genesen
+var dead0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.DEAD]			# ungetestet tot
+var dead1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.DEAD]			# getestet tot
+var dead2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.DEAD]			# unbewusst tot
+
+var hosp = [CONSTANTS.HOSPITALISED]										# ungeimpfte Hospitalisierte
+
+var vax1sus = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.SUSCEPTIBLE]	# 1x geimpft ansteckbar
+var vax1inf = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.INFECTED]		# 1x geimpft infiziert
+var vax1hosp = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.HOSPITALISED]	# 1x geimpft hospitalisiert
+var vax1rec = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.RECOVERED]		# 1x geimpft genesen
+var vax1dead = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.DEAD]			# 1x geimpft tot
+var vax2sus = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.SUSCEPTIBLE]	# 2x geimpft ansteckbar
+var vax2inf = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.INFECTED]		# 2x geimpft infiziert
+var vax2hosp = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.HOSPITALISED]	# 2x geimpft hospitalisiert
+var vax2rec = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.RECOVERED]		# 2x geimpft genesen
+var vax2dead = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.DEAD]			# 2x geimpft tot
+
+
+func _init(initStates, initName, initButton):
+#func _init(initStates, initName, initButton).(initName, 0, initButton, [], 0):
+	
+	self.name = initName
+	self.mapButton = initButton
+	
+	var image = Image.new()
+	image.load("res://resources/map/" + name + ".png")
+	var bitmap = BitMap.new()
+	bitmap.create_from_image_alpha(image)
+	mapButton.texture_click_mask = bitmap
+	mapButton.toggle_mode = true
+	
+	self.population
+	
+	
 	self.states = initStates
 	recalculatePop()
 	recalculateHospitalBeds()

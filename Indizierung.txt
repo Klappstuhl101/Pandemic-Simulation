@@ -14,6 +14,7 @@
 # infectRate: Ungetestet, Getestet, (Hospitalisiert), 1x Geimpft, 2x Geimpft
 # recRate: Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft (keine Genesenen, da im Modell Genesene nicht mehr anstecken)
 # deathRate: Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
+# hospitalRate: ungeimpft, 1x Geimpft, 2x Geimpft
 
 Keine Pendler während Wartezeit auf zweite Impfung, keine Hospitalisierung von Pendlern, Impfung nur in eigenem Bundesland
 # Indizierung Reisende/Pendler # 0: Ungeimpft 1: 1x geimpft 2: 2x geimpft
@@ -21,3 +22,14 @@ Keine Pendler während Wartezeit auf zweite Impfung, keine Hospitalisierung von 
 # 1: I
 # 2: R
 # 3: D # Tote werden zurück zu Wohnort gebracht
+
+Faktor für Ansteckung in Krankenhäusern statt quadrierte Infektionsrate
+Pendler ändern Population am Tag
+Zahlen aus Fließband angucken und prüfen
+
+Tote komplett aus Bevölkerung streichen
+
+
+Weitere Ideen (für die Zukunft):
+"Gottmodus" Idee?
+Budget als Spielmechanismus

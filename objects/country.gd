@@ -1,26 +1,19 @@
-#extends State
 extends Object
 
 class_name Country
 
-
-var states # dict of states
-
-
-var beds = []
-
-var vaxProduction
-
-# Variablen die zur Umstellung der Erbverhältnisse der Klasse gehören
 var name
 var population
 
-var mapButton
+var states # dict of states
 
-var hospitalBeds
-var rnd = RandomNumberGenerator.new()
+var beds = []
+var hospitalBeds # Number of Beds
 
+var vaxProduction
 var avlbVax
+
+var mapButton
 
 var lockdown = false
 
@@ -61,6 +54,9 @@ var vax2inf = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.INFECTED]		# 2x geimpft
 var vax2hosp = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.HOSPITALISED]	# 2x geimpft hospitalisiert
 var vax2rec = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.RECOVERED]		# 2x geimpft genesen
 var vax2dead = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.DEAD]			# 2x geimpft tot
+
+
+var rnd = RandomNumberGenerator.new()
 
 
 func _init(initStates, initName, initButton):
@@ -165,7 +161,7 @@ func distributeCommuters():
 						state.I[0] -= 1
 						states.get(neighborstate).visitors[neighborIndices[index]][1][1][0] += 1 
 					
-					3: 
+					3:  # Vielleicht raus, Pseudoquarantäne
 						state.I[1] -= 1
 						states.get(neighborstate).visitors[neighborIndices[index]][1][1][0] += 1 
 					
@@ -215,10 +211,8 @@ func checkAvlblCommuters(state):
 	dict[1] = !(state.S[1] == 0)
 	dict[2] = !(state.I[0] == 0)
 	dict[3] = !(state.I[1] == 0)
-#	dict[4] = !(state.I[2] == 0)
 	dict[4] = !(state.R[0] == 0)
 	dict[5] = !(state.R[1] == 0)
-#	dict[7] = !(state.R[2] == 0)
 	dict[6] = !(state.V1eligible[0] == 0)
 	dict[7] = !(state.V1eligible[1] == 0)
 	dict[8] = !(state.V1eligible[3] == 0)
@@ -262,7 +256,7 @@ func homeCommuters():
 
 
 func simulateALL():
-	S = [0,0,0]
+	S = [0,0]
 	I = [0,0,0,0]
 	R = [0,0,0]
 	D = [0,0,0]
@@ -275,38 +269,20 @@ func simulateALL():
 	
 	for state in states.values():
 		state.simulate()
-#		S = CONSTANTS.add_arrays(S, state.S)
-#		I = CONSTANTS.add_arrays(I, state.I)
-#		R = CONSTANTS.add_arrays(R, state.R)
-#		D = CONSTANTS.add_arrays(D, state.D)
-#		var stateV1 = [CONSTANTS.sum(state.V1[0]) + state.V1eligible[0], CONSTANTS.sum(state.V1[1]) + state.V1eligible[1], CONSTANTS.sum(state.V1[2]) + state.V1eligible[2], CONSTANTS.sum(state.V1[3]) + state.V1eligible[3], CONSTANTS.sum(state.V1[4]) + state.V1eligible[4]]
-#		V1 = CONSTANTS.add_arrays(V1, stateV1)
-#		V2 = CONSTANTS.add_arrays(V2, state.V2)
 	
 	homeCommuters()
 	
+	
 	getNumbers()
 	
-#	for state in states.values():
-#		S = CONSTANTS.add_arrays(S, state.S)
-#		I = CONSTANTS.add_arrays(I, state.I)
-#		R = CONSTANTS.add_arrays(R, state.R)
-#		D = CONSTANTS.add_arrays(D, state.D)
-#		var stateV1 = [CONSTANTS.sum(state.V1[0]) + state.V1eligible[0], CONSTANTS.sum(state.V1[1]) + state.V1eligible[1], CONSTANTS.sum(state.V1[2]) + state.V1eligible[2], CONSTANTS.sum(state.V1[3]) + state.V1eligible[3], CONSTANTS.sum(state.V1[4]) + state.V1eligible[4]]
-#		V1 = CONSTANTS.add_arrays(V1, stateV1)
-#		V2 = CONSTANTS.add_arrays(V2, state.V2)
-		
-		
 	# für Gesamtübersicht
-#	suscept.append(S[0] + S[1] + S[2])
-	suscept.append(S[0] + S[1])
-	infect.append(I[0] + I[1] + I[2])
-	recov.append(R[0] + R[1] + R[2])
-	dead.append(D[0] + D[1] + D[2])
+	suscept.append(S[0] + S[1] + V1[0] + V2[0])
+	infect.append(I[0] + I[1] + I[2] + I[3] + V1[1] + V1[2] + V2[1] + V2[2])
+	recov.append(R[0] + R[1] + R[2] + V1[3] + V2[3])
+	dead.append(D[0] + D[1] + D[2] + V1[4] + V2[4])
 	
 	sus0.append(S[0])
 	sus1.append(S[1])
-#	sus2.append(S[2])
 	inf0.append(I[0])
 	inf1.append(I[1])
 	inf2.append(I[2])
@@ -317,11 +293,6 @@ func simulateALL():
 	dead1.append(D[1])
 	dead2.append(D[2])
 	
-#	vax1sus.append(CONSTANTS.sum(V1[0]) + V1eligible[0])
-#	vax1inf.append(CONSTANTS.sum(V1[1]) + V1eligible[1])
-#	vax1hosp.append(CONSTANTS.sum(V1[2]) + V1eligible[2])
-#	vax1rec.append(CONSTANTS.sum(V1[3]) + V1eligible[3])
-#	vax1dead.append(CONSTANTS.sum(V1[4]) + V1eligible[4])
 	
 	vax1sus.append(V1[0])
 	vax1inf.append(V1[1])

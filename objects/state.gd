@@ -49,6 +49,7 @@ var baseInfect
 var baseRec
 var baseDeath
 var baseTest
+var baseHospital
 
 var lockdown = false
 var lockdownStrictness
@@ -108,6 +109,7 @@ func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
 	baseRec = 0.02
 	baseDeath = 0.01
 	baseTest = 0.04
+	baseHospital = 0.6
 	
 	self.avlbVax = 0
 #	# StandardSimulation
@@ -151,7 +153,7 @@ func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
 	deathRate = [baseDeath, baseDeath*0.5, baseDeath*0.2, baseDeath*0.1]														# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	testRate = [baseTest, baseTest, baseTest]
 	hospitalBeds = 20
-	hospitalRate = 0.6
+	hospitalRate = [baseHospital, baseHospital*0.2, baseHospital*0.1]
 	
 #	# für Lockdown
 	lockdownStrictness = 0.9
@@ -869,12 +871,12 @@ func updateReactionRates():
 	
 	var occBeds = occupiedBeds()
 	# 136 137 138 139 140 141 Hospitalisierungsrate
-	rates.append(hospitalRate*(hospitalBeds-occBeds)/population * I[0])									# Hospitalisierung Ungeimpfte
-	rates.append(hospitalRate*(hospitalBeds-occBeds)/population * I[1])									# Hospitalisierung Ungeimpfte
-	rates.append(hospitalRate*(hospitalBeds-occBeds)/population * I[2])									# Hospitalisierung Ungeimpfte
-	rates.append(hospitalRate*recRate[2]*(hospitalBeds-occBeds)/population * CONSTANTS.sum(V1[1])) 		# Hospitalisierung 1x Geimpfte
-	rates.append(hospitalRate*recRate[2]*(hospitalBeds-occBeds)/population * V1eligible[1])				# Hospitalisierung 1x Geimpfte
-	rates.append(hospitalRate*recRate[3]*(hospitalBeds-occBeds)/population * V2[1])						# Hospitalisierung 2x Geimpfte
+	rates.append(hospitalRate[0]*(hospitalBeds-occBeds)/population * I[0])									# Hospitalisierung Ungeimpfte
+	rates.append(hospitalRate[0]*(hospitalBeds-occBeds)/population * I[1])									# Hospitalisierung Ungeimpfte
+	rates.append(hospitalRate[0]*(hospitalBeds-occBeds)/population * I[2])									# Hospitalisierung Ungeimpfte
+	rates.append(hospitalRate[1]*(hospitalBeds-occBeds)/population * CONSTANTS.sum(V1[1])) 					# Hospitalisierung 1x Geimpfte
+	rates.append(hospitalRate[1]*(hospitalBeds-occBeds)/population * V1eligible[1])							# Hospitalisierung 1x Geimpfte
+	rates.append(hospitalRate[2]*(hospitalBeds-occBeds)/population * V2[1])									# Hospitalisierung 2x Geimpfte
 	
 	
 	# Impfungen

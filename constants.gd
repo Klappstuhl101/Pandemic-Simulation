@@ -55,8 +55,6 @@ const VAX2 = "2x Vaccinated"
 const VACDELAY = 10
 
 
-
-
 static func sum(arr):
 	var sum = 0
 	for i in range(arr.size()):
@@ -79,6 +77,6 @@ static func add_arrays(arr1, arr2):
 
 static func zeroes(length : int):
 	var arr = []
-	for i in range(length):
+	for _i in range(length):
 		arr.append(0)
 	return arr

@@ -4,13 +4,15 @@ extends Object
 class_name State
 
 var name
-var population
+var populationBase
 var neighbors
 var visitors
 var commuterRate
 
 var mapButton
 
+var population
+var deaths
 
 var suscept = [CONSTANTS.SUSCEPTIBLE]
 var infect = [CONSTANTS.INFECTED]
@@ -41,6 +43,11 @@ var avlbVax
 var infectRate
 var recRate
 var deathRate
+
+var deathFactorHosp
+var infectFactorHosp
+var infectFactorV1
+var infectFactorV2
 
 var hospitalBeds
 var hospitalRate
@@ -90,13 +97,14 @@ var rnd = RandomNumberGenerator.new()
 
 func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
 	self.name = initName
-	self.population = initPopulation
+	self.populationBase = initPopulation
 	self.mapButton = initButton
 	self.neighbors = initNeighbors
 	self.commuterRate = initCommuter
 	
 	var image = Image.new()
 	image.load("res://resources/map/" + name + ".png")
+#	var res = load("res://resources/map/" + name + ".png")
 	var bitmap = BitMap.new()
 	bitmap.create_from_image_alpha(image)
 	mapButton.texture_click_mask = bitmap
@@ -112,6 +120,8 @@ func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
 	baseHospital = 0.6
 	
 	self.avlbVax = 0
+	self.population = populationBase
+	self.deaths = 0
 #	# StandardSimulation
 #	self.I = 3
 #	self.S = self.population - self.I
@@ -138,19 +148,17 @@ func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
 	self.D = [0,0,0]
 	informationLoss = 0.02
 	
-#	# nur Test-Simulation
-#	infectRate = [baseInfect,baseInfect,baseInfect]
-#	recRate = [0.02,0.02,0.02]
-#	deathRate = [0.01,0.01,0.01]
-#	testRate = [0.04,0.04,0.04]
-
+	infectFactorHosp = 0.2
+	infectFactorV1 = 0.5
+	infectFactorV2 = 0.3
 	
+	deathFactorHosp = 0.5
 	
 	
 #	# für Hospitalisierung
-	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*0.5, getInfectRate()*0.4, getInfectRate()*0.2] 	# Ungetestet, Getestet, Hospitalisiert, 1x Geimpft, 2x Geimpft
-	recRate = [baseRec, baseRec*1.6, baseRec*1.3, baseRec*1.6] 																# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
-	deathRate = [baseDeath, baseDeath*0.5, baseDeath*0.2, baseDeath*0.1]														# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
+	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*infectFactorHosp, getInfectRate()*infectFactorV1, getInfectRate()*infectFactorV2] 	# Ungetestet, Getestet, Hospitalisiert, 1x Geimpft, 2x Geimpft
+	recRate = [baseRec, baseRec*1.2, baseRec*1.3, baseRec*1.6] 																# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
+	deathRate = [baseDeath, baseDeath*deathFactorHosp, baseDeath*0.2, baseDeath*0.1]														# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	testRate = [baseTest, baseTest, baseTest]
 	hospitalBeds = 20
 	hospitalRate = [baseHospital, baseHospital*0.2, baseHospital*0.1]
@@ -204,6 +212,16 @@ func occupiedBeds():
 func getPopulation():
 	return self.population
 
+func calculateLivingPopulation():
+	calculateDeaths()
+	self.population = self.populationBase - self.deaths
+
+func getDeaths():
+	return self.deaths
+
+func calculateDeaths():
+	self.deaths = CONSTANTS.sum(D) + CONSTANTS.sum(V1[4]) + V1eligible[4] + V2[4]
+
 func getInfectRate():
 	if lockdown:
 		return baseInfect * (1-lockdownStrictness)
@@ -216,7 +234,7 @@ func getCommuteRate():
 func simulate():
 #	if I <= 0: # pandemic over
 #		return
-	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*0.5, getInfectRate()*0.4, getInfectRate()*0.2] # Ungetestet, Getestet, Hospitalisiert, 1x Geimpft, 2x Geimpft
+	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*infectFactorHosp, getInfectRate()*infectFactorV1, getInfectRate()*infectFactorV2] # Ungetestet, Getestet, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	var t = timeDifference
 	while t<1:
 		t = gillespieIteration(t)
@@ -277,6 +295,8 @@ func simulate():
 	vax2dead.append(V2[4])
 	
 	hosp.append(I[3])
+	
+	#population dead abziehen
 
 
 
@@ -685,11 +705,11 @@ func updateReactionRates():
 	rates.append((infectRate[0]/population)*S[0]*I[2]) 									# Ansteckung an Unbewusst Infizierten (ungetestet)
 	rates.append((infectRate[2]/population)*S[0]*I[3]) 									# Ansteckung an Ungeimpften Hospitalisierten
 	rates.append((infectRate[3]/population)*S[0]*CONSTANTS.sum(V1[1])) 					# Ansteckung an einfach Geimpften (noch ohne Zulassung zweite Impfung)
-	rates.append((infectRate[2]*infectRate[3]/population)*S[0]*CONSTANTS.sum(V1[2]))	# Ansteckung an einfach Geimpften Hospitalisierten (noch ohne Zulassung zweite Impfung)
+	rates.append((infectFactorHosp*infectRate[3]/population)*S[0]*CONSTANTS.sum(V1[2]))	# Ansteckung an einfach Geimpften Hospitalisierten (noch ohne Zulassung zweite Impfung)
 	rates.append((infectRate[3]/population)*S[0]*V1eligible[1]) 						# Ansteckung an einfach Geimpften
-	rates.append((infectRate[2]*infectRate[3]/population)*S[0]*V1eligible[2])			# Ansteckung an einfach Geimpften Hospitalisierten
+	rates.append((infectFactorHosp*infectRate[3]/population)*S[0]*V1eligible[2])			# Ansteckung an einfach Geimpften Hospitalisierten
 	rates.append((infectRate[4]/population)*S[0]*V2[1]) 								# Ansteckung an zweifach Geimpften
-	rates.append((infectRate[2]*infectRate[4]/population)*S[0]*V2[2])					# Ansteckung an zweifach Geimpften Hospitalisierten
+	rates.append((infectFactorHosp*infectRate[4]/population)*S[0]*V2[2])					# Ansteckung an zweifach Geimpften Hospitalisierten
 	rates.append((infectRate[0]/population)*S[0]*sumVisitors(1,0))						# Ansteckung an ungeimpften, infizierten Pendlern
 	rates.append((infectRate[3]/population)*S[0]*sumVisitors(1,1))						# Ansteckung an 1x geimpften, infizierten Pendlern
 	rates.append((infectRate[4]/population)*S[0]*sumVisitors(1,2))						# Ansteckung an 2x geimpften, infizierten Pendlern
@@ -700,11 +720,11 @@ func updateReactionRates():
 	rates.append((infectRate[0]/population)*S[1]*I[2])
 	rates.append((infectRate[2]/population)*S[1]*I[3])
 	rates.append((infectRate[3]/population)*S[1]*CONSTANTS.sum(V1[1]))
-	rates.append((infectRate[2]*infectRate[3]/population)*S[1]*CONSTANTS.sum(V1[2]))
+	rates.append((infectFactorHosp*infectRate[3]/population)*S[1]*CONSTANTS.sum(V1[2]))
 	rates.append((infectRate[3]/population)*S[1]*V1eligible[1])
-	rates.append((infectRate[2]*infectRate[3]/population)*S[1]*V1eligible[2])
+	rates.append((infectFactorHosp*infectRate[3]/population)*S[1]*V1eligible[2])
 	rates.append((infectRate[4]/population)*S[1]*V2[1])
-	rates.append((infectRate[2]*infectRate[4]/population)*S[1]*V2[2])
+	rates.append((infectFactorHosp*infectRate[4]/population)*S[1]*V2[2])
 	rates.append((infectRate[0]/population)*S[1]*sumVisitors(1,0))
 	rates.append((infectRate[3]/population)*S[1]*sumVisitors(1,1))
 	rates.append((infectRate[4]/population)*S[1]*sumVisitors(1,2))
@@ -715,11 +735,11 @@ func updateReactionRates():
 	rates.append((infectRate[0]/population)*CONSTANTS.sum(V1[0])*I[2])
 	rates.append((infectRate[2]/population)*CONSTANTS.sum(V1[0])*I[3])
 	rates.append((infectRate[3]/population)*CONSTANTS.sum(V1[0])*CONSTANTS.sum(V1[1]))
-	rates.append((infectRate[2]*infectRate[3]/population)*CONSTANTS.sum(V1[0])*CONSTANTS.sum(V1[2]))
+	rates.append((infectFactorHosp*infectRate[3]/population)*CONSTANTS.sum(V1[0])*CONSTANTS.sum(V1[2]))
 	rates.append((infectRate[3]/population)*CONSTANTS.sum(V1[0])*V1eligible[1])
-	rates.append((infectRate[2]*infectRate[3]/population)*CONSTANTS.sum(V1[0])*V1eligible[2])
+	rates.append((infectFactorHosp*infectRate[3]/population)*CONSTANTS.sum(V1[0])*V1eligible[2])
 	rates.append((infectRate[4]/population)*CONSTANTS.sum(V1[0])*V2[1])
-	rates.append((infectRate[2]*infectRate[4]/population)*CONSTANTS.sum(V1[0])*V2[2])
+	rates.append((infectFactorHosp*infectRate[4]/population)*CONSTANTS.sum(V1[0])*V2[2])
 	rates.append((infectRate[0]/population)*CONSTANTS.sum(V1[0])*sumVisitors(1,0))
 	rates.append((infectRate[3]/population)*CONSTANTS.sum(V1[0])*sumVisitors(1,1))
 	rates.append((infectRate[4]/population)*CONSTANTS.sum(V1[0])*sumVisitors(1,2))
@@ -730,11 +750,11 @@ func updateReactionRates():
 	rates.append((infectRate[0]/population)*V1eligible[0]*I[2])
 	rates.append((infectRate[2]/population)*V1eligible[0]*I[3])
 	rates.append((infectRate[3]/population)*V1eligible[0]*CONSTANTS.sum(V1[1]))
-	rates.append((infectRate[2]*infectRate[3]/population)*V1eligible[1]*CONSTANTS.sum(V1[2]))
+	rates.append((infectFactorHosp*infectRate[3]/population)*V1eligible[1]*CONSTANTS.sum(V1[2]))
 	rates.append((infectRate[3]/population)*V1eligible[0]*V1eligible[1])
-	rates.append((infectRate[2]*infectRate[3]/population)*V1eligible[1]*V1eligible[2])
+	rates.append((infectFactorHosp*infectRate[3]/population)*V1eligible[1]*V1eligible[2])
 	rates.append((infectRate[4]/population)*V1eligible[0]*V2[1])
-	rates.append((infectRate[2]*infectRate[4]/population)*V1eligible[1]*V2[2])
+	rates.append((infectFactorHosp*infectRate[4]/population)*V1eligible[1]*V2[2])
 	rates.append((infectRate[0]/population)*V1eligible[0]*sumVisitors(1,0))
 	rates.append((infectRate[3]/population)*V1eligible[0]*sumVisitors(1,1))
 	rates.append((infectRate[4]/population)*V1eligible[0]*sumVisitors(1,2))
@@ -745,11 +765,11 @@ func updateReactionRates():
 	rates.append((infectRate[0]/population)*V2[0]*I[2])
 	rates.append((infectRate[2]/population)*V2[0]*I[3])
 	rates.append((infectRate[3]/population)*V2[0]*CONSTANTS.sum(V1[1]))
-	rates.append((infectRate[2]*infectRate[3]/population)*V2[1]*CONSTANTS.sum(V1[2]))
+	rates.append((infectFactorHosp*infectRate[3]/population)*V2[1]*CONSTANTS.sum(V1[2]))
 	rates.append((infectRate[3]/population)*V2[0]*V1eligible[1])
-	rates.append((infectRate[2]*infectRate[3]/population)*V2[1]*V1eligible[2])
+	rates.append((infectFactorHosp*infectRate[3]/population)*V2[1]*V1eligible[2])
 	rates.append((infectRate[4]/population)*V2[0]*V2[1])
-	rates.append((infectRate[2]*infectRate[4]/population)*V2[1]*V2[2])
+	rates.append((infectFactorHosp*infectRate[4]/population)*V2[1]*V2[2])
 	rates.append((infectRate[0]/population)*V2[0]*sumVisitors(1,0))
 	rates.append((infectRate[3]/population)*V2[0]*sumVisitors(1,1))
 	rates.append((infectRate[4]/population)*V2[0]*sumVisitors(1,2))
@@ -761,11 +781,11 @@ func updateReactionRates():
 	rates.append((infectRate[0]/population)*sumVisitors(0,0)*I[2])
 	rates.append((infectRate[2]/population)*sumVisitors(0,0)*I[3])
 	rates.append((infectRate[3]/population)*sumVisitors(0,0)*CONSTANTS.sum(V1[1]))
-	rates.append((infectRate[2]*infectRate[3]/population)*sumVisitors(0,0)*CONSTANTS.sum(V1[2]))
+	rates.append((infectFactorHosp*infectRate[3]/population)*sumVisitors(0,0)*CONSTANTS.sum(V1[2]))
 	rates.append((infectRate[3]/population)*sumVisitors(0,0)*V1eligible[1])
-	rates.append((infectRate[2]*infectRate[3]/population)*sumVisitors(0,0)*V1eligible[2])
+	rates.append((infectFactorHosp*infectRate[3]/population)*sumVisitors(0,0)*V1eligible[2])
 	rates.append((infectRate[4]/population)*sumVisitors(0,0)*V2[1])
-	rates.append((infectRate[2]*infectRate[4]/population)*sumVisitors(0,0)*V2[2])
+	rates.append((infectFactorHosp*infectRate[4]/population)*sumVisitors(0,0)*V2[2])
 	rates.append((infectRate[0]/population)*sumVisitors(0,0)*sumVisitors(1,0))
 	rates.append((infectRate[3]/population)*sumVisitors(0,0)*sumVisitors(1,1))
 	rates.append((infectRate[4]/population)*sumVisitors(0,0)*sumVisitors(1,2))
@@ -777,11 +797,11 @@ func updateReactionRates():
 	rates.append((infectRate[0]/population)*sumVisitors(0,1)*I[2])
 	rates.append((infectRate[2]/population)*sumVisitors(0,1)*I[3])
 	rates.append((infectRate[3]/population)*sumVisitors(0,1)*CONSTANTS.sum(V1[1]))
-	rates.append((infectRate[2]*infectRate[3]/population)*sumVisitors(0,1)*CONSTANTS.sum(V1[2]))
+	rates.append((infectFactorHosp*infectRate[3]/population)*sumVisitors(0,1)*CONSTANTS.sum(V1[2]))
 	rates.append((infectRate[3]/population)*sumVisitors(0,1)*V1eligible[1])
-	rates.append((infectRate[2]*infectRate[3]/population)*sumVisitors(0,1)*V1eligible[2])
+	rates.append((infectFactorHosp*infectRate[3]/population)*sumVisitors(0,1)*V1eligible[2])
 	rates.append((infectRate[4]/population)*sumVisitors(0,1)*V2[1])
-	rates.append((infectRate[2]*infectRate[4]/population)*sumVisitors(0,0)*V2[2])
+	rates.append((infectFactorHosp*infectRate[4]/population)*sumVisitors(0,0)*V2[2])
 	rates.append((infectRate[0]/population)*sumVisitors(0,1)*sumVisitors(1,0))
 	rates.append((infectRate[3]/population)*sumVisitors(0,1)*sumVisitors(1,1))
 	rates.append((infectRate[4]/population)*sumVisitors(0,1)*sumVisitors(1,2))
@@ -792,11 +812,11 @@ func updateReactionRates():
 	rates.append((infectRate[0]/population)*sumVisitors(0,2)*I[2])
 	rates.append((infectRate[2]/population)*sumVisitors(0,2)*I[3])
 	rates.append((infectRate[3]/population)*sumVisitors(0,2)*CONSTANTS.sum(V1[1]))
-	rates.append((infectRate[2]*infectRate[3]/population)*sumVisitors(0,2)*CONSTANTS.sum(V1[2]))
+	rates.append((infectFactorHosp*infectRate[3]/population)*sumVisitors(0,2)*CONSTANTS.sum(V1[2]))
 	rates.append((infectRate[3]/population)*sumVisitors(0,2)*V1eligible[1])
-	rates.append((infectRate[2]*infectRate[3]/population)*sumVisitors(0,2)*V1eligible[2])
+	rates.append((infectFactorHosp*infectRate[3]/population)*sumVisitors(0,2)*V1eligible[2])
 	rates.append((infectRate[4]/population)*sumVisitors(0,2)*V2[1])
-	rates.append((infectRate[2]*infectRate[4]/population)*sumVisitors(0,0)*V2[2])
+	rates.append((infectFactorHosp*infectRate[4]/population)*sumVisitors(0,0)*V2[2])
 	rates.append((infectRate[0]/population)*sumVisitors(0,2)*sumVisitors(1,0))
 	rates.append((infectRate[3]/population)*sumVisitors(0,2)*sumVisitors(1,1))
 	rates.append((infectRate[4]/population)*sumVisitors(0,2)*sumVisitors(1,2))
@@ -838,15 +858,15 @@ func updateReactionRates():
 	
 	# 121 122 Tod Infizierte V1
 	rates.append(deathRate[2] * CONSTANTS.sum(V1[1]))
-	rates.append(deathRate[2] * deathRate[1] * CONSTANTS.sum(V1[2]))
+	rates.append(deathRate[2] * deathFactorHosp * CONSTANTS.sum(V1[2]))
 
 	# 123 124 Tod Infizierte V1eligible
 	rates.append(deathRate[2] * V1eligible[1])
-	rates.append(deathRate[2] * deathRate[1] * V1eligible[2])
+	rates.append(deathRate[2] * deathFactorHosp * V1eligible[2])
 
 	# 125 126 Tod Infizierte V2
 	rates.append(deathRate[3] * V2[1])
-	rates.append(deathRate[3] * deathRate[1] * V2[2])
+	rates.append(deathRate[3] * deathFactorHosp * V2[2])
 	
 	# Tod Pendler/Visitors
 	# 127 Tod ungeimpfte Pendler

@@ -85,7 +85,7 @@ func _init(initStates, initName, initButton):
 	
 	# Hospital Bed array zum Anzeigen
 	beds.append("Available Hospital-Beds")
-	for i in range(CONSTANTS.TRYOUT_DAYS):
+	for _i in range(CONSTANTS.TRYOUT_DAYS):
 		beds.append(hospitalBeds)
 	
 	rnd.randomize()
@@ -96,6 +96,10 @@ func recalculatePop():
 	self.population = 0
 	for state in states.values():
 		self.population += state.population
+
+func recalculateStatePopulation():
+	for state in states.values():
+		state.calculateLivingPopulation()
 
 func recalculateHospitalBeds():
 	self.hospitalBeds = 0
@@ -151,56 +155,72 @@ func distributeCommuters():
 					# UNGEIMPFT
 					0: # aus S
 						state.S[0] -= 1
+						state.population -= 1
 						states.get(neighborstate).visitors[neighborIndices[index]][1][0][0] += 1 
+						states.get(neighborstate).population += 1
 					
 					1: 
 						state.S[1] -= 1
+						state.population -= 1
 						states.get(neighborstate).visitors[neighborIndices[index]][1][0][0] += 1 
+						states.get(neighborstate).population += 1
 					
 					2: 
 						state.I[0] -= 1
+						state.population -= 1
 						states.get(neighborstate).visitors[neighborIndices[index]][1][1][0] += 1 
+						states.get(neighborstate).population += 1
 					
-					3:  # Vielleicht raus, Pseudoquarantäne
-						state.I[1] -= 1
-						states.get(neighborstate).visitors[neighborIndices[index]][1][1][0] += 1 
+					3: 
+						state.R[0] -= 1
+						state.population -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][2][0] += 1 
+						states.get(neighborstate).population += 1
 					
 					4: 
-						state.R[0] -= 1
-						states.get(neighborstate).visitors[neighborIndices[index]][1][2][0] += 1 
-					
-					5: 
 						state.R[1] -= 1
+						state.population -= 1
 						states.get(neighborstate).visitors[neighborIndices[index]][1][2][0] += 1 
+						states.get(neighborstate).population += 1
 					
 					
 					# 1x GEIMPFT
-					6: 
+					5: 
 						state.V1eligible[0] -= 1
+						state.population -= 1
 						states.get(neighborstate).visitors[neighborIndices[index]][1][0][1] += 1 
+						states.get(neighborstate).population += 1
 					
-					7: 
+					6: 
 						state.V1eligible[1] -= 1
+						state.population -= 1
 						states.get(neighborstate).visitors[neighborIndices[index]][1][1][1] += 1 
+						states.get(neighborstate).population += 1
+					
+					7:
+						state.V1eligible[3] -= 1
+						state.population -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][2][1] += 1 
+						states.get(neighborstate).population += 1
 					
 					8:
-						state.V1eligible[3] -= 1
-						states.get(neighborstate).visitors[neighborIndices[index]][1][2][1] += 1 
+						state.V2[0] -= 1
+						state.population -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][0][2] += 1 
+						states.get(neighborstate).population += 1
 					
 					9:
-						state.V2[0] -= 1
-						states.get(neighborstate).visitors[neighborIndices[index]][1][0][2] += 1 
+						state.V2[1] -= 1
+						state.population -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][1][2] += 1
+						states.get(neighborstate).population += 1
 					
 					10:
-						state.V2[1] -= 1
-						states.get(neighborstate).visitors[neighborIndices[index]][1][1][2] += 1
-					
-					11:
 						state.V2[3] -= 1
+						state.population -= 1
 						states.get(neighborstate).visitors[neighborIndices[index]][1][2][2] += 1
+						states.get(neighborstate).population += 1
 					
-					
-						
 				index += 1
 				commuteCount -= 1
 
@@ -210,15 +230,14 @@ func checkAvlblCommuters(state):
 	dict[0] = !(state.S[0] == 0)
 	dict[1] = !(state.S[1] == 0)
 	dict[2] = !(state.I[0] == 0)
-	dict[3] = !(state.I[1] == 0)
-	dict[4] = !(state.R[0] == 0)
-	dict[5] = !(state.R[1] == 0)
-	dict[6] = !(state.V1eligible[0] == 0)
-	dict[7] = !(state.V1eligible[1] == 0)
-	dict[8] = !(state.V1eligible[3] == 0)
-	dict[9] = !(state.V2[0] == 0)
-	dict[10] = !(state.V2[1] == 0)
-	dict[11] = !(state.V2[3] == 0)
+	dict[3] = !(state.R[0] == 0)
+	dict[4] = !(state.R[1] == 0)
+	dict[5] = !(state.V1eligible[0] == 0)
+	dict[6] = !(state.V1eligible[1] == 0)
+	dict[7] = !(state.V1eligible[3] == 0)
+	dict[8] = !(state.V2[0] == 0)
+	dict[9] = !(state.V2[1] == 0)
+	dict[10] = !(state.V2[3] == 0)
 	
 	return dict
 
@@ -228,31 +247,67 @@ func homeCommuters():
 			var homeState = states.get(state.neighbors[i])
 			
 			homeState.S[0] += state.visitors[i][1][0][0]
+			homeState.population += state.visitors[i][1][0][0]
+			state.population -= state.visitors[i][1][0][0]
 			state.visitors[i][1][0][0] = 0
+			
 			homeState.I[0] += state.visitors[i][1][1][0]
+			homeState.population += state.visitors[i][1][1][0]
+			state.population -= state.visitors[i][1][1][0]
 			state.visitors[i][1][1][0] = 0
+			
 			homeState.R[0] += state.visitors[i][1][2][0]
+			homeState.population += state.visitors[i][1][2][0]
+			state.population -= state.visitors[i][1][2][0]
 			state.visitors[i][1][2][0] = 0
+			
 			homeState.D[0] += state.visitors[i][1][3][0]
+			homeState.population += state.visitors[i][1][3][0]
+			state.population -= state.visitors[i][1][3][0]
 			state.visitors[i][1][3][0] = 0
 			
+			
 			homeState.V1eligible[0] += state.visitors[i][1][0][1]
+			homeState.population += state.visitors[i][1][0][1]
+			state.population -= state.visitors[i][1][0][1]
 			state.visitors[i][1][0][1] = 0
+			
 			homeState.V1eligible[1] += state.visitors[i][1][1][1]
+			homeState.population += state.visitors[i][1][1][1]
+			state.population -= state.visitors[i][1][1][1]
 			state.visitors[i][1][1][1] = 0
+			
 			homeState.V1eligible[3] += state.visitors[i][1][2][1]
+			homeState.population += state.visitors[i][1][2][1]
+			state.population -= state.visitors[i][1][2][1]
 			state.visitors[i][1][2][1] = 0
+			
 			homeState.V1eligible[4] += state.visitors[i][1][3][1]
+			homeState.population += state.visitors[i][1][3][1]
+			state.population -= state.visitors[i][1][3][1]
 			state.visitors[i][1][3][1] = 0
 			
+			
 			homeState.V2[0] += state.visitors[i][1][0][2]
+			homeState.population += state.visitors[i][1][0][2]
+			state.population -= state.visitors[i][1][0][2]
 			state.visitors[i][1][0][2] = 0
+			
 			homeState.V2[1] += state.visitors[i][1][1][2]
+			homeState.population += state.visitors[i][1][1][2]
+			state.population -= state.visitors[i][1][1][2]
 			state.visitors[i][1][1][2] = 0
+			
 			homeState.V2[3] += state.visitors[i][1][2][2]
+			homeState.population += state.visitors[i][1][2][2]
+			state.population -= state.visitors[i][1][2][2]
 			state.visitors[i][1][2][2] = 0
+			
 			homeState.V2[4] += state.visitors[i][1][3][2]
+			homeState.population += state.visitors[i][1][3][2]
+			state.population -= state.visitors[i][1][3][2]
 			state.visitors[i][1][3][2] = 0
+			
 
 
 func simulateALL():
@@ -274,6 +329,8 @@ func simulateALL():
 	
 	
 	getNumbers()
+	
+	recalculateStatePopulation()
 	
 	# für Gesamtübersicht
 	suscept.append(S[0] + S[1] + V1[0] + V2[0])

@@ -23,8 +23,8 @@ Keine Pendler während Wartezeit auf zweite Impfung, keine Hospitalisierung von 
 # 2: R
 # 3: D # Tote werden zurück zu Wohnort gebracht
 
-Faktor für Ansteckung in Krankenhäusern statt quadrierte Infektionsrate
-Pendler ändern Population am Tag
+Faktor für Ansteckung in Krankenhäusern statt quadrierte Infektionsrate, auch bei deathRate DONE
+Pendler ändern Population am Tag DONE
 Zahlen aus Fließband angucken und prüfen
 
 Tote komplett aus Bevölkerung streichen

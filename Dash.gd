@@ -138,18 +138,26 @@ func _ready():
 	# Herausfinden wie man Objekte von Unterklassen richtig erstellt
 	deu = Country.new(states, CONSTANTS.DEU, get_node("Map/DeutschButton"))
 	
-	sim = Simulation.new({CONSTANTS.BAW:bawu, CONSTANTS.BAY:bayern, CONSTANTS.BER:berlin, CONSTANTS.BRA:brand,
+	var entities = {CONSTANTS.BAW:bawu, CONSTANTS.BAY:bayern, CONSTANTS.BER:berlin, CONSTANTS.BRA:brand,
 	 CONSTANTS.BRE:bremen, CONSTANTS.HAM:hamb, CONSTANTS.HES:hessen, CONSTANTS.MVP:meckPom,
 	 CONSTANTS.NIE:nieders, CONSTANTS.NRW:nrw, CONSTANTS.RLP:rlp, CONSTANTS.SAA:saar,
 	 CONSTANTS.SCN:sachsen, CONSTANTS.SCA:sacanh, CONSTANTS.SLH:schlHol, CONSTANTS.THU:thur, 
 	 CONSTANTS.DEU: deu
-	 })
-	game_manager = Game_Management.new(sim, statOutput, statButtons)
+	 }
+	
+#	sim = Simulation.new({CONSTANTS.BAW:bawu, CONSTANTS.BAY:bayern, CONSTANTS.BER:berlin, CONSTANTS.BRA:brand,
+#	 CONSTANTS.BRE:bremen, CONSTANTS.HAM:hamb, CONSTANTS.HES:hessen, CONSTANTS.MVP:meckPom,
+#	 CONSTANTS.NIE:nieders, CONSTANTS.NRW:nrw, CONSTANTS.RLP:rlp, CONSTANTS.SAA:saar,
+#	 CONSTANTS.SCN:sachsen, CONSTANTS.SCA:sacanh, CONSTANTS.SLH:schlHol, CONSTANTS.THU:thur, 
+#	 CONSTANTS.DEU: deu
+#	 })
+#	game_manager = Game_Management.new(sim, statOutput, statButtons)
+	game_manager = Game_Management.new(entities, statOutput, statButtons)
 	
 	print(OS.get_ticks_msec()/1000, " sec")
 	for i in range(CONSTANTS.TRYOUT_DAYS):
 		print("TAG " + String(i))
-		sim.days.append(i)
+		game_manager.days.append(i)
 		deu.setVaxProduction(20)
 		if 25 == i:
 			deu.imposeLockdown()

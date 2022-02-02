@@ -3,7 +3,10 @@ extends Object
 class_name Country
 
 var name
+var populationBase
+
 var population
+var deaths
 
 var states # dict of states
 
@@ -65,18 +68,20 @@ func _init(initStates, initName, initButton):
 	self.name = initName
 	self.mapButton = initButton
 	
-	var image = Image.new()
-	image.load("res://resources/map/" + name + ".png")
+	var res = load("res://resources/map/" + name + ".png")
+	var image : Image = res.get_data()
 	var bitmap = BitMap.new()
 	bitmap.create_from_image_alpha(image)
 	mapButton.texture_click_mask = bitmap
 	mapButton.toggle_mode = true
 	
-	self.population
 	
 	
 	self.states = initStates
-	recalculatePop()
+	recalculatePopulation()
+	self.populationBase = self.population
+	self.deaths = 0
+	
 	recalculateHospitalBeds()
 	
 	self.avlbVax = 0
@@ -92,14 +97,19 @@ func _init(initStates, initName, initButton):
 	
 	
 	
-func recalculatePop():
+func recalculatePopulation():
 	self.population = 0
 	for state in states.values():
-		self.population += state.population
+		self.population += state.getPopulation()
 
 func recalculateStatePopulation():
 	for state in states.values():
 		state.calculateLivingPopulation()
+
+func recalculateDeaths():
+	self.deaths = 0
+	for state in states.values():
+		self.deaths += state.getDeaths()
 
 func recalculateHospitalBeds():
 	self.hospitalBeds = 0

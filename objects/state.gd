@@ -102,16 +102,12 @@ func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
 	self.neighbors = initNeighbors
 	self.commuterRate = initCommuter
 	
-	var image = Image.new()
-	image.load("res://resources/map/" + name + ".png")
-#	var res = load("res://resources/map/" + name + ".png")
+	var res = load("res://resources/map/" + name + ".png")
+	var image : Image = res.get_data()
 	var bitmap = BitMap.new()
 	bitmap.create_from_image_alpha(image)
 	mapButton.texture_click_mask = bitmap
 	mapButton.toggle_mode = true
-	
-#	for neighbor in neighbors.values():
-#		pass
 	
 	baseInfect = 0.2
 	baseRec = 0.02
@@ -122,21 +118,6 @@ func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
 	self.avlbVax = 0
 	self.population = populationBase
 	self.deaths = 0
-#	# StandardSimulation
-#	self.I = 3
-#	self.S = self.population - self.I
-#	self.R = 0
-#	self.D = 0
-	
-#	infectRate = baseInfect
-#	recRate = 0.02
-#	deathRate = 0.005
-#	deathRate = 0.01
-	
-	
-#	# Test-Simulation
-#	self.I = [3,0,0]
-#	self.I = [16000,0,0]
 	
 #	# Hospitalisierung
 	self.I = [3,0,0,0]
@@ -210,6 +191,7 @@ func occupiedBeds():
 	return I[3] + CONSTANTS.sum(V1[2]) + V1eligible[2] + V2[2]
 
 func getPopulation():
+	calculateLivingPopulation()
 	return self.population
 
 func calculateLivingPopulation():
@@ -217,6 +199,7 @@ func calculateLivingPopulation():
 	self.population = self.populationBase - self.deaths
 
 func getDeaths():
+	calculateDeaths()
 	return self.deaths
 
 func calculateDeaths():
@@ -295,8 +278,6 @@ func simulate():
 	vax2dead.append(V2[4])
 	
 	hosp.append(I[3])
-	
-	#population dead abziehen
 
 
 
@@ -707,9 +688,9 @@ func updateReactionRates():
 	rates.append((infectRate[3]/population)*S[0]*CONSTANTS.sum(V1[1])) 					# Ansteckung an einfach Geimpften (noch ohne Zulassung zweite Impfung)
 	rates.append((infectFactorHosp*infectRate[3]/population)*S[0]*CONSTANTS.sum(V1[2]))	# Ansteckung an einfach Geimpften Hospitalisierten (noch ohne Zulassung zweite Impfung)
 	rates.append((infectRate[3]/population)*S[0]*V1eligible[1]) 						# Ansteckung an einfach Geimpften
-	rates.append((infectFactorHosp*infectRate[3]/population)*S[0]*V1eligible[2])			# Ansteckung an einfach Geimpften Hospitalisierten
+	rates.append((infectFactorHosp*infectRate[3]/population)*S[0]*V1eligible[2])		# Ansteckung an einfach Geimpften Hospitalisierten
 	rates.append((infectRate[4]/population)*S[0]*V2[1]) 								# Ansteckung an zweifach Geimpften
-	rates.append((infectFactorHosp*infectRate[4]/population)*S[0]*V2[2])					# Ansteckung an zweifach Geimpften Hospitalisierten
+	rates.append((infectFactorHosp*infectRate[4]/population)*S[0]*V2[2])				# Ansteckung an zweifach Geimpften Hospitalisierten
 	rates.append((infectRate[0]/population)*S[0]*sumVisitors(1,0))						# Ansteckung an ungeimpften, infizierten Pendlern
 	rates.append((infectRate[3]/population)*S[0]*sumVisitors(1,1))						# Ansteckung an 1x geimpften, infizierten Pendlern
 	rates.append((infectRate[4]/population)*S[0]*sumVisitors(1,2))						# Ansteckung an 2x geimpften, infizierten Pendlern

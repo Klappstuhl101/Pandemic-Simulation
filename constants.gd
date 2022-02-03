@@ -55,13 +55,14 @@ const VAX2 = "2x Vaccinated"
 
 const VACDELAY = 10
 
-
+# Calculate sum of an array
 static func sum(arr):
 	var sum = 0
 	for i in range(arr.size()):
 		sum += arr[i]
 	return sum
 
+# Calculate cumulative sum for each entry of an array
 static func cumulative_sum(arr):
 	for i in range(1,arr.size()):
 		arr[i] += arr[i-1]
@@ -76,6 +77,7 @@ static func add_arrays(arr1, arr2):
 		counter += 1
 	return new
 
+# Create an empty array with a length
 static func zeroes(length : int):
 	var arr = []
 	for _i in range(length):

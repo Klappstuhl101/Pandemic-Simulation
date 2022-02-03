@@ -14,6 +14,8 @@ var mapButton
 var population
 var deaths
 
+var borderOpen
+
 var suscept = [CONSTANTS.SUSCEPTIBLE]
 var infect = [CONSTANTS.INFECTED]
 var recov = [CONSTANTS.RECOVERED]
@@ -178,6 +180,8 @@ func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
 		var arr = [neighborName, vis]
 		visitors.append(arr)
 	
+	borderOpen = true
+	
 	vacRate1 = 2
 	vacRate2 = 18
 	
@@ -213,6 +217,12 @@ func getInfectRate():
 
 func getCommuteRate():
 	return commuterRate
+
+func getBorderOpen():
+	return borderOpen
+
+func setBorderOpen(open:bool):
+	self.borderOpen = open
 
 func simulate():
 #	if I <= 0: # pandemic over

@@ -161,9 +161,11 @@ func _ready():
 		deu.setVaxProduction(20)
 		if 25 == i:
 			deu.imposeLockdown()
+			bawu.setBorderOpen(false)
 #			deu.setVaxProduction(20)
 		if i == 50:
 			deu.stopLockdown()
+			bawu.setBorderOpen(true)
 #			deu.setVaxProduction(5)
 			
 #		sim.simulate()

@@ -147,7 +147,10 @@ func distributeCommuters():
 #		print(state.name)
 		
 		var commuteCount = int(floor(state.getCommuteRate() * state.getPopulation()))
-		var modCommuter = commuteCount % state.neighbors.size()
+		var openBorderNeighborCount = getOpenBorderNeighborCount(state)
+		var modCommuter = 0
+		if openBorderNeighborCount != 0:
+			modCommuter = commuteCount % openBorderNeighborCount
 		commuteCount -= modCommuter
 		var neighborIndices = [] # Index in Array neighbors vom Nachbarland
 		for neighborstateName in state.neighbors:
@@ -157,7 +160,7 @@ func distributeCommuters():
 		while commuteCount > 0:
 			var index = 0
 			for neighborstate in state.neighbors:
-				if neighborstate.getBorderOpen():
+				if states.get(neighborstate).getBorderOpen():
 					var avlblCommuters = checkAvlblCommuters(state)
 					var rand = rnd.randi_range(0, avlblCommuters.size()-1)
 					
@@ -236,7 +239,17 @@ func distributeCommuters():
 						
 					index += 1
 					commuteCount -= 1
+					
+				else:
+					index += 1
 
+func getOpenBorderNeighborCount(state:State):
+	var sum = 0
+	for neighborstate in state.neighbors:
+		if states.get(neighborstate).getBorderOpen():
+			sum += 1
+	return sum
+	
 func checkAvlblCommuters(state):
 	var dict = {}
 	

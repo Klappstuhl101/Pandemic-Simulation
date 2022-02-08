@@ -50,6 +50,7 @@ var deathFactorHosp
 var infectFactorHosp
 var infectFactorV1
 var infectFactorV2
+var infectTestFactor
 
 var hospitalBeds
 var hospitalRate
@@ -134,6 +135,7 @@ func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
 	infectFactorHosp = 0.2
 	infectFactorV1 = 0.5
 	infectFactorV2 = 0.3
+	infectTestFactor = 0.7
 	
 	deathFactorHosp = 0.5
 	
@@ -227,7 +229,7 @@ func setBorderOpen(open:bool):
 func simulate():
 #	if I <= 0: # pandemic over
 #		return
-	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*infectFactorHosp, getInfectRate()*infectFactorV1, getInfectRate()*infectFactorV2] # Ungetestet, Getestet, Hospitalisiert, 1x Geimpft, 2x Geimpft
+	infectRate = [getInfectRate(), getInfectRate()*infectTestFactor, getInfectRate()*infectFactorHosp, getInfectRate()*infectFactorV1, getInfectRate()*infectFactorV2] # Ungetestet, Getestet, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	var t = timeDifference
 	while t<1:
 		t = gillespieIteration(t)

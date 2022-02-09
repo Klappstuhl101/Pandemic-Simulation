@@ -5,9 +5,11 @@ class_name Game_Management
 var entities # states + country
 var active # active state / country
 var mode # StatsMode or ActionMode
-var stat_output # stat_output for stats
+var statOutput # statOutput for stats
+var actionOutput
 var statButtons
-var sim # simulation class
+var buttons
+
 
 var days = [CONSTANTS.DAYS]
 
@@ -15,17 +17,19 @@ var previous # previous activated button
 
 var counter = 0
 
-func _init(initEntities, initStatOutput, initStatButtons):
+func _init(initEntities, initStatOutput, initActionOutput, initButtons):
 #	self.sim = initSim
 	self.entities = initEntities
-	self.stat_output = initStatOutput
-	self.statButtons = initStatButtons
+	self.statOutput = initStatOutput
+	self.actionOutput = initActionOutput
+#	self.statButtons = initStatButtons
+	self.buttons = initButtons
 	connectButtons()
 	previous = entities.get(CONSTANTS.DEU)
 	
-#	var lineChart = stat_output[CONSTANTS.LINE]
+#	var lineChart = statOutput[CONSTANTS.LINE]
 #	lineChart.plot_from_array([sim.days, sim.sStats, sim.iStats, sim.rStats, sim.dStats])
-	
+	self.mode = CONSTANTS.STATMODE
 	
 
 func update():
@@ -43,7 +47,7 @@ func showStats():
 #	active.mapButton.material.set_shader_param("infected", counter)
 #	var color = active.mapButton.material.get_shader_param("infectGradient").get_gradient().interpolate(counter)
 #	active.mapButton.material.get_shader_param("twoColorGradient").get_gradient().set_color(0,color)
-	stat_output[CONSTANTS.LABEL].text = active.name
+	statOutput[CONSTANTS.LABEL].text = active.name
 	pass
 
 func activate():
@@ -163,32 +167,44 @@ func _on_DEU_press(toggle):
 		active.mapButton.pressed = true
 		
 func _on_statButton_press():
-	var l1 = stat_output[CONSTANTS.LINE]
-	l1.plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
+	mode = CONSTANTS.STATMODE
+	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
+	statOutput[CONSTANTS.STATCONTAINER].visible = true
 	
-	var l2 = stat_output[CONSTANTS.LINE2]
-	l2.plot_from_array([self.days, entities[CONSTANTS.DEU].sus0, entities[CONSTANTS.DEU].inf0, entities[CONSTANTS.DEU].rec0, entities[CONSTANTS.DEU].dead0])
-
-	var l3 = stat_output[CONSTANTS.LINE3]
-	l3.plot_from_array([self.days, entities[CONSTANTS.DEU].sus1, entities[CONSTANTS.DEU].inf1, entities[CONSTANTS.DEU].rec1, entities[CONSTANTS.DEU].dead1])
-
-	var l4 = stat_output[CONSTANTS.LINE4]
-#	l4.plot_from_array([self.days, entities[CONSTANTS.DEU].sus2, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
-	l4.plot_from_array([self.days, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
 	
-	var l5 = stat_output[CONSTANTS.LINE5]
-#	l5.plot_from_array([self.days, entities[CONSTANTS.DEU].beds, entities[CONSTANTS.DEU].hosp])
-	l5.plot_from_array([self.days, entities[CONSTANTS.DEU].vax2sus, entities[CONSTANTS.DEU].vax2inf, entities[CONSTANTS.DEU].vax2hosp, entities[CONSTANTS.DEU].vax2rec, entities[CONSTANTS.DEU].vax2dead])
-	
-	var l6 = stat_output[CONSTANTS.LINE6]
-	l6.plot_from_array([self.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf, entities[CONSTANTS.DEU].vax1hosp, entities[CONSTANTS.DEU].vax1rec, entities[CONSTANTS.DEU].vax1dead])
+#	var l1 = statOutput[CONSTANTS.LINE]
+#	l1.plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
+#
+#	var l2 = statOutput[CONSTANTS.LINE2]
+#	l2.plot_from_array([self.days, entities[CONSTANTS.DEU].sus0, entities[CONSTANTS.DEU].inf0, entities[CONSTANTS.DEU].rec0, entities[CONSTANTS.DEU].dead0])
+#
+#	var l3 = statOutput[CONSTANTS.LINE3]
+#	l3.plot_from_array([self.days, entities[CONSTANTS.DEU].sus1, entities[CONSTANTS.DEU].inf1, entities[CONSTANTS.DEU].rec1, entities[CONSTANTS.DEU].dead1])
+#
+#	var l4 = statOutput[CONSTANTS.LINE4]
+##	l4.plot_from_array([self.days, entities[CONSTANTS.DEU].sus2, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
+#	l4.plot_from_array([self.days, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
+#
+#	var l5 = statOutput[CONSTANTS.LINE5]
+##	l5.plot_from_array([self.days, entities[CONSTANTS.DEU].beds, entities[CONSTANTS.DEU].hosp])
+#	l5.plot_from_array([self.days, entities[CONSTANTS.DEU].vax2sus, entities[CONSTANTS.DEU].vax2inf, entities[CONSTANTS.DEU].vax2hosp, entities[CONSTANTS.DEU].vax2rec, entities[CONSTANTS.DEU].vax2dead])
+#
+#	var l6 = statOutput[CONSTANTS.LINE6]
+#	l6.plot_from_array([self.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf, entities[CONSTANTS.DEU].vax1hosp, entities[CONSTANTS.DEU].vax1rec, entities[CONSTANTS.DEU].vax1dead])
 #	l6.plot_from_array([self.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf])
-#	var lineChart = stat_output[CONSTANTS.LINE]
+#	var lineChart = statOutput[CONSTANTS.LINE]
 #	lineChart.plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
 	
 
+func _on_actionButton_press():
+	mode = CONSTANTS.ACTIONMODE
+	statOutput[CONSTANTS.STATCONTAINER].visible = false
+	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
+	
+
 func connectButtons():
-	statButtons[CONSTANTS.STATBUTTON].connect("pressed", self, "_on_statButton_press")
+	buttons[CONSTANTS.STATBUTTON].connect("pressed", self, "_on_statButton_press")
+	buttons[CONSTANTS.ACTIONBUTTON].connect("pressed", self, "_on_actionButton_press")
 	
 	# Buttons for Map
 	entities[CONSTANTS.BAW].mapButton.connect("toggled", self, "_on_BAW_press")

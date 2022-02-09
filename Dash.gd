@@ -15,6 +15,8 @@ var pause
 var play
 var playspeedx2
 
+var quit
+
 var bawu
 var bayern
 var berlin
@@ -45,28 +47,31 @@ var minute = 0
 var counter = 0
 
 var statOutput = {}
-var statButtons = {}
+var actionOutput = {}
+var buttons = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 #	Statistics shown
 	label = get_node("Label")
 	
-	pieChart = get_node("Statistics/PieChart")
-	lineChart = get_node("Statistics/LineChart")
-	lineChart2 = get_node("Statistics/LineChart2")
-	lineChart3 = get_node("Statistics/LineChart3")
-	lineChart4 = get_node("Statistics/LineChart4")
-	lineChart5 = get_node("Statistics/LineChart5")
-	lineChart6 = get_node("Statistics/LineChart6")
+#	pieChart = get_node("ScrollContainer/PieChart")
+	lineChart = get_node("Statistics/GridContainer/LineChart")
+	lineChart2 = get_node("Statistics/GridContainer/LineChart2")
+	lineChart3 = get_node("Statistics/GridContainer/LineChart3")
+	lineChart4 = get_node("Statistics/GridContainer/LineChart4")
+	lineChart5 = get_node("Statistics/GridContainer/LineChart5")
+	lineChart6 = get_node("Statistics/GridContainer/LineChart6")
 #	pieChart.plot()
-	var stats = [["Country","Population"],["Germany",7],["GB",15],["Canada",10],["Sweden",3]]
+#	var stats = [["Country","Population"],["Germany",7],["GB",15],["Canada",10],["Sweden",3]]
 	
-	pieChart.plot_from_array(stats)
+#	pieChart.plot_from_array(stats)
 	
 	
 	
 	timer = get_node("Time")
+	
+	quit = get_node("Quit")
 	
 #	Time Control Buttons
 	pause = get_node("TimeControls/Pause")
@@ -77,9 +82,12 @@ func _ready():
 	play.connect("pressed", self, "_on_Play_pressed")
 	playspeedx2.connect("pressed", self, "_on_PlaySpeedx2_pressed")
 	
+	quit.connect("pressed", self, "_on_quit_pressed")
+	
 	timer.set_wait_time(0.1)
 	timer.connect("timeout", self, "_on_Time_timeout")
 	
+	statOutput[CONSTANTS.STATCONTAINER] = get_node("Statistics")
 	statOutput[CONSTANTS.LABEL] = label
 	statOutput[CONSTANTS.PIE] = pieChart
 	statOutput[CONSTANTS.LINE] = lineChart
@@ -89,7 +97,10 @@ func _ready():
 	statOutput[CONSTANTS.LINE5] = lineChart5
 	statOutput[CONSTANTS.LINE6] = lineChart6
 	
-	statButtons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
+	actionOutput[CONSTANTS.ACTIONCONTAINER] = get_node("PlayControls")
+	
+	buttons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
+	buttons[CONSTANTS.ACTIONBUTTON] = get_node("ModeControl/ActionMode")
 	
 #	#Map Buttons
 #	# Test data	
@@ -152,7 +163,7 @@ func _ready():
 #	 CONSTANTS.DEU: deu
 #	 })
 #	game_manager = Game_Management.new(sim, statOutput, statButtons)
-	game_manager = Game_Management.new(entities, statOutput, statButtons)
+	game_manager = Game_Management.new(entities, statOutput, actionOutput, buttons)
 	
 	print(OS.get_ticks_msec()/1000, " sec")
 	for i in range(CONSTANTS.TRYOUT_DAYS):
@@ -199,6 +210,8 @@ func _on_PlaySpeedx2_pressed():
 	label.text = "x2"
 	pass
 
+func _on_quit_pressed():
+	get_tree().quit()
 
 func _on_Time_timeout():
 	tenthsec += 1

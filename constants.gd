@@ -4,7 +4,10 @@ class_name CONSTANTS
 
 const BL = " "
 
+const ACTIONCONTAINER = "ActionContainer"
+
 const LABEL = "Label"
+const STATCONTAINER = "StatContainer"
 const PIE = "Pie"
 const LINE = "Line"
 const LINE2 = "Line2"
@@ -12,6 +15,7 @@ const LINE3 = "Line3"
 const LINE4 = "Line4"
 const LINE5 = "Line5"
 const LINE6 = "Line6"
+
 
 const BAW = "Baden-Württemberg"
 const BAY = "Bayern"
@@ -36,6 +40,7 @@ const STATMODE = "Stats"
 const ACTIONMODE = "Action"
 
 const STATBUTTON = "StatButton"
+const ACTIONBUTTON = "ActionButton"
 
 const TRYOUT_DAYS = 100
 const DAYS = "Days"

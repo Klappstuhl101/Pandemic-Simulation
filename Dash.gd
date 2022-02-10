@@ -15,7 +15,7 @@ var pause
 var play
 var playspeedx2
 
-var quit
+var menu
 
 var bawu
 var bayern
@@ -71,7 +71,7 @@ func _ready():
 	
 	timer = get_node("Time")
 	
-	quit = get_node("Quit")
+	menu = get_node("Menu")
 	
 #	Time Control Buttons
 	pause = get_node("TimeControls/Pause")
@@ -82,7 +82,7 @@ func _ready():
 	play.connect("pressed", self, "_on_Play_pressed")
 	playspeedx2.connect("pressed", self, "_on_PlaySpeedx2_pressed")
 	
-	quit.connect("pressed", self, "_on_quit_pressed")
+	menu.connect("pressed", self, "_on_menu_pressed")
 	
 	timer.set_wait_time(0.1)
 	timer.connect("timeout", self, "_on_Time_timeout")
@@ -210,7 +210,7 @@ func _on_PlaySpeedx2_pressed():
 	label.text = "x2"
 	pass
 
-func _on_quit_pressed():
+func _on_menu_pressed():
 	get_tree().quit()
 
 func _on_Time_timeout():

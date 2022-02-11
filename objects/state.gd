@@ -193,6 +193,9 @@ func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
 	
 	rnd.randomize()
 
+func getName():
+	return self.name
+
 func occupiedBeds():
 	return I[3] + CONSTANTS.sum(V1[2]) + V1eligible[2] + V2[2]
 

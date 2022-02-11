@@ -4,6 +4,9 @@ class_name CONSTANTS
 
 const BL = " "
 
+const PROGRESSBAR = "Progressbar"
+const PROGRESSPANEL = "ProgressPanel"
+
 const ACTIONCONTAINER = "ActionContainer"
 
 const LABEL = "Label"
@@ -42,6 +45,10 @@ const ACTIONMODE = "Action"
 const STATBUTTON = "StatButton"
 const ACTIONBUTTON = "ActionButton"
 
+const PAUSEBUTTON = "PauseButton"
+const PLAYBUTTON = "PlayButton"
+const PLAYX2BUTTON = "PlayX2Button"
+
 const TRYOUT_DAYS = 100
 const DAYS = "Days"
 
@@ -59,6 +66,8 @@ const VAX1 = "1x Vaccinated"
 const VAX2 = "2x Vaccinated"
 
 const VACDELAY = 10
+
+var currentState: String
 
 # Calculate sum of an array
 static func sum(arr):

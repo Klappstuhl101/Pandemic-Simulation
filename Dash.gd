@@ -46,12 +46,18 @@ var minute = 0
 
 var counter = 0
 
+var remainingDays
+
 var statOutput = {}
 var actionOutput = {}
 var buttons = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
+	remainingDays = -1
+	
+	
 #	Statistics shown
 	label = get_node("Label")
 	
@@ -77,7 +83,7 @@ func _ready():
 	pause = get_node("TimeControls/Pause")
 	play = get_node("TimeControls/Play")
 	playspeedx2 = get_node("TimeControls/PlaySpeedx2")
-	
+
 	pause.connect("pressed", self, "_on_Pause_pressed")
 	play.connect("pressed", self, "_on_Play_pressed")
 	playspeedx2.connect("pressed", self, "_on_PlaySpeedx2_pressed")
@@ -97,10 +103,17 @@ func _ready():
 	statOutput[CONSTANTS.LINE5] = lineChart5
 	statOutput[CONSTANTS.LINE6] = lineChart6
 	
+	statOutput[CONSTANTS.PROGRESSBAR] = get_node("SimProgress")
+	statOutput[CONSTANTS.PROGRESSPANEL] = get_node("SimProgress/ProgressPanel")
+	statOutput[CONSTANTS.DAYS] = get_node("CurrentDay")
+	
 	actionOutput[CONSTANTS.ACTIONCONTAINER] = get_node("PlayControls")
 	
 	buttons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
 	buttons[CONSTANTS.ACTIONBUTTON] = get_node("ModeControl/ActionMode")
+	buttons[CONSTANTS.PAUSEBUTTON] = get_node("TimeControls/Pause")
+	buttons[CONSTANTS.PLAYBUTTON] = get_node("TimeControls/Play")
+	buttons[CONSTANTS.PLAYX2BUTTON] = get_node("TimeControls/PlaySpeedx2")
 	
 #	#Map Buttons
 #	# Test data	
@@ -165,49 +178,70 @@ func _ready():
 #	game_manager = Game_Management.new(sim, statOutput, statButtons)
 	game_manager = Game_Management.new(entities, statOutput, actionOutput, buttons)
 	
-	print(OS.get_ticks_msec()/1000, " sec")
-	for i in range(CONSTANTS.TRYOUT_DAYS):
-		print("TAG " + String(i))
-		game_manager.days.append(i)
-		deu.setVaxProduction(20)
-		if 25 == i:
-			deu.imposeLockdown()
-			bawu.setBorderOpen(false)
-#			deu.setVaxProduction(20)
-		if i == 50:
-			deu.stopLockdown()
-			bawu.setBorderOpen(true)
-#			deu.setVaxProduction(5)
-			
-#		sim.simulate()
-		deu.simulateALL()
-		print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes")
-#		lineChart.plot_from_array([sim.days, deu.suscept, deu.infect, deu.recov, deu.dead])
+#	print(OS.get_ticks_msec()/1000, " sec")
+#	for i in range(CONSTANTS.TRYOUT_DAYS):
+#		print("TAG " + String(i))
+#		game_manager.days.append(i)
+#		deu.setVaxProduction(20)
+#		if 25 == i:
+#			deu.imposeLockdown()
+#			bawu.setBorderOpen(false)
+##			deu.setVaxProduction(20)
+#		if i == 50:
+#			deu.stopLockdown()
+#			bawu.setBorderOpen(true)
+##			deu.setVaxProduction(5)
+#
+##		sim.simulate()
+#		deu.simulateALL()
+#		print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes")
+##		lineChart.plot_from_array([sim.days, deu.suscept, deu.infect, deu.recov, deu.dead])
 
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
+	updateProgress()
+	if remainingDays > 0:
+		statOutput[CONSTANTS.PROGRESSPANEL].visible = true
+		game_manager.simulate()
+		remainingDays -= 1
+	else:
+		statOutput[CONSTANTS.PROGRESSPANEL].visible = false
+	
+	if remainingDays == 0:
+		game_manager.testStats()
+		remainingDays -= 1
+		
+		match game_manager.getMode():
+			CONSTANTS.STATMODE:
+				statOutput[CONSTANTS.STATCONTAINER].visible = false
+				statOutput[CONSTANTS.STATCONTAINER].visible = true
+			CONSTANTS.ACTIONMODE:
+				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
+				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
 	pass
 
+#func updateDay():
+#	get_node("CurrentDay").text = "Day " + String(game_manager.currentDay)
+
+func updateProgress():
+	statOutput[CONSTANTS.PROGRESSBAR].value = statOutput[CONSTANTS.PROGRESSBAR].max_value - remainingDays
+	pass
 
 func _on_Pause_pressed():
 	label.text = "Pause"
 	timer.stop()
 	pass
-	
+
 func _on_Play_pressed():
-#	sim.days.append(counter)
-#	counter+=1
-#	label.text = String(counter)
-#	deu.simulateALL()
-#	lineChart.plot_from_array([sim.days, deu.suscept, deu.infect, deu.recov, deu.dead])
-	label.text = "Play"
-	timer.start()
+	remainingDays = 7
+	statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 	pass
-	
+
 func _on_PlaySpeedx2_pressed():
-	label.text = "x2"
+	remainingDays = 14
+	statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 	pass
 
 func _on_menu_pressed():

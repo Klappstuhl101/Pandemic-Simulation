@@ -349,6 +349,7 @@ func simulateALL():
 	distributeCommuters()
 	
 	for state in states.values():
+#		CONSTANTS.currentState = state.getName()
 		state.simulate()
 	
 	homeCommuters()

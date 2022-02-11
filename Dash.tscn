@@ -73,6 +73,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="CurrentDay" type="Label" parent="."]
+margin_left = 600.0
+margin_top = 5.0
+margin_right = 725.0
+margin_bottom = 105.0
+rect_min_size = Vector2( 125, 100 )
+text = "Day 0"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Time" type="Timer" parent="."]
 
 [node name="Map" type="Panel" parent="."]
@@ -400,10 +414,6 @@ rect_min_size = Vector2( 854, 480 )
 source = "res://addons/easy_charts/file.samples/linechart (rows).csv"
 delimiter = ","
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="LineChart2" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
@@ -413,10 +423,6 @@ margin_right = 854.0
 margin_bottom = 964.0
 rect_min_size = Vector2( 854, 480 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="LineChart3" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
@@ -426,10 +432,6 @@ margin_right = 854.0
 margin_bottom = 1448.0
 rect_min_size = Vector2( 854, 480 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="LineChart4" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
@@ -439,10 +441,6 @@ margin_right = 854.0
 margin_bottom = 1932.0
 rect_min_size = Vector2( 854, 480 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="LineChart5" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
@@ -452,10 +450,6 @@ margin_right = 854.0
 margin_bottom = 2416.0
 rect_min_size = Vector2( 854, 480 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="LineChart6" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
@@ -465,10 +459,6 @@ margin_right = 854.0
 margin_bottom = 2900.0
 rect_min_size = Vector2( 854, 480 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="SimProgress" type="ProgressBar" parent="."]
 margin_left = 740.0
@@ -482,7 +472,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Panel" type="Label" parent="SimProgress"]
+[node name="ProgressPanel" type="Label" parent="SimProgress"]
 margin_left = 150.0
 margin_top = 25.0
 margin_right = 300.0
@@ -490,8 +480,10 @@ margin_bottom = 75.0
 rect_min_size = Vector2( 150, 50 )
 custom_styles/normal = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
-text = "Simuliere
-Baden-Württemberg"
+text = "Simuliere"
 align = 1
 valign = 1
 uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}

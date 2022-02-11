@@ -10,8 +10,11 @@ var actionOutput
 var statButtons
 var buttons
 
+var paused
+
 
 var days = [CONSTANTS.DAYS]
+var currentDay = 0
 
 var previous # previous activated button
 
@@ -30,6 +33,8 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons):
 #	var lineChart = statOutput[CONSTANTS.LINE]
 #	lineChart.plot_from_array([sim.days, sim.sStats, sim.iStats, sim.rStats, sim.dStats])
 	self.mode = CONSTANTS.STATMODE
+	
+	self.paused = true
 	
 
 func update():
@@ -172,7 +177,31 @@ func _on_statButton_press():
 	statOutput[CONSTANTS.STATCONTAINER].visible = true
 	
 	
-#	var l1 = statOutput[CONSTANTS.LINE]
+##	var l1 = statOutput[CONSTANTS.LINE]
+#	statOutput[CONSTANTS.LINE].plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
+#
+##	var l2 = statOutput[CONSTANTS.LINE2]
+#	statOutput[CONSTANTS.LINE2].plot_from_array([self.days, entities[CONSTANTS.DEU].sus0, entities[CONSTANTS.DEU].inf0, entities[CONSTANTS.DEU].rec0, entities[CONSTANTS.DEU].dead0])
+#
+##	var l3 = statOutput[CONSTANTS.LINE3]
+#	statOutput[CONSTANTS.LINE3].plot_from_array([self.days, entities[CONSTANTS.DEU].sus1, entities[CONSTANTS.DEU].inf1, entities[CONSTANTS.DEU].rec1, entities[CONSTANTS.DEU].dead1])
+#
+##	var l4 = statOutput[CONSTANTS.LINE4]
+##	l4.plot_from_array([self.days, entities[CONSTANTS.DEU].sus2, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
+#	statOutput[CONSTANTS.LINE4].plot_from_array([self.days, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
+#
+##	var l5 = statOutput[CONSTANTS.LINE5]
+##	l5.plot_from_array([self.days, entities[CONSTANTS.DEU].beds, entities[CONSTANTS.DEU].hosp])
+#	statOutput[CONSTANTS.LINE5].plot_from_array([self.days, entities[CONSTANTS.DEU].vax2sus, entities[CONSTANTS.DEU].vax2inf, entities[CONSTANTS.DEU].vax2hosp, entities[CONSTANTS.DEU].vax2rec, entities[CONSTANTS.DEU].vax2dead])
+#
+##	var l6 = statOutput[CONSTANTS.LINE6]
+#	statOutput[CONSTANTS.LINE6].plot_from_array([self.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf, entities[CONSTANTS.DEU].vax1hosp, entities[CONSTANTS.DEU].vax1rec, entities[CONSTANTS.DEU].vax1dead])
+##	l6.plot_from_array([self.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf])
+##	var lineChart = statOutput[CONSTANTS.LINE]
+##	lineChart.plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
+	
+func testStats():
+	#	var l1 = statOutput[CONSTANTS.LINE]
 	statOutput[CONSTANTS.LINE].plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
 
 #	var l2 = statOutput[CONSTANTS.LINE2]
@@ -194,7 +223,7 @@ func _on_statButton_press():
 #	l6.plot_from_array([self.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf])
 #	var lineChart = statOutput[CONSTANTS.LINE]
 #	lineChart.plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
-	
+
 
 func _on_actionButton_press():
 	mode = CONSTANTS.ACTIONMODE
@@ -202,9 +231,23 @@ func _on_actionButton_press():
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
 	
 
+
+func simulate():
+	entities[CONSTANTS.DEU].simulateALL()
+	days.append(self.currentDay)
+	updateDay()
+
+func updateDay():
+	self.currentDay += 1
+	statOutput[CONSTANTS.DAYS].text = "Day " + String(self.currentDay)
+
 func connectButtons():
 	buttons[CONSTANTS.STATBUTTON].connect("pressed", self, "_on_statButton_press")
 	buttons[CONSTANTS.ACTIONBUTTON].connect("pressed", self, "_on_actionButton_press")
+	
+#	buttons[CONSTANTS.PAUSEBUTTON].connect("pressed", self, "_on_Pause_pressed")
+#	buttons[CONSTANTS.PLAYBUTTON].connect("pressed", self, "_on_Play_pressed")
+#	buttons[CONSTANTS.PLAYX2BUTTON].connect("pressed", self, "_on_PlaySpeedx2_pressed")
 	
 	# Buttons for Map
 	entities[CONSTANTS.BAW].mapButton.connect("toggled", self, "_on_BAW_press")
@@ -224,3 +267,7 @@ func connectButtons():
 	entities[CONSTANTS.SLH].mapButton.connect("toggled", self, "_on_SLH_press")
 	entities[CONSTANTS.THU].mapButton.connect("toggled", self, "_on_THU_press")
 	entities[CONSTANTS.DEU].mapButton.connect("toggled", self, "_on_DEU_press")
+	
+
+func getMode():
+	return self.mode

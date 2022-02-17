@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://resources/control_buttons/Pause-thin-rounded-button-white.png" type="Texture" id=1]
 [ext_resource path="res://resources/control_buttons/Play-rounded-button-outline-white.png" type="Texture" id=2]
@@ -49,22 +49,15 @@
 bg_color = Color( 0, 0, 0, 0 )
 
 [sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 1, 1, 1, 1 )
-
-[sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 1, 0, 0, 1 )
 
-[sub_resource type="Theme" id=4]
-ProgressBar/colors/font_color = Color( 0, 0, 0, 1 )
-ProgressBar/colors/font_color_shadow = Color( 0, 0, 0, 1 )
-ProgressBar/fonts/font = null
-ProgressBar/styles/bg = SubResource( 2 )
-ProgressBar/styles/fg = SubResource( 3 )
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 1, 1, 1, 1 )
 
 [node name="Panel" type="Panel"]
-margin_top = 1.25995
-margin_right = 1920.0
-margin_bottom = 1081.26
+margin_right = 1600.0
+margin_bottom = 900.0
+rect_min_size = Vector2( 1600, 900 )
 theme = ExtResource( 44 )
 script = ExtResource( 4 )
 __meta__ = {
@@ -72,10 +65,10 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="."]
-margin_left = 221.0
-margin_top = 885.0
-margin_right = 504.0
-margin_bottom = 1064.0
+margin_left = 220.0
+margin_top = 830.0
+margin_right = 503.0
+margin_bottom = 898.0
 theme = ExtResource( 44 )
 text = "Test
 BLALBLALBLALBALBALLBAL"
@@ -310,9 +303,10 @@ __meta__ = {
 }
 
 [node name="TimeControls" type="GridContainer" parent="."]
-margin_top = 1010.0
+margin_top = 830.0
 margin_right = 200.0
-margin_bottom = 1078.0
+margin_bottom = 898.0
+rect_min_size = Vector2( 200, 68 )
 columns = 3
 __meta__ = {
 "_edit_use_anchors_": false
@@ -345,27 +339,12 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="PlayControls" type="ScrollContainer" parent="."]
-margin_left = 601.0
-margin_top = 110.0
-margin_right = 1901.0
-margin_bottom = 910.0
-rect_min_size = Vector2( 1300, 850 )
-scroll_horizontal_enabled = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="GridContainer" type="GridContainer" parent="PlayControls"]
-margin_right = 1288.0
-rect_min_size = Vector2( 1288, 0 )
-
 [node name="ModeControl" type="GridContainer" parent="."]
-margin_left = 1560.0
+margin_left = 1250.0
 margin_top = 5.0
-margin_right = 1860.0
+margin_right = 1514.0
 margin_bottom = 105.0
-rect_min_size = Vector2( 300, 100 )
+rect_min_size = Vector2( 260, 100 )
 columns = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -394,29 +373,44 @@ script = ExtResource( 38 )
 script = ExtResource( 39 )
 
 [node name="Menu" type="Button" parent="."]
-margin_left = 1880.0
-margin_right = 1920.0
+margin_left = 1560.0
+margin_right = 1600.0
 margin_bottom = 40.0
 text = "MENÜ"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="PlayControls" type="ScrollContainer" parent="."]
+margin_left = 600.0
+margin_top = 115.0
+margin_right = 1600.0
+margin_bottom = 895.0
+rect_min_size = Vector2( 1000, 780 )
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GridContainer" type="GridContainer" parent="PlayControls"]
+margin_right = 988.0
+rect_min_size = Vector2( 988, 0 )
+
 [node name="Statistics" type="ScrollContainer" parent="."]
-margin_left = 601.0
-margin_top = 110.0
-margin_right = 1901.0
-margin_bottom = 960.0
-rect_min_size = Vector2( 1300, 850 )
+margin_left = 600.0
+margin_top = 115.0
+margin_right = 1600.0
+margin_bottom = 895.0
+rect_min_size = Vector2( 1000, 780 )
 scroll_horizontal_enabled = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="GridContainer" type="GridContainer" parent="Statistics"]
-margin_right = 1288.0
+margin_right = 988.0
 margin_bottom = 2900.0
-rect_min_size = Vector2( 1288, 0 )
+rect_min_size = Vector2( 988, 0 )
 
 [node name="LineChart" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
@@ -427,10 +421,6 @@ rect_min_size = Vector2( 854, 480 )
 source = "res://addons/easy_charts/file.samples/linechart (rows).csv"
 delimiter = ","
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="LineChart2" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
@@ -440,10 +430,6 @@ margin_right = 854.0
 margin_bottom = 964.0
 rect_min_size = Vector2( 854, 480 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="LineChart3" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
@@ -453,10 +439,6 @@ margin_right = 854.0
 margin_bottom = 1448.0
 rect_min_size = Vector2( 854, 480 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="LineChart4" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
@@ -466,10 +448,6 @@ margin_right = 854.0
 margin_bottom = 1932.0
 rect_min_size = Vector2( 854, 480 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="LineChart5" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
@@ -479,10 +457,6 @@ margin_right = 854.0
 margin_bottom = 2416.0
 rect_min_size = Vector2( 854, 480 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="LineChart6" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
@@ -492,17 +466,13 @@ margin_right = 854.0
 margin_bottom = 2900.0
 rect_min_size = Vector2( 854, 480 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="SimProgress" type="ProgressBar" parent="."]
 margin_left = 740.0
 margin_top = 5.0
-margin_right = 1440.0
-margin_bottom = 55.0
-rect_min_size = Vector2( 700, 50 )
+margin_right = 1240.0
+margin_bottom = 53.0
+rect_min_size = Vector2( 500, 48 )
 max_value = 16.0
 value = 6.0
 __meta__ = {
@@ -510,12 +480,12 @@ __meta__ = {
 }
 
 [node name="ProgressPanel" type="Label" parent="SimProgress"]
-margin_left = 150.0
-margin_right = 300.0
-margin_bottom = 50.0
-rect_min_size = Vector2( 150, 50 )
-custom_styles/normal = SubResource( 1 )
+margin_left = 100.0
+margin_right = 250.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 150, 48 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_styles/normal = SubResource( 1 )
 text = "Simuliere"
 align = 1
 valign = 1
@@ -526,12 +496,13 @@ __meta__ = {
 
 [node name="InterventionWeight" type="ProgressBar" parent="."]
 margin_left = 740.0
-margin_top = 58.5858
-margin_right = 1440.0
-margin_bottom = 108.586
-rect_min_size = Vector2( 700, 50 )
-theme = SubResource( 4 )
+margin_top = 57.0
+margin_right = 1240.0
+margin_bottom = 105.0
+rect_min_size = Vector2( 500, 48 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_styles/fg = SubResource( 2 )
+custom_styles/bg = SubResource( 3 )
 value = 40.0
 percent_visible = false
 __meta__ = {
@@ -539,10 +510,13 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="InterventionWeight"]
-margin_left = 250.0
-margin_right = 450.0
-margin_bottom = 50.0
-rect_min_size = Vector2( 200, 50 )
+margin_left = 150.0
+margin_right = 350.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 200, 48 )
 text = "Schwere der Maßnahmen"
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

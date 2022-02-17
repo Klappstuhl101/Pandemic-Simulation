@@ -408,62 +408,141 @@ __meta__ = {
 }
 
 [node name="GridContainer" type="GridContainer" parent="Statistics"]
-margin_right = 988.0
-margin_bottom = 2900.0
+margin_right = 991.0
+margin_bottom = 896.0
 rect_min_size = Vector2( 988, 0 )
+columns = 2
+
+[node name="Empty" type="GridContainer" parent="Statistics/GridContainer"]
+margin_right = 475.0
+margin_bottom = 20.0
+columns = 2
+
+[node name="Interval" type="GridContainer" parent="Statistics/GridContainer"]
+margin_left = 479.0
+margin_right = 991.0
+margin_bottom = 20.0
+columns = 4
+
+[node name="Week" type="Button" parent="Statistics/GridContainer/Interval"]
+margin_right = 125.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 125, 20 )
+text = "1 Week"
+
+[node name="Month" type="Button" parent="Statistics/GridContainer/Interval"]
+margin_left = 129.0
+margin_right = 254.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 125, 20 )
+text = "1 Month"
+
+[node name="Year" type="Button" parent="Statistics/GridContainer/Interval"]
+margin_left = 258.0
+margin_right = 383.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 125, 20 )
+text = "1 Year"
+
+[node name="Max" type="Button" parent="Statistics/GridContainer/Interval"]
+margin_left = 387.0
+margin_right = 512.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 125, 20 )
+text = "Max"
+
+[node name="Incidence" type="Label" parent="Statistics/GridContainer"]
+margin_top = 24.0
+margin_right = 475.6
+margin_bottom = 312.0
+rect_min_size = Vector2( 475.6, 288 )
+text = "111111111111111111111111111111111111
+
+Test Inzidenz"
+align = 1
+valign = 1
 
 [node name="LineChart" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 854.0
-margin_bottom = 480.0
-rect_min_size = Vector2( 854, 480 )
+margin_left = 479.0
+margin_top = 24.0
+margin_right = 991.4
+margin_bottom = 312.0
+rect_min_size = Vector2( 512.4, 288 )
 source = "res://addons/easy_charts/file.samples/linechart (rows).csv"
 delimiter = ","
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
 
+[node name="R-Value" type="Label" parent="Statistics/GridContainer"]
+margin_top = 316.0
+margin_right = 475.6
+margin_bottom = 604.0
+rect_min_size = Vector2( 475.6, 288 )
+text = "5555555555555555
+
+R-Wert"
+align = 1
+valign = 1
+
 [node name="LineChart2" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 484.0
-margin_right = 854.0
-margin_bottom = 964.0
-rect_min_size = Vector2( 854, 480 )
+margin_left = 479.0
+margin_top = 316.0
+margin_right = 991.4
+margin_bottom = 604.0
+rect_min_size = Vector2( 512.4, 288 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
+
+[node name="HospBeds" type="Label" parent="Statistics/GridContainer"]
+margin_top = 608.0
+margin_right = 475.6
+margin_bottom = 896.0
+rect_min_size = Vector2( 475.6, 288 )
+text = "22222222222222222222222222
+
+Belegte Betten"
+align = 1
+valign = 1
 
 [node name="LineChart3" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 968.0
-margin_right = 854.0
-margin_bottom = 1448.0
-rect_min_size = Vector2( 854, 480 )
+margin_left = 479.0
+margin_top = 608.0
+margin_right = 991.4
+margin_bottom = 896.0
+rect_min_size = Vector2( 512.4, 288 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
 
 [node name="LineChart4" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
+visible = false
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 1452.0
+margin_top = 292.0
 margin_right = 854.0
-margin_bottom = 1932.0
+margin_bottom = 772.0
 rect_min_size = Vector2( 854, 480 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
 
 [node name="LineChart5" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
+visible = false
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 1936.0
+margin_top = 292.0
 margin_right = 854.0
-margin_bottom = 2416.0
+margin_bottom = 772.0
 rect_min_size = Vector2( 854, 480 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
 
 [node name="LineChart6" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
+visible = false
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 2420.0
+margin_top = 292.0
 margin_right = 854.0
-margin_bottom = 2900.0
+margin_bottom = 772.0
 rect_min_size = Vector2( 854, 480 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
 

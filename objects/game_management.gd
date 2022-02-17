@@ -12,6 +12,8 @@ var buttons
 
 var paused
 
+var godmode:bool
+
 
 var days = [CONSTANTS.DAYS]
 var currentDay = 0
@@ -20,7 +22,7 @@ var previous # previous activated button
 
 var counter = 0
 
-func _init(initEntities, initStatOutput, initActionOutput, initButtons):
+func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodmode):
 #	self.sim = initSim
 	self.entities = initEntities
 	self.statOutput = initStatOutput
@@ -30,11 +32,15 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons):
 	connectButtons()
 	previous = entities.get(CONSTANTS.DEU)
 	
+	self.godmode = initGodmode
+	
 #	var lineChart = statOutput[CONSTANTS.LINE]
 #	lineChart.plot_from_array([sim.days, sim.sStats, sim.iStats, sim.rStats, sim.dStats])
 	self.mode = CONSTANTS.STATMODE
 	
 	self.paused = true
+	
+	self.active = entities.get(CONSTANTS.DEU)
 	
 
 func update():
@@ -47,13 +53,18 @@ func resetAll(exception = ""):
 			entity.mapButton.pressed = false
 
 func showStats():
+	if godmode:
+		pass
+	else:
+		statOutput[CONSTANTS.LINE].plot_from_array([self.days, active.suscept, active.infect, active.recov, active.dead])
+		pass
 #	HIERHER DIE GANZEN SHADER EINSTELLUNGEN UND ÜBERGABE
 #	active.mapButton.material.set_shader_param("vaccinated", counter)
 #	active.mapButton.material.set_shader_param("infected", counter)
 #	var color = active.mapButton.material.get_shader_param("infectGradient").get_gradient().interpolate(counter)
 #	active.mapButton.material.get_shader_param("twoColorGradient").get_gradient().set_color(0,color)
 	statOutput[CONSTANTS.LABEL].text = active.name
-	pass
+	
 
 func activate():
 	resetAll(active.name)
@@ -271,3 +282,6 @@ func connectButtons():
 
 func getMode():
 	return self.mode
+
+func getOutputArray():
+	pass

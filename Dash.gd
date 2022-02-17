@@ -107,6 +107,10 @@ func _ready():
 	statOutput[CONSTANTS.PROGRESSPANEL] = get_node("SimProgress/ProgressPanel")
 	statOutput[CONSTANTS.DAYS] = get_node("CurrentDay")
 	
+	statOutput[CONSTANTS.INCIDENCE] = get_node("Statistics/GridContainer/Incidence")
+	statOutput[CONSTANTS.RVALUE] = get_node("Statistics/GridContainer/R-Value")
+	statOutput[CONSTANTS.HOSPBEDS] = get_node("Statistics/GridContainer/HospBeds")
+	
 	actionOutput[CONSTANTS.ACTIONCONTAINER] = get_node("PlayControls")
 	
 	buttons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
@@ -176,7 +180,7 @@ func _ready():
 #	 CONSTANTS.DEU: deu
 #	 })
 #	game_manager = Game_Management.new(sim, statOutput, statButtons)
-	game_manager = Game_Management.new(entities, statOutput, actionOutput, buttons)
+	game_manager = Game_Management.new(entities, statOutput, actionOutput, buttons, false)
 	
 #	print(OS.get_ticks_msec()/1000, " sec")
 #	for i in range(CONSTANTS.TRYOUT_DAYS):
@@ -210,7 +214,8 @@ func _process(_delta):
 		statOutput[CONSTANTS.PROGRESSPANEL].visible = false
 	
 	if remainingDays == 0:
-		game_manager.testStats()
+#		game_manager.testStats()
+		game_manager.showStats()
 		remainingDays -= 1
 		
 		match game_manager.getMode():
@@ -220,7 +225,7 @@ func _process(_delta):
 			CONSTANTS.ACTIONMODE:
 				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
 				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
-	pass
+	
 
 #func updateDay():
 #	get_node("CurrentDay").text = "Day " + String(game_manager.currentDay)

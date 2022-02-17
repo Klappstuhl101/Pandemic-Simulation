@@ -19,6 +19,10 @@ const LINE4 = "Line4"
 const LINE5 = "Line5"
 const LINE6 = "Line6"
 
+const RVALUE = "R-Wert"
+const INCIDENCE = "Inzidenz"
+const HOSPBEDS = "Betten"
+
 
 const BAW = "Baden-Württemberg"
 const BAY = "Bayern"

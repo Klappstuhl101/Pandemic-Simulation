@@ -33,3 +33,12 @@ Tote komplett aus Bevölkerung streichen
 Weitere Ideen (für die Zukunft):
 "Gottmodus" Idee?
 Budget als Spielmechanismus
+
+
+Statistiken verfügbar im "realen" Modus:
+- Inzidenzen
+- R-Wert
+- Übersicht über alle Klassen: unaware Recovered kommen in Recovered, auch wenn nicht nachweislich getestet.
+- Getestete
+- Impfübersicht
+- Hospitalisierungen / belegte Betten

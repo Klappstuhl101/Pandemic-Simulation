@@ -23,6 +23,11 @@ const RVALUE = "R-Wert"
 const INCIDENCE = "Inzidenz"
 const HOSPBEDS = "Betten"
 
+const WEEK = 7
+const MONTH = 28
+const YEAR = 365
+const MAX = INF
+
 
 const BAW = "Baden-Württemberg"
 const BAY = "Bayern"

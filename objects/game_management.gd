@@ -242,6 +242,17 @@ func _on_actionButton_press():
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
 	
 
+func _on_weekButton_press():
+	pass
+	
+func _on_monthButton_press():
+	pass
+	
+func _on_yearButton_press():
+	pass
+	
+func _on_maxButton_press():
+	pass
 
 func simulate():
 	entities[CONSTANTS.DEU].simulateALL()
@@ -255,6 +266,11 @@ func updateDay():
 func connectButtons():
 	buttons[CONSTANTS.STATBUTTON].connect("pressed", self, "_on_statButton_press")
 	buttons[CONSTANTS.ACTIONBUTTON].connect("pressed", self, "_on_actionButton_press")
+	
+	buttons[CONSTANTS.WEEK].connect("pressed", self, "_on_weekButton_press")
+	buttons[CONSTANTS.MONTH].connect("pressed", self, "_on_monthButton_press")
+	buttons[CONSTANTS.YEAR].connect("pressed", self, "_on_yearButton_press")
+	buttons[CONSTANTS.MAX].connect("pressed", self, "_on_maxButton_press")
 	
 #	buttons[CONSTANTS.PAUSEBUTTON].connect("pressed", self, "_on_Pause_pressed")
 #	buttons[CONSTANTS.PLAYBUTTON].connect("pressed", self, "_on_Play_pressed")

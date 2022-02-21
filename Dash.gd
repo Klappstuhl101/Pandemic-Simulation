@@ -118,6 +118,10 @@ func _ready():
 	buttons[CONSTANTS.PAUSEBUTTON] = get_node("TimeControls/Pause")
 	buttons[CONSTANTS.PLAYBUTTON] = get_node("TimeControls/Play")
 	buttons[CONSTANTS.PLAYX2BUTTON] = get_node("TimeControls/PlaySpeedx2")
+	buttons[CONSTANTS.WEEK] = get_node("Statistics/GridContainer/Interval/Week")
+	buttons[CONSTANTS.MONTH] = get_node("Statistics/GridContainer/Interval/Month")
+	buttons[CONSTANTS.YEAR] = get_node("Statistics/GridContainer/Interval/Year")
+	buttons[CONSTANTS.MAX] = get_node("Statistics/GridContainer/Interval/Max")
 	
 #	#Map Buttons
 #	# Test data	
@@ -209,6 +213,7 @@ func _process(_delta):
 	if remainingDays > 0:
 		statOutput[CONSTANTS.PROGRESSPANEL].visible = true
 		game_manager.simulate()
+		game_manager.showStats()
 		remainingDays -= 1
 	else:
 		statOutput[CONSTANTS.PROGRESSPANEL].visible = false

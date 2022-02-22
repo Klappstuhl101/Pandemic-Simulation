@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=2]
+[gd_scene load_steps=49 format=2]
 
 [ext_resource path="res://resources/control_buttons/Pause-thin-rounded-button-white.png" type="Texture" id=1]
 [ext_resource path="res://resources/control_buttons/Play-rounded-button-outline-white.png" type="Texture" id=2]
@@ -42,6 +42,7 @@
 [ext_resource path="res://resources/map/Deutschland.png" type="Texture" id=40]
 [ext_resource path="res://resources/map/Deutschland_pressed.png" type="Texture" id=41]
 [ext_resource path="res://resources/shader/NIE.tres" type="Material" id=42]
+[ext_resource path="res://addons/easy_charts/PieChart/pie_chart.tscn" type="PackedScene" id=43]
 [ext_resource path="res://resources/standard_theme.theme" type="Theme" id=44]
 [ext_resource path="res://addons/easy_charts/LineChart/line_chart.tscn" type="PackedScene" id=45]
 
@@ -64,14 +65,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="."]
+[node name="CurrentDay" type="Label" parent="."]
 margin_left = 220.0
 margin_top = 830.0
 margin_right = 503.0
 margin_bottom = 898.0
 theme = ExtResource( 44 )
-text = "Test
-BLALBLALBLALBALBALLBAL"
+text = "Days"
 align = 1
 valign = 1
 uppercase = true
@@ -79,13 +79,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CurrentDay" type="Label" parent="."]
+[node name="CountryName" type="Label" parent="."]
 margin_left = 600.0
 margin_top = 5.0
 margin_right = 725.0
 margin_bottom = 105.0
 rect_min_size = Vector2( 125, 100 )
-text = "Day 0"
+text = "Countryname"
 align = 1
 valign = 1
 uppercase = true
@@ -399,7 +399,7 @@ rect_min_size = Vector2( 988, 0 )
 [node name="Statistics" type="ScrollContainer" parent="."]
 margin_left = 600.0
 margin_top = 115.0
-margin_right = 1600.0
+margin_right = 1606.0
 margin_bottom = 895.0
 rect_min_size = Vector2( 1000, 780 )
 scroll_horizontal_enabled = false
@@ -408,19 +408,19 @@ __meta__ = {
 }
 
 [node name="GridContainer" type="GridContainer" parent="Statistics"]
-margin_right = 991.0
+margin_right = 994.0
 margin_bottom = 896.0
 rect_min_size = Vector2( 988, 0 )
 columns = 2
 
 [node name="Empty" type="GridContainer" parent="Statistics/GridContainer"]
-margin_right = 475.0
+margin_right = 478.0
 margin_bottom = 20.0
 columns = 2
 
 [node name="Interval" type="GridContainer" parent="Statistics/GridContainer"]
-margin_left = 479.0
-margin_right = 991.0
+margin_left = 482.0
+margin_right = 994.0
 margin_bottom = 20.0
 columns = 4
 
@@ -451,53 +451,90 @@ margin_bottom = 20.0
 rect_min_size = Vector2( 125, 20 )
 text = "Max"
 
-[node name="Incidence" type="Label" parent="Statistics/GridContainer"]
+[node name="Indicators" type="GridContainer" parent="Statistics/GridContainer"]
 margin_top = 24.0
-margin_right = 475.6
+margin_right = 478.0
 margin_bottom = 312.0
 rect_min_size = Vector2( 475.6, 288 )
-text = "111111111111111111111111111111111111
+columns = 2
 
-Test Inzidenz"
+[node name="IncidenceNr" type="Label" parent="Statistics/GridContainer/Indicators"]
+margin_right = 237.0
+margin_bottom = 192.0
+rect_min_size = Vector2( 237, 192 )
+text = "120"
 align = 1
 valign = 1
 
-[node name="LineChart" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
+[node name="RNr" type="Label" parent="Statistics/GridContainer/Indicators"]
+margin_left = 241.0
+margin_right = 478.0
+margin_bottom = 192.0
+rect_min_size = Vector2( 237, 192 )
+text = "1,9"
+align = 1
+valign = 1
+
+[node name="IncidenceText" type="Label" parent="Statistics/GridContainer/Indicators"]
+margin_top = 196.0
+margin_right = 237.0
+margin_bottom = 210.0
+text = "Inzidenz"
+align = 1
+valign = 1
+
+[node name="RText" type="Label" parent="Statistics/GridContainer/Indicators"]
+margin_left = 241.0
+margin_top = 196.0
+margin_right = 478.0
+margin_bottom = 210.0
+text = "R-Wert"
+align = 1
+valign = 1
+
+[node name="Overview" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 479.0
+margin_left = 482.0
 margin_top = 24.0
-margin_right = 991.4
+margin_right = 994.4
 margin_bottom = 312.0
 rect_min_size = Vector2( 512.4, 288 )
 source = "res://addons/easy_charts/file.samples/linechart (rows).csv"
 delimiter = ","
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
-[node name="R-Value" type="Label" parent="Statistics/GridContainer"]
-margin_top = 316.0
-margin_right = 475.6
-margin_bottom = 604.0
-rect_min_size = Vector2( 475.6, 288 )
-text = "5555555555555555
-
-R-Wert"
-align = 1
-valign = 1
-
-[node name="LineChart2" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
+[node name="VaxStatus" parent="Statistics/GridContainer" instance=ExtResource( 43 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 479.0
 margin_top = 316.0
-margin_right = 991.4
+margin_right = 478.0
+margin_bottom = 604.0
+rect_min_size = Vector2( 475.6, 288 )
+Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+
+[node name="NewInfections" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 482.0
+margin_top = 316.0
+margin_right = 994.4
 margin_bottom = 604.0
 rect_min_size = Vector2( 512.4, 288 )
 Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="HospBeds" type="Label" parent="Statistics/GridContainer"]
 margin_top = 608.0
-margin_right = 475.6
+margin_right = 478.0
 margin_bottom = 896.0
 rect_min_size = Vector2( 475.6, 288 )
 text = "22222222222222222222222222
@@ -505,46 +542,6 @@ text = "22222222222222222222222222
 Belegte Betten"
 align = 1
 valign = 1
-
-[node name="LineChart3" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 479.0
-margin_top = 608.0
-margin_right = 991.4
-margin_bottom = 896.0
-rect_min_size = Vector2( 512.4, 288 )
-Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
-
-[node name="LineChart4" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
-visible = false
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 292.0
-margin_right = 854.0
-margin_bottom = 772.0
-rect_min_size = Vector2( 854, 480 )
-Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
-
-[node name="LineChart5" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
-visible = false
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 292.0
-margin_right = 854.0
-margin_bottom = 772.0
-rect_min_size = Vector2( 854, 480 )
-Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
-
-[node name="LineChart6" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
-visible = false
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 292.0
-margin_right = 854.0
-margin_bottom = 772.0
-rect_min_size = Vector2( 854, 480 )
-Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
 
 [node name="SimProgress" type="ProgressBar" parent="."]
 margin_left = 740.0

@@ -59,15 +59,15 @@ func _ready():
 	
 	
 #	Statistics shown
-	label = get_node("Label")
+#	label = get_node("CountryName")
 	
 #	pieChart = get_node("ScrollContainer/PieChart")
-	lineChart = get_node("Statistics/GridContainer/LineChart")
-	lineChart2 = get_node("Statistics/GridContainer/LineChart2")
-	lineChart3 = get_node("Statistics/GridContainer/LineChart3")
-	lineChart4 = get_node("Statistics/GridContainer/LineChart4")
-	lineChart5 = get_node("Statistics/GridContainer/LineChart5")
-	lineChart6 = get_node("Statistics/GridContainer/LineChart6")
+#	lineChart = get_node("Statistics/GridContainer/LineChart")
+#	lineChart2 = get_node("Statistics/GridContainer/LineChart2")
+#	lineChart3 = get_node("Statistics/GridContainer/LineChart3")
+#	lineChart4 = get_node("Statistics/GridContainer/LineChart4")
+#	lineChart5 = get_node("Statistics/GridContainer/LineChart5")
+#	lineChart6 = get_node("Statistics/GridContainer/LineChart6")
 #	pieChart.plot()
 #	var stats = [["Country","Population"],["Germany",7],["GB",15],["Canada",10],["Sweden",3]]
 	
@@ -94,14 +94,18 @@ func _ready():
 	timer.connect("timeout", self, "_on_Time_timeout")
 	
 	statOutput[CONSTANTS.STATCONTAINER] = get_node("Statistics")
-	statOutput[CONSTANTS.LABEL] = label
-	statOutput[CONSTANTS.PIE] = pieChart
-	statOutput[CONSTANTS.LINE] = lineChart
-	statOutput[CONSTANTS.LINE2] = lineChart2
-	statOutput[CONSTANTS.LINE3] = lineChart3
-	statOutput[CONSTANTS.LINE4] = lineChart4
-	statOutput[CONSTANTS.LINE5] = lineChart5
-	statOutput[CONSTANTS.LINE6] = lineChart6
+	statOutput[CONSTANTS.COUNTRYNAME] = get_node("CountryName")
+	statOutput[CONSTANTS.OVERVIEW] = get_node("Statistics/GridContainer/Overview")
+	statOutput[CONSTANTS.VAXSTATUS] = get_node("Statistics/GridContainer/VaxStatus")
+	statOutput[CONSTANTS.NEWINFECTIONS] = get_node("Statistics/GridContainer/NewInfections")
+	
+#	statOutput[CONSTANTS.PIE] = pieChart
+#	statOutput[CONSTANTS.LINE] = lineChart
+#	statOutput[CONSTANTS.LINE2] = lineChart2
+#	statOutput[CONSTANTS.LINE3] = lineChart3
+#	statOutput[CONSTANTS.LINE4] = lineChart4
+#	statOutput[CONSTANTS.LINE5] = lineChart5
+#	statOutput[CONSTANTS.LINE6] = lineChart6
 	
 	statOutput[CONSTANTS.PROGRESSBAR] = get_node("SimProgress")
 	statOutput[CONSTANTS.PROGRESSPANEL] = get_node("SimProgress/ProgressPanel")
@@ -240,17 +244,15 @@ func updateProgress():
 	pass
 
 func _on_Pause_pressed():
-	label.text = "Pause"
-	timer.stop()
-	pass
+	remainingDays = 0
 
 func _on_Play_pressed():
-	remainingDays = 7
+	remainingDays = CONSTANTS.WEEK + 1
 	statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 	pass
 
 func _on_PlaySpeedx2_pressed():
-	remainingDays = 14
+	remainingDays = CONSTANTS.WEEK * 2 + 1
 	statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 	pass
 

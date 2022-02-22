@@ -9,8 +9,12 @@ const PROGRESSPANEL = "ProgressPanel"
 
 const ACTIONCONTAINER = "ActionContainer"
 
-const LABEL = "Label"
+const COUNTRYNAME = "COUNTRYNAME"
 const STATCONTAINER = "StatContainer"
+const OVERVIEW = "Overview"
+const VAXSTATUS = "VaxStatus"
+const NEWINFECTIONS = "NewInfections"
+
 const PIE = "Pie"
 const LINE = "Line"
 const LINE2 = "Line2"
@@ -24,8 +28,8 @@ const INCIDENCE = "Inzidenz"
 const HOSPBEDS = "Betten"
 
 const WEEK = 7
-const MONTH = 28
-const YEAR = 365
+const MONTH = 30
+const YEAR = 360
 const MAX = INF
 
 
@@ -59,20 +63,20 @@ const PLAYBUTTON = "PlayButton"
 const PLAYX2BUTTON = "PlayX2Button"
 
 const TRYOUT_DAYS = 100
-const DAYS = "Days"
+const DAYS = "Day"
 
-const SUSCEPTIBLE = "Susceptible"
-const INFECTED = "Infected"
-const RECOVERED = "Recovered"
-const DEAD = "Dead"
-const HOSPITALISED = "Hospitalised"
+const SUSCEPTIBLE = "Gesund"
+const INFECTED = "Infiziert"
+const RECOVERED = "Genesen"
+const DEAD = "Tot"
+const HOSPITALISED = "Hospitalisiert"
 
-const TESTED = "Tested"
-const NTESTED = "Not Tested"
-const UNAWARE = "Unaware"
+const TESTED = "Getestet"
+const NTESTED = "Nicht Getestet"
+const UNAWARE = "Unbewusst"
 
-const VAX1 = "1x Vaccinated"
-const VAX2 = "2x Vaccinated"
+const VAX1 = "1x Geimpft"
+const VAX2 = "2x Geimpft"
 
 const VACDELAY = 10
 

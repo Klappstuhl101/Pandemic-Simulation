@@ -14,8 +14,10 @@ var paused
 
 var godmode:bool
 
+var interval
 
-var days = [CONSTANTS.DAYS]
+
+var days = []
 var currentDay = 0
 
 var previous # previous activated button
@@ -34,6 +36,8 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	
 	self.godmode = initGodmode
 	
+	self.interval = CONSTANTS.WEEK
+	
 #	var lineChart = statOutput[CONSTANTS.LINE]
 #	lineChart.plot_from_array([sim.days, sim.sStats, sim.iStats, sim.rStats, sim.dStats])
 	self.mode = CONSTANTS.STATMODE
@@ -47,30 +51,95 @@ func update():
 #	HIER DIE UPDATES FÜR STATS ETC. AUCH SHADER
 	pass
 
-func resetAll(exception = ""):
-	for entity in entities.values():
-		if (entity.name != exception):
-			entity.mapButton.pressed = false
-
 func showStats():
 	if godmode:
 		pass
 	else:
-		statOutput[CONSTANTS.LINE].plot_from_array([self.days, active.suscept, active.infect, active.recov, active.dead])
-		pass
+		var showInterval = getOutputInterval()
+		statOutput[CONSTANTS.OVERVIEW].plot_from_array(getOutputOverview(showInterval))
+#		pass
 #	HIERHER DIE GANZEN SHADER EINSTELLUNGEN UND ÜBERGABE
 #	active.mapButton.material.set_shader_param("vaccinated", counter)
 #	active.mapButton.material.set_shader_param("infected", counter)
 #	var color = active.mapButton.material.get_shader_param("infectGradient").get_gradient().interpolate(counter)
 #	active.mapButton.material.get_shader_param("twoColorGradient").get_gradient().set_color(0,color)
-	statOutput[CONSTANTS.LABEL].text = active.name
+	statOutput[CONSTANTS.COUNTRYNAME].text = active.name
+
+func getMode():
+	return self.mode
+
+func getOutputArray():
+	pass
+
+func getOutputOverview(dayArray):
+	var output = [dayArray]
+	var sus = [CONSTANTS.SUSCEPTIBLE]
+	var inf = [CONSTANTS.INFECTED]
+	var rec = [CONSTANTS.RECOVERED]
+	var dead = [CONSTANTS.DEAD]
+	for i in range(1, dayArray.size()):
+		sus.append(active.suscept[dayArray[i]])
+		inf.append(active.infect[dayArray[i]])
+		rec.append(active.recov[dayArray[i]])
+		dead.append(active.dead[dayArray[i]])
+	output.append(sus)
+	output.append(inf)
+	output.append(rec)
+	output.append(dead)
+	return output
+
+func getOutputInterval():
+	var dayArray = [CONSTANTS.DAYS]
+	if self.days.size() < CONSTANTS.WEEK:
+		dayArray.append_array(self.days)
+		return dayArray
 	
+	match self.interval:
+		CONSTANTS.WEEK:
+			for i in range(CONSTANTS.WEEK):
+				if (days.size() - 1 - CONSTANTS.WEEK + i) < 0:
+					continue
+				else:
+					dayArray.append(days[days.size() - 1 - CONSTANTS.WEEK + i])
+		
+		CONSTANTS.MONTH:
+			for i in range(CONSTANTS.MONTH / 3):
+				if (days.size() - 1 - CONSTANTS.MONTH + (i*3)) < 0:
+					continue
+				else:
+					dayArray.append(days[days.size() - 1 - CONSTANTS.MONTH + (i*3)])
+		
+		CONSTANTS.YEAR:
+			for i in range(CONSTANTS.YEAR / 12):
+				if (days.size() - 1 - CONSTANTS.YEAR + (i*12)) < 0:
+					continue
+				else:
+					dayArray.append(days[days.size() - 1 - CONSTANTS.YEAR + (i*12)])
+		
+		CONSTANTS.MAX:
+			dayArray.append_array(self.days)
+			return dayArray
+			
+	return dayArray
+
+func simulate():
+	entities[CONSTANTS.DEU].simulateALL()
+	days.append(self.currentDay)
+	updateDay()
+
+func updateDay():
+	self.currentDay += 1
+	statOutput[CONSTANTS.DAYS].text = "Day " + String(self.currentDay)
 
 func activate():
 	resetAll(active.name)
-
 	showStats()
 
+func resetAll(exception = ""):
+	for entity in entities.values():
+		if (entity.name != exception):
+			entity.mapButton.pressed = false
+			
 func _on_BAW_press(toggle):
 	if toggle:
 		active = entities.get(CONSTANTS.BAW)
@@ -211,29 +280,29 @@ func _on_statButton_press():
 ##	var lineChart = statOutput[CONSTANTS.LINE]
 ##	lineChart.plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
 	
-func testStats():
-	#	var l1 = statOutput[CONSTANTS.LINE]
-	statOutput[CONSTANTS.LINE].plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
-
-#	var l2 = statOutput[CONSTANTS.LINE2]
-	statOutput[CONSTANTS.LINE2].plot_from_array([self.days, entities[CONSTANTS.DEU].sus0, entities[CONSTANTS.DEU].inf0, entities[CONSTANTS.DEU].rec0, entities[CONSTANTS.DEU].dead0])
-
-#	var l3 = statOutput[CONSTANTS.LINE3]
-	statOutput[CONSTANTS.LINE3].plot_from_array([self.days, entities[CONSTANTS.DEU].sus1, entities[CONSTANTS.DEU].inf1, entities[CONSTANTS.DEU].rec1, entities[CONSTANTS.DEU].dead1])
-
-#	var l4 = statOutput[CONSTANTS.LINE4]
-#	l4.plot_from_array([self.days, entities[CONSTANTS.DEU].sus2, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
-	statOutput[CONSTANTS.LINE4].plot_from_array([self.days, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
-
-#	var l5 = statOutput[CONSTANTS.LINE5]
-#	l5.plot_from_array([self.days, entities[CONSTANTS.DEU].beds, entities[CONSTANTS.DEU].hosp])
-	statOutput[CONSTANTS.LINE5].plot_from_array([self.days, entities[CONSTANTS.DEU].vax2sus, entities[CONSTANTS.DEU].vax2inf, entities[CONSTANTS.DEU].vax2hosp, entities[CONSTANTS.DEU].vax2rec, entities[CONSTANTS.DEU].vax2dead])
-
-#	var l6 = statOutput[CONSTANTS.LINE6]
-	statOutput[CONSTANTS.LINE6].plot_from_array([self.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf, entities[CONSTANTS.DEU].vax1hosp, entities[CONSTANTS.DEU].vax1rec, entities[CONSTANTS.DEU].vax1dead])
-#	l6.plot_from_array([self.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf])
-#	var lineChart = statOutput[CONSTANTS.LINE]
-#	lineChart.plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
+#func testStats():
+#	#	var l1 = statOutput[CONSTANTS.LINE]
+#	statOutput[CONSTANTS.LINE].plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
+#
+##	var l2 = statOutput[CONSTANTS.LINE2]
+#	statOutput[CONSTANTS.LINE2].plot_from_array([self.days, entities[CONSTANTS.DEU].sus0, entities[CONSTANTS.DEU].inf0, entities[CONSTANTS.DEU].rec0, entities[CONSTANTS.DEU].dead0])
+#
+##	var l3 = statOutput[CONSTANTS.LINE3]
+#	statOutput[CONSTANTS.LINE3].plot_from_array([self.days, entities[CONSTANTS.DEU].sus1, entities[CONSTANTS.DEU].inf1, entities[CONSTANTS.DEU].rec1, entities[CONSTANTS.DEU].dead1])
+#
+##	var l4 = statOutput[CONSTANTS.LINE4]
+##	l4.plot_from_array([self.days, entities[CONSTANTS.DEU].sus2, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
+#	statOutput[CONSTANTS.LINE4].plot_from_array([self.days, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
+#
+##	var l5 = statOutput[CONSTANTS.LINE5]
+##	l5.plot_from_array([self.days, entities[CONSTANTS.DEU].beds, entities[CONSTANTS.DEU].hosp])
+#	statOutput[CONSTANTS.LINE5].plot_from_array([self.days, entities[CONSTANTS.DEU].vax2sus, entities[CONSTANTS.DEU].vax2inf, entities[CONSTANTS.DEU].vax2hosp, entities[CONSTANTS.DEU].vax2rec, entities[CONSTANTS.DEU].vax2dead])
+#
+##	var l6 = statOutput[CONSTANTS.LINE6]
+#	statOutput[CONSTANTS.LINE6].plot_from_array([self.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf, entities[CONSTANTS.DEU].vax1hosp, entities[CONSTANTS.DEU].vax1rec, entities[CONSTANTS.DEU].vax1dead])
+##	l6.plot_from_array([self.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf])
+##	var lineChart = statOutput[CONSTANTS.LINE]
+##	lineChart.plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
 
 
 func _on_actionButton_press():
@@ -243,25 +312,22 @@ func _on_actionButton_press():
 	
 
 func _on_weekButton_press():
-	pass
+	self.interval = CONSTANTS.WEEK
+	showStats()
 	
 func _on_monthButton_press():
-	pass
+	self.interval = CONSTANTS.MONTH
+	showStats()
 	
 func _on_yearButton_press():
-	pass
+	self.interval = CONSTANTS.YEAR
+	showStats()
 	
 func _on_maxButton_press():
-	pass
+	self.interval = CONSTANTS.MAX
+	showStats()
 
-func simulate():
-	entities[CONSTANTS.DEU].simulateALL()
-	days.append(self.currentDay)
-	updateDay()
 
-func updateDay():
-	self.currentDay += 1
-	statOutput[CONSTANTS.DAYS].text = "Day " + String(self.currentDay)
 
 func connectButtons():
 	buttons[CONSTANTS.STATBUTTON].connect("pressed", self, "_on_statButton_press")
@@ -296,8 +362,3 @@ func connectButtons():
 	entities[CONSTANTS.DEU].mapButton.connect("toggled", self, "_on_DEU_press")
 	
 
-func getMode():
-	return self.mode
-
-func getOutputArray():
-	pass

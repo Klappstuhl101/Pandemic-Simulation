@@ -111,8 +111,8 @@ func _ready():
 	statOutput[CONSTANTS.PROGRESSPANEL] = get_node("SimProgress/ProgressPanel")
 	statOutput[CONSTANTS.DAYS] = get_node("CurrentDay")
 	
-	statOutput[CONSTANTS.INCIDENCE] = get_node("Statistics/GridContainer/Incidence")
-	statOutput[CONSTANTS.RVALUE] = get_node("Statistics/GridContainer/R-Value")
+	statOutput[CONSTANTS.INCIDENCE] = get_node("Statistics/GridContainer/Indicators/IncidenceNr")
+	statOutput[CONSTANTS.RVALUE] = get_node("Statistics/GridContainer/Indicators/RNr")
 	statOutput[CONSTANTS.HOSPBEDS] = get_node("Statistics/GridContainer/HospBeds")
 	
 	actionOutput[CONSTANTS.ACTIONCONTAINER] = get_node("PlayControls")
@@ -129,23 +129,23 @@ func _ready():
 	
 #	#Map Buttons
 #	# Test data	
-	bawu = State.new(CONSTANTS.BAW,		1000, get_node("Map/BaWuButton"), [CONSTANTS.BAY, CONSTANTS.HES, CONSTANTS.RLP], 0.026)
-	bayern = State.new(CONSTANTS.BAY,	1000, get_node("Map/BayernButton"), [CONSTANTS.BAW, CONSTANTS.HES, CONSTANTS.SCN, CONSTANTS.THU], 0.022)
-	berlin = State.new(CONSTANTS.BER,	1000, get_node("Map/BerlinButton"), [CONSTANTS.BRA], 0.05)
-	brand = State.new(CONSTANTS.BRA, 	1000, get_node("Map/BrandenburgButton"), [CONSTANTS.BER, CONSTANTS.MVP, CONSTANTS.NIE, CONSTANTS.SCN, CONSTANTS.SCA], 0.119)
-	bremen = State.new(CONSTANTS.BRE, 	1000, get_node("Map/BremenButton"), [CONSTANTS.NIE], 0.079)
-	hamb = State.new(CONSTANTS.HAM, 	1000, get_node("Map/HamburgButton"), [CONSTANTS.NIE, CONSTANTS.SLH], 0.07)
-	hessen = State.new(CONSTANTS.HES, 	1000, get_node("Map/HessenButton"), [CONSTANTS.BAW, CONSTANTS.BAY, CONSTANTS.NIE, CONSTANTS.NRW, CONSTANTS.RLP, CONSTANTS.THU], 0.042)
-	meckPom = State.new(CONSTANTS.MVP, 	1000, get_node("Map/MeckPomButton"), [CONSTANTS.BRA, CONSTANTS.NIE, CONSTANTS.SLH], 0.046)
-	nieders = State.new(CONSTANTS.NIE, 	1000, get_node("Map/NiedersachsenButton"), [CONSTANTS.BRA, CONSTANTS.BRE, CONSTANTS.HAM,
+	bawu = State.new(CONSTANTS.BAW,		 	11103043,1000, get_node("Map/BaWuButton"), [CONSTANTS.BAY, CONSTANTS.HES, CONSTANTS.RLP], 0.026)
+	bayern = State.new(CONSTANTS.BAY, 		13140183, 1000, get_node("Map/BayernButton"), [CONSTANTS.BAW, CONSTANTS.HES, CONSTANTS.SCN, CONSTANTS.THU], 0.022)
+	berlin = State.new(CONSTANTS.BER, 		3664088, 1000, get_node("Map/BerlinButton"), [CONSTANTS.BRA], 0.05)
+	brand = State.new(CONSTANTS.BRA, 		2531071, 1000, get_node("Map/BrandenburgButton"), [CONSTANTS.BER, CONSTANTS.MVP, CONSTANTS.NIE, CONSTANTS.SCN, CONSTANTS.SCA], 0.119)
+	bremen = State.new(CONSTANTS.BRE, 		680130, 1000, get_node("Map/BremenButton"), [CONSTANTS.NIE], 0.079)
+	hamb = State.new(CONSTANTS.HAM, 		1852478, 1000, get_node("Map/HamburgButton"), [CONSTANTS.NIE, CONSTANTS.SLH], 0.07)
+	hessen = State.new(CONSTANTS.HES, 		6293154, 1000, get_node("Map/HessenButton"), [CONSTANTS.BAW, CONSTANTS.BAY, CONSTANTS.NIE, CONSTANTS.NRW, CONSTANTS.RLP, CONSTANTS.THU], 0.042)
+	meckPom = State.new(CONSTANTS.MVP, 		1610774, 1000, get_node("Map/MeckPomButton"), [CONSTANTS.BRA, CONSTANTS.NIE, CONSTANTS.SLH], 0.046)
+	nieders = State.new(CONSTANTS.NIE, 		8003421, 1000, get_node("Map/NiedersachsenButton"), [CONSTANTS.BRA, CONSTANTS.BRE, CONSTANTS.HAM,
 																					CONSTANTS.HES, CONSTANTS.MVP, CONSTANTS.NRW, CONSTANTS.SCA, CONSTANTS.SLH, CONSTANTS.THU], 0.055)
-	nrw = State.new(CONSTANTS.NRW, 		1000, get_node("Map/NrwButton"), [CONSTANTS.HES, CONSTANTS.NIE, CONSTANTS.RLP], 0.019)
-	rlp = State.new(CONSTANTS.RLP, 		1000, get_node("Map/RlpButton"), [CONSTANTS.BAW, CONSTANTS.HES, CONSTANTS.NRW, CONSTANTS.SAA], 0.08)
-	saar = State.new(CONSTANTS.SAA, 	1000, get_node("Map/SaarlandButton"), [CONSTANTS.RLP], 0.035)
-	sachsen = State.new(CONSTANTS.SCN, 	1000, get_node("Map/SachsenButton"), [CONSTANTS.BAY, CONSTANTS.BRA, CONSTANTS.SCA, CONSTANTS.THU], 0.035)
-	sacanh = State.new(CONSTANTS.SCA, 	1000, get_node("Map/SachsenAnhaltButton"), [CONSTANTS.BRA, CONSTANTS.NIE, CONSTANTS.SCN, CONSTANTS.THU], 0.065)
-	schlHol = State.new(CONSTANTS.SLH, 	1000, get_node("Map/SchlHolButton"), [CONSTANTS.HAM, CONSTANTS.MVP, CONSTANTS.NIE], 0.082)
-	thur = State.new(CONSTANTS.THU, 	1000, get_node("Map/ThuringenButton"), [CONSTANTS.BAY, CONSTANTS.HES, CONSTANTS.NIE, CONSTANTS.SCN, CONSTANTS.SCA], 0.058)
+	nrw = State.new(CONSTANTS.NRW, 			17925570, 1000, get_node("Map/NrwButton"), [CONSTANTS.HES, CONSTANTS.NIE, CONSTANTS.RLP], 0.019)
+	rlp = State.new(CONSTANTS.RLP, 			4098391, 1000, get_node("Map/RlpButton"), [CONSTANTS.BAW, CONSTANTS.HES, CONSTANTS.NRW, CONSTANTS.SAA], 0.08)
+	saar = State.new(CONSTANTS.SAA, 		983991, 1000, get_node("Map/SaarlandButton"), [CONSTANTS.RLP], 0.035)
+	sachsen = State.new(CONSTANTS.SCN, 		4056941, 1000, get_node("Map/SachsenButton"), [CONSTANTS.BAY, CONSTANTS.BRA, CONSTANTS.SCA, CONSTANTS.THU], 0.035)
+	sacanh = State.new(CONSTANTS.SCA, 		2180684, 1000, get_node("Map/SachsenAnhaltButton"), [CONSTANTS.BRA, CONSTANTS.NIE, CONSTANTS.SCN, CONSTANTS.THU], 0.065)
+	schlHol = State.new(CONSTANTS.SLH, 		2910875, 1000, get_node("Map/SchlHolButton"), [CONSTANTS.HAM, CONSTANTS.MVP, CONSTANTS.NIE], 0.082)
+	thur = State.new(CONSTANTS.THU, 		2120237, 1000, get_node("Map/ThuringenButton"), [CONSTANTS.BAY, CONSTANTS.HES, CONSTANTS.NIE, CONSTANTS.SCN, CONSTANTS.SCA], 0.058)
 	
 #	# Real Data
 #	bawu = State.new(CONSTANTS.BAW,		11103043, get_node("Map/BaWuButton"), [CONSTANTS.BAY, CONSTANTS.HES, CONSTANTS.RLP], 0.026)
@@ -214,6 +214,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	updateProgress()
+#	game_manager.showStats()
 	if remainingDays > 0:
 		statOutput[CONSTANTS.PROGRESSPANEL].visible = true
 		game_manager.simulate()

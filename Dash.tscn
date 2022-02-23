@@ -462,7 +462,7 @@ columns = 2
 margin_right = 237.0
 margin_bottom = 192.0
 rect_min_size = Vector2( 237, 192 )
-text = "120"
+text = "1111111111111"
 align = 1
 valign = 1
 
@@ -471,15 +471,16 @@ margin_left = 241.0
 margin_right = 478.0
 margin_bottom = 192.0
 rect_min_size = Vector2( 237, 192 )
-text = "1,9"
+text = "1111111111111"
 align = 1
 valign = 1
 
 [node name="IncidenceText" type="Label" parent="Statistics/GridContainer/Indicators"]
 margin_top = 196.0
 margin_right = 237.0
-margin_bottom = 210.0
-text = "Inzidenz"
+margin_bottom = 227.0
+text = "Inzidenz
+pro 100.000 Einwohnern"
 align = 1
 valign = 1
 
@@ -487,8 +488,9 @@ valign = 1
 margin_left = 241.0
 margin_top = 196.0
 margin_right = 478.0
-margin_bottom = 210.0
-text = "R-Wert"
+margin_bottom = 227.0
+text = "Wöchentlicher R-Wert
+"
 align = 1
 valign = 1
 
@@ -502,7 +504,7 @@ margin_bottom = 312.0
 rect_min_size = Vector2( 512.4, 288 )
 source = "res://addons/easy_charts/file.samples/linechart (rows).csv"
 delimiter = ","
-Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
+Chart_Style/function_colors = PoolColorArray( 0.00784314, 1, 0.0235294, 1, 0.976471, 0, 0, 1, 0.0431373, 0.678431, 0.988235, 1, 0, 0, 0, 1 )
 Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
@@ -515,8 +517,6 @@ margin_top = 316.0
 margin_right = 478.0
 margin_bottom = 604.0
 rect_min_size = Vector2( 475.6, 288 )
-Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="NewInfections" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
@@ -526,7 +526,7 @@ margin_top = 316.0
 margin_right = 994.4
 margin_bottom = 604.0
 rect_min_size = Vector2( 512.4, 288 )
-Chart_Style/function_colors = PoolColorArray( 0.027451, 0.752941, 0.0392157, 1, 0.870588, 0.145098, 0.145098, 1, 0.109804, 0.305882, 0.827451, 1, 0, 0, 0, 1 )
+Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
 Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )

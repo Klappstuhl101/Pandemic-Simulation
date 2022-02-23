@@ -3,6 +3,7 @@ extends Object
 class_name Country
 
 var name
+var realPopulation
 var populationBase
 
 var population
@@ -93,14 +94,25 @@ func _init(initStates, initName, initButton):
 	for _i in range(CONSTANTS.TRYOUT_DAYS):
 		beds.append(hospitalBeds)
 	
+	S = [0,0]
+	I = [0,0,0,0]
+	R = [0,0,0]
+	D = [0,0,0]
+	V1 = [0,0,0,0,0]
+	V2 = [0,0,0,0,0]
+	
+	getNumbers()
+	
 	rnd.randomize()
 	
 	
 	
 func recalculatePopulation():
 	self.population = 0
+	self.realPopulation = 0
 	for state in states.values():
 		self.population += state.getPopulation()
+		self.realPopulation += state.getRealPopulation()
 
 func recalculateStatePopulation():
 	for state in states.values():
@@ -402,3 +414,6 @@ func getNumbers():
 		var stateV1 = [CONSTANTS.sum(state.V1[0]) + state.V1eligible[0], CONSTANTS.sum(state.V1[1]) + state.V1eligible[1], CONSTANTS.sum(state.V1[2]) + state.V1eligible[2], CONSTANTS.sum(state.V1[3]) + state.V1eligible[3], CONSTANTS.sum(state.V1[4]) + state.V1eligible[4]]
 		V1 = CONSTANTS.add_arrays(V1, stateV1)
 		V2 = CONSTANTS.add_arrays(V2, state.V2)
+
+func getPopulation():
+	return self.population

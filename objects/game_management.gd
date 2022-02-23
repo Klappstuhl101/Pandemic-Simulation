@@ -57,6 +57,12 @@ func showStats():
 	else:
 		var showInterval = getOutputInterval()
 		statOutput[CONSTANTS.OVERVIEW].plot_from_array(getOutputOverview(showInterval))
+		statOutput[CONSTANTS.OVERVIEW].redraw()
+		
+		var incidence = String(getOutputIncidence())
+		statOutput[CONSTANTS.INCIDENCE].text = incidence
+		var rValue = String(getOutputR())
+		statOutput[CONSTANTS.RVALUE].text = rValue
 #		pass
 #	HIERHER DIE GANZEN SHADER EINSTELLUNGEN UND ÜBERGABE
 #	active.mapButton.material.set_shader_param("vaccinated", counter)
@@ -70,23 +76,6 @@ func getMode():
 
 func getOutputArray():
 	pass
-
-func getOutputOverview(dayArray):
-	var output = [dayArray]
-	var sus = [CONSTANTS.SUSCEPTIBLE]
-	var inf = [CONSTANTS.INFECTED]
-	var rec = [CONSTANTS.RECOVERED]
-	var dead = [CONSTANTS.DEAD]
-	for i in range(1, dayArray.size()):
-		sus.append(active.suscept[dayArray[i]])
-		inf.append(active.infect[dayArray[i]])
-		rec.append(active.recov[dayArray[i]])
-		dead.append(active.dead[dayArray[i]])
-	output.append(sus)
-	output.append(inf)
-	output.append(rec)
-	output.append(dead)
-	return output
 
 func getOutputInterval():
 	var dayArray = [CONSTANTS.DAYS]
@@ -121,6 +110,59 @@ func getOutputInterval():
 			return dayArray
 			
 	return dayArray
+
+func getOutputOverview(dayArray):
+	var output = [dayArray]
+	var sus = [CONSTANTS.SUSCEPTIBLE]
+	var inf = [CONSTANTS.INFECTED]
+	var rec = [CONSTANTS.RECOVERED]
+	var dead = [CONSTANTS.DEAD]
+	for i in range(1, dayArray.size()):
+		sus.append(active.suscept[dayArray[i]])
+		inf.append(active.infect[dayArray[i]])
+		rec.append(active.recov[dayArray[i]])
+		dead.append(active.dead[dayArray[i]])
+	output.append(sus)
+	output.append(inf)
+	output.append(rec)
+	output.append(dead)
+	return output
+
+func getOutputIncidence():
+	var newCases = 0
+	if godmode:
+		for i in range(self.interval):
+			var index = self.days[days.size() - 1] - self.interval + i 
+			if index < 2:
+				continue
+			newCases += (active.infect[index] - active.infect[index - 1])
+	else:
+		for i in range(self.interval):
+			var index = self.days[days.size() - 1] - self.interval + i 
+			if index < 2:
+				continue
+			newCases += (active.inf1[index] - active.inf1[index - 1]) + (active.hosp[index] - active.hosp[index - 1]) + (active.vax1hosp[index] - active.vax1hosp[index - 1]) + (active.vax2hosp[index] - active.vax2hosp[index - 1])
+	
+	return int((float(newCases)/float(active.getPopulation())) * 100000)
+
+func getOutputR():
+	var casesGen1:float = 0
+	var casesGen2:float = 0
+	if godmode:
+		pass
+	else:
+		for i in range(CONSTANTS.WEEK):
+			var indexGen1 = self.days[days.size() - 1] - CONSTANTS.WEEK + i
+			var indexGen2 = indexGen1 - CONSTANTS.WEEK
+			if indexGen1 > 2:
+				casesGen1 += (active.inf1[indexGen1] - active.inf1[indexGen1 - 1]) + (active.hosp[indexGen1] - active.hosp[indexGen1 - 1]) + (active.vax1hosp[indexGen1] - active.vax1hosp[indexGen1 - 1]) + (active.vax2hosp[indexGen1] - active.vax2hosp[indexGen1 - 1])
+			if indexGen2 > 2:
+				casesGen2 += (active.inf1[indexGen2] - active.inf1[indexGen2 - 1]) + (active.hosp[indexGen2] - active.hosp[indexGen2 - 1]) + (active.vax1hosp[indexGen2] - active.vax1hosp[indexGen2 - 1]) + (active.vax2hosp[indexGen2] - active.vax2hosp[indexGen2 - 1])
+	
+	if casesGen2 == 0:
+		return 0
+	else:
+		return casesGen1/casesGen2
 
 func simulate():
 	entities[CONSTANTS.DEU].simulateALL()

@@ -4,6 +4,7 @@ extends Object
 class_name State
 
 var name
+var realPopulation
 var populationBase
 var neighbors
 var visitors
@@ -91,15 +92,15 @@ var vax2hosp = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.HOSPITALISED]	# 2x gei
 var vax2rec = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.RECOVERED]		# 2x geimpft genesen
 var vax2dead = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.DEAD]			# 2x geimpft tot
 
-var hosp = [CONSTANTS.HOSPITALISED]		# ungeimpfte Hospitalisierte
+var hosp = [CONSTANTS.HOSPITALISED]										# ungeimpfte Hospitalisierte
 
 var timeDifference
-var timeDifferenceV1
 
 var rnd = RandomNumberGenerator.new()
 
-func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
+func _init(initName, initRealPopulation, initPopulation, initButton, initNeighbors, initCommuter):
 	self.name = initName
+	self.realPopulation = initRealPopulation
 	self.populationBase = initPopulation
 	self.mapButton = initButton
 	self.neighbors = initNeighbors
@@ -189,7 +190,38 @@ func _init(initName, initPopulation, initButton, initNeighbors, initCommuter):
 	
 	
 	timeDifference = 0
-	timeDifferenceV1 = 0
+	
+	suscept.append(S[0] + S[1])
+	infect.append(I[0] + I[1] + I[2])
+	recov.append(R[0] + R[1] + R[2])
+	dead.append(D[0] + D[1] + D[2])
+	
+	sus0.append(S[0])
+	sus1.append(S[1])
+#	sus2.append(S[2])
+	inf0.append(I[0])
+	inf1.append(I[1])
+	inf2.append(I[2])
+	rec0.append(R[0])
+	rec1.append(R[1])
+	rec2.append(R[2])
+	dead0.append(D[0])
+	dead1.append(D[1])
+	dead2.append(D[2])
+	
+	vax1sus.append(CONSTANTS.sum(V1[0]) + V1eligible[0])
+	vax1inf.append(CONSTANTS.sum(V1[1]) + V1eligible[1])
+	vax1hosp.append(CONSTANTS.sum(V1[2]) + V1eligible[2])
+	vax1rec.append(CONSTANTS.sum(V1[3]) + V1eligible[3])
+	vax1dead.append(CONSTANTS.sum(V1[4]) + V1eligible[4])
+	
+	vax2sus.append(V2[0])
+	vax2inf.append(V2[1])
+	vax2hosp.append(V2[2])
+	vax2rec.append(V2[3])
+	vax2dead.append(V2[4])
+	
+	hosp.append(I[3])
 	
 	rnd.randomize()
 
@@ -198,6 +230,9 @@ func getName():
 
 func occupiedBeds():
 	return I[3] + CONSTANTS.sum(V1[2]) + V1eligible[2] + V2[2]
+
+func getRealPopulation():
+	return self.realPopulation
 
 func getPopulation():
 	calculateLivingPopulation()

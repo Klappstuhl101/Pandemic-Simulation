@@ -32,7 +32,11 @@ func _draw():
 func draw_lines():
 	var _function = 0
 	for PointContainer in Points.get_children(): #Each function is stored in a different PointContainer
+		if _function >= point_positions.size():
+				break
 		for function_point in range(1, PointContainer.get_children().size()): 
+			if _function >= point_positions.size() or function_point >= point_positions[_function].size():
+				break
 			draw_line(
 					point_positions[_function][function_point - 1],
 					point_positions[_function][function_point],

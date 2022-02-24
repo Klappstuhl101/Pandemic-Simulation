@@ -71,7 +71,7 @@ var informationLoss
 
 var sus0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]	# ungetestet ansteckbar
 var sus1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]		# getestet ansteckbar
-var sus2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]	# unbewusst ansteckbar (WIRD GESTRICHEN, NICHT MÖGLICH)
+#var sus2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]	# unbewusst ansteckbar (WIRD GESTRICHEN, NICHT MÖGLICH)
 var inf0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]		# ungetestet infiziert
 var inf1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]		# getestet infiziert
 var inf2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.INFECTED]		# unbewusst infiziert
@@ -128,7 +128,7 @@ func _init(initName, initRealPopulation, initPopulation, initButton, initNeighbo
 	
 	
 	# für Test und Hospitalisierung
-	self.S = [self.population - self.I[0],0]
+	self.S = [self.populationBase - self.I[0],0]
 	self.R = [0,0,0]
 	self.D = [0,0,0]
 	informationLoss = 0.02
@@ -246,6 +246,15 @@ func getDeaths():
 	calculateDeaths()
 	return self.deaths
 
+func getUnvaxedSum():
+	return CONSTANTS.sum(S) + CONSTANTS.sum(I) + CONSTANTS.sum(R)
+
+func getV1Sum():
+	return CONSTANTS.sum(V1[0]) + CONSTANTS.sum(V1[1]) + CONSTANTS.sum(V1[2]) + CONSTANTS.sum(V1[3]) + V1eligible[0] + V1eligible[1] + V1eligible[2] + V1eligible[3]
+
+func getV2Sum():
+	return V2[0] + V2[1] + V2[2] + V2[3]
+
 func calculateDeaths():
 	self.deaths = CONSTANTS.sum(D) + CONSTANTS.sum(V1[4]) + V1eligible[4] + V2[4]
 
@@ -297,10 +306,10 @@ func simulate():
 	
 	
 #	suscept.append(S[0] + S[1] + S[2])
-	suscept.append(S[0] + S[1])
-	infect.append(I[0] + I[1] + I[2])
-	recov.append(R[0] + R[1] + R[2])
-	dead.append(D[0] + D[1] + D[2])
+	suscept.append(S[0] + S[1] + CONSTANTS.sum(V1[0]) + V1eligible[0] + V2[0])
+	infect.append(I[0] + I[1] + I[2] + CONSTANTS.sum(V1[1]) + CONSTANTS.sum(V1[2]) + V1eligible[1] + V1eligible[2] + V2[1] + V2[2])
+	recov.append(R[0] + R[1] + R[2] + CONSTANTS.sum(V1[3]) + V1eligible[3] + V2[3])
+	dead.append(D[0] + D[1] + D[2] + CONSTANTS.sum(V1[4]) + V1eligible[4] + V2[4])
 	
 	sus0.append(S[0])
 	sus1.append(S[1])
@@ -714,16 +723,25 @@ func updatePersonNumbers(rule):
 			V1[3][waitDay] += 1
 			self.avlbVax -= 1
 		
+		146:
+			R[2] -= 1
+			V1[3][waitDay] += 1
+			self.avlbVax -= 1
 		# ZWEITE IMPFUNG
 		# Impfung nur für gesunde und genesene, während Infektion keine Impfung
-		146:
+		147:
 			V1eligible[0] -= 1
 			V2[0] += 1
 			self.avlbVax -= 1
 		
-		147:
+		148:
 			V1eligible[2] -= 1
 			V2[2] += 1
+			self.avlbVax -= 1
+		
+		149:
+			V1eligible[3] -= 1
+			V2[3] += 1
 			self.avlbVax -= 1
 		
 
@@ -936,13 +954,15 @@ func updateReactionRates():
 	rates.append(vacRate1*avlbVax*S[0])
 	rates.append(vacRate1*avlbVax*S[1])
 	
-	# 144 145 von R zu V1
+	# 144 145 146 von R zu V1
 	rates.append(vacRate1*avlbVax*R[0])
 	rates.append(vacRate1*avlbVax*R[1])
+	rates.append(vacRate1*avlbVax*R[2])
 
-	# 146 147 von V1eligible zu V2 (nur noch nicht Angesteckte und Genesene bekommen zweite Impfung)
+	# 147 148 149 von V1eligible zu V2 (nur noch nicht Angesteckte und Genesene bekommen zweite Impfung)
 	rates.append(vacRate2*avlbVax*V1eligible[0])
 	rates.append(vacRate2*avlbVax*V1eligible[2])
+	rates.append(vacRate2*avlbVax*V1eligible[3])
 	
 	return rates
 	

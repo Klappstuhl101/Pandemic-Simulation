@@ -4,16 +4,18 @@ class_name CONSTANTS
 
 const BL = " "
 
+const TIMER = "Timer"
+
 const PROGRESSBAR = "Progressbar"
 const PROGRESSPANEL = "ProgressPanel"
 
 const ACTIONCONTAINER = "ActionContainer"
 
-const COUNTRYNAME = "COUNTRYNAME"
+const COUNTRYNAME = "Countryname"
 const STATCONTAINER = "StatContainer"
 const OVERVIEW = "Overview"
-const VAXSTATUS = "VaxStatus"
-const NEWINFECTIONS = "NewInfections"
+const VAXSTATUS = "Impfstatus"
+const NEWINFECTIONS = "Neuinfektionen"
 
 const PIE = "Pie"
 const LINE = "Line"
@@ -63,7 +65,7 @@ const PLAYBUTTON = "PlayButton"
 const PLAYX2BUTTON = "PlayX2Button"
 
 const TRYOUT_DAYS = 100
-const DAYS = "Day"
+const DAYS = "Tag"
 
 const SUSCEPTIBLE = "Gesund"
 const INFECTED = "Infiziert"
@@ -75,6 +77,7 @@ const TESTED = "Getestet"
 const NTESTED = "Nicht Getestet"
 const UNAWARE = "Unbewusst"
 
+const UNVAXED = "Ungeimpft"
 const VAX1 = "1x Geimpft"
 const VAX2 = "2x Geimpft"
 

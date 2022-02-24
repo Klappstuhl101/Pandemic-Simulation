@@ -85,8 +85,10 @@ func _init(initStates, initName, initButton):
 	
 	recalculateHospitalBeds()
 	
+	# ZURÜCKSETZEN BEVOR ABSCHLUSS
 	self.avlbVax = 0
-	setVaxProduction(0)
+#	setVaxProduction(0)
+	setVaxProduction(20)
 	
 	
 	# Hospital Bed array zum Anzeigen
@@ -417,3 +419,12 @@ func getNumbers():
 
 func getPopulation():
 	return self.population
+
+func getUnvaxedSum():
+	return CONSTANTS.sum(S) + CONSTANTS.sum(I) + CONSTANTS.sum(R)
+
+func getV1Sum():
+	return V1[0] + V1[1] + V1[2] + V1[3]
+
+func getV2Sum():
+	return V2[0] + V2[1] + V2[2] + V2[3]

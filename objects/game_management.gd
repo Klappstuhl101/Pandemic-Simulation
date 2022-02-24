@@ -46,30 +46,43 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	
 	self.active = entities.get(CONSTANTS.DEU)
 	
+	statOutput[CONSTANTS.STATCONTAINER].visible = false
+	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
+	
 
 func update():
 #	HIER DIE UPDATES FÜR STATS ETC. AUCH SHADER
 	pass
 
 func showStats():
-	if godmode:
-		pass
-	else:
-		var showInterval = getOutputInterval()
-		statOutput[CONSTANTS.OVERVIEW].plot_from_array(getOutputOverview(showInterval))
-		statOutput[CONSTANTS.OVERVIEW].redraw()
+	if statOutput[CONSTANTS.TIMER].is_stopped():
+		statOutput[CONSTANTS.TIMER].start()
 		
-		var incidence = String(getOutputIncidence())
-		statOutput[CONSTANTS.INCIDENCE].text = incidence
-		var rValue = String(getOutputR())
-		statOutput[CONSTANTS.RVALUE].text = rValue
-#		pass
-#	HIERHER DIE GANZEN SHADER EINSTELLUNGEN UND ÜBERGABE
-#	active.mapButton.material.set_shader_param("vaccinated", counter)
-#	active.mapButton.material.set_shader_param("infected", counter)
-#	var color = active.mapButton.material.get_shader_param("infectGradient").get_gradient().interpolate(counter)
-#	active.mapButton.material.get_shader_param("twoColorGradient").get_gradient().set_color(0,color)
-	statOutput[CONSTANTS.COUNTRYNAME].text = active.name
+	if self.days.size() > 3:
+		
+		if godmode:
+			pass
+		else:
+			var showInterval = getOutputInterval()
+			statOutput[CONSTANTS.OVERVIEW].plot_from_array(getOutputOverview(showInterval))
+#			statOutput[CONSTANTS.OVERVIEW].redraw()
+			
+			var incidence = String(getOutputIncidence())
+			statOutput[CONSTANTS.INCIDENCE].text = incidence
+			var rValue = String(getOutputR())
+			statOutput[CONSTANTS.RVALUE].text = rValue
+			
+			statOutput[CONSTANTS.VAXSTATUS].plot_from_array(getOutputVaccinations())
+	#		pass
+	#	HIERHER DIE GANZEN SHADER EINSTELLUNGEN UND ÜBERGABE
+	#	active.mapButton.material.set_shader_param("vaccinated", counter)
+	#	active.mapButton.material.set_shader_param("infected", counter)
+	#	var color = active.mapButton.material.get_shader_param("infectGradient").get_gradient().interpolate(counter)
+	#	active.mapButton.material.get_shader_param("twoColorGradient").get_gradient().set_color(0,color)
+		statOutput[CONSTANTS.COUNTRYNAME].text = active.name
+		
+		actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
+		statOutput[CONSTANTS.STATCONTAINER].visible = true
 
 func getMode():
 	return self.mode
@@ -86,27 +99,28 @@ func getOutputInterval():
 	match self.interval:
 		CONSTANTS.WEEK:
 			for i in range(CONSTANTS.WEEK):
-				if (days.size() - 1 - CONSTANTS.WEEK + i) < 0:
+				if (days.size() - 1 - CONSTANTS.WEEK + i) <= 0:
 					continue
 				else:
 					dayArray.append(days[days.size() - 1 - CONSTANTS.WEEK + i])
 		
 		CONSTANTS.MONTH:
 			for i in range(CONSTANTS.MONTH / 3):
-				if (days.size() - 1 - CONSTANTS.MONTH + (i*3)) < 0:
+				if (days.size() - 1 - CONSTANTS.MONTH + (i*3)) <= 0:
 					continue
 				else:
 					dayArray.append(days[days.size() - 1 - CONSTANTS.MONTH + (i*3)])
 		
 		CONSTANTS.YEAR:
 			for i in range(CONSTANTS.YEAR / 12):
-				if (days.size() - 1 - CONSTANTS.YEAR + (i*12)) < 0:
+				if (days.size() - 1 - CONSTANTS.YEAR + (i*12)) <= 0:
 					continue
 				else:
 					dayArray.append(days[days.size() - 1 - CONSTANTS.YEAR + (i*12)])
 		
 		CONSTANTS.MAX:
 			dayArray.append_array(self.days)
+			dayArray.remove(1)
 			return dayArray
 			
 	return dayArray
@@ -131,17 +145,29 @@ func getOutputOverview(dayArray):
 func getOutputIncidence():
 	var newCases = 0
 	if godmode:
-		for i in range(self.interval):
-			var index = self.days[days.size() - 1] - self.interval + i 
+		for i in range(CONSTANTS.WEEK):
+			var index = self.days[days.size() - 1] - CONSTANTS.WEEK + i 
 			if index < 2:
 				continue
 			newCases += (active.infect[index] - active.infect[index - 1])
+			
+#		for i in range(self.interval):
+#			var index = self.days[days.size() - 1] - self.interval + i 
+#			if index < 2:
+#				continue
+#			newCases += (active.infect[index] - active.infect[index - 1])
 	else:
-		for i in range(self.interval):
-			var index = self.days[days.size() - 1] - self.interval + i 
+		for i in range(CONSTANTS.WEEK):
+			var index = self.days[days.size() - 1] - CONSTANTS.WEEK + i 
 			if index < 2:
 				continue
 			newCases += (active.inf1[index] - active.inf1[index - 1]) + (active.hosp[index] - active.hosp[index - 1]) + (active.vax1hosp[index] - active.vax1hosp[index - 1]) + (active.vax2hosp[index] - active.vax2hosp[index - 1])
+	
+#		for i in range(self.interval):
+#			var index = self.days[days.size() - 1] - self.interval + i 
+#			if index < 2:
+#				continue
+#			newCases += (active.inf1[index] - active.inf1[index - 1]) + (active.hosp[index] - active.hosp[index - 1]) + (active.vax1hosp[index] - active.vax1hosp[index - 1]) + (active.vax2hosp[index] - active.vax2hosp[index - 1])
 	
 	return int((float(newCases)/float(active.getPopulation())) * 100000)
 
@@ -162,7 +188,15 @@ func getOutputR():
 	if casesGen2 == 0:
 		return 0
 	else:
-		return casesGen1/casesGen2
+		return stepify(casesGen1/casesGen2, 0.01)
+
+func getOutputVaccinations():
+	var sumUnvax = active.getUnvaxedSum()
+	var sumV1 = active.getV1Sum()
+	var sumV2 = active.getV2Sum()
+#	var sumV1 = CONSTANTS.sum(active.vax1sus) + CONSTANTS.sum(active.vax1inf) + CONSTANTS.sum(active.vax1hosp) + CONSTANTS.sum(active.vax1rec)
+#	var sumV2 = CONSTANTS.sum(active.vax2sus) + CONSTANTS.sum(active.vax2inf) + CONSTANTS.sum(active.vax2hosp) + CONSTANTS.sum(active.vax2rec)
+	return [[CONSTANTS.VAXSTATUS, "Anzahl Personen"], [CONSTANTS.UNVAXED, sumUnvax], [CONSTANTS.VAX1, sumV1], [CONSTANTS.VAX2, sumV2]]
 
 func simulate():
 	entities[CONSTANTS.DEU].simulateALL()
@@ -369,9 +403,16 @@ func _on_maxButton_press():
 	self.interval = CONSTANTS.MAX
 	showStats()
 
-
+func _on_Time_timeout():
+	print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes // ", OS.get_ticks_msec())
+	showStats()
+	statOutput[CONSTANTS.TIMER].stop()
 
 func connectButtons():
+	statOutput[CONSTANTS.TIMER].set_wait_time(0.5)
+	statOutput[CONSTANTS.TIMER].connect("timeout", self, "_on_Time_timeout")
+	statOutput[CONSTANTS.TIMER].start()
+	
 	buttons[CONSTANTS.STATBUTTON].connect("pressed", self, "_on_statButton_press")
 	buttons[CONSTANTS.ACTIONBUTTON].connect("pressed", self, "_on_actionButton_press")
 	
@@ -403,4 +444,3 @@ func connectButtons():
 	entities[CONSTANTS.THU].mapButton.connect("toggled", self, "_on_THU_press")
 	entities[CONSTANTS.DEU].mapButton.connect("toggled", self, "_on_DEU_press")
 	
-

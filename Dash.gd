@@ -9,7 +9,7 @@ var lineChart4
 var lineChart5
 var lineChart6
 
-var timer
+#var timer
 
 var pause
 var play
@@ -52,11 +52,14 @@ var statOutput = {}
 var actionOutput = {}
 var buttons = {}
 
+var showStatsSafe	:bool
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
 	remainingDays = -1
 	
+	self.showStatsSafe = false
 	
 #	Statistics shown
 #	label = get_node("CountryName")
@@ -75,7 +78,7 @@ func _ready():
 	
 	
 	
-	timer = get_node("Time")
+#	timer = get_node("Time")
 	
 	menu = get_node("Menu")
 	
@@ -90,8 +93,12 @@ func _ready():
 	
 	menu.connect("pressed", self, "_on_menu_pressed")
 	
-	timer.set_wait_time(0.1)
-	timer.connect("timeout", self, "_on_Time_timeout")
+#	timer.set_wait_time(0.5)
+#	timer.connect("timeout", self, "_on_Time_timeout")
+#	timer.start()
+	
+	statOutput[CONSTANTS.TIMER] = get_node("Time")
+	
 	
 	statOutput[CONSTANTS.STATCONTAINER] = get_node("Statistics")
 	statOutput[CONSTANTS.COUNTRYNAME] = get_node("CountryName")
@@ -223,19 +230,21 @@ func _process(_delta):
 	else:
 		statOutput[CONSTANTS.PROGRESSPANEL].visible = false
 	
-	if remainingDays == 0:
-#		game_manager.testStats()
-		game_manager.showStats()
-		remainingDays -= 1
-		
-		match game_manager.getMode():
-			CONSTANTS.STATMODE:
-				statOutput[CONSTANTS.STATCONTAINER].visible = false
-				statOutput[CONSTANTS.STATCONTAINER].visible = true
-			CONSTANTS.ACTIONMODE:
-				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
-				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
+#	if game_manager.days.size() > 3:
+#		game_manager.showStats()
 	
+#	if remainingDays == 0:
+##		game_manager.testStats()
+#		game_manager.showStats()
+#		remainingDays -= 1
+#
+#		match game_manager.getMode():
+#			CONSTANTS.STATMODE:
+#				statOutput[CONSTANTS.STATCONTAINER].visible = false
+#				statOutput[CONSTANTS.STATCONTAINER].visible = true
+#			CONSTANTS.ACTIONMODE:
+#				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
+#				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
 
 #func updateDay():
 #	get_node("CurrentDay").text = "Day " + String(game_manager.currentDay)
@@ -253,19 +262,14 @@ func _on_Play_pressed():
 	pass
 
 func _on_PlaySpeedx2_pressed():
-	remainingDays = CONSTANTS.WEEK * 2 + 1
+	remainingDays = CONSTANTS.WEEK * 20 + 1
 	statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 	pass
 
 func _on_menu_pressed():
 	get_tree().quit()
 
-func _on_Time_timeout():
-	tenthsec += 1
-	if tenthsec == 10:
-		sec +=1
-		tenthsec = 0
-	
-	if sec == 60:
-		sec = 0
-		minute += 1
+#func _on_Time_timeout():
+#	print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes")
+#	game_manager.showStats()
+#	timer.stop()

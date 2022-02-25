@@ -11,9 +11,12 @@ const PROGRESSPANEL = "ProgressPanel"
 
 const ACTIONCONTAINER = "ActionContainer"
 
+const LEGEND = "Legend"
+
 const COUNTRYNAME = "Countryname"
 const STATCONTAINER = "StatContainer"
 const OVERVIEW = "Overview"
+const OVERVIEWLEGEND = "OverviewLegend"
 const VAXSTATUS = "Impfstatus"
 const NEWINFECTIONS = "Neuinfektionen"
 

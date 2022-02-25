@@ -11,6 +11,8 @@ var lineChart6
 
 #var timer
 
+var paused	:bool = false
+
 var pause
 var play
 var playspeedx2
@@ -103,6 +105,7 @@ func _ready():
 	statOutput[CONSTANTS.STATCONTAINER] = get_node("Statistics")
 	statOutput[CONSTANTS.COUNTRYNAME] = get_node("CountryName")
 	statOutput[CONSTANTS.OVERVIEW] = get_node("Statistics/GridContainer/Overview")
+	statOutput[CONSTANTS.OVERVIEWLEGEND] = get_node("Statistics/GridContainer/Indicators/OverviewLegend")
 	statOutput[CONSTANTS.VAXSTATUS] = get_node("Statistics/GridContainer/VaxStatus")
 	statOutput[CONSTANTS.NEWINFECTIONS] = get_node("Statistics/GridContainer/NewInfections")
 	
@@ -220,15 +223,16 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	updateProgress()
-#	game_manager.showStats()
-	if remainingDays > 0:
-		statOutput[CONSTANTS.PROGRESSPANEL].visible = true
-		game_manager.simulate()
-		game_manager.showStats()
-		remainingDays -= 1
-	else:
-		statOutput[CONSTANTS.PROGRESSPANEL].visible = false
+	if !paused:
+		updateProgress()
+	#	game_manager.showStats()
+		if remainingDays > 0:
+			statOutput[CONSTANTS.PROGRESSPANEL].visible = true
+			game_manager.simulate()
+			game_manager.showStats()
+			remainingDays -= 1
+		else:
+			statOutput[CONSTANTS.PROGRESSPANEL].visible = false
 	
 #	if game_manager.days.size() > 3:
 #		game_manager.showStats()
@@ -254,17 +258,22 @@ func updateProgress():
 	pass
 
 func _on_Pause_pressed():
-	remainingDays = 0
+	paused = true
+#	remainingDays = 0
 
 func _on_Play_pressed():
-	remainingDays = CONSTANTS.WEEK + 1
-	statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
-	pass
+	if paused:
+		paused = false
+	else:
+		remainingDays = CONSTANTS.WEEK + 1
+		statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 
 func _on_PlaySpeedx2_pressed():
-	remainingDays = CONSTANTS.WEEK * 20 + 1
-	statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
-	pass
+	if paused:
+		paused = false
+	else:
+		remainingDays = CONSTANTS.WEEK * 20 + 1
+		statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 
 func _on_menu_pressed():
 	get_tree().quit()

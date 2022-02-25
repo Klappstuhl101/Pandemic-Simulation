@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://resources/control_buttons/Pause-thin-rounded-button-white.png" type="Texture" id=1]
 [ext_resource path="res://resources/control_buttons/Play-rounded-button-outline-white.png" type="Texture" id=2]
@@ -37,6 +37,7 @@
 [ext_resource path="res://resources/map/Schleswig-Holstein.png" type="Texture" id=35]
 [ext_resource path="res://resources/map/Sachsen-Anhalt.png" type="Texture" id=36]
 [ext_resource path="res://resources/map/SchlHol_pressed.png" type="Texture" id=37]
+[ext_resource path="res://addons/easy_charts/Utilities/Legend/function_legend.tscn" type="PackedScene" id=38]
 [ext_resource path="res://resources/map/Deutschland.png" type="Texture" id=40]
 [ext_resource path="res://resources/map/Deutschland_pressed.png" type="Texture" id=41]
 [ext_resource path="res://resources/shader/NIE.tres" type="Material" id=42]
@@ -69,21 +70,7 @@ margin_top = 830.0
 margin_right = 503.0
 margin_bottom = 898.0
 theme = ExtResource( 44 )
-text = "Days"
-align = 1
-valign = 1
-uppercase = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CountryName" type="Label" parent="."]
-margin_left = 600.0
-margin_top = 5.0
-margin_right = 725.0
-margin_bottom = 105.0
-rect_min_size = Vector2( 125, 100 )
-text = "Countryname"
+text = "Tag 0"
 align = 1
 valign = 1
 uppercase = true
@@ -300,6 +287,20 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="CountryName" type="Label" parent="."]
+margin_left = 497.0
+margin_top = 5.0
+margin_right = 725.0
+margin_bottom = 105.0
+rect_min_size = Vector2( 125, 100 )
+text = "Countryname"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="TimeControls" type="GridContainer" parent="."]
 margin_top = 830.0
 margin_right = 200.0
@@ -420,21 +421,21 @@ columns = 4
 margin_right = 125.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 125, 20 )
-text = "1 Week"
+text = "1 Woche"
 
 [node name="Month" type="Button" parent="Statistics/GridContainer/Interval"]
 margin_left = 129.0
 margin_right = 254.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 125, 20 )
-text = "1 Month"
+text = "1 Monat"
 
 [node name="Year" type="Button" parent="Statistics/GridContainer/Interval"]
 margin_left = 258.0
 margin_right = 383.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 125, 20 )
-text = "1 Year"
+text = "1 Jahr"
 
 [node name="Max" type="Button" parent="Statistics/GridContainer/Interval"]
 margin_left = 387.0
@@ -448,28 +449,34 @@ margin_top = 24.0
 margin_right = 478.0
 margin_bottom = 312.0
 rect_min_size = Vector2( 475.6, 288 )
-columns = 2
+columns = 3
 
 [node name="IncidenceNr" type="Label" parent="Statistics/GridContainer/Indicators"]
-margin_right = 237.0
+margin_right = 150.0
 margin_bottom = 192.0
-rect_min_size = Vector2( 237, 192 )
+rect_min_size = Vector2( 150, 192 )
 text = "1111111111111"
 align = 1
 valign = 1
 
 [node name="RNr" type="Label" parent="Statistics/GridContainer/Indicators"]
-margin_left = 241.0
-margin_right = 478.0
+margin_left = 159.0
+margin_right = 309.0
 margin_bottom = 192.0
-rect_min_size = Vector2( 237, 192 )
+rect_min_size = Vector2( 150, 192 )
 text = "1111111111111"
 align = 1
 valign = 1
 
+[node name="OverviewLegend" parent="Statistics/GridContainer/Indicators" instance=ExtResource( 38 )]
+margin_left = 328.0
+margin_right = 478.0
+margin_bottom = 192.0
+rect_min_size = Vector2( 150, 192 )
+
 [node name="IncidenceText" type="Label" parent="Statistics/GridContainer/Indicators"]
 margin_top = 196.0
-margin_right = 237.0
+margin_right = 155.0
 margin_bottom = 227.0
 text = "7-Tage Inzidenz
 pro 100.000 Einwohnern"
@@ -477,9 +484,9 @@ align = 1
 valign = 1
 
 [node name="RText" type="Label" parent="Statistics/GridContainer/Indicators"]
-margin_left = 241.0
+margin_left = 159.0
 margin_top = 196.0
-margin_right = 478.0
+margin_right = 324.0
 margin_bottom = 227.0
 text = "7 Tage Reproduktionswert
 "
@@ -494,13 +501,12 @@ margin_top = 24.0
 margin_right = 994.4
 margin_bottom = 312.0
 rect_min_size = Vector2( 512.4, 288 )
-source = "res://addons/easy_charts/file.samples/linechart (rows).csv"
-delimiter = ","
-Chart_Style/function_colors = PoolColorArray( 0.105882, 0.827451, 0.0235294, 1, 0.94902, 0.0509804, 0.0509804, 1, 0.0392157, 0.290196, 0.611765, 1, 1, 1, 1, 1 )
+Chart_Style/function_colors = PoolColorArray( 0.356863, 0.929412, 0.0313726, 1, 1, 0, 0, 1, 0.0235294, 0.164706, 0.937255, 1, 1, 1, 1, 1 )
 Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/font_color = Color( 1, 1, 1, 1 )
+Chart_Style/use_template = false
 
 [node name="VaxStatus" parent="Statistics/GridContainer" instance=ExtResource( 43 )]
 anchor_right = 0.0
@@ -510,7 +516,6 @@ margin_right = 478.0
 margin_bottom = 604.0
 rect_min_size = Vector2( 475.6, 288 )
 Chart_Style/function_colors = PoolColorArray( 0.572549, 0.00392157, 0.00392157, 1, 0, 0.352941, 0.0235294, 1, 0.0784314, 0.803922, 0.0156863, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="NewInfections" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
@@ -521,10 +526,6 @@ margin_right = 994.4
 margin_bottom = 604.0
 rect_min_size = Vector2( 512.4, 288 )
 Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="HospBeds" type="Label" parent="Statistics/GridContainer"]
 margin_top = 608.0

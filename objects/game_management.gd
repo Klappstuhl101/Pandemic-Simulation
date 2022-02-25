@@ -31,7 +31,7 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	self.actionOutput = initActionOutput
 #	self.statButtons = initStatButtons
 	self.buttons = initButtons
-	connectButtons()
+	connectSignals()
 	previous = entities.get(CONSTANTS.DEU)
 	
 	self.godmode = initGodmode
@@ -94,6 +94,7 @@ func getOutputInterval():
 	var dayArray = [CONSTANTS.DAYS]
 	if self.days.size() < CONSTANTS.WEEK:
 		dayArray.append_array(self.days)
+		dayArray.remove(1)
 		return dayArray
 	
 	match self.interval:
@@ -204,8 +205,8 @@ func simulate():
 	updateDay()
 
 func updateDay():
+	statOutput[CONSTANTS.DAYS].text = CONSTANTS.DAYS + CONSTANTS.BL + String(self.currentDay)
 	self.currentDay += 1
-	statOutput[CONSTANTS.DAYS].text = "Day " + String(self.currentDay)
 
 func activate():
 	resetAll(active.name)
@@ -408,10 +409,20 @@ func _on_Time_timeout():
 	showStats()
 	statOutput[CONSTANTS.TIMER].stop()
 
-func connectButtons():
+func _show_overview_legend(chart):
+#	for child in statOutput[CONSTANTS.OVERVIEWLEGEND].get_children():
+#		child.queue_free()
+	for function in chart.get_legend():
+		statOutput[CONSTANTS.OVERVIEWLEGEND].add_child(function)
+	
+
+func connectSignals():
 	statOutput[CONSTANTS.TIMER].set_wait_time(0.5)
 	statOutput[CONSTANTS.TIMER].connect("timeout", self, "_on_Time_timeout")
 	statOutput[CONSTANTS.TIMER].start()
+	
+	statOutput[CONSTANTS.OVERVIEW].connect("chart_plotted", self, "_show_overview_legend")
+	
 	
 	buttons[CONSTANTS.STATBUTTON].connect("pressed", self, "_on_statButton_press")
 	buttons[CONSTANTS.ACTIONBUTTON].connect("pressed", self, "_on_actionButton_press")

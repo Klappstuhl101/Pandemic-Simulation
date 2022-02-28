@@ -33,6 +33,13 @@ Tote komplett aus Bevölkerung streichen
 Weitere Ideen (für die Zukunft):
 "Gottmodus" Idee?
 Budget als Spielmechanismus
+Evaluierung schon im Vortrag erwähnen
+O-Notation für Algorithmus, Gillespie
+Evaluation der process-Funktion
+Abschätzung von Bevölkerungsgröße Skalierung Fehler
+Skalierung Inzidenz für Karte, Grenzen nachziehen
+
+Dead End Ansätze zeigen
 
 
 Statistiken verfügbar im "realen" Modus:

@@ -55,6 +55,7 @@ func update():
 	pass
 
 func showStats():
+	statOutput[CONSTANTS.COUNTRYNAME].text = active.name
 	if statOutput[CONSTANTS.TIMER].is_stopped():
 		statOutput[CONSTANTS.TIMER].start()
 		
@@ -79,7 +80,7 @@ func showStats():
 	#	active.mapButton.material.set_shader_param("infected", counter)
 	#	var color = active.mapButton.material.get_shader_param("infectGradient").get_gradient().interpolate(counter)
 	#	active.mapButton.material.get_shader_param("twoColorGradient").get_gradient().set_color(0,color)
-		statOutput[CONSTANTS.COUNTRYNAME].text = active.name
+		
 		
 		actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
 		statOutput[CONSTANTS.STATCONTAINER].visible = true
@@ -209,124 +210,88 @@ func updateDay():
 	self.currentDay += 1
 
 func activate():
-	resetAll(active.name)
+#	resetAll(active.name)
 	showStats()
 
-func resetAll(exception = ""):
-	for entity in entities.values():
-		if (entity.name != exception):
-			entity.mapButton.pressed = false
+#func resetAll(exception = ""):
+#	for entity in entities.values():
+#		if (entity.name != exception):
+#			entity.mapButton.pressed = false
 			
 func _on_BAW_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.BAW)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.BAW)
+	activate()
 func _on_BAY_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.BAY)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.BAY)
+	activate()
+#	if toggle:
+#		active = entities.get(CONSTANTS.BAY)
+#		activate()
+#	else:
+#		active.mapButton.pressed = true
 func _on_BER_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.BER)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.BER)
+	activate()
 func _on_BRA_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.BRA)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.BRA)
+	activate()
+#	if toggle:
+#		active = entities.get(CONSTANTS.BRA)
+#		activate()
+#	else:
+#		active.mapButton.pressed = true
 func _on_BRE_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.BRE)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.BRE)
+	activate()
 func _on_HAM_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.HAM)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.HAM)
+	activate()
 func _on_HES_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.HES)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.HES)
+	activate()
 func _on_MVP_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.MVP)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.MVP)
+	activate()
 func _on_NIE_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.NIE)
-#		self.material.set_shader_param("testcolor", Color(1.0,0.0,0.0))
-		active.mapButton.material.set_shader_param("vaccinated", counter)
-		active.mapButton.material.set_shader_param("infected", counter)
-		var color = active.mapButton.material.get_shader_param("infectGradient").get_gradient().interpolate(counter)
-		active.mapButton.material.get_shader_param("twoColorGradient").get_gradient().set_color(0,color)
-		print(counter)
-		counter += 0.01
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.NIE)
+	activate()
+#	if toggle:
+#		active = entities.get(CONSTANTS.NIE)
+##		self.material.set_shader_param("testcolor", Color(1.0,0.0,0.0))
+#		active.mapButton.material.set_shader_param("vaccinated", counter)
+#		active.mapButton.material.set_shader_param("infected", counter)
+#		var color = active.mapButton.material.get_shader_param("infectGradient").get_gradient().interpolate(counter)
+#		active.mapButton.material.get_shader_param("twoColorGradient").get_gradient().set_color(0,color)
+#		print(counter)
+#		counter += 0.01
+#		activate()
+#	else:
+#		active.mapButton.pressed = true
 func _on_NRW_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.NRW)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.NRW)
+	activate()
 func _on_RLP_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.RLP)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.RLP)
+	activate()
 func _on_SAA_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.SAA)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.SAA)
+	activate()
 func _on_SCN_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.SCN)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.SCN)
+	activate()
 func _on_SCA_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.SCA)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.SCA)
+	activate()
 func _on_SLH_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.SLH)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.SLH)
+	activate()
 func _on_THU_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.THU)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.THU)
+	activate()
 	
 func _on_DEU_press(toggle):
-	if toggle:
-		active = entities.get(CONSTANTS.DEU)
-		activate()
-	else:
-		active.mapButton.pressed = true
+	active = entities.get(CONSTANTS.DEU)
+	activate()
 		
 func _on_statButton_press():
 	mode = CONSTANTS.STATMODE

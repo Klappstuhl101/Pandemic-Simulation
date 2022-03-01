@@ -18,7 +18,12 @@ const STATCONTAINER = "StatContainer"
 const OVERVIEW = "Overview"
 const OVERVIEWLEGEND = "OverviewLegend"
 const VAXSTATUS = "Impfstatus"
+const VAXSTATUSLEGEND = "VaxStatusLegend"
+const DAILYCHANGES = "DailyChanges"
 const NEWINFECTIONS = "Neuinfektionen"
+
+const FIRSTVAX = "Erstimpfungen"
+const SECONDVAX = "Zweitimpfungen"
 
 const PIE = "Pie"
 const LINE = "Line"

@@ -256,7 +256,11 @@ func calculate_pass():
 		x_pass = (SIZE.x - OFFSET.x*2 - (column_width) * ( y_datas.size())  - column_gap - column_width/2) / ((x_chors.size()-1) if x_chors.size()!=1 else 1)
 	else:
 		x_pass = (SIZE.x - OFFSET.x*2 - (column_width) * ( y_datas[0].size()+1 )  - column_gap - column_width/2) / (x_chors.size()-1)
-	y_pass = (origin.y - ChartName.get_rect().size.y*2) / (y_chors.size() - 1)
+	
+	if y_chors.size() - 1 <= 0:
+		y_pass = 0
+	else:
+		y_pass = (origin.y - ChartName.get_rect().size.y*2) / (y_chors.size() - 1)
 
 func calculate_coordinates():
 	x_coordinates.clear()

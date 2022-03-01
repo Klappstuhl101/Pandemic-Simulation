@@ -10,7 +10,9 @@ var actionOutput
 var statButtons
 var buttons
 
-var paused
+var establishedLegends:bool
+
+var paused:bool
 
 var godmode:bool
 
@@ -44,6 +46,8 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	
 	self.paused = true
 	
+	self.establishedLegends = false
+	
 	self.active = entities.get(CONSTANTS.DEU)
 	
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
@@ -58,7 +62,7 @@ func showStats():
 	statOutput[CONSTANTS.COUNTRYNAME].text = active.name
 	if statOutput[CONSTANTS.TIMER].is_stopped():
 		statOutput[CONSTANTS.TIMER].start()
-		
+	
 	if self.days.size() > 3:
 		
 		if godmode:
@@ -74,6 +78,18 @@ func showStats():
 			statOutput[CONSTANTS.RVALUE].text = rValue
 			
 			statOutput[CONSTANTS.VAXSTATUS].plot_from_array(getOutputVaccinations())
+			
+			statOutput[CONSTANTS.DAILYCHANGES].plot_from_array(getDailyChanges(showInterval))
+			
+		if !establishedLegends:
+			establishedLegends = true
+			establishLegends()
+		
+		if self.days.size() > 30:
+			buttons[CONSTANTS.MONTH].disabled = false
+		
+		if self.days.size() > 360:
+			buttons[CONSTANTS.YEAR].disabled = false
 	#		pass
 	#	HIERHER DIE GANZEN SHADER EINSTELLUNGEN UND ÜBERGABE
 	#	active.mapButton.material.set_shader_param("vaccinated", counter)
@@ -170,8 +186,9 @@ func getOutputIncidence():
 #			if index < 2:
 #				continue
 #			newCases += (active.inf1[index] - active.inf1[index - 1]) + (active.hosp[index] - active.hosp[index - 1]) + (active.vax1hosp[index] - active.vax1hosp[index - 1]) + (active.vax2hosp[index] - active.vax2hosp[index - 1])
-	
-	return int((float(newCases)/float(active.getPopulation())) * 100000)
+	var incidence = int((float(newCases)/float(active.getPopulation())) * 100000)
+#	return int((float(newCases)/float(active.getPopulation())) * 100000)
+	return incidence if incidence > 0 else 0
 
 func getOutputR():
 	var casesGen1:float = 0
@@ -200,6 +217,33 @@ func getOutputVaccinations():
 #	var sumV2 = CONSTANTS.sum(active.vax2sus) + CONSTANTS.sum(active.vax2inf) + CONSTANTS.sum(active.vax2hosp) + CONSTANTS.sum(active.vax2rec)
 	return [[CONSTANTS.VAXSTATUS, "Anzahl Personen"], [CONSTANTS.UNVAXED, sumUnvax], [CONSTANTS.VAX1, sumV1], [CONSTANTS.VAX2, sumV2]]
 
+func getDailyChanges(dayArray):
+	var output = [dayArray]
+	var newInfections = [CONSTANTS.NEWINFECTIONS]
+	var newVaxxed1 = [CONSTANTS.FIRSTVAX]
+	var newVaxxed2 = [CONSTANTS.SECONDVAX]
+	
+	for i in range(1, dayArray.size()):
+		if dayArray[i] > 2:
+			newInfections.append(active.getDailyInfections(dayArray[i]))
+			newVaxxed1.append(active.getDailyV1Difference(dayArray[i]))
+			newVaxxed2.append(active.getDailyV2Difference(dayArray[i]))
+		else:
+			newInfections.append(0)
+			newVaxxed1.append(0)
+			newVaxxed2.append(0)
+			
+	output.append(newInfections)
+	output.append(newVaxxed1)
+	output.append(newVaxxed2)
+	
+	return output
+	
+	var data = [["0","A","B","C"], ["Stimmen",2,3,4], ["Bla",6,7,8], ["Drei", 2, 5, 8]]
+	
+	return output
+
+
 func simulate():
 	entities[CONSTANTS.DEU].simulateALL()
 	days.append(self.currentDay)
@@ -218,44 +262,44 @@ func activate():
 #		if (entity.name != exception):
 #			entity.mapButton.pressed = false
 			
-func _on_BAW_press(toggle):
+func _on_BAW_press(_toggle):
 	active = entities.get(CONSTANTS.BAW)
 	activate()
-func _on_BAY_press(toggle):
+func _on_BAY_press(_toggle):
 	active = entities.get(CONSTANTS.BAY)
 	activate()
-#	if toggle:
+#	if _toggle:
 #		active = entities.get(CONSTANTS.BAY)
 #		activate()
 #	else:
 #		active.mapButton.pressed = true
-func _on_BER_press(toggle):
+func _on_BER_press(_toggle):
 	active = entities.get(CONSTANTS.BER)
 	activate()
-func _on_BRA_press(toggle):
+func _on_BRA_press(_toggle):
 	active = entities.get(CONSTANTS.BRA)
 	activate()
-#	if toggle:
+#	if _toggle:
 #		active = entities.get(CONSTANTS.BRA)
 #		activate()
 #	else:
 #		active.mapButton.pressed = true
-func _on_BRE_press(toggle):
+func _on_BRE_press(_toggle):
 	active = entities.get(CONSTANTS.BRE)
 	activate()
-func _on_HAM_press(toggle):
+func _on_HAM_press(_toggle):
 	active = entities.get(CONSTANTS.HAM)
 	activate()
-func _on_HES_press(toggle):
+func _on_HES_press(_toggle):
 	active = entities.get(CONSTANTS.HES)
 	activate()
-func _on_MVP_press(toggle):
+func _on_MVP_press(_toggle):
 	active = entities.get(CONSTANTS.MVP)
 	activate()
-func _on_NIE_press(toggle):
+func _on_NIE_press(_toggle):
 	active = entities.get(CONSTANTS.NIE)
 	activate()
-#	if toggle:
+#	if _toggle:
 #		active = entities.get(CONSTANTS.NIE)
 ##		self.material.set_shader_param("testcolor", Color(1.0,0.0,0.0))
 #		active.mapButton.material.set_shader_param("vaccinated", counter)
@@ -267,29 +311,29 @@ func _on_NIE_press(toggle):
 #		activate()
 #	else:
 #		active.mapButton.pressed = true
-func _on_NRW_press(toggle):
+func _on_NRW_press(_toggle):
 	active = entities.get(CONSTANTS.NRW)
 	activate()
-func _on_RLP_press(toggle):
+func _on_RLP_press(_toggle):
 	active = entities.get(CONSTANTS.RLP)
 	activate()
-func _on_SAA_press(toggle):
+func _on_SAA_press(_toggle):
 	active = entities.get(CONSTANTS.SAA)
 	activate()
-func _on_SCN_press(toggle):
+func _on_SCN_press(_toggle):
 	active = entities.get(CONSTANTS.SCN)
 	activate()
-func _on_SCA_press(toggle):
+func _on_SCA_press(_toggle):
 	active = entities.get(CONSTANTS.SCA)
 	activate()
-func _on_SLH_press(toggle):
+func _on_SLH_press(_toggle):
 	active = entities.get(CONSTANTS.SLH)
 	activate()
-func _on_THU_press(toggle):
+func _on_THU_press(_toggle):
 	active = entities.get(CONSTANTS.THU)
 	activate()
 	
-func _on_DEU_press(toggle):
+func _on_DEU_press(_toggle):
 	active = entities.get(CONSTANTS.DEU)
 	activate()
 		
@@ -298,55 +342,6 @@ func _on_statButton_press():
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
 	statOutput[CONSTANTS.STATCONTAINER].visible = true
 	
-	
-##	var l1 = statOutput[CONSTANTS.LINE]
-#	statOutput[CONSTANTS.LINE].plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
-#
-##	var l2 = statOutput[CONSTANTS.LINE2]
-#	statOutput[CONSTANTS.LINE2].plot_from_array([self.days, entities[CONSTANTS.DEU].sus0, entities[CONSTANTS.DEU].inf0, entities[CONSTANTS.DEU].rec0, entities[CONSTANTS.DEU].dead0])
-#
-##	var l3 = statOutput[CONSTANTS.LINE3]
-#	statOutput[CONSTANTS.LINE3].plot_from_array([self.days, entities[CONSTANTS.DEU].sus1, entities[CONSTANTS.DEU].inf1, entities[CONSTANTS.DEU].rec1, entities[CONSTANTS.DEU].dead1])
-#
-##	var l4 = statOutput[CONSTANTS.LINE4]
-##	l4.plot_from_array([self.days, entities[CONSTANTS.DEU].sus2, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
-#	statOutput[CONSTANTS.LINE4].plot_from_array([self.days, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
-#
-##	var l5 = statOutput[CONSTANTS.LINE5]
-##	l5.plot_from_array([self.days, entities[CONSTANTS.DEU].beds, entities[CONSTANTS.DEU].hosp])
-#	statOutput[CONSTANTS.LINE5].plot_from_array([self.days, entities[CONSTANTS.DEU].vax2sus, entities[CONSTANTS.DEU].vax2inf, entities[CONSTANTS.DEU].vax2hosp, entities[CONSTANTS.DEU].vax2rec, entities[CONSTANTS.DEU].vax2dead])
-#
-##	var l6 = statOutput[CONSTANTS.LINE6]
-#	statOutput[CONSTANTS.LINE6].plot_from_array([self.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf, entities[CONSTANTS.DEU].vax1hosp, entities[CONSTANTS.DEU].vax1rec, entities[CONSTANTS.DEU].vax1dead])
-##	l6.plot_from_array([self.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf])
-##	var lineChart = statOutput[CONSTANTS.LINE]
-##	lineChart.plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
-	
-#func testStats():
-#	#	var l1 = statOutput[CONSTANTS.LINE]
-#	statOutput[CONSTANTS.LINE].plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
-#
-##	var l2 = statOutput[CONSTANTS.LINE2]
-#	statOutput[CONSTANTS.LINE2].plot_from_array([self.days, entities[CONSTANTS.DEU].sus0, entities[CONSTANTS.DEU].inf0, entities[CONSTANTS.DEU].rec0, entities[CONSTANTS.DEU].dead0])
-#
-##	var l3 = statOutput[CONSTANTS.LINE3]
-#	statOutput[CONSTANTS.LINE3].plot_from_array([self.days, entities[CONSTANTS.DEU].sus1, entities[CONSTANTS.DEU].inf1, entities[CONSTANTS.DEU].rec1, entities[CONSTANTS.DEU].dead1])
-#
-##	var l4 = statOutput[CONSTANTS.LINE4]
-##	l4.plot_from_array([self.days, entities[CONSTANTS.DEU].sus2, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
-#	statOutput[CONSTANTS.LINE4].plot_from_array([self.days, entities[CONSTANTS.DEU].inf2, entities[CONSTANTS.DEU].rec2, entities[CONSTANTS.DEU].dead2])
-#
-##	var l5 = statOutput[CONSTANTS.LINE5]
-##	l5.plot_from_array([self.days, entities[CONSTANTS.DEU].beds, entities[CONSTANTS.DEU].hosp])
-#	statOutput[CONSTANTS.LINE5].plot_from_array([self.days, entities[CONSTANTS.DEU].vax2sus, entities[CONSTANTS.DEU].vax2inf, entities[CONSTANTS.DEU].vax2hosp, entities[CONSTANTS.DEU].vax2rec, entities[CONSTANTS.DEU].vax2dead])
-#
-##	var l6 = statOutput[CONSTANTS.LINE6]
-#	statOutput[CONSTANTS.LINE6].plot_from_array([self.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf, entities[CONSTANTS.DEU].vax1hosp, entities[CONSTANTS.DEU].vax1rec, entities[CONSTANTS.DEU].vax1dead])
-##	l6.plot_from_array([self.days, entities[CONSTANTS.DEU].vax1sus, entities[CONSTANTS.DEU].vax1inf])
-##	var lineChart = statOutput[CONSTANTS.LINE]
-##	lineChart.plot_from_array([self.days, entities[CONSTANTS.DEU].suscept, entities[CONSTANTS.DEU].infect, entities[CONSTANTS.DEU].recov, entities[CONSTANTS.DEU].dead])
-
-
 func _on_actionButton_press():
 	mode = CONSTANTS.ACTIONMODE
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
@@ -374,19 +369,24 @@ func _on_Time_timeout():
 	showStats()
 	statOutput[CONSTANTS.TIMER].stop()
 
-func _show_overview_legend(chart):
-#	for child in statOutput[CONSTANTS.OVERVIEWLEGEND].get_children():
-#		child.queue_free()
-	for function in chart.get_legend():
+func _show_overview_legend():
+	for function in statOutput[CONSTANTS.OVERVIEW].get_legend():
 		statOutput[CONSTANTS.OVERVIEWLEGEND].add_child(function)
-	
+
+func _show_vaxStatus_legend():
+	for function in statOutput[CONSTANTS.VAXSTATUS].get_legend():
+		statOutput[CONSTANTS.VAXSTATUSLEGEND].add_child(function)
+
+func establishLegends():
+	_show_overview_legend()
+	_show_vaxStatus_legend()
 
 func connectSignals():
 	statOutput[CONSTANTS.TIMER].set_wait_time(0.5)
 	statOutput[CONSTANTS.TIMER].connect("timeout", self, "_on_Time_timeout")
 	statOutput[CONSTANTS.TIMER].start()
 	
-	statOutput[CONSTANTS.OVERVIEW].connect("chart_plotted", self, "_show_overview_legend")
+#	statOutput[CONSTANTS.OVERVIEW].connect("chart_plotted", self, "_show_overview_legend")
 	
 	
 	buttons[CONSTANTS.STATBUTTON].connect("pressed", self, "_on_statButton_press")

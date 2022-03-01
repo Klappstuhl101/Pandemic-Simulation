@@ -255,6 +255,19 @@ func getV1Sum():
 func getV2Sum():
 	return V2[0] + V2[1] + V2[2] + V2[3]
 
+func getDailyInfections(day:int):
+	var difference = infect[day] - infect[day - 1] # zum Testen des Overlay
+#	var difference = inf1[day] - inf1[day-1] # später für Coronatests only
+	return difference if difference > 0 else 0
+
+func getDailyV1Difference(day:int):
+	var difference = (vax1sus[day] + vax1inf[day] + vax1hosp[day] + vax1rec[day]) - (vax1sus[day-1] + vax1inf[day-1] + vax1hosp[day-1] + vax1rec[day-1])
+	return difference if difference > 0 else 0
+
+func getDailyV2Difference(day:int):
+	var difference = (vax2sus[day] + vax2inf[day] + vax2hosp[day] + vax2rec[day]) - (vax2sus[day-1] + vax2inf[day-1] + vax2hosp[day-1] + vax2rec[day-1])
+	return difference if difference > 0 else 0
+
 func calculateDeaths():
 	self.deaths = CONSTANTS.sum(D) + CONSTANTS.sum(V1[4]) + V1eligible[4] + V2[4]
 

@@ -109,15 +109,6 @@ func _ready():
 	statOutput[CONSTANTS.VAXSTATUS] = get_node("Statistics/GridContainer/VaxStatusContainer/VaxStatus")
 	statOutput[CONSTANTS.VAXSTATUSLEGEND] = get_node("Statistics/GridContainer/VaxStatusContainer/VaxStatusLegend")
 	statOutput[CONSTANTS.DAILYCHANGES] = get_node("Statistics/GridContainer/DailyChanges")
-#	statOutput[CONSTANTS.NEWINFECTIONS] = get_node("Statistics/GridContainer/NewInfections")
-	
-#	statOutput[CONSTANTS.PIE] = pieChart
-#	statOutput[CONSTANTS.LINE] = lineChart
-#	statOutput[CONSTANTS.LINE2] = lineChart2
-#	statOutput[CONSTANTS.LINE3] = lineChart3
-#	statOutput[CONSTANTS.LINE4] = lineChart4
-#	statOutput[CONSTANTS.LINE5] = lineChart5
-#	statOutput[CONSTANTS.LINE6] = lineChart6
 	
 	statOutput[CONSTANTS.PROGRESSBAR] = get_node("SimProgress")
 	statOutput[CONSTANTS.PROGRESSPANEL] = get_node("SimProgress/ProgressPanel")
@@ -125,6 +116,7 @@ func _ready():
 	
 	statOutput[CONSTANTS.INCIDENCE] = get_node("Statistics/GridContainer/Indicators/IncidenceNr")
 	statOutput[CONSTANTS.RVALUE] = get_node("Statistics/GridContainer/Indicators/RNr")
+	statOutput[CONSTANTS.BEDSTATUS] = get_node("Statistics/GridContainer/BedsOverview")
 	statOutput[CONSTANTS.HOSPBEDS] = get_node("Statistics/GridContainer/HospBeds")
 	
 	actionOutput[CONSTANTS.ACTIONCONTAINER] = get_node("PlayControls")
@@ -260,22 +252,25 @@ func updateProgress():
 	pass
 
 func _on_Pause_pressed():
-	paused = true
+	if remainingDays > 0:
+		paused = true
 #	remainingDays = 0
 
 func _on_Play_pressed():
 	if paused:
 		paused = false
 	else:
-		remainingDays = CONSTANTS.WEEK + 1
-		statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
+		if remainingDays < 1:
+			remainingDays = CONSTANTS.WEEK + 1
+			statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 
 func _on_PlaySpeedx2_pressed():
 	if paused:
 		paused = false
 	else:
-		remainingDays = CONSTANTS.WEEK * 20 + 1
-		statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
+		if remainingDays < 1:
+			remainingDays = CONSTANTS.WEEK * 20 + 1
+			statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 
 func _on_menu_pressed():
 	get_tree().quit()

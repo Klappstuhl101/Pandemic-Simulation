@@ -81,6 +81,12 @@ func showStats():
 			
 			statOutput[CONSTANTS.DAILYCHANGES].plot_from_array(getDailyChanges(showInterval))
 			
+			statOutput[CONSTANTS.HOSPBEDS].plot_from_array(getHospitalOccupation(showInterval))
+#			if days.max() == 70:
+#				entities[CONSTANTS.DEU].setHospitalBeds(days.max(), 500)
+			if days.max() == 50:
+				entities[CONSTANTS.DEU].setHospitalBeds(days.max(), 100)
+			
 		if !establishedLegends:
 			establishedLegends = true
 			establishLegends()
@@ -223,6 +229,9 @@ func getDailyChanges(dayArray):
 	var newVaxxed1 = [CONSTANTS.FIRSTVAX]
 	var newVaxxed2 = [CONSTANTS.SECONDVAX]
 	
+#	if dayArray.size() == ((CONSTANTS.YEAR/12.0) + 1):
+#		pass
+	
 	for i in range(1, dayArray.size()):
 		if dayArray[i] > 2:
 			newInfections.append(active.getDailyInfections(dayArray[i]))
@@ -243,6 +252,18 @@ func getDailyChanges(dayArray):
 	
 	return output
 
+func getHospitalOccupation(dayArray):
+	var output = [dayArray]
+	var hosp = [CONSTANTS.HOSPITALISED]
+	var maxBeds = [CONSTANTS.HOSPBEDS]
+	
+	for i in range(1, dayArray.size()):
+		hosp.append(active.getDailyOccupiedBeds(dayArray[i]))
+		maxBeds.append(active.getHospitalBeds(dayArray[i]))
+	
+	output.append(maxBeds)
+	output.append(hosp)
+	return output
 
 func simulate():
 	entities[CONSTANTS.DEU].simulateALL()

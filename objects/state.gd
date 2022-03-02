@@ -3,19 +3,19 @@ extends Object
 
 class_name State
 
-var name
-var realPopulation
-var populationBase
-var neighbors
-var visitors
-var commuterRate
+var name :String
+var realPopulation :int
+var populationBase :int
+var neighbors :Array
+var visitors :Array
+var commuterRate :float
 
-var mapButton
+var mapButton :TextureButton
 
-var population
-var deaths
+var population :int
+var deaths :int
 
-var borderOpen
+var borderOpen :bool
 
 var suscept = [CONSTANTS.SUSCEPTIBLE]
 var infect = [CONSTANTS.INFECTED]
@@ -39,7 +39,7 @@ var V2
 
 var vacRate1
 var vacRate2
-var waitDay = 0
+var waitDay :int = 0
 
 var avlbVax
 
@@ -53,7 +53,8 @@ var infectFactorV1
 var infectFactorV2
 var infectTestFactor
 
-var hospitalBeds
+var hospitalBeds :int
+var hospitalBedsDaily :Dictionary
 var hospitalRate
 
 var baseInfect
@@ -62,7 +63,7 @@ var baseDeath
 var baseTest
 var baseHospital
 
-var lockdown = false
+var lockdown :bool = false
 var lockdownStrictness
 
 var testRate
@@ -147,6 +148,7 @@ func _init(initName, initRealPopulation, initPopulation, initButton, initNeighbo
 	deathRate = [baseDeath, baseDeath*deathFactorHosp, baseDeath*0.2, baseDeath*0.1]														# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	testRate = [baseTest, baseTest, baseTest]
 	hospitalBeds = 20
+	hospitalBedsDaily = {0:hospitalBeds}
 	hospitalRate = [baseHospital, baseHospital*0.2, baseHospital*0.1]
 	
 #	# für Lockdown
@@ -228,7 +230,26 @@ func _init(initName, initRealPopulation, initPopulation, initButton, initNeighbo
 func getName():
 	return self.name
 
-func occupiedBeds():
+func setHospitalBeds(day, value):
+	self.hospitalBedsDaily[day] = value
+	self.hospitalBeds = value
+
+func getHospitalBeds(day = 0):
+	var keys = self.hospitalBedsDaily.keys()
+	if day != 0:
+		
+		var key = keys.size() - 1
+		for i in range(keys.size()):
+			if day <= keys[i]:
+				key = keys[i]
+				break
+		
+		return self.hospitalBedsDaily[key]
+	else:
+		return self.hospitalBedsDaily[keys[keys.size() - 1]]
+
+
+func getOccupiedBeds():
 	return I[3] + CONSTANTS.sum(V1[2]) + V1eligible[2] + V2[2]
 
 func getRealPopulation():
@@ -241,6 +262,9 @@ func getPopulation():
 func calculateLivingPopulation():
 	calculateDeaths()
 	self.population = self.populationBase - self.deaths
+
+func calculateDeaths():
+	self.deaths = CONSTANTS.sum(D) + CONSTANTS.sum(V1[4]) + V1eligible[4] + V2[4]
 
 func getDeaths():
 	calculateDeaths()
@@ -268,8 +292,8 @@ func getDailyV2Difference(day:int):
 	var difference = (vax2sus[day] + vax2inf[day] + vax2hosp[day] + vax2rec[day]) - (vax2sus[day-1] + vax2inf[day-1] + vax2hosp[day-1] + vax2rec[day-1])
 	return difference if difference > 0 else 0
 
-func calculateDeaths():
-	self.deaths = CONSTANTS.sum(D) + CONSTANTS.sum(V1[4]) + V1eligible[4] + V2[4]
+func getDailyOccupiedBeds(day):
+	return hosp[day] + vax1hosp[day] + vax2hosp[day]
 
 func getInfectRate():
 	if lockdown:
@@ -951,7 +975,7 @@ func updateReactionRates():
 	rates.append(informationLoss*R[1])
 	
 	
-	var occBeds = occupiedBeds()
+	var occBeds = getOccupiedBeds()
 	# 136 137 138 139 140 141 Hospitalisierungsrate
 	rates.append(hospitalRate[0]*(hospitalBeds-occBeds)/population * I[0])									# Hospitalisierung Ungeimpfte
 	rates.append(hospitalRate[0]*(hospitalBeds-occBeds)/population * I[1])									# Hospitalisierung Ungeimpfte

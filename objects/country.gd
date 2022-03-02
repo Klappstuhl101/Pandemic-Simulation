@@ -13,6 +13,7 @@ var states # dict of states
 
 var beds = []
 var hospitalBeds # Number of Beds
+var hospitalBedsDaily
 
 var vaxProduction
 var avlbVax
@@ -83,7 +84,9 @@ func _init(initStates, initName, initButton):
 	self.populationBase = self.population
 	self.deaths = 0
 	
+	self.hospitalBedsDaily = {0:0}
 	recalculateHospitalBeds()
+	self.hospitalBedsDaily = {0:self.hospitalBeds}
 	
 	# ZURÜCKSETZEN BEVOR ABSCHLUSS
 	self.avlbVax = 0
@@ -125,10 +128,40 @@ func recalculateDeaths():
 	for state in states.values():
 		self.deaths += state.getDeaths()
 
+func setHospitalBeds(day, value):
+#	var avlblBeds = floor(int(value))
+	recalculatePopulation()
+	for state in states.values():
+		var avlblBeds = int(floor(value * (float(state.getPopulation())/float(self.population))))
+		state.setHospitalBeds(day, avlblBeds)
+		
+	recalculateHospitalBeds()
+
+func getHospitalBeds(day = 0):
+	var keys = self.hospitalBedsDaily.keys()
+	if day != 0:
+		
+		var key = keys.max()
+		for i in range(keys.size()):
+			if day <= keys[i]:
+				key = keys[i]
+				break
+		
+		return self.hospitalBedsDaily[key]
+	else:
+		return self.hospitalBedsDaily[keys[keys.size() - 1]]
+
 func recalculateHospitalBeds():
 	self.hospitalBeds = 0
+	var maxKey = []
 	for state in states.values():
 		self.hospitalBeds += state.hospitalBeds
+		maxKey.append(state.hospitalBedsDaily.keys().max())
+	
+	var keys = self.hospitalBedsDaily.keys()
+	if self.hospitalBedsDaily[keys.max()] != self.hospitalBeds:
+		self.hospitalBedsDaily[maxKey.max()] = self.hospitalBeds
+	
 
 func imposeLockdown():
 	self.lockdown = true
@@ -147,6 +180,7 @@ func produceVax():
 	self.avlbVax += vaxProduction
 	
 func distributeVax():
+	recalculatePopulation()
 	var sumVax = 0
 	for state in states.values():
 		var distVax = int(floor(self.avlbVax * (float(state.getPopulation())/float(self.population))))
@@ -155,6 +189,7 @@ func distributeVax():
 	self.avlbVax -= sumVax
 
 func distributeCommuters():
+	recalculatePopulation()
 	for state in states.values():
 		if !state.getBorderOpen():
 			continue
@@ -441,3 +476,6 @@ func getDailyV1Difference(day:int):
 func getDailyV2Difference(day:int):
 	var difference = (vax2sus[day] + vax2inf[day] + vax2hosp[day] + vax2rec[day]) - (vax2sus[day-1] + vax2inf[day-1] + vax2hosp[day-1] + vax2rec[day-1])
 	return difference if difference > 0 else 0
+
+func getDailyOccupiedBeds(day):
+	return hosp[day] + vax1hosp[day] + vax2hosp[day]

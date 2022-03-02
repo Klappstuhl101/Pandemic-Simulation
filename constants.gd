@@ -35,7 +35,8 @@ const LINE6 = "Line6"
 
 const RVALUE = "R-Wert"
 const INCIDENCE = "Inzidenz"
-const HOSPBEDS = "Betten"
+const HOSPBEDS = "Verfügbare Betten"
+const BEDSTATUS = "BedStatus"
 
 const WEEK = 7
 const MONTH = 30

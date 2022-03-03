@@ -143,9 +143,9 @@ func getHospitalBeds(day = 0):
 		
 		var key = keys.max()
 		for i in range(keys.size()):
-			if day <= keys[i]:
+			if day >= keys[i]:
 				key = keys[i]
-				break
+#				break
 		
 		return self.hospitalBedsDaily[key]
 	else:

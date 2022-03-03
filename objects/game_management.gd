@@ -81,7 +81,9 @@ func showStats():
 			
 			statOutput[CONSTANTS.DAILYCHANGES].plot_from_array(getDailyChanges(showInterval))
 			
-			statOutput[CONSTANTS.HOSPBEDS].plot_from_array(getHospitalOccupation(showInterval))
+			var hospitalOccupation = getHospitalOccupation(showInterval)
+			statOutput[CONSTANTS.HOSPBEDS].plot_from_array(hospitalOccupation)
+			statOutput[CONSTANTS.BEDSTATUS].text = String(hospitalOccupation[2][hospitalOccupation[2].size() - 1]) + CONSTANTS.BL + "/" + CONSTANTS.BL + String(active.getHospitalBeds())
 #			if days.max() == 70:
 #				entities[CONSTANTS.DEU].setHospitalBeds(days.max(), 500)
 			if days.max() == 50:
@@ -398,9 +400,14 @@ func _show_vaxStatus_legend():
 	for function in statOutput[CONSTANTS.VAXSTATUS].get_legend():
 		statOutput[CONSTANTS.VAXSTATUSLEGEND].add_child(function)
 
+func _show_daily_legend():
+	for function in statOutput[CONSTANTS.DAILYCHANGES].get_legend():
+		statOutput[CONSTANTS.DAILYLEGEND].add_child(function)
+
 func establishLegends():
 	_show_overview_legend()
 	_show_vaxStatus_legend()
+	_show_daily_legend()
 
 func connectSignals():
 	statOutput[CONSTANTS.TIMER].set_wait_time(0.5)

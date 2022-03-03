@@ -107,8 +107,9 @@ func _ready():
 	statOutput[CONSTANTS.OVERVIEW] = get_node("Statistics/GridContainer/Overview")
 	statOutput[CONSTANTS.OVERVIEWLEGEND] = get_node("Statistics/GridContainer/Indicators/OverviewLegend")
 	statOutput[CONSTANTS.VAXSTATUS] = get_node("Statistics/GridContainer/VaxStatusContainer/VaxStatus")
-	statOutput[CONSTANTS.VAXSTATUSLEGEND] = get_node("Statistics/GridContainer/VaxStatusContainer/VaxStatusLegend")
+	statOutput[CONSTANTS.VAXSTATUSLEGEND] = get_node("Statistics/GridContainer/VaxStatusContainer/VaxLegendContainer/VaxStatusLegend")
 	statOutput[CONSTANTS.DAILYCHANGES] = get_node("Statistics/GridContainer/DailyChanges")
+	statOutput[CONSTANTS.DAILYLEGEND] = get_node("Statistics/GridContainer/VaxStatusContainer/DailyLegendContainer/DailyLegend")
 	
 	statOutput[CONSTANTS.PROGRESSBAR] = get_node("SimProgress")
 	statOutput[CONSTANTS.PROGRESSPANEL] = get_node("SimProgress/ProgressPanel")
@@ -116,7 +117,7 @@ func _ready():
 	
 	statOutput[CONSTANTS.INCIDENCE] = get_node("Statistics/GridContainer/Indicators/IncidenceNr")
 	statOutput[CONSTANTS.RVALUE] = get_node("Statistics/GridContainer/Indicators/RNr")
-	statOutput[CONSTANTS.BEDSTATUS] = get_node("Statistics/GridContainer/BedsOverview")
+	statOutput[CONSTANTS.BEDSTATUS] = get_node("Statistics/GridContainer/BedsOverview/BedNr")
 	statOutput[CONSTANTS.HOSPBEDS] = get_node("Statistics/GridContainer/HospBeds")
 	
 	actionOutput[CONSTANTS.ACTIONCONTAINER] = get_node("PlayControls")

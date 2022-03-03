@@ -20,6 +20,7 @@ const OVERVIEWLEGEND = "OverviewLegend"
 const VAXSTATUS = "Impfstatus"
 const VAXSTATUSLEGEND = "VaxStatusLegend"
 const DAILYCHANGES = "DailyChanges"
+const DAILYLEGEND = "DailyLegend"
 const NEWINFECTIONS = "Neuinfektionen"
 
 const FIRSTVAX = "Erstimpfungen"

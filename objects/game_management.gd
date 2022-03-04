@@ -2,7 +2,7 @@ extends Object
 
 class_name Game_Management
 
-var entities # states + country
+var entities :Dictionary # states + country
 var active # active state / country
 var mode # StatsMode or ActionMode
 var statOutput # statOutput for stats
@@ -39,10 +39,8 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	self.godmode = initGodmode
 	
 	self.interval = CONSTANTS.WEEK
-	
-#	var lineChart = statOutput[CONSTANTS.LINE]
-#	lineChart.plot_from_array([sim.days, sim.sStats, sim.iStats, sim.rStats, sim.dStats])
-	self.mode = CONSTANTS.STATMODE
+
+	setMode(CONSTANTS.STATMODE)
 	
 	self.paused = true
 	
@@ -54,12 +52,13 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
 	
 
-func update():
-#	HIER DIE UPDATES FÜR STATS ETC. AUCH SHADER
-	pass
-
 func showStats():
 	statOutput[CONSTANTS.COUNTRYNAME].text = active.name
+	updateMap()
+	
+	if getMode() == CONSTANTS.ACTIONMODE:
+		return
+	
 	if statOutput[CONSTANTS.TIMER].is_stopped():
 		statOutput[CONSTANTS.TIMER].start()
 	
@@ -109,8 +108,27 @@ func showStats():
 		actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
 		statOutput[CONSTANTS.STATCONTAINER].visible = true
 
+func updateMap():
+	var incidences = []
+	for entity in entities.values():
+		incidences.append(entity.get7DayIncidence(godmode))
+#	var maxInc = incidences.max()
+	print(log(incidences[0]) / log(incidences.max()), " //", String(incidences[0]) + " Inzidenz Bawü// " + String(incidences.max()))
+	entities[CONSTANTS.BAW].mapButton.material.set_shader_param("incidenceRatio", log(incidences[0]) / log(incidences.max()))
+	
+	# Für die Zukunft in der jeder MapButton einen Shader hat
+	var i = 0
+#	for entity in entities.values():
+#		entity.mapButton.material.set_shader_param("incidenceRatio", log(incidences[i]) / log(incidences.max()))
+#		i += 1
+	
+	pass
+
 func getMode():
 	return self.mode
+
+func setMode(newMode):
+	self.mode = newMode
 
 func getOutputArray():
 	pass
@@ -169,34 +187,35 @@ func getOutputOverview(dayArray):
 	return output
 
 func getOutputIncidence():
-	var newCases = 0
-	if godmode:
-		for i in range(CONSTANTS.WEEK):
-			var index = self.days[days.size() - 1] - CONSTANTS.WEEK + i 
-			if index < 2:
-				continue
-			newCases += (active.infect[index] - active.infect[index - 1])
-			
-#		for i in range(self.interval):
-#			var index = self.days[days.size() - 1] - self.interval + i 
+#	var newCases = 0
+#	if godmode:
+#		for i in range(CONSTANTS.WEEK):
+#			var index = self.days[days.size() - 1] - CONSTANTS.WEEK + i 
 #			if index < 2:
 #				continue
 #			newCases += (active.infect[index] - active.infect[index - 1])
-	else:
-		for i in range(CONSTANTS.WEEK):
-			var index = self.days[days.size() - 1] - CONSTANTS.WEEK + i 
-			if index < 2:
-				continue
-			newCases += (active.inf1[index] - active.inf1[index - 1]) + (active.hosp[index] - active.hosp[index - 1]) + (active.vax1hosp[index] - active.vax1hosp[index - 1]) + (active.vax2hosp[index] - active.vax2hosp[index - 1])
-	
-#		for i in range(self.interval):
-#			var index = self.days[days.size() - 1] - self.interval + i 
+#
+##		for i in range(self.interval):
+##			var index = self.days[days.size() - 1] - self.interval + i 
+##			if index < 2:
+##				continue
+##			newCases += (active.infect[index] - active.infect[index - 1])
+#	else:
+#		for i in range(CONSTANTS.WEEK):
+#			var index = self.days[days.size() - 1] - CONSTANTS.WEEK + i 
 #			if index < 2:
 #				continue
 #			newCases += (active.inf1[index] - active.inf1[index - 1]) + (active.hosp[index] - active.hosp[index - 1]) + (active.vax1hosp[index] - active.vax1hosp[index - 1]) + (active.vax2hosp[index] - active.vax2hosp[index - 1])
-	var incidence = int((float(newCases)/float(active.getPopulation())) * 100000)
-#	return int((float(newCases)/float(active.getPopulation())) * 100000)
-	return incidence if incidence > 0 else 0
+#
+##		for i in range(self.interval):
+##			var index = self.days[days.size() - 1] - self.interval + i 
+##			if index < 2:
+##				continue
+##			newCases += (active.inf1[index] - active.inf1[index - 1]) + (active.hosp[index] - active.hosp[index - 1]) + (active.vax1hosp[index] - active.vax1hosp[index - 1]) + (active.vax2hosp[index] - active.vax2hosp[index - 1])
+#	var incidence = int((float(newCases)/float(active.getPopulation())) * 100000)
+##	return int((float(newCases)/float(active.getPopulation())) * 100000)
+#	return incidence if incidence > 0 else 0
+	return active.get7DayIncidence(godmode)
 
 func getOutputR():
 	var casesGen1:float = 0
@@ -247,10 +266,6 @@ func getDailyChanges(dayArray):
 	output.append(newInfections)
 	output.append(newVaxxed1)
 	output.append(newVaxxed2)
-	
-	return output
-	
-	var data = [["0","A","B","C"], ["Stimmen",2,3,4], ["Bla",6,7,8], ["Drei", 2, 5, 8]]
 	
 	return output
 
@@ -361,12 +376,12 @@ func _on_DEU_press(_toggle):
 	activate()
 		
 func _on_statButton_press():
-	mode = CONSTANTS.STATMODE
+	setMode(CONSTANTS.STATMODE)
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
 	statOutput[CONSTANTS.STATCONTAINER].visible = true
 	
 func _on_actionButton_press():
-	mode = CONSTANTS.ACTIONMODE
+	setMode(CONSTANTS.ACTIONMODE)
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
 	

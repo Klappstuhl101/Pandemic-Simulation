@@ -479,3 +479,17 @@ func getDailyV2Difference(day:int):
 
 func getDailyOccupiedBeds(day):
 	return hosp[day] + vax1hosp[day] + vax2hosp[day]
+
+func get7DayIncidence(godmode = false):
+	var newCases = 0
+	if godmode:
+		pass
+	else:
+		for i in range(CONSTANTS.WEEK):
+			var index = sus0.size() - 1 - CONSTANTS.WEEK + i
+			if index < 2:
+				continue
+			newCases += (inf1[index] - inf1[index - 1]) + (hosp[index] - hosp[index - 1]) + (vax1hosp[index] - vax1hosp[index - 1]) + (vax2hosp[index] - vax2hosp[index - 1])
+	
+	var incidence = int((float(newCases)/float(getPopulation())) * 100000)
+	return incidence if incidence > 0 else 0

@@ -248,7 +248,6 @@ func getHospitalBeds(day = 0):
 	else:
 		return self.hospitalBedsDaily[keys[keys.size() - 1]]
 
-
 func getOccupiedBeds():
 	return I[3] + CONSTANTS.sum(V1[2]) + V1eligible[2] + V2[2]
 
@@ -269,6 +268,20 @@ func calculateDeaths():
 func getDeaths():
 	calculateDeaths()
 	return self.deaths
+
+func get7DayIncidence(godmode = false):
+	var newCases = 0
+	if godmode:
+		pass
+	else:
+		for i in range(CONSTANTS.WEEK):
+			var index = sus0.size() - 1 - CONSTANTS.WEEK + i
+			if index < 2:
+				continue
+			newCases += (inf1[index] - inf1[index - 1]) + (hosp[index] - hosp[index - 1]) + (vax1hosp[index] - vax1hosp[index - 1]) + (vax2hosp[index] - vax2hosp[index - 1])
+	
+	var incidence = int((float(newCases)/float(getPopulation())) * 100000)
+	return incidence if incidence > 0 else 0
 
 func getUnvaxedSum():
 	return CONSTANTS.sum(S) + CONSTANTS.sum(I) + CONSTANTS.sum(R)

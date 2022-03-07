@@ -115,6 +115,8 @@ func _ready():
 	statOutput[CONSTANTS.PROGRESSPANEL] = get_node("SimProgress/ProgressPanel")
 	statOutput[CONSTANTS.DAYS] = get_node("CurrentDay")
 	
+	statOutput[CONSTANTS.INCIDENCELABELS] = get_node("Map/ScaleContainer/ScaleContainer/IncidenceLabels")
+	
 	statOutput[CONSTANTS.INCIDENCE] = get_node("Statistics/GridContainer/Indicators/IncidenceNr")
 	statOutput[CONSTANTS.RVALUE] = get_node("Statistics/GridContainer/Indicators/RNr")
 	statOutput[CONSTANTS.BEDSTATUS] = get_node("Statistics/GridContainer/BedsOverview/BedNr")

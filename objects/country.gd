@@ -111,7 +111,10 @@ func _init(initStates, initName, initButton):
 	rnd.randomize()
 	
 	
-	
+
+func getName():
+	return self.name
+
 func recalculatePopulation():
 	self.population = 0
 	self.realPopulation = 0
@@ -465,7 +468,10 @@ func getV2Sum():
 	return V2[0] + V2[1] + V2[2] + V2[3]
 
 func getDailyInfections(day:int):
-	var difference = infect[day] - infect[day - 1] # zum Testen des Overlay
+	var difference = 0
+	for state in states.values():
+		difference += state.getDailyInfections(day)
+#	var difference = infect[day] - infect[day - 1] # zum Testen des Overlay
 #	var difference = inf1[day] - inf1[day-1] # später für Coronatests only
 	return difference if difference > 0 else 0
 
@@ -491,5 +497,5 @@ func get7DayIncidence(godmode = false):
 				continue
 			newCases += (inf1[index] - inf1[index - 1]) + (hosp[index] - hosp[index - 1]) + (vax1hosp[index] - vax1hosp[index - 1]) + (vax2hosp[index] - vax2hosp[index - 1])
 	
-	var incidence = int((float(newCases)/float(getPopulation())) * 100000)
+	var incidence = stepify(float(newCases)/float(getPopulation()) * 100000, 0.01)
 	return incidence if incidence > 0 else 0

@@ -119,10 +119,19 @@ func updateMap():
 	# Für die Zukunft in der jeder MapButton einen Shader hat
 	var i = 0
 	for entity in entities.values():
-		entity.mapButton.material.set_shader_param("incidenceRatio", log(incidences[i]) / log(incidences.max()))
+		if incidences.max() > 0:
+#			print(entity.getName()," MapFaktor //", float(incidences[i]) / float(incidences.max()), " // ", float(log(incidences[i])) / float(log(incidences.max())))
+			entity.mapButton.material.set_shader_param("incidenceRatio", float(incidences[i]) / float(incidences.max()))
+#			entity.mapButton.material.set_shader_param("incidenceRatio", float(log(incidences[i])) / float(log(incidences.max())))
+		else:
+			entity.mapButton.material.set_shader_param("incidenceRatio", 0)
 		i += 1
 	
-	pass
+	
+	i = statOutput[CONSTANTS.INCIDENCELABELS].get_children().size()
+	for label in statOutput[CONSTANTS.INCIDENCELABELS].get_children():
+		label.text = String(int(incidences.max() * (i/4.0)))
+		i -= 1
 
 func getMode():
 	return self.mode
@@ -403,7 +412,7 @@ func _on_maxButton_press():
 	showStats()
 
 func _on_Time_timeout():
-	print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes // ", OS.get_ticks_msec())
+#	print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes // ", OS.get_ticks_msec())
 	showStats()
 	statOutput[CONSTANTS.TIMER].stop()
 

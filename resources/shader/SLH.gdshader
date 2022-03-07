@@ -1,7 +1,7 @@
 shader_type canvas_item;
 render_mode unshaded;
 
-uniform float incidenceRatio = 0.2;
+uniform float incidenceRatio = 0.0;
 
 uniform sampler2D infectGradient;
 // uniform sampler2D twoColorGradient;

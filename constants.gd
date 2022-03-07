@@ -23,6 +23,8 @@ const DAILYCHANGES = "DailyChanges"
 const DAILYLEGEND = "DailyLegend"
 const NEWINFECTIONS = "Neuinfektionen"
 
+const INCIDENCELABELS = "IncidenceLabels"
+
 const FIRSTVAX = "Erstimpfungen"
 const SECONDVAX = "Zweitimpfungen"
 

@@ -105,7 +105,7 @@ func _ready():
 	statOutput[CONSTANTS.STATCONTAINER] = get_node("Statistics")
 	statOutput[CONSTANTS.COUNTRYNAME] = get_node("CountryName")
 	statOutput[CONSTANTS.OVERVIEW] = get_node("Statistics/GridContainer/Overview")
-	statOutput[CONSTANTS.OVERVIEWLEGEND] = get_node("Statistics/GridContainer/Indicators/OverviewLegend")
+	statOutput[CONSTANTS.OVERVIEWLEGEND] = get_node("Statistics/GridContainer/Indicators/OverviewContainer/OverviewLegend")
 	statOutput[CONSTANTS.VAXSTATUS] = get_node("Statistics/GridContainer/VaxStatusContainer/VaxStatus")
 	statOutput[CONSTANTS.VAXSTATUSLEGEND] = get_node("Statistics/GridContainer/VaxStatusContainer/VaxLegendContainer/VaxStatusLegend")
 	statOutput[CONSTANTS.DAILYCHANGES] = get_node("Statistics/GridContainer/DailyChanges")

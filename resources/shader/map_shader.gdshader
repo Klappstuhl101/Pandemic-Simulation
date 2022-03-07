@@ -7,7 +7,7 @@ uniform float vaccinated=0.4; // use for color and height of color
 uniform float infected=0.5; // use same as vaccinated 
 
 uniform sampler2D infectGradient;
-uniform sampler2D twoColorGradient;
+// uniform sampler2D twoColorGradient;
 
 vec3 colorValues(float UVy, float UVx) {
 	if (UVy <= (1.0/green_space)) {

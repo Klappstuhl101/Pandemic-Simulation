@@ -113,14 +113,14 @@ func updateMap():
 	for entity in entities.values():
 		incidences.append(entity.get7DayIncidence(godmode))
 #	var maxInc = incidences.max()
-	print(log(incidences[0]) / log(incidences.max()), " //", String(incidences[0]) + " Inzidenz Bawü// " + String(incidences.max()))
-	entities[CONSTANTS.BAW].mapButton.material.set_shader_param("incidenceRatio", log(incidences[0]) / log(incidences.max()))
-	
+#	print(log(incidences[0]) / log(incidences.max()), " //", String(incidences[0]) + " Inzidenz Bawü// " + String(incidences.max()))
+#	entities[CONSTANTS.BAW].mapButton.material.set_shader_param("incidenceRatio", log(incidences[0]) / log(incidences.max()))
+#
 	# Für die Zukunft in der jeder MapButton einen Shader hat
 	var i = 0
-#	for entity in entities.values():
-#		entity.mapButton.material.set_shader_param("incidenceRatio", log(incidences[i]) / log(incidences.max()))
-#		i += 1
+	for entity in entities.values():
+		entity.mapButton.material.set_shader_param("incidenceRatio", log(incidences[i]) / log(incidences.max()))
+		i += 1
 	
 	pass
 

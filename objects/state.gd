@@ -323,6 +323,13 @@ func getBorderOpen():
 func setBorderOpen(open:bool):
 	self.borderOpen = open
 
+func setTestRates(value:float):
+	self.testRate = [value, value, value]
+	
+func setLockdown(isTrue:bool, strictness:float):
+	self.lockdown = isTrue
+	self.lockdownStrictness = strictness
+
 func simulate():
 #	if I <= 0: # pandemic over
 #		return

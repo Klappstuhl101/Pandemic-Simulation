@@ -166,6 +166,11 @@ func recalculateHospitalBeds():
 		self.hospitalBedsDaily[maxKey.max()] = self.hospitalBeds
 	
 
+func setLockdown(isTrue:bool, lockdownStrictness:float):
+	self.lockdown = isTrue
+	for state in states.values():
+		state.setLockdown(isTrue, lockdownStrictness)
+
 func imposeLockdown():
 	self.lockdown = true
 	for state in states.values():
@@ -487,15 +492,16 @@ func getDailyOccupiedBeds(day):
 	return hosp[day] + vax1hosp[day] + vax2hosp[day]
 
 func get7DayIncidence(godmode = false):
-	var newCases = 0
-	if godmode:
-		pass
-	else:
-		for i in range(CONSTANTS.WEEK):
-			var index = sus0.size() - 1 - CONSTANTS.WEEK + i
-			if index < 2:
-				continue
-			newCases += (inf1[index] - inf1[index - 1]) + (hosp[index] - hosp[index - 1]) + (vax1hosp[index] - vax1hosp[index - 1]) + (vax2hosp[index] - vax2hosp[index - 1])
+	var incidenceSum :float = 0
+	for state in states.values():
+		incidenceSum += state.get7DayIncidence(godmode)
 	
-	var incidence = stepify(float(newCases)/float(getPopulation()) * 100000, 0.01)
-	return incidence if incidence > 0 else 0
+	return stepify(incidenceSum/states.values().size(), 0.01)
+
+func setBorderOpen(open:bool):
+	for state in states.values():
+		state.setBorderOpen(open)
+
+func setTestRates(value:float):
+	for state in states.values():
+		state.setTestRates(value)

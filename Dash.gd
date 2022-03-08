@@ -63,25 +63,6 @@ func _ready():
 	
 	self.showStatsSafe = false
 	
-#	Statistics shown
-#	label = get_node("CountryName")
-	
-#	pieChart = get_node("ScrollContainer/PieChart")
-#	lineChart = get_node("Statistics/GridContainer/LineChart")
-#	lineChart2 = get_node("Statistics/GridContainer/LineChart2")
-#	lineChart3 = get_node("Statistics/GridContainer/LineChart3")
-#	lineChart4 = get_node("Statistics/GridContainer/LineChart4")
-#	lineChart5 = get_node("Statistics/GridContainer/LineChart5")
-#	lineChart6 = get_node("Statistics/GridContainer/LineChart6")
-#	pieChart.plot()
-#	var stats = [["Country","Population"],["Germany",7],["GB",15],["Canada",10],["Sweden",3]]
-	
-#	pieChart.plot_from_array(stats)
-	
-	
-	
-#	timer = get_node("Time")
-	
 	menu = get_node("Menu")
 	
 #	Time Control Buttons
@@ -95,10 +76,6 @@ func _ready():
 	
 	menu.connect("pressed", self, "_on_menu_pressed")
 	
-#	timer.set_wait_time(0.5)
-#	timer.connect("timeout", self, "_on_Time_timeout")
-#	timer.start()
-	
 	statOutput[CONSTANTS.TIMER] = get_node("Time")
 	
 	
@@ -106,6 +83,7 @@ func _ready():
 	statOutput[CONSTANTS.COUNTRYNAME] = get_node("CountryName")
 	statOutput[CONSTANTS.OVERVIEW] = get_node("Statistics/GridContainer/Overview")
 	statOutput[CONSTANTS.OVERVIEWLEGEND] = get_node("Statistics/GridContainer/Indicators/OverviewContainer/OverviewLegend")
+	statOutput[CONSTANTS.OVERVIEWHEADLINE] = get_node("Statistics/GridContainer/Indicators/OverviewContainer/Overview")
 	statOutput[CONSTANTS.VAXSTATUS] = get_node("Statistics/GridContainer/VaxStatusContainer/VaxStatus")
 	statOutput[CONSTANTS.VAXSTATUSLEGEND] = get_node("Statistics/GridContainer/VaxStatusContainer/VaxLegendContainer/VaxStatusLegend")
 	statOutput[CONSTANTS.DAILYCHANGES] = get_node("Statistics/GridContainer/DailyChanges")
@@ -123,6 +101,8 @@ func _ready():
 	statOutput[CONSTANTS.HOSPBEDS] = get_node("Statistics/GridContainer/HospBeds")
 	
 	actionOutput[CONSTANTS.ACTIONCONTAINER] = get_node("PlayControls")
+	actionOutput[CONSTANTS.OPTIONBUTTON] = get_node("PlayControls/GridContainer/OptionButton")
+	actionOutput[CONSTANTS.MENUBUTTON] = get_node("PlayControls/GridContainer/MenuButton")
 	
 	buttons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
 	buttons[CONSTANTS.ACTIONBUTTON] = get_node("ModeControl/ActionMode")
@@ -178,7 +158,6 @@ func _ready():
 	 CONSTANTS.NIE:nieders, CONSTANTS.NRW:nrw, CONSTANTS.RLP:rlp, CONSTANTS.SAA:saar,
 	 CONSTANTS.SCN:sachsen, CONSTANTS.SCA:sacanh, CONSTANTS.SLH:schlHol, CONSTANTS.THU:thur}
 	
-	# Herausfinden wie man Objekte von Unterklassen richtig erstellt
 	deu = Country.new(states, CONSTANTS.DEU, get_node("Map/DeutschButton"))
 	
 	var entities = {CONSTANTS.BAW:bawu, CONSTANTS.BAY:bayern, CONSTANTS.BER:berlin, CONSTANTS.BRA:brand,
@@ -187,35 +166,8 @@ func _ready():
 	 CONSTANTS.SCN:sachsen, CONSTANTS.SCA:sacanh, CONSTANTS.SLH:schlHol, CONSTANTS.THU:thur, 
 	 CONSTANTS.DEU: deu
 	 }
-	
-#	sim = Simulation.new({CONSTANTS.BAW:bawu, CONSTANTS.BAY:bayern, CONSTANTS.BER:berlin, CONSTANTS.BRA:brand,
-#	 CONSTANTS.BRE:bremen, CONSTANTS.HAM:hamb, CONSTANTS.HES:hessen, CONSTANTS.MVP:meckPom,
-#	 CONSTANTS.NIE:nieders, CONSTANTS.NRW:nrw, CONSTANTS.RLP:rlp, CONSTANTS.SAA:saar,
-#	 CONSTANTS.SCN:sachsen, CONSTANTS.SCA:sacanh, CONSTANTS.SLH:schlHol, CONSTANTS.THU:thur, 
-#	 CONSTANTS.DEU: deu
-#	 })
-#	game_manager = Game_Management.new(sim, statOutput, statButtons)
 	game_manager = Game_Management.new(entities, statOutput, actionOutput, buttons, false)
 	
-#	print(OS.get_ticks_msec()/1000, " sec")
-#	for i in range(CONSTANTS.TRYOUT_DAYS):
-#		print("TAG " + String(i))
-#		game_manager.days.append(i)
-#		deu.setVaxProduction(20)
-#		if 25 == i:
-#			deu.imposeLockdown()
-#			bawu.setBorderOpen(false)
-##			deu.setVaxProduction(20)
-#		if i == 50:
-#			deu.stopLockdown()
-#			bawu.setBorderOpen(true)
-##			deu.setVaxProduction(5)
-#
-##		sim.simulate()
-#		deu.simulateALL()
-#		print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes")
-##		lineChart.plot_from_array([sim.days, deu.suscept, deu.infect, deu.recov, deu.dead])
-
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -247,8 +199,6 @@ func _process(_delta):
 #				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
 #				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
 
-#func updateDay():
-#	get_node("CurrentDay").text = "Day " + String(game_manager.currentDay)
 
 func updateProgress():
 	statOutput[CONSTANTS.PROGRESSBAR].value = statOutput[CONSTANTS.PROGRESSBAR].max_value - remainingDays
@@ -278,7 +228,3 @@ func _on_PlaySpeedx2_pressed():
 func _on_menu_pressed():
 	get_tree().quit()
 
-#func _on_Time_timeout():
-#	print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes")
-#	game_manager.showStats()
-#	timer.stop()

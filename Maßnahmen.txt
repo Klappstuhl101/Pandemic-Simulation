@@ -15,6 +15,8 @@ Impfungen (Impfbereischaft 100%):
 	- 1. und 2. Impfung
 	- Produktion an Impfungen einstellbar
 
+Abstand zwischen Impfungen einstellbar
+
 Hospitalisierungen:
 	- Bettenanzahl einstellbar
 

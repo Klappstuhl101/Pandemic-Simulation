@@ -10,6 +10,8 @@ const PROGRESSBAR = "Progressbar"
 const PROGRESSPANEL = "ProgressPanel"
 
 const ACTIONCONTAINER = "ActionContainer"
+const OPTIONBUTTON = "OptionButton"
+const MENUBUTTON = "MenuButton"
 
 const LEGEND = "Legend"
 
@@ -17,6 +19,7 @@ const COUNTRYNAME = "Countryname"
 const STATCONTAINER = "StatContainer"
 const OVERVIEW = "Overview"
 const OVERVIEWLEGEND = "OverviewLegend"
+const OVERVIEWHEADLINE = "Anzahl getesteter Fälle"
 const VAXSTATUS = "Impfstatus"
 const VAXSTATUSLEGEND = "VaxStatusLegend"
 const DAILYCHANGES = "DailyChanges"

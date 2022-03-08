@@ -46,10 +46,22 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	
 	self.establishedLegends = false
 	
+	establishActions()
+	
 	self.active = entities.get(CONSTANTS.DEU)
 	
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
+	
+
+func showAction():
+	statOutput[CONSTANTS.COUNTRYNAME].text = active.name
+	updateMap()
+	
+	statOutput[CONSTANTS.STATCONTAINER].visible = false
+	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
+	
+	
 	
 
 func showStats():
@@ -59,11 +71,13 @@ func showStats():
 	if getMode() == CONSTANTS.ACTIONMODE:
 		return
 	
+	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
+	
 	if statOutput[CONSTANTS.TIMER].is_stopped():
 		statOutput[CONSTANTS.TIMER].start()
 	
 	if self.days.size() > 3:
-		
+		buttons[CONSTANTS.STATBUTTON].disabled = false
 		if godmode:
 			pass
 		else:
@@ -97,7 +111,9 @@ func showStats():
 		
 		if self.days.size() > 360:
 			buttons[CONSTANTS.YEAR].disabled = false
-	#		pass
+			
+		
+		statOutput[CONSTANTS.STATCONTAINER].visible = true
 	#	HIERHER DIE GANZEN SHADER EINSTELLUNGEN UND ÜBERGABE
 	#	active.mapButton.material.set_shader_param("vaccinated", counter)
 	#	active.mapButton.material.set_shader_param("infected", counter)
@@ -105,8 +121,7 @@ func showStats():
 	#	active.mapButton.material.get_shader_param("twoColorGradient").get_gradient().set_color(0,color)
 		
 		
-		actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
-		statOutput[CONSTANTS.STATCONTAINER].visible = true
+		
 
 func updateMap():
 	var incidences = []
@@ -127,7 +142,7 @@ func updateMap():
 			entity.mapButton.material.set_shader_param("incidenceRatio", 0)
 		i += 1
 	
-	
+	print("Inzidenz Deutschland ", incidences[incidences.size() -1], " // Inzidenz Durchschnitt: " , float(CONSTANTS.sum(incidences) - incidences[incidences.size() -1]) / 16.0)
 	i = statOutput[CONSTANTS.INCIDENCELABELS].get_children().size()
 	for label in statOutput[CONSTANTS.INCIDENCELABELS].get_children():
 		label.text = String(int(incidences.max() * (i/4.0)))
@@ -179,51 +194,63 @@ func getOutputInterval():
 	return dayArray
 
 func getOutputOverview(dayArray):
-	var output = [dayArray]
-	var sus = [CONSTANTS.SUSCEPTIBLE]
-	var inf = [CONSTANTS.INFECTED]
-	var rec = [CONSTANTS.RECOVERED]
-	var dead = [CONSTANTS.DEAD]
-	for i in range(1, dayArray.size()):
-		sus.append(active.suscept[dayArray[i]])
-		inf.append(active.infect[dayArray[i]])
-		rec.append(active.recov[dayArray[i]])
-		dead.append(active.dead[dayArray[i]])
-	output.append(sus)
-	output.append(inf)
-	output.append(rec)
-	output.append(dead)
-	return output
+	if godmode:
+		var output = [dayArray]
+		var sus = [CONSTANTS.SUSCEPTIBLE]
+		var inf = [CONSTANTS.INFECTED]
+		var rec = [CONSTANTS.RECOVERED]
+		var dead = [CONSTANTS.DEAD]
+		for i in range(1, dayArray.size()):
+			sus.append(active.suscept[dayArray[i]])
+			inf.append(active.infect[dayArray[i]])
+			rec.append(active.recov[dayArray[i]])
+			dead.append(active.dead[dayArray[i]])
+		output.append(sus)
+		output.append(inf)
+		output.append(rec)
+		output.append(dead)
+		return output
+	else:
+		# HIER STATT ALLEN ZAHLEN NUR GETESTETE FÄLLE
+#		var output = [dayArray]
+#		var sus = [CONSTANTS.SUSCEPTIBLE]
+#		var susTested = [CONSTANTS.SUSCEPTIBLE + CONSTANTS.BL + CONSTANTS.TESTED]
+#		var inf = [CONSTANTS.INFECTED + CONSTANTS.BL + CONSTANTS.TESTED]
+##		var rec = [CONSTANTS.RECOVERED]
+#		var recTested = [CONSTANTS.RECOVERED + CONSTANTS.BL + CONSTANTS.TESTED]
+#		var dead = [CONSTANTS.DEAD]
+#		for i in range(1, dayArray.size()):
+#			sus.append(active.suscept[dayArray[i]])
+#			susTested.append(active.sus1[dayArray[i]])
+#			inf.append(active.inf1[dayArray[i]] + active.getDailyOccupiedBeds(dayArray[i]))
+##			rec.append(active.recov[dayArray[i]])
+#			recTested.append(active.rec1[dayArray[i]] + active.rec2[dayArray[i]])
+#			dead.append(active.dead[dayArray[i]])
+#		output.append(sus)
+#		output.append(susTested)
+#		output.append(inf)
+##		output.append(rec)
+#		output.append(recTested)
+#		output.append(dead)
+#		return output
+		
+		var output = [dayArray]
+		var sus = [CONSTANTS.SUSCEPTIBLE]
+		var inf = [CONSTANTS.INFECTED]
+		var rec = [CONSTANTS.RECOVERED]
+		var dead = [CONSTANTS.DEAD]
+		for i in range(1, dayArray.size()):
+			sus.append(active.suscept[dayArray[i]])
+			inf.append(active.infect[dayArray[i]])
+			rec.append(active.recov[dayArray[i]])
+			dead.append(active.dead[dayArray[i]])
+		output.append(sus)
+		output.append(inf)
+		output.append(rec)
+		output.append(dead)
+		return output
 
 func getOutputIncidence():
-#	var newCases = 0
-#	if godmode:
-#		for i in range(CONSTANTS.WEEK):
-#			var index = self.days[days.size() - 1] - CONSTANTS.WEEK + i 
-#			if index < 2:
-#				continue
-#			newCases += (active.infect[index] - active.infect[index - 1])
-#
-##		for i in range(self.interval):
-##			var index = self.days[days.size() - 1] - self.interval + i 
-##			if index < 2:
-##				continue
-##			newCases += (active.infect[index] - active.infect[index - 1])
-#	else:
-#		for i in range(CONSTANTS.WEEK):
-#			var index = self.days[days.size() - 1] - CONSTANTS.WEEK + i 
-#			if index < 2:
-#				continue
-#			newCases += (active.inf1[index] - active.inf1[index - 1]) + (active.hosp[index] - active.hosp[index - 1]) + (active.vax1hosp[index] - active.vax1hosp[index - 1]) + (active.vax2hosp[index] - active.vax2hosp[index - 1])
-#
-##		for i in range(self.interval):
-##			var index = self.days[days.size() - 1] - self.interval + i 
-##			if index < 2:
-##				continue
-##			newCases += (active.inf1[index] - active.inf1[index - 1]) + (active.hosp[index] - active.hosp[index - 1]) + (active.vax1hosp[index] - active.vax1hosp[index - 1]) + (active.vax2hosp[index] - active.vax2hosp[index - 1])
-#	var incidence = int((float(newCases)/float(active.getPopulation())) * 100000)
-##	return int((float(newCases)/float(active.getPopulation())) * 100000)
-#	return incidence if incidence > 0 else 0
 	return active.get7DayIncidence(godmode)
 
 func getOutputR():
@@ -249,8 +276,6 @@ func getOutputVaccinations():
 	var sumUnvax = active.getUnvaxedSum()
 	var sumV1 = active.getV1Sum()
 	var sumV2 = active.getV2Sum()
-#	var sumV1 = CONSTANTS.sum(active.vax1sus) + CONSTANTS.sum(active.vax1inf) + CONSTANTS.sum(active.vax1hosp) + CONSTANTS.sum(active.vax1rec)
-#	var sumV2 = CONSTANTS.sum(active.vax2sus) + CONSTANTS.sum(active.vax2inf) + CONSTANTS.sum(active.vax2hosp) + CONSTANTS.sum(active.vax2rec)
 	return [[CONSTANTS.VAXSTATUS, "Anzahl Personen"], [CONSTANTS.UNVAXED, sumUnvax], [CONSTANTS.VAX1, sumV1], [CONSTANTS.VAX2, sumV2]]
 
 func getDailyChanges(dayArray):
@@ -298,6 +323,8 @@ func simulate():
 
 func updateDay():
 	statOutput[CONSTANTS.DAYS].text = CONSTANTS.DAYS + CONSTANTS.BL + String(self.currentDay)
+	if self.days.size() > 3:
+		buttons[CONSTANTS.STATBUTTON].disabled = false
 	self.currentDay += 1
 
 func activate():
@@ -386,13 +413,15 @@ func _on_DEU_press(_toggle):
 		
 func _on_statButton_press():
 	setMode(CONSTANTS.STATMODE)
-	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
-	statOutput[CONSTANTS.STATCONTAINER].visible = true
+#	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
+#	statOutput[CONSTANTS.STATCONTAINER].visible = true
+	showStats()
 	
 func _on_actionButton_press():
 	setMode(CONSTANTS.ACTIONMODE)
-	statOutput[CONSTANTS.STATCONTAINER].visible = false
-	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
+#	statOutput[CONSTANTS.STATCONTAINER].visible = false
+#	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
+	showAction()
 	
 
 func _on_weekButton_press():
@@ -417,6 +446,9 @@ func _on_Time_timeout():
 	statOutput[CONSTANTS.TIMER].stop()
 
 func _show_overview_legend():
+	if godmode:
+		statOutput[CONSTANTS.OVERVIEWHEADLINE].text = "Anzahl aller Fälle"
+	
 	for function in statOutput[CONSTANTS.OVERVIEW].get_legend():
 		statOutput[CONSTANTS.OVERVIEWLEGEND].add_child(function)
 
@@ -427,6 +459,15 @@ func _show_vaxStatus_legend():
 func _show_daily_legend():
 	for function in statOutput[CONSTANTS.DAILYCHANGES].get_legend():
 		statOutput[CONSTANTS.DAILYLEGEND].add_child(function)
+
+func establishActions():
+	actionOutput[CONSTANTS.OPTIONBUTTON].add_item("NR1")
+	actionOutput[CONSTANTS.OPTIONBUTTON].add_item("NR2")
+	actionOutput[CONSTANTS.OPTIONBUTTON].add_item("NR3")
+	
+	actionOutput[CONSTANTS.MENUBUTTON].get_popup().add_item("NR1")
+	actionOutput[CONSTANTS.MENUBUTTON].get_popup().add_item("NR2")
+	actionOutput[CONSTANTS.MENUBUTTON].get_popup().add_item("NR3")
 
 func establishLegends():
 	_show_overview_legend()

@@ -559,6 +559,7 @@ __meta__ = {
 margin_right = 130.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 130, 100 )
+disabled = true
 text = "Statistiken"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -581,7 +582,6 @@ __meta__ = {
 }
 
 [node name="PlayControls" type="ScrollContainer" parent="."]
-visible = false
 margin_left = 600.0
 margin_top = 115.0
 margin_right = 1600.0
@@ -594,20 +594,69 @@ __meta__ = {
 
 [node name="GridContainer" type="GridContainer" parent="PlayControls"]
 margin_right = 988.0
-margin_bottom = 40.0
+margin_bottom = 106.0
 rect_min_size = Vector2( 988, 0 )
 
+[node name="LockDownOptions" type="GridContainer" parent="PlayControls/GridContainer"]
+margin_right = 988.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 988, 0 )
+columns = 4
+
+[node name="CheckBox" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
+margin_right = 16.0
+margin_bottom = 20.0
+
+[node name="CheckBox2" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
+margin_left = 20.0
+margin_right = 36.0
+margin_bottom = 20.0
+
+[node name="CheckBox3" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
+margin_left = 40.0
+margin_right = 56.0
+margin_bottom = 20.0
+
+[node name="CheckBox4" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
+margin_left = 60.0
+margin_right = 76.0
+margin_bottom = 20.0
+
+[node name="Label" type="Label" parent="PlayControls/GridContainer"]
+margin_top = 24.0
+margin_right = 988.0
+margin_bottom = 38.0
+text = "Wähle eine Option aus"
+
 [node name="OptionButton" type="OptionButton" parent="PlayControls/GridContainer"]
-margin_right = 127.0
-margin_bottom = 18.0
+margin_top = 42.0
+margin_right = 988.0
+margin_bottom = 60.0
+hint_tooltip = "Set Lockdown 2
+
+Set Lockdown 3: This is an explanation of the measures that will be taken.
+
+And the list goes on and on as long as I want it to be"
+text = "Lockdown"
 
 [node name="MenuButton" type="MenuButton" parent="PlayControls/GridContainer"]
-margin_top = 22.0
-margin_right = 127.0
-margin_bottom = 40.0
+margin_top = 64.0
+margin_right = 988.0
+margin_bottom = 82.0
+hint_tooltip = "NR1: Set Lockdown 1
+
+NR2: Set Lockdown 2"
 text = "Lockdown Opitonen"
 
+[node name="CheckBox" type="CheckBox" parent="PlayControls/GridContainer"]
+margin_top = 86.0
+margin_right = 988.0
+margin_bottom = 106.0
+text = "Lockdown Nr1"
+align = 1
+
 [node name="Statistics" type="ScrollContainer" parent="."]
+visible = false
 margin_left = 599.0
 margin_top = 115.0
 margin_right = 1605.0
@@ -708,7 +757,7 @@ margin_bottom = 227.0
 margin_right = 150.0
 margin_bottom = 31.0
 rect_min_size = Vector2( 0, 20 )
-text = "Übersicht bekannter Fälle"
+text = "Übersicht getesteter Fälle"
 align = 1
 valign = 1
 autowrap = true
@@ -746,7 +795,7 @@ margin_top = 24.0
 margin_right = 994.4
 margin_bottom = 312.0
 rect_min_size = Vector2( 512.4, 288 )
-Chart_Style/function_colors = PoolColorArray( 0.356863, 0.929412, 0.0313726, 1, 1, 0, 0, 1, 0.0235294, 0.164706, 0.937255, 1, 1, 1, 1, 1 )
+Chart_Style/function_colors = PoolColorArray( 0.356863, 0.929412, 0.0313726, 1, 0, 0.501961, 0, 1, 1, 0, 0, 1, 0, 0.384314, 0.74902, 1, 1, 1, 1, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 

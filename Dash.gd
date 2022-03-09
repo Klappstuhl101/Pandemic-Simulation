@@ -101,8 +101,8 @@ func _ready():
 	statOutput[CONSTANTS.HOSPBEDS] = get_node("Statistics/GridContainer/HospBeds")
 	
 	actionOutput[CONSTANTS.ACTIONCONTAINER] = get_node("PlayControls")
-	actionOutput[CONSTANTS.OPTIONBUTTON] = get_node("PlayControls/GridContainer/OptionButton")
-	actionOutput[CONSTANTS.MENUBUTTON] = get_node("PlayControls/GridContainer/MenuButton")
+	actionOutput[CONSTANTS.OPTIONBUTTON] = get_node("PlayControls/GridContainer/OptionContainer/MaskOption/OptionButton")
+#	actionOutput[CONSTANTS.MENUBUTTON] = get_node("PlayControls/GridContainer/MenuButton")
 	
 	buttons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
 	buttons[CONSTANTS.ACTIONBUTTON] = get_node("ModeControl/ActionMode")

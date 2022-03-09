@@ -142,7 +142,7 @@ func updateMap():
 			entity.mapButton.material.set_shader_param("incidenceRatio", 0)
 		i += 1
 	
-	print("Inzidenz Deutschland ", incidences[incidences.size() -1], " // Inzidenz Durchschnitt: " , float(CONSTANTS.sum(incidences) - incidences[incidences.size() -1]) / 16.0)
+#	print("Inzidenz Deutschland ", incidences[incidences.size() -1], " // Inzidenz Durchschnitt: " , float(CONSTANTS.sum(incidences) - incidences[incidences.size() -1]) / 16.0)
 	i = statOutput[CONSTANTS.INCIDENCELABELS].get_children().size()
 	for label in statOutput[CONSTANTS.INCIDENCELABELS].get_children():
 		label.text = String(int(incidences.max() * (i/4.0)))
@@ -465,9 +465,6 @@ func establishActions():
 	actionOutput[CONSTANTS.OPTIONBUTTON].add_item("NR2")
 	actionOutput[CONSTANTS.OPTIONBUTTON].add_item("NR3")
 	
-	actionOutput[CONSTANTS.MENUBUTTON].get_popup().add_item("NR1")
-	actionOutput[CONSTANTS.MENUBUTTON].get_popup().add_item("NR2")
-	actionOutput[CONSTANTS.MENUBUTTON].get_popup().add_item("NR3")
 
 func establishLegends():
 	_show_overview_legend()

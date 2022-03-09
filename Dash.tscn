@@ -1,4 +1,4 @@
-[gd_scene load_steps=86 format=2]
+[gd_scene load_steps=88 format=2]
 
 [ext_resource path="res://resources/control_buttons/Pause-thin-rounded-button-white.png" type="Texture" id=1]
 [ext_resource path="res://resources/control_buttons/Play-rounded-button-outline-white.png" type="Texture" id=2]
@@ -65,6 +65,7 @@
 [ext_resource path="res://resources/shader/NRW.gdshader" type="Shader" id=63]
 [ext_resource path="res://resources/shader/NIE.gdshader" type="Shader" id=64]
 [ext_resource path="res://resources/shader/ColorScale.tres" type="Material" id=65]
+[ext_resource path="res://resources/LockdownButtonGroup.tres" type="ButtonGroup" id=66]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 48 )
@@ -150,6 +151,9 @@ shader_param/infectGradient = ExtResource( 49 )
 shader = ExtResource( 60 )
 shader_param/incidenceRatio = 0.0
 shader_param/infectGradient = ExtResource( 49 )
+
+[sub_resource type="StyleBoxLine" id=21]
+color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="StyleBoxFlat" id=18]
 bg_color = Color( 0, 0, 0, 0 )
@@ -582,6 +586,8 @@ __meta__ = {
 }
 
 [node name="PlayControls" type="ScrollContainer" parent="."]
+anchor_top = -0.00117716
+anchor_bottom = -0.00117716
 margin_left = 600.0
 margin_top = 115.0
 margin_right = 1600.0
@@ -594,66 +600,203 @@ __meta__ = {
 
 [node name="GridContainer" type="GridContainer" parent="PlayControls"]
 margin_right = 988.0
-margin_bottom = 106.0
+margin_bottom = 452.0
 rect_min_size = Vector2( 988, 0 )
+
+[node name="HSeparator3" type="HSeparator" parent="PlayControls/GridContainer"]
+margin_right = 988.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 20 )
 
 [node name="LockDownOptions" type="GridContainer" parent="PlayControls/GridContainer"]
-margin_right = 988.0
-margin_bottom = 20.0
-rect_min_size = Vector2( 988, 0 )
-columns = 4
-
-[node name="CheckBox" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
-margin_right = 16.0
-margin_bottom = 20.0
-
-[node name="CheckBox2" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
-margin_left = 20.0
-margin_right = 36.0
-margin_bottom = 20.0
-
-[node name="CheckBox3" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
-margin_left = 40.0
-margin_right = 56.0
-margin_bottom = 20.0
-
-[node name="CheckBox4" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
-margin_left = 60.0
-margin_right = 76.0
-margin_bottom = 20.0
-
-[node name="Label" type="Label" parent="PlayControls/GridContainer"]
 margin_top = 24.0
 margin_right = 988.0
-margin_bottom = 38.0
-text = "Wähle eine Option aus"
+margin_bottom = 124.0
+rect_min_size = Vector2( 988, 100 )
+columns = 5
 
-[node name="OptionButton" type="OptionButton" parent="PlayControls/GridContainer"]
-margin_top = 42.0
+[node name="CheckBox" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
+margin_right = 194.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 194, 100 )
+group = ExtResource( 66 )
+text = "kein"
+
+[node name="CheckBox2" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
+margin_left = 198.0
+margin_right = 392.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 194, 0 )
+group = ExtResource( 66 )
+text = "leichter"
+
+[node name="CheckBox3" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
+margin_left = 396.0
+margin_right = 590.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 194, 0 )
+group = ExtResource( 66 )
+text = "mittlerer"
+
+[node name="CheckBox4" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
+margin_left = 594.0
+margin_right = 788.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 194, 0 )
+group = ExtResource( 66 )
+text = "harter"
+
+[node name="CheckBox5" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
+margin_left = 792.0
+margin_right = 986.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 194, 0 )
+group = ExtResource( 66 )
+text = "benutzerdefiniert"
+
+[node name="HSeparator" type="HSeparator" parent="PlayControls/GridContainer"]
+margin_top = 128.0
 margin_right = 988.0
-margin_bottom = 60.0
+margin_bottom = 158.0
+rect_min_size = Vector2( 0, 30 )
+custom_styles/separator = SubResource( 21 )
+
+[node name="OptionContainer" type="GridContainer" parent="PlayControls/GridContainer"]
+margin_top = 162.0
+margin_right = 988.0
+margin_bottom = 262.0
+rect_min_size = Vector2( 988, 100 )
+columns = 3
+
+[node name="MaskOption" type="GridContainer" parent="PlayControls/GridContainer/OptionContainer"]
+margin_right = 480.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 480, 100 )
+columns = 2
+
+[node name="Label" type="Label" parent="PlayControls/GridContainer/OptionContainer/MaskOption"]
+margin_top = 18.0
+margin_right = 238.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 238, 0 )
+text = "Maskenmandat: "
+
+[node name="OptionButton" type="OptionButton" parent="PlayControls/GridContainer/OptionContainer/MaskOption"]
+margin_left = 242.0
+margin_right = 480.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 238, 50 )
 hint_tooltip = "Set Lockdown 2
 
 Set Lockdown 3: This is an explanation of the measures that will be taken.
 
 And the list goes on and on as long as I want it to be"
-text = "Lockdown"
-
-[node name="MenuButton" type="MenuButton" parent="PlayControls/GridContainer"]
-margin_top = 64.0
-margin_right = 988.0
-margin_bottom = 82.0
-hint_tooltip = "NR1: Set Lockdown 1
-
-NR2: Set Lockdown 2"
-text = "Lockdown Opitonen"
-
-[node name="CheckBox" type="CheckBox" parent="PlayControls/GridContainer"]
-margin_top = 86.0
-margin_right = 988.0
-margin_bottom = 106.0
-text = "Lockdown Nr1"
+text = "Masken"
 align = 1
+
+[node name="VSeparator" type="VSeparator" parent="PlayControls/GridContainer/OptionContainer"]
+margin_left = 484.0
+margin_right = 492.0
+margin_bottom = 80.0
+rect_min_size = Vector2( 8, 80 )
+
+[node name="HomeOfficeOption" type="GridContainer" parent="PlayControls/GridContainer/OptionContainer"]
+margin_left = 496.0
+margin_right = 976.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 480, 100 )
+columns = 2
+
+[node name="Label" type="Label" parent="PlayControls/GridContainer/OptionContainer/HomeOfficeOption"]
+margin_top = 18.0
+margin_right = 238.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 238, 0 )
+text = "Home-Office-Vorgabe"
+
+[node name="OptionButton" type="OptionButton" parent="PlayControls/GridContainer/OptionContainer/HomeOfficeOption"]
+margin_left = 242.0
+margin_right = 480.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 238, 50 )
+align = 1
+
+[node name="GridContainer" type="GridContainer" parent="PlayControls/GridContainer"]
+margin_top = 266.0
+margin_right = 988.0
+margin_bottom = 344.0
+columns = 2
+
+[node name="BedContainer" type="GridContainer" parent="PlayControls/GridContainer/GridContainer"]
+margin_right = 492.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 492, 0 )
+columns = 2
+
+[node name="Label" type="Label" parent="PlayControls/GridContainer/GridContainer/BedContainer"]
+margin_top = 5.0
+margin_right = 244.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 244, 0 )
+text = "Verfügbare Betten"
+
+[node name="HospitalBeds" type="SpinBox" parent="PlayControls/GridContainer/GridContainer/BedContainer"]
+margin_left = 248.0
+margin_right = 322.0
+margin_bottom = 24.0
+allow_greater = true
+
+[node name="BorderControl" type="CheckBox" parent="PlayControls/GridContainer/GridContainer"]
+margin_left = 496.0
+margin_right = 976.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 480, 50 )
+text = "Ländergrenzen schließen"
+align = 1
+
+[node name="VaxContainer" type="GridContainer" parent="PlayControls/GridContainer/GridContainer"]
+margin_top = 54.0
+margin_right = 492.0
+margin_bottom = 78.0
+columns = 2
+
+[node name="Label" type="Label" parent="PlayControls/GridContainer/GridContainer/VaxContainer"]
+margin_top = 5.0
+margin_right = 244.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 244, 0 )
+text = "Tägliche Produktion von Impfdosen"
+
+[node name="VaxProduction" type="SpinBox" parent="PlayControls/GridContainer/GridContainer/VaxContainer"]
+margin_left = 248.0
+margin_right = 322.0
+margin_bottom = 24.0
+allow_greater = true
+
+[node name="HSeparator2" type="HSeparator" parent="PlayControls/GridContainer"]
+margin_top = 348.0
+margin_right = 988.0
+margin_bottom = 398.0
+rect_min_size = Vector2( 0, 50 )
+
+[node name="TestContainer" type="GridContainer" parent="PlayControls/GridContainer"]
+margin_top = 402.0
+margin_right = 988.0
+margin_bottom = 452.0
+columns = 2
+
+[node name="Label" type="Label" parent="PlayControls/GridContainer/TestContainer"]
+margin_top = 18.0
+margin_right = 238.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 238, 0 )
+text = "Testvorgaben "
+
+[node name="OptionButton" type="OptionButton" parent="PlayControls/GridContainer/TestContainer"]
+margin_left = 242.0
+margin_right = 480.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 238, 50 )
 
 [node name="Statistics" type="ScrollContainer" parent="."]
 visible = false
@@ -796,6 +939,9 @@ margin_right = 994.4
 margin_bottom = 312.0
 rect_min_size = Vector2( 512.4, 288 )
 Chart_Style/function_colors = PoolColorArray( 0.356863, 0.929412, 0.0313726, 1, 0, 0.501961, 0, 1, 1, 0, 0, 1, 0, 0.384314, 0.74902, 1, 1, 1, 1, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -872,6 +1018,9 @@ Chart_Properties/column_width = 12.0
 Chart_Properties/column_gap = 1.0
 Chart_Style/points_shape = [ 2, 2, 2 ]
 Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.352941, 0, 1, 0, 1, 0, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -906,9 +1055,6 @@ margin_top = 608.0
 margin_right = 994.0
 margin_bottom = 900.0
 Chart_Style/function_colors = PoolColorArray( 1, 0.960784, 0, 1, 0.658824, 0.0784314, 0, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 

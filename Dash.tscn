@@ -1,4 +1,4 @@
-[gd_scene load_steps=88 format=2]
+[gd_scene load_steps=87 format=2]
 
 [ext_resource path="res://resources/control_buttons/Pause-thin-rounded-button-white.png" type="Texture" id=1]
 [ext_resource path="res://resources/control_buttons/Play-rounded-button-outline-white.png" type="Texture" id=2]
@@ -152,16 +152,13 @@ shader = ExtResource( 60 )
 shader_param/incidenceRatio = 0.0
 shader_param/infectGradient = ExtResource( 49 )
 
-[sub_resource type="StyleBoxLine" id=21]
-color = Color( 1, 1, 1, 1 )
-
-[sub_resource type="StyleBoxFlat" id=18]
+[sub_resource type="StyleBoxFlat" id=19]
 bg_color = Color( 0, 0, 0, 0 )
 
-[sub_resource type="StyleBoxFlat" id=19]
+[sub_resource type="StyleBoxFlat" id=20]
 bg_color = Color( 1, 0, 0, 1 )
 
-[sub_resource type="StyleBoxFlat" id=20]
+[sub_resource type="StyleBoxFlat" id=21]
 bg_color = Color( 1, 1, 1, 1 )
 
 [node name="Panel" type="Panel"]
@@ -578,8 +575,9 @@ text = "Maßnahmen"
 
 [node name="Menu" type="Button" parent="."]
 margin_left = 1560.0
-margin_right = 1600.0
-margin_bottom = 40.0
+margin_right = 1599.0
+margin_bottom = 18.0
+rect_min_size = Vector2( 40, 40 )
 text = "MENÜ"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -589,9 +587,9 @@ __meta__ = {
 anchor_top = -0.00117716
 anchor_bottom = -0.00117716
 margin_left = 600.0
-margin_top = 115.0
+margin_top = 115.059
 margin_right = 1600.0
-margin_bottom = 895.0
+margin_bottom = 895.059
 rect_min_size = Vector2( 1000, 780 )
 scroll_horizontal_enabled = false
 __meta__ = {
@@ -600,7 +598,7 @@ __meta__ = {
 
 [node name="GridContainer" type="GridContainer" parent="PlayControls"]
 margin_right = 988.0
-margin_bottom = 452.0
+margin_bottom = 514.0
 rect_min_size = Vector2( 988, 0 )
 
 [node name="HSeparator3" type="HSeparator" parent="PlayControls/GridContainer"]
@@ -619,6 +617,7 @@ columns = 5
 margin_right = 194.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 194, 100 )
+pressed = true
 group = ExtResource( 66 )
 text = "kein"
 
@@ -659,18 +658,17 @@ margin_top = 128.0
 margin_right = 988.0
 margin_bottom = 158.0
 rect_min_size = Vector2( 0, 30 )
-custom_styles/separator = SubResource( 21 )
 
 [node name="OptionContainer" type="GridContainer" parent="PlayControls/GridContainer"]
 margin_top = 162.0
 margin_right = 988.0
-margin_bottom = 262.0
+margin_bottom = 284.0
 rect_min_size = Vector2( 988, 100 )
 columns = 3
 
 [node name="MaskOption" type="GridContainer" parent="PlayControls/GridContainer/OptionContainer"]
 margin_right = 480.0
-margin_bottom = 100.0
+margin_bottom = 122.0
 rect_min_size = Vector2( 480, 100 )
 columns = 2
 
@@ -686,24 +684,22 @@ margin_left = 242.0
 margin_right = 480.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 238, 50 )
-hint_tooltip = "Set Lockdown 2
+hint_tooltip = "Stellen sie ein, welche Masken in öffentlichen Räumen getragen werden sollen.
 
-Set Lockdown 3: This is an explanation of the measures that will be taken.
-
-And the list goes on and on as long as I want it to be"
+Das Tragen von Masken verhindert Ansteckungen."
 text = "Masken"
 align = 1
 
 [node name="VSeparator" type="VSeparator" parent="PlayControls/GridContainer/OptionContainer"]
 margin_left = 484.0
 margin_right = 492.0
-margin_bottom = 80.0
+margin_bottom = 122.0
 rect_min_size = Vector2( 8, 80 )
 
 [node name="HomeOfficeOption" type="GridContainer" parent="PlayControls/GridContainer/OptionContainer"]
 margin_left = 496.0
 margin_right = 976.0
-margin_bottom = 100.0
+margin_bottom = 122.0
 rect_min_size = Vector2( 480, 100 )
 columns = 2
 
@@ -719,84 +715,142 @@ margin_left = 242.0
 margin_right = 480.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 238, 50 )
+hint_tooltip = "Stellen sie ein, welche Vorgaben hinsichtlich der Heimarbeit gemacht werden.
+
+Je strenger die Home-Office-Regelung, desto weniger Pendler wird es zwischen den Bundesländern geben."
 align = 1
 
-[node name="GridContainer" type="GridContainer" parent="PlayControls/GridContainer"]
-margin_top = 266.0
+[node name="Empty" type="Label" parent="PlayControls/GridContainer/OptionContainer/HomeOfficeOption"]
+margin_top = 54.0
+margin_right = 238.0
+margin_bottom = 68.0
+rect_min_size = Vector2( 0, 10 )
+
+[node name="Empty2" type="Label" parent="PlayControls/GridContainer/OptionContainer/HomeOfficeOption"]
+margin_left = 242.0
+margin_top = 54.0
+margin_right = 480.0
+margin_bottom = 68.0
+
+[node name="BorderControl" type="CheckBox" parent="PlayControls/GridContainer/OptionContainer/HomeOfficeOption"]
+margin_top = 72.0
+margin_right = 238.0
+margin_bottom = 122.0
+rect_min_size = Vector2( 238, 50 )
+hint_tooltip = "Schließen Sie die Grenze der Bundesländer, um Pendlerströme zu unterbrechen."
+text = "Ländergrenzen schließen"
+align = 1
+
+[node name="HSeparator2" type="HSeparator" parent="PlayControls/GridContainer"]
+margin_top = 288.0
 margin_right = 988.0
-margin_bottom = 344.0
+margin_bottom = 338.0
+rect_min_size = Vector2( 0, 50 )
+
+[node name="TestOption" type="GridContainer" parent="PlayControls/GridContainer"]
+margin_top = 342.0
+margin_right = 988.0
+margin_bottom = 392.0
 columns = 2
 
-[node name="BedContainer" type="GridContainer" parent="PlayControls/GridContainer/GridContainer"]
+[node name="Label" type="Label" parent="PlayControls/GridContainer/TestOption"]
+margin_top = 18.0
 margin_right = 492.0
-margin_bottom = 50.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 492, 0 )
-columns = 2
+text = "Testvorgaben "
+valign = 1
 
-[node name="Label" type="Label" parent="PlayControls/GridContainer/GridContainer/BedContainer"]
-margin_top = 5.0
-margin_right = 244.0
-margin_bottom = 19.0
-rect_min_size = Vector2( 244, 0 )
-text = "Verfügbare Betten"
-
-[node name="HospitalBeds" type="SpinBox" parent="PlayControls/GridContainer/GridContainer/BedContainer"]
-margin_left = 248.0
-margin_right = 322.0
-margin_bottom = 24.0
-allow_greater = true
-
-[node name="BorderControl" type="CheckBox" parent="PlayControls/GridContainer/GridContainer"]
+[node name="OptionButton" type="OptionButton" parent="PlayControls/GridContainer/TestOption"]
 margin_left = 496.0
 margin_right = 976.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 480, 50 )
-text = "Ländergrenzen schließen"
-align = 1
+
+[node name="HSeparator4" type="HSeparator" parent="PlayControls/GridContainer"]
+margin_top = 396.0
+margin_right = 988.0
+margin_bottom = 446.0
+rect_min_size = Vector2( 0, 50 )
+
+[node name="GridContainer" type="GridContainer" parent="PlayControls/GridContainer"]
+margin_top = 450.0
+margin_right = 988.0
+margin_bottom = 514.0
+rect_min_size = Vector2( 0, 50 )
+columns = 2
+
+[node name="BedContainer" type="GridContainer" parent="PlayControls/GridContainer/GridContainer"]
+margin_right = 492.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 492, 0 )
+columns = 2
+
+[node name="Label" type="Label" parent="PlayControls/GridContainer/GridContainer/BedContainer"]
+margin_right = 244.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 244, 30 )
+text = "Verfügbare Betten"
+valign = 1
+
+[node name="HospitalBeds" type="SpinBox" parent="PlayControls/GridContainer/GridContainer/BedContainer"]
+margin_left = 248.0
+margin_right = 322.0
+margin_bottom = 30.0
+rounded = true
+allow_greater = true
+
+[node name="Label2" type="Label" parent="PlayControls/GridContainer/GridContainer/BedContainer"]
+margin_top = 34.0
+margin_right = 244.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 0, 30 )
+text = "Belegte Betten"
+valign = 1
+
+[node name="HospitalBedsNumber" type="Label" parent="PlayControls/GridContainer/GridContainer/BedContainer"]
+margin_left = 248.0
+margin_top = 42.0
+margin_right = 322.0
+margin_bottom = 56.0
+text = "Anzahl belegte Betten"
+clip_text = true
 
 [node name="VaxContainer" type="GridContainer" parent="PlayControls/GridContainer/GridContainer"]
-margin_top = 54.0
-margin_right = 492.0
-margin_bottom = 78.0
+margin_left = 496.0
+margin_right = 818.0
+margin_bottom = 64.0
 columns = 2
 
 [node name="Label" type="Label" parent="PlayControls/GridContainer/GridContainer/VaxContainer"]
-margin_top = 5.0
 margin_right = 244.0
-margin_bottom = 19.0
-rect_min_size = Vector2( 244, 0 )
+margin_bottom = 30.0
+rect_min_size = Vector2( 244, 30 )
 text = "Tägliche Produktion von Impfdosen"
+valign = 1
 
 [node name="VaxProduction" type="SpinBox" parent="PlayControls/GridContainer/GridContainer/VaxContainer"]
 margin_left = 248.0
 margin_right = 322.0
-margin_bottom = 24.0
+margin_bottom = 30.0
+rounded = true
 allow_greater = true
 
-[node name="HSeparator2" type="HSeparator" parent="PlayControls/GridContainer"]
-margin_top = 348.0
-margin_right = 988.0
-margin_bottom = 398.0
-rect_min_size = Vector2( 0, 50 )
+[node name="Label2" type="Label" parent="PlayControls/GridContainer/GridContainer/VaxContainer"]
+margin_top = 34.0
+margin_right = 244.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 0, 30 )
+text = "Verfügbare Impfdosen"
+valign = 1
 
-[node name="TestContainer" type="GridContainer" parent="PlayControls/GridContainer"]
-margin_top = 402.0
-margin_right = 988.0
-margin_bottom = 452.0
-columns = 2
-
-[node name="Label" type="Label" parent="PlayControls/GridContainer/TestContainer"]
-margin_top = 18.0
-margin_right = 238.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 238, 0 )
-text = "Testvorgaben "
-
-[node name="OptionButton" type="OptionButton" parent="PlayControls/GridContainer/TestContainer"]
-margin_left = 242.0
-margin_right = 480.0
-margin_bottom = 50.0
-rect_min_size = Vector2( 238, 50 )
+[node name="VaxNumber" type="Label" parent="PlayControls/GridContainer/GridContainer/VaxContainer"]
+margin_left = 248.0
+margin_top = 42.0
+margin_right = 322.0
+margin_bottom = 56.0
+text = "Anzahl Impfdosen"
+clip_text = true
 
 [node name="Statistics" type="ScrollContainer" parent="."]
 visible = false
@@ -939,9 +993,6 @@ margin_right = 994.4
 margin_bottom = 312.0
 rect_min_size = Vector2( 512.4, 288 )
 Chart_Style/function_colors = PoolColorArray( 0.356863, 0.929412, 0.0313726, 1, 0, 0.501961, 0, 1, 1, 0, 0, 1, 0, 0.384314, 0.74902, 1, 1, 1, 1, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1018,9 +1069,6 @@ Chart_Properties/column_width = 12.0
 Chart_Properties/column_gap = 1.0
 Chart_Style/points_shape = [ 2, 2, 2 ]
 Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.352941, 0, 1, 0, 1, 0, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1055,6 +1103,9 @@ margin_top = 608.0
 margin_right = 994.0
 margin_bottom = 900.0
 Chart_Style/function_colors = PoolColorArray( 1, 0.960784, 0, 1, 0.658824, 0.0784314, 0, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1075,7 +1126,7 @@ margin_left = 100.0
 margin_right = 250.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 150, 48 )
-custom_styles/normal = SubResource( 18 )
+custom_styles/normal = SubResource( 19 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Simuliere"
 align = 1
@@ -1091,8 +1142,8 @@ margin_top = 57.0
 margin_right = 1240.0
 margin_bottom = 105.0
 rect_min_size = Vector2( 500, 48 )
-custom_styles/fg = SubResource( 19 )
-custom_styles/bg = SubResource( 20 )
+custom_styles/fg = SubResource( 20 )
+custom_styles/bg = SubResource( 21 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 value = 40.0
 percent_visible = false

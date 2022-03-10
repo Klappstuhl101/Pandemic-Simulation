@@ -16,6 +16,8 @@ var paused:bool
 
 var godmode:bool
 
+var optionChanged:bool
+
 var interval
 
 
@@ -42,6 +44,8 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 
 	setMode(CONSTANTS.STATMODE)
 	
+	self.optionChanged = false
+	
 	self.paused = true
 	
 	self.establishedLegends = false
@@ -59,6 +63,20 @@ func showAction():
 	updateMap()
 	
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
+	
+	actionOutput[CONSTANTS.OCCBEDS].text = String(active.getDailyOccupiedBeds(self.days.max() if self.days.max() != null else -1)) + " / " + String(active.getHospitalBeds())
+	actionOutput[CONSTANTS.AVLBLVAX].text = String(active.getAvlbVax())
+	
+	actionOutput[CONSTANTS.VAXPRODUCTIONSPINBOX].editable = active.getName() == entities[CONSTANTS.DEU].getName()
+	actionOutput[CONSTANTS.VAXPRODUCTIONSPINBOX].value = entities[CONSTANTS.DEU].getVaxProduction()
+	
+	
+	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].editable = active.getName() == entities[CONSTANTS.DEU].getName()
+	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].value = active.getHospitalBeds(self.days.max() if self.days.max() != null else 0)
+	
+	
+	
+	
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
 	
 	
@@ -99,8 +117,8 @@ func showStats():
 			statOutput[CONSTANTS.BEDSTATUS].text = String(hospitalOccupation[2][hospitalOccupation[2].size() - 1]) + CONSTANTS.BL + "/" + CONSTANTS.BL + String(active.getHospitalBeds())
 #			if days.max() == 70:
 #				entities[CONSTANTS.DEU].setHospitalBeds(days.max(), 500)
-			if days.max() == 50:
-				entities[CONSTANTS.DEU].setHospitalBeds(days.max(), 100)
+#			if days.max() > 50:
+#				entities[CONSTANTS.DEU].setHospitalBeds(days.max(), 100)
 			
 		if !establishedLegends:
 			establishedLegends = true
@@ -319,6 +337,11 @@ func getHospitalOccupation(dayArray):
 func simulate():
 	entities[CONSTANTS.DEU].simulateALL()
 	days.append(self.currentDay)
+	match getMode():
+		CONSTANTS.STATMODE:
+			showStats()
+		CONSTANTS.ACTIONMODE:
+			showAction()
 	updateDay()
 
 func updateDay():
@@ -328,8 +351,11 @@ func updateDay():
 	self.currentDay += 1
 
 func activate():
-#	resetAll(active.name)
-	showStats()
+	match getMode():
+		CONSTANTS.STATMODE:
+			showStats()
+		CONSTANTS.ACTIONMODE:
+			showAction()
 
 #func resetAll(exception = ""):
 #	for entity in entities.values():
@@ -460,10 +486,53 @@ func _show_daily_legend():
 	for function in statOutput[CONSTANTS.DAILYCHANGES].get_legend():
 		statOutput[CONSTANTS.DAILYLEGEND].add_child(function)
 
+func _on_borderControl_toggle(button_pressed:bool):
+	print("Border Control ", button_pressed)
+	active.setBorderOpen(!button_pressed)
+
+func _on_vaxProduction_changed(value:float):
+	entities[CONSTANTS.DEU].setVaxProduction(int(value))
+
+func _on_hospitalBed_changed(value:float):
+	if actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].editable and value != entities[CONSTANTS.DEU].getHospitalBeds(self.days.max() if self.days.max() != null else 0):
+		entities[CONSTANTS.DEU].setHospitalBeds(self.days.max() if self.days.max() != null else 0, int(value))
+#		entities[CONSTANTS.DEU].recalculateHospitalBeds()
+		actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].value = entities[CONSTANTS.DEU].getHospitalBeds(self.days.max() if self.days.max() != null else 0)
+#	active.setHospitalBeds(self.days.max() if self.days.max() != null else 0, int(value))
+
+func _establish_mask_options():
+	actionOutput[CONSTANTS.MASKOPTION].add_item("Keine Masken")
+	actionOutput[CONSTANTS.MASKOPTION].add_item("Stoffmasken, Schals, etc.")
+	actionOutput[CONSTANTS.MASKOPTION].add_item("OP-Masken")
+	actionOutput[CONSTANTS.MASKOPTION].add_item("FFP2-Masken")
+	
+#	actionOutput[CONSTANTS.MASKOPTION].get_popup().set_item_tooltip(0, ".")
+
+func _establish_homeOffice_options():
+	actionOutput[CONSTANTS.HOMEOFFICEOPTION].add_item("Keine Vorgabe")
+	actionOutput[CONSTANTS.HOMEOFFICEOPTION].add_item("Empfehlung zum Home-Office")
+	actionOutput[CONSTANTS.HOMEOFFICEOPTION].add_item("Verpflichtung zum Home-Office")
+	actionOutput[CONSTANTS.HOMEOFFICEOPTION].add_item("Schließung der nicht lebensnotwendigen Betriebe")
+	
+	actionOutput[CONSTANTS.HOMEOFFICEOPTION].get_popup().set_item_tooltip(0, "Jeder Arbeitnehmer kann ganz normal zur Arbeit gehen.")
+	actionOutput[CONSTANTS.HOMEOFFICEOPTION].get_popup().set_item_tooltip(1, "Jedem Arbeitnehmer wird empfohlen von zu Hause zu arbeiten, vorausgesetzt der Beruf lässt es zu.")
+	actionOutput[CONSTANTS.HOMEOFFICEOPTION].get_popup().set_item_tooltip(2, "Jeder Arbeitnehmer wird verpflichtet von zu Hause zu arbeiten, vorausgesetzt der Beruf lässt es zu.")
+	actionOutput[CONSTANTS.HOMEOFFICEOPTION].get_popup().set_item_tooltip(3, "Alle Betriebe, außer lebensnotwendiger Infrastruktur, werden geschlossen. Arbeitnehmer bleiben zu Hause.")
+
+func _establish_test_options():
+	actionOutput[CONSTANTS.TESTOPTION].add_item("Keine Tests")
+	actionOutput[CONSTANTS.TESTOPTION].add_item("	Tests für Zugang zu öffentlichen Einrichtungen")
+	actionOutput[CONSTANTS.TESTOPTION].add_item("+	Regelmäßige Tests in Schulen und Arbeitsstätten")
+	actionOutput[CONSTANTS.TESTOPTION].add_item("+	Tests für private Treffen")
+	
+	
 func establishActions():
-	actionOutput[CONSTANTS.OPTIONBUTTON].add_item("NR1")
-	actionOutput[CONSTANTS.OPTIONBUTTON].add_item("NR2")
-	actionOutput[CONSTANTS.OPTIONBUTTON].add_item("NR3")
+	_establish_mask_options()
+	_establish_homeOffice_options()
+	_establish_test_options()
+#	actionOutput[CONSTANTS.OPTIONBUTTON].add_item("NR1")
+#	actionOutput[CONSTANTS.OPTIONBUTTON].add_item("NR2")
+#	actionOutput[CONSTANTS.OPTIONBUTTON].add_item("NR3")
 	
 
 func establishLegends():
@@ -477,7 +546,10 @@ func connectSignals():
 	statOutput[CONSTANTS.TIMER].start()
 	
 #	statOutput[CONSTANTS.OVERVIEW].connect("chart_plotted", self, "_show_overview_legend")
+	actionOutput[CONSTANTS.BORDERCONTROL].connect("toggled", self, "_on_borderControl_toggle")
 	
+	actionOutput[CONSTANTS.VAXPRODUCTIONSPINBOX].connect("value_changed", self, "_on_vaxProduction_changed")
+	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].connect("value_changed", self, "_on_hospitalBed_changed")
 	
 	buttons[CONSTANTS.STATBUTTON].connect("pressed", self, "_on_statButton_press")
 	buttons[CONSTANTS.ACTIONBUTTON].connect("pressed", self, "_on_actionButton_press")

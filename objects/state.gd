@@ -258,6 +258,9 @@ func getPopulation():
 	calculateLivingPopulation()
 	return self.population
 
+func getAvlbVax():
+	return self.avlbVax
+
 func calculateLivingPopulation():
 	calculateDeaths()
 	self.population = self.populationBase - self.deaths
@@ -337,6 +340,7 @@ func simulate():
 	var t = timeDifference
 	while t<1:
 		t = gillespieIteration(t)
+#		print(t)
 #		print(t, " S ", S, " I ", I, " R ", R, " D ", D, " ", I+S+R+D)
 		if(t>1):
 			timeDifference = fmod(t,1)

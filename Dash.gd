@@ -102,7 +102,15 @@ func _ready():
 	
 	actionOutput[CONSTANTS.ACTIONCONTAINER] = get_node("PlayControls")
 	actionOutput[CONSTANTS.OPTIONBUTTON] = get_node("PlayControls/GridContainer/OptionContainer/MaskOption/OptionButton")
-#	actionOutput[CONSTANTS.MENUBUTTON] = get_node("PlayControls/GridContainer/MenuButton")
+	actionOutput[CONSTANTS.LOCKDOWNOPTION] = get_node("PlayControls/GridContainer/LockDownOptions")
+	actionOutput[CONSTANTS.MASKOPTION] = get_node("PlayControls/GridContainer/OptionContainer/MaskOption/OptionButton")
+	actionOutput[CONSTANTS.HOMEOFFICEOPTION] = get_node("PlayControls/GridContainer/OptionContainer/HomeOfficeOption/OptionButton")
+	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX] = get_node("PlayControls/GridContainer/GridContainer/BedContainer/HospitalBeds")
+	actionOutput[CONSTANTS.VAXPRODUCTIONSPINBOX] = get_node("PlayControls/GridContainer/GridContainer/VaxContainer/VaxProduction")
+	actionOutput[CONSTANTS.TESTOPTION] = get_node("PlayControls/GridContainer/TestOption/OptionButton")
+	actionOutput[CONSTANTS.BORDERCONTROL] = get_node("PlayControls/GridContainer/OptionContainer/HomeOfficeOption/BorderControl")
+	actionOutput[CONSTANTS.OCCBEDS] = get_node("PlayControls/GridContainer/GridContainer/BedContainer/HospitalBedsNumber")
+	actionOutput[CONSTANTS.AVLBLVAX] = get_node("PlayControls/GridContainer/GridContainer/VaxContainer/VaxNumber")
 	
 	buttons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
 	buttons[CONSTANTS.ACTIONBUTTON] = get_node("ModeControl/ActionMode")

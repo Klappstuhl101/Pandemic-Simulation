@@ -140,6 +140,13 @@ func setHospitalBeds(day, value):
 		
 	recalculateHospitalBeds()
 
+func getAvlbVax():
+	var sum = 0
+	for state in states.values():
+		sum += state.getAvlbVax()
+	sum += self.avlbVax
+	return sum
+
 func getHospitalBeds(day = 0):
 	var keys = self.hospitalBedsDaily.keys()
 	if day != 0:
@@ -183,6 +190,9 @@ func stopLockdown():
 	
 func setVaxProduction(value):
 	self.vaxProduction = value
+
+func getVaxProduction():
+	return self.vaxProduction
 	
 func produceVax():
 	self.avlbVax += vaxProduction
@@ -203,8 +213,9 @@ func distributeCommuters():
 			continue
 #		print(state.name)
 		
+		# Anzahl der Pendler
 		var commuteCount = int(floor(state.getCommuteRate() * state.getPopulation()))
-		var openBorderNeighborCount = getOpenBorderNeighborCount(state)
+		var openBorderNeighborCount = getOpenBorderNeighborCount(state) # Anzahl der Nachbarstaaten, deren Grenze offen ist
 		var modCommuter = 0
 		if openBorderNeighborCount != 0:
 			modCommuter = commuteCount % openBorderNeighborCount
@@ -221,6 +232,7 @@ func distributeCommuters():
 					var avlblCommuters = checkAvlblCommuters(state)
 					var rand = rnd.randi_range(0, avlblCommuters.size()-1)
 					
+					# PROBLEM: KEINE COMMUTER VEFÜGBAR WENN ALLE ERSTE IMPFUNG BEKOMMEN HABEN UND IM FLIEßBAND SIND
 					while !avlblCommuters[rand]:
 						rand = rnd.randi_range(0, avlblCommuters.size()-1)
 						
@@ -303,6 +315,7 @@ func distributeCommuters():
 func getOpenBorderNeighborCount(state:State):
 	var sum = 0
 	for neighborstate in state.neighbors:
+#		if states.get(neighborstate).getBorderOpen() and checkAvlblCommuters(state).values().min() == true:
 		if states.get(neighborstate).getBorderOpen():
 			sum += 1
 	return sum
@@ -400,6 +413,8 @@ func simulateALL():
 	D = [0,0,0]
 	V1 = [0,0,0,0,0]
 	V2 = [0,0,0,0,0]
+	
+#	recalculateHospitalBeds()
 	
 	produceVax()
 	distributeVax()

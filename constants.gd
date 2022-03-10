@@ -10,6 +10,16 @@ const PROGRESSBAR = "Progressbar"
 const PROGRESSPANEL = "ProgressPanel"
 
 const ACTIONCONTAINER = "ActionContainer"
+const LOCKDOWNOPTION = "LockDownOption"
+const MASKOPTION = "MaskOption"
+const HOMEOFFICEOPTION = "HomeOfficeOption"
+const HOSPITALBEDSPINBOX = "HospitalBedSpinbox"
+const VAXPRODUCTIONSPINBOX = "VaxProductionSpinbox"
+const TESTOPTION = "TestOption"
+const BORDERCONTROL = "BorderControl"
+const OCCBEDS = "OccBeds"
+const AVLBLVAX = "AvailableVax"
+
 const OPTIONBUTTON = "OptionButton"
 const MENUBUTTON = "MenuButton"
 

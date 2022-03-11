@@ -9,6 +9,12 @@ const TIMER = "Timer"
 const PROGRESSBAR = "Progressbar"
 const PROGRESSPANEL = "ProgressPanel"
 
+const NO = "No"
+const LIGHT = "Light"
+const MEDIUM = "Medium"
+const HEAVY = "Heavy"
+const USERDEFINED = "Userdefined"
+
 const ACTIONCONTAINER = "ActionContainer"
 const LOCKDOWNOPTION = "LockDownOption"
 const MASKOPTION = "MaskOption"
@@ -138,3 +144,7 @@ static func zeroes(length : int):
 	for _i in range(length):
 		arr.append(0)
 	return arr
+
+static func average(arr:Array):
+	var sum = sum(arr)
+	return float(sum) / float(arr.size())

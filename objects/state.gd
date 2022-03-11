@@ -9,9 +9,11 @@ var populationBase :int
 var neighbors :Array
 var visitors :Array
 var commuterRate :float
+var commuterFactor :float
 
 var mapButton :TextureButton
 
+var populationToRealFactor :float
 var population :int
 var deaths :int
 
@@ -41,7 +43,7 @@ var vacRate1
 var vacRate2
 var waitDay :int = 0
 
-var avlbVax
+var avlbVax :int
 
 var infectRate
 var recRate
@@ -103,6 +105,9 @@ func _init(initName, initRealPopulation, initPopulation, initButton, initNeighbo
 	self.name = initName
 	self.realPopulation = initRealPopulation
 	self.populationBase = initPopulation
+	
+	self.populationToRealFactor = float(self.realPopulation) / float(self.populationBase)
+	
 	self.mapButton = initButton
 	self.neighbors = initNeighbors
 	self.commuterRate = initCommuter
@@ -114,10 +119,13 @@ func _init(initName, initRealPopulation, initPopulation, initButton, initNeighbo
 	mapButton.texture_click_mask = bitmap
 	mapButton.toggle_mode = true
 	
+	setCommuterFactor(1)
+	
+	
 	baseInfect = 0.2
 	baseRec = 0.02
 	baseDeath = 0.01
-	baseTest = 0.04
+	baseTest = 0.000 #0.005 für stärkste Teststufe, 0.0025 für mittlere Stufe, 0.001 für schwächste Stufe, 0.000 für keine Tests
 	baseHospital = 0.6
 	
 	self.avlbVax = 0
@@ -318,7 +326,7 @@ func getInfectRate():
 		return baseInfect
 
 func getCommuteRate():
-	return commuterRate
+	return self.commuterRate * self.commuterFactor
 
 func getBorderOpen():
 	return borderOpen
@@ -332,6 +340,10 @@ func setTestRates(value:float):
 func setLockdown(isTrue:bool, strictness:float):
 	self.lockdown = isTrue
 	self.lockdownStrictness = strictness
+
+func setCommuterFactor(value:float):
+	self.commuterFactor = value
+
 
 func simulate():
 #	if I <= 0: # pandemic over

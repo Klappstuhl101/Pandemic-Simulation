@@ -100,6 +100,12 @@ func _ready():
 	statOutput[CONSTANTS.BEDSTATUS] = get_node("Statistics/GridContainer/BedsOverview/BedNr")
 	statOutput[CONSTANTS.HOSPBEDS] = get_node("Statistics/GridContainer/HospBeds")
 	
+	actionOutput[CONSTANTS.NO] = get_node("PlayControls/GridContainer/LockDownOptions/No")
+	actionOutput[CONSTANTS.LIGHT] = get_node("PlayControls/GridContainer/LockDownOptions/Light")
+	actionOutput[CONSTANTS.MEDIUM] = get_node("PlayControls/GridContainer/LockDownOptions/Medium")
+	actionOutput[CONSTANTS.HEAVY] = get_node("PlayControls/GridContainer/LockDownOptions/Heavy")
+	actionOutput[CONSTANTS.USERDEFINED] = get_node("PlayControls/GridContainer/LockDownOptions/Userdefined")
+	
 	actionOutput[CONSTANTS.ACTIONCONTAINER] = get_node("PlayControls")
 	actionOutput[CONSTANTS.OPTIONBUTTON] = get_node("PlayControls/GridContainer/OptionContainer/MaskOption/OptionButton")
 	actionOutput[CONSTANTS.LOCKDOWNOPTION] = get_node("PlayControls/GridContainer/LockDownOptions")

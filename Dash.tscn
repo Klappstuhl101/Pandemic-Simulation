@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=2]
+[gd_scene load_steps=88 format=2]
 
 [ext_resource path="res://resources/control_buttons/Pause-thin-rounded-button-white.png" type="Texture" id=1]
 [ext_resource path="res://resources/control_buttons/Play-rounded-button-outline-white.png" type="Texture" id=2]
@@ -152,13 +152,16 @@ shader = ExtResource( 60 )
 shader_param/incidenceRatio = 0.0
 shader_param/infectGradient = ExtResource( 49 )
 
-[sub_resource type="StyleBoxFlat" id=19]
+[sub_resource type="StyleBoxFlat" id=21]
+bg_color = Color( 0.266667, 0.266667, 0.266667, 1 )
+
+[sub_resource type="StyleBoxFlat" id=18]
 bg_color = Color( 0, 0, 0, 0 )
 
-[sub_resource type="StyleBoxFlat" id=20]
+[sub_resource type="StyleBoxFlat" id=19]
 bg_color = Color( 1, 0, 0, 1 )
 
-[sub_resource type="StyleBoxFlat" id=21]
+[sub_resource type="StyleBoxFlat" id=20]
 bg_color = Color( 1, 1, 1, 1 )
 
 [node name="Panel" type="Panel"]
@@ -613,45 +616,48 @@ margin_bottom = 124.0
 rect_min_size = Vector2( 988, 100 )
 columns = 5
 
-[node name="CheckBox" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
+[node name="No" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
 margin_right = 194.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 194, 100 )
 pressed = true
 group = ExtResource( 66 )
-text = "kein"
+text = "Kein Lockdown"
 
-[node name="CheckBox2" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
+[node name="Light" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
 margin_left = 198.0
 margin_right = 392.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 194, 0 )
 group = ExtResource( 66 )
-text = "leichter"
+text = "Leichter Lockdown"
 
-[node name="CheckBox3" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
+[node name="Medium" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
 margin_left = 396.0
 margin_right = 590.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 194, 0 )
 group = ExtResource( 66 )
-text = "mittlerer"
+text = "Mittlerer Lockdown"
 
-[node name="CheckBox4" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
+[node name="Heavy" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
 margin_left = 594.0
 margin_right = 788.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 194, 0 )
 group = ExtResource( 66 )
-text = "harter"
+text = "Harter Lockdown"
 
-[node name="CheckBox5" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
+[node name="Userdefined" type="CheckBox" parent="PlayControls/GridContainer/LockDownOptions"]
 margin_left = 792.0
 margin_right = 986.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 194, 0 )
+custom_styles/disabled = SubResource( 21 )
+disabled = true
 group = ExtResource( 66 )
-text = "benutzerdefiniert"
+text = "Benutzerdefiniert"
+clip_text = true
 
 [node name="HSeparator" type="HSeparator" parent="PlayControls/GridContainer"]
 margin_top = 128.0
@@ -1126,7 +1132,7 @@ margin_left = 100.0
 margin_right = 250.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 150, 48 )
-custom_styles/normal = SubResource( 19 )
+custom_styles/normal = SubResource( 18 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Simuliere"
 align = 1
@@ -1142,8 +1148,8 @@ margin_top = 57.0
 margin_right = 1240.0
 margin_bottom = 105.0
 rect_min_size = Vector2( 500, 48 )
-custom_styles/fg = SubResource( 20 )
-custom_styles/bg = SubResource( 21 )
+custom_styles/fg = SubResource( 19 )
+custom_styles/bg = SubResource( 20 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 value = 40.0
 percent_visible = false

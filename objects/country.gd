@@ -6,6 +6,7 @@ var name
 var realPopulation
 var populationBase
 
+var populationToRealFactor :float
 var population
 var deaths
 
@@ -90,8 +91,8 @@ func _init(initStates, initName, initButton):
 	
 	# ZURÜCKSETZEN BEVOR ABSCHLUSS
 	self.avlbVax = 0
-#	setVaxProduction(0)
-	setVaxProduction(20)
+	setVaxProduction(0)
+#	setVaxProduction(20)
 	
 	
 	# Hospital Bed array zum Anzeigen
@@ -107,6 +108,38 @@ func _init(initStates, initName, initButton):
 	V2 = [0,0,0,0,0]
 	
 	getNumbers()
+	# für Gesamtübersicht
+	suscept.append(S[0] + S[1] + V1[0] + V2[0])
+	infect.append(I[0] + I[1] + I[2] + I[3] + V1[1] + V1[2] + V2[1] + V2[2])
+	recov.append(R[0] + R[1] + R[2] + V1[3] + V2[3])
+	dead.append(D[0] + D[1] + D[2] + V1[4] + V2[4])
+	
+	sus0.append(S[0])
+	sus1.append(S[1])
+	inf0.append(I[0])
+	inf1.append(I[1])
+	inf2.append(I[2])
+	rec0.append(R[0])
+	rec1.append(R[1])
+	rec2.append(R[2])
+	dead0.append(D[0])
+	dead1.append(D[1])
+	dead2.append(D[2])
+	
+	
+	vax1sus.append(V1[0])
+	vax1inf.append(V1[1])
+	vax1hosp.append(V1[2])
+	vax1rec.append(V1[3])
+	vax1dead.append(V1[4])
+	
+	vax2sus.append(V2[0])
+	vax2inf.append(V2[1])
+	vax2hosp.append(V2[2])
+	vax2rec.append(V2[3])
+	vax2dead.append(V2[4])
+	
+	hosp.append(I[3])
 	
 	rnd.randomize()
 	
@@ -478,6 +511,9 @@ func getNumbers():
 func getPopulation():
 	return self.population
 
+func getTestedSum():
+	return S[1] + I[1] + R[1]
+
 func getUnvaxedSum():
 	return CONSTANTS.sum(S) + CONSTANTS.sum(I) + CONSTANTS.sum(R)
 
@@ -520,3 +556,7 @@ func setBorderOpen(open:bool):
 func setTestRates(value:float):
 	for state in states.values():
 		state.setTestRates(value)
+
+func setCommuterFactor(value:float):
+	for state in states.values():
+		state.setCommuterFactor(value)

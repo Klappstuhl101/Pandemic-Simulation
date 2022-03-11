@@ -20,6 +20,12 @@ var optionChanged:bool
 
 var interval
 
+var selectedLockdown :Array
+var lockdownFactor :float
+var maskFactor :float
+
+var selectedMask :int
+var selectedHomeOffice :int
 
 var days = []
 var currentDay = 0
@@ -40,6 +46,10 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	
 	self.godmode = initGodmode
 	
+	self.selectedLockdown = [0, 1-0.816, 1-0.66, 1-0.451]
+	self.lockdownFactor = 0
+	self.maskFactor = 0
+	
 	self.interval = CONSTANTS.WEEK
 
 	setMode(CONSTANTS.STATMODE)
@@ -54,6 +64,9 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	
 	self.active = entities.get(CONSTANTS.DEU)
 	
+	self.selectedMask = 0
+	self.selectedHomeOffice = 0
+	
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
 	
@@ -64,8 +77,9 @@ func showAction():
 	
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	
-	actionOutput[CONSTANTS.OCCBEDS].text = String(active.getDailyOccupiedBeds(self.days.max() if self.days.max() != null else -1)) + " / " + String(active.getHospitalBeds())
-	actionOutput[CONSTANTS.AVLBLVAX].text = String(active.getAvlbVax())
+	actionOutput[CONSTANTS.USERDEFINED].pressed = self.optionChanged
+	self.optionChanged = false
+	
 	
 	actionOutput[CONSTANTS.VAXPRODUCTIONSPINBOX].editable = active.getName() == entities[CONSTANTS.DEU].getName()
 	actionOutput[CONSTANTS.VAXPRODUCTIONSPINBOX].value = entities[CONSTANTS.DEU].getVaxProduction()
@@ -74,6 +88,8 @@ func showAction():
 	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].editable = active.getName() == entities[CONSTANTS.DEU].getName()
 	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].value = active.getHospitalBeds(self.days.max() if self.days.max() != null else 0)
 	
+	actionOutput[CONSTANTS.OCCBEDS].text = String(active.getDailyOccupiedBeds(self.days.max() if self.days.max() != null else -1)) + " / " + String(active.getHospitalBeds())
+	actionOutput[CONSTANTS.AVLBLVAX].text = String(active.getAvlbVax())
 	
 	
 	
@@ -115,10 +131,7 @@ func showStats():
 			var hospitalOccupation = getHospitalOccupation(showInterval)
 			statOutput[CONSTANTS.HOSPBEDS].plot_from_array(hospitalOccupation)
 			statOutput[CONSTANTS.BEDSTATUS].text = String(hospitalOccupation[2][hospitalOccupation[2].size() - 1]) + CONSTANTS.BL + "/" + CONSTANTS.BL + String(active.getHospitalBeds())
-#			if days.max() == 70:
-#				entities[CONSTANTS.DEU].setHospitalBeds(days.max(), 500)
-#			if days.max() > 50:
-#				entities[CONSTANTS.DEU].setHospitalBeds(days.max(), 100)
+			
 			
 		if !establishedLegends:
 			establishedLegends = true
@@ -145,11 +158,7 @@ func updateMap():
 	var incidences = []
 	for entity in entities.values():
 		incidences.append(entity.get7DayIncidence(godmode))
-#	var maxInc = incidences.max()
-#	print(log(incidences[0]) / log(incidences.max()), " //", String(incidences[0]) + " Inzidenz Bawü// " + String(incidences.max()))
-#	entities[CONSTANTS.BAW].mapButton.material.set_shader_param("incidenceRatio", log(incidences[0]) / log(incidences.max()))
-#
-	# Für die Zukunft in der jeder MapButton einen Shader hat
+		
 	var i = 0
 	for entity in entities.values():
 		if incidences.max() > 0:
@@ -288,7 +297,7 @@ func getOutputR():
 	if casesGen2 == 0:
 		return 0
 	else:
-		return stepify(casesGen1/casesGen2, 0.01)
+		return stepify(casesGen1/casesGen2, 0.01) if casesGen1/casesGen2 > 0 else 0
 
 func getOutputVaccinations():
 	var sumUnvax = active.getUnvaxedSum()
@@ -298,7 +307,7 @@ func getOutputVaccinations():
 
 func getDailyChanges(dayArray):
 	var output = [dayArray]
-	var newInfections = [CONSTANTS.NEWINFECTIONS]
+	var newInfections = [CONSTANTS.NEWINFECTIONS + CONSTANTS.BL + CONSTANTS.TESTED]
 	var newVaxxed1 = [CONSTANTS.FIRSTVAX]
 	var newVaxxed2 = [CONSTANTS.SECONDVAX]
 	
@@ -333,7 +342,13 @@ func getHospitalOccupation(dayArray):
 	output.append(maxBeds)
 	output.append(hosp)
 	return output
+	
+func getLockdownStrictness():
+	return (2 * self.lockdownFactor + self.maskFactor) / 3.0
 
+func getIsLockdown():
+	return self.lockdownFactor == 0 and self.maskFactor == 0
+	
 func simulate():
 	entities[CONSTANTS.DEU].simulateALL()
 	days.append(self.currentDay)
@@ -346,8 +361,12 @@ func simulate():
 
 func updateDay():
 	statOutput[CONSTANTS.DAYS].text = CONSTANTS.DAYS + CONSTANTS.BL + String(self.currentDay)
+	
+	print("Tag ", self.currentDay, "// getestete Personen Deutschland: ", entities[CONSTANTS.DEU].getTestedSum())
+	
 	if self.days.size() > 3:
 		buttons[CONSTANTS.STATBUTTON].disabled = false
+		
 	self.currentDay += 1
 
 func activate():
@@ -486,8 +505,74 @@ func _show_daily_legend():
 	for function in statOutput[CONSTANTS.DAILYCHANGES].get_legend():
 		statOutput[CONSTANTS.DAILYLEGEND].add_child(function)
 
+func _on_NO_toggled(pressed:bool):
+	if pressed:
+		self.lockdownFactor = self.selectedLockdown[0]
+		
+		self.selectedMask = 0
+		self.selectedHomeOffice = 0
+		
+		actionOutput[CONSTANTS.MASKOPTION].select(self.selectedMask)
+		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(self.selectedHomeOffice)
+		
+		self.optionChanged = false
+		
+		active.setLockdown(getIsLockdown(), getLockdownStrictness())
+
+func _on_LIGHT_toggled(pressed:bool):
+	if pressed:
+		self.lockdownFactor = self.selectedLockdown[1]
+		
+		self.selectedMask = 1
+		self.selectedHomeOffice = 1
+		
+		actionOutput[CONSTANTS.MASKOPTION].select(self.selectedMask)
+		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(self.selectedHomeOffice)
+		
+		self.optionChanged = false
+		
+		active.setLockdown(getIsLockdown(), getLockdownStrictness())
+
+func _on_MEDIUM_toggled(pressed:bool):
+	if pressed:
+		self.lockdownFactor = self.selectedLockdown[2]
+		
+		self.selectedMask = 2
+		self.selectedHomeOffice = 2
+		
+		actionOutput[CONSTANTS.MASKOPTION].select(self.selectedMask)
+		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(self.selectedHomeOffice)
+		
+		self.optionChanged = false
+		
+		active.setLockdown(getIsLockdown(), getLockdownStrictness())
+
+func _on_HEAVY_toggled(pressed:bool):
+	if pressed:
+		self.lockdownFactor = self.selectedLockdown[3]
+		
+		self.selectedMask = 3
+		self.selectedHomeOffice = 3
+		actionOutput[CONSTANTS.MASKOPTION].select(self.selectedMask)
+		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(self.selectedHomeOffice)
+		
+		
+		
+		self.optionChanged = false
+		
+		active.setLockdown(getIsLockdown(), getLockdownStrictness())
+
+func _on_USERDEFINED_toggled(pressed:bool):
+	if pressed:
+		self.optionChanged = false
+		self.lockdownFactor = self.selectedLockdown[int(CONSTANTS.average([self.selectedMask, self.selectedHomeOffice]))]
+
+		active.setLockdown(getIsLockdown(), getLockdownStrictness())
+
 func _on_borderControl_toggle(button_pressed:bool):
-	print("Border Control ", button_pressed)
+	self.optionChanged = true
+	self.selectedHomeOffice = 4
+#	print("Border Control ", button_pressed)
 	active.setBorderOpen(!button_pressed)
 
 func _on_vaxProduction_changed(value:float):
@@ -499,6 +584,47 @@ func _on_hospitalBed_changed(value:float):
 #		entities[CONSTANTS.DEU].recalculateHospitalBeds()
 		actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].value = entities[CONSTANTS.DEU].getHospitalBeds(self.days.max() if self.days.max() != null else 0)
 #	active.setHospitalBeds(self.days.max() if self.days.max() != null else 0, int(value))
+
+func _on_mask_selected(index:int):
+	self.optionChanged = true
+	self.selectedMask = index
+	match index:
+		0:
+			self.maskFactor = 0
+		1:
+			self.maskFactor = 0.5
+		2:
+			self.maskFactor = 0.1
+		3:
+			self.maskFactor = 0.04
+	active.setLockdown(getIsLockdown(), getLockdownStrictness())
+	showAction()
+
+func _on_homeOffice_selected(index:int):
+	self.optionChanged = true
+	self.selectedHomeOffice = index
+	match index:
+		0:
+			active.setCommuterFactor(1)
+		1:
+			active.setCommuterFactor(1 - 0.24)
+		2:
+			active.setCommuterFactor(1 - 0.42)
+		3:
+			active.setCommuterFactor((1 - 0.43) * 0.42)
+	active.setLockdown(getIsLockdown(), getLockdownStrictness())
+	showAction()
+
+func _on_testScenario_selected(index:int):
+	match index:
+		0:
+			active.setTestRates(0.0)
+		1:
+			active.setTestRates(0.001)
+		2:
+			active.setTestRates(0.0025)
+		3:
+			active.setTestRates(0.005)
 
 func _establish_mask_options():
 	actionOutput[CONSTANTS.MASKOPTION].add_item("Keine Masken")
@@ -512,12 +638,12 @@ func _establish_homeOffice_options():
 	actionOutput[CONSTANTS.HOMEOFFICEOPTION].add_item("Keine Vorgabe")
 	actionOutput[CONSTANTS.HOMEOFFICEOPTION].add_item("Empfehlung zum Home-Office")
 	actionOutput[CONSTANTS.HOMEOFFICEOPTION].add_item("Verpflichtung zum Home-Office")
-	actionOutput[CONSTANTS.HOMEOFFICEOPTION].add_item("Schließung der nicht lebensnotwendigen Betriebe")
+	actionOutput[CONSTANTS.HOMEOFFICEOPTION].add_item("Schließung nicht kritischer Betriebe")
 	
 	actionOutput[CONSTANTS.HOMEOFFICEOPTION].get_popup().set_item_tooltip(0, "Jeder Arbeitnehmer kann ganz normal zur Arbeit gehen.")
 	actionOutput[CONSTANTS.HOMEOFFICEOPTION].get_popup().set_item_tooltip(1, "Jedem Arbeitnehmer wird empfohlen von zu Hause zu arbeiten, vorausgesetzt der Beruf lässt es zu.")
 	actionOutput[CONSTANTS.HOMEOFFICEOPTION].get_popup().set_item_tooltip(2, "Jeder Arbeitnehmer wird verpflichtet von zu Hause zu arbeiten, vorausgesetzt der Beruf lässt es zu.")
-	actionOutput[CONSTANTS.HOMEOFFICEOPTION].get_popup().set_item_tooltip(3, "Alle Betriebe, außer lebensnotwendiger Infrastruktur, werden geschlossen. Arbeitnehmer bleiben zu Hause.")
+	actionOutput[CONSTANTS.HOMEOFFICEOPTION].get_popup().set_item_tooltip(3, "Alle Betriebe, außer kritischer Infrastruktur, werden geschlossen. Arbeitnehmer bleiben zu Hause.")
 
 func _establish_test_options():
 	actionOutput[CONSTANTS.TESTOPTION].add_item("Keine Tests")
@@ -545,8 +671,18 @@ func connectSignals():
 	statOutput[CONSTANTS.TIMER].connect("timeout", self, "_on_Time_timeout")
 	statOutput[CONSTANTS.TIMER].start()
 	
-#	statOutput[CONSTANTS.OVERVIEW].connect("chart_plotted", self, "_show_overview_legend")
+	actionOutput[CONSTANTS.NO].connect("toggled", self, "_on_NO_toggled")
+	actionOutput[CONSTANTS.LIGHT].connect("toggled", self, "_on_LIGHT_toggled")
+	actionOutput[CONSTANTS.MEDIUM].connect("toggled", self, "_on_MEDIUM_toggled")
+	actionOutput[CONSTANTS.HEAVY].connect("toggled", self, "_on_HEAVY_toggled")
+	actionOutput[CONSTANTS.USERDEFINED].connect("toggled", self, "_on_USERDEFINED_toggled")
+	
 	actionOutput[CONSTANTS.BORDERCONTROL].connect("toggled", self, "_on_borderControl_toggle")
+	
+	actionOutput[CONSTANTS.MASKOPTION].connect("item_selected", self, "_on_mask_selected")
+	actionOutput[CONSTANTS.HOMEOFFICEOPTION].connect("item_selected", self, "_on_homeOffice_selected")
+	
+	actionOutput[CONSTANTS.TESTOPTION].connect("item_selected", self, "_on_testScenario_selected")
 	
 	actionOutput[CONSTANTS.VAXPRODUCTIONSPINBOX].connect("value_changed", self, "_on_vaxProduction_changed")
 	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].connect("value_changed", self, "_on_hospitalBed_changed")

@@ -4,8 +4,7 @@ extends Object
 class_name State
 
 var name :String
-var realPopulation :int
-var populationBase :int
+
 var neighbors :Array
 var visitors :Array
 var commuterRate :float
@@ -13,11 +12,20 @@ var commuterFactor :float
 
 var mapButton :TextureButton
 
+var realPopulation :int
+var populationBase :int
+var populationFactor :float
 var populationToRealFactor :float
 var population :int
 var deaths :int
 
 var borderOpen :bool
+
+var selectedMask :int
+var selectedHomeOffice :int
+
+var lockdown :bool = false
+#var lockdownStrictness
 
 var suscept = [CONSTANTS.SUSCEPTIBLE]
 var infect = [CONSTANTS.INFECTED]
@@ -65,9 +73,6 @@ var baseDeath
 var baseTest
 var baseHospital
 
-var lockdown :bool = false
-var lockdownStrictness
-
 var testRate
 var informationLoss
 
@@ -101,10 +106,13 @@ var timeDifference
 
 var rnd = RandomNumberGenerator.new()
 
-func _init(initName, initRealPopulation, initPopulation, initButton, initNeighbors, initCommuter):
+func _init(initName, initRealPopulation, initPopulationFactor, initButton, initNeighbors, initCommuter):
 	self.name = initName
 	self.realPopulation = initRealPopulation
-	self.populationBase = initPopulation
+	self.populationFactor = initPopulationFactor
+	
+	self.populationBase = int(floor(self.realPopulation * self.populationFactor))
+#	self.populationBase = initPopulation
 	
 	self.populationToRealFactor = float(self.realPopulation) / float(self.populationBase)
 	
@@ -160,7 +168,7 @@ func _init(initName, initRealPopulation, initPopulation, initButton, initNeighbo
 	hospitalRate = [baseHospital, baseHospital*0.2, baseHospital*0.1]
 	
 #	# für Lockdown
-	lockdownStrictness = 0.9
+#	lockdownStrictness = 0.9
 	
 	self.V1 = [CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY)]
 	self.V1eligible = [0,0,0,0,0]
@@ -320,7 +328,9 @@ func getDailyOccupiedBeds(day):
 	return hosp[day] + vax1hosp[day] + vax2hosp[day]
 
 func getInfectRate():
-	if lockdown:
+	if !(self.selectedMask == 0 and self.selectedHomeOffice == 0):
+		var lockdownAverage = int(CONSTANTS.average([self.selectedMask, self.selectedHomeOffice]))
+		var lockdownStrictness = (2 * CONSTANTS.LOCKDOWNSTRICTNESS[lockdownAverage] + CONSTANTS.MASKFACTORS[self.selectedMask]) / 3.0
 		return baseInfect * (1-lockdownStrictness)
 	else:
 		return baseInfect
@@ -334,15 +344,25 @@ func getBorderOpen():
 func setBorderOpen(open:bool):
 	self.borderOpen = open
 
-func setTestRates(value:float):
+func setTestRates(index:int):
+	var value = CONSTANTS.TESTRATES[index]
 	self.testRate = [value, value, value]
 	
 func setLockdown(isTrue:bool, strictness:float):
 	self.lockdown = isTrue
-	self.lockdownStrictness = strictness
+#	self.lockdownStrictness = strictness
 
 func setCommuterFactor(value:float):
 	self.commuterFactor = value
+
+func setSelectedMask(index:int):
+	self.selectedMask = index
+
+func setSelectedHomeOffice(index:int):
+	self.selectedHomeOffice = index
+
+
+
 
 
 func simulate():

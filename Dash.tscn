@@ -152,16 +152,16 @@ shader = ExtResource( 60 )
 shader_param/incidenceRatio = 0.0
 shader_param/infectGradient = ExtResource( 49 )
 
-[sub_resource type="StyleBoxFlat" id=21]
+[sub_resource type="StyleBoxFlat" id=18]
 bg_color = Color( 0.266667, 0.266667, 0.266667, 1 )
 
-[sub_resource type="StyleBoxFlat" id=18]
+[sub_resource type="StyleBoxFlat" id=19]
 bg_color = Color( 0, 0, 0, 0 )
 
-[sub_resource type="StyleBoxFlat" id=19]
+[sub_resource type="StyleBoxFlat" id=20]
 bg_color = Color( 1, 0, 0, 1 )
 
-[sub_resource type="StyleBoxFlat" id=20]
+[sub_resource type="StyleBoxFlat" id=21]
 bg_color = Color( 1, 1, 1, 1 )
 
 [node name="Panel" type="Panel"]
@@ -653,7 +653,7 @@ margin_left = 792.0
 margin_right = 986.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 194, 0 )
-custom_styles/disabled = SubResource( 21 )
+custom_styles/disabled = SubResource( 18 )
 disabled = true
 group = ExtResource( 66 )
 text = "Benutzerdefiniert"
@@ -1132,7 +1132,7 @@ margin_left = 100.0
 margin_right = 250.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 150, 48 )
-custom_styles/normal = SubResource( 18 )
+custom_styles/normal = SubResource( 19 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Simuliere"
 align = 1
@@ -1148,8 +1148,8 @@ margin_top = 57.0
 margin_right = 1240.0
 margin_bottom = 105.0
 rect_min_size = Vector2( 500, 48 )
-custom_styles/fg = SubResource( 19 )
-custom_styles/bg = SubResource( 20 )
+custom_styles/fg = SubResource( 20 )
+custom_styles/bg = SubResource( 21 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 value = 40.0
 percent_visible = false

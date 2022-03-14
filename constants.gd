@@ -112,6 +112,13 @@ const UNVAXED = "Ungeimpft"
 const VAX1 = "1x Geimpft"
 const VAX2 = "2x Geimpft"
 
+const LOCKDOWNSTRICTNESS = [0, 1-0.816, 1-0.66, 1-0.451]
+const MASKFACTORS = [0,0.5,0.1,0.04]
+const COMMUTERFACTORS = [1, 1-0.24, 1-0.42, (1 - 0.43) * 0.42]
+
+const TESTRATES = [0.0, 0.001, 0.0025, 0.005]
+
+
 const VACDELAY = 10
 
 var currentState: String

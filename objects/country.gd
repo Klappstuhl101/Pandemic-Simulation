@@ -553,10 +553,18 @@ func setBorderOpen(open:bool):
 	for state in states.values():
 		state.setBorderOpen(open)
 
-func setTestRates(value:float):
+func setTestRates(index:int):
 	for state in states.values():
-		state.setTestRates(value)
+		state.setTestRates(index)
 
 func setCommuterFactor(value:float):
 	for state in states.values():
 		state.setCommuterFactor(value)
+
+func setSelectedMask(index:int):
+	for state in states.values():
+		state.setSelectedMask(index)
+		
+func setSelectedHomeOffice(index:int):
+	for state in states.values():
+		state.setSelectedHomeOffice(index)

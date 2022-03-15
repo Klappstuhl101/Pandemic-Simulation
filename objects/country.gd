@@ -3,25 +3,32 @@ extends Object
 class_name Country
 
 var name
-var realPopulation
-var populationBase
+var realPopulation :int
+var populationBase :int
 
 var populationToRealFactor :float
-var population
-var deaths
+var population :int
+var deaths :int
 
 var states # dict of states
 
 var beds = []
-var hospitalBeds # Number of Beds
+var hospitalBeds :int# Number of Beds
 var hospitalBedsDaily
 
-var vaxProduction
-var avlbVax
+var vaxProduction :int
+var avlbVax :int
 
 var mapButton
 
-var lockdown = false
+var lockdown :bool = false
+var openBorder :bool
+
+var optionChanged :bool
+
+var selectedMask :int
+var selectedHomeOffice :int
+var selectedTest :int
 
 var S
 var I
@@ -211,15 +218,15 @@ func setLockdown(isTrue:bool, lockdownStrictness:float):
 	for state in states.values():
 		state.setLockdown(isTrue, lockdownStrictness)
 
-func imposeLockdown():
-	self.lockdown = true
-	for state in states.values():
-		state.lockdown = true
-
-func stopLockdown():
-	self.lockdown = false
-	for state in states.values():
-		state.lockdown = false
+#func imposeLockdown():
+#	self.lockdown = true
+#	for state in states.values():
+#		state.lockdown = true
+#
+#func stopLockdown():
+#	self.lockdown = false
+#	for state in states.values():
+#		state.lockdown = false
 	
 func setVaxProduction(value):
 	self.vaxProduction = value
@@ -553,18 +560,66 @@ func setBorderOpen(open:bool):
 	for state in states.values():
 		state.setBorderOpen(open)
 
+func getBorderOpen():
+	var value = states[CONSTANTS.BAW].getBorderOpen()
+	for state in states.values():
+		if value != state.getBorderOpen():
+			return CONSTANTS.DIFFERENTSETTINGS
+	self.openBorder = value
+	return self.openBorder
+
 func setTestRates(index:int):
+	self.selectedTest = index
 	for state in states.values():
 		state.setTestRates(index)
 
-func setCommuterFactor(value:float):
-	for state in states.values():
-		state.setCommuterFactor(value)
+#func setCommuterFactor(value:float):
+#	for state in states.values():
+#		state.setCommuterFactor(value)
 
 func setSelectedMask(index:int):
+	self.selectedMask = index
 	for state in states.values():
 		state.setSelectedMask(index)
 		
 func setSelectedHomeOffice(index:int):
+	self.selectedHomeOffice = index
 	for state in states.values():
 		state.setSelectedHomeOffice(index)
+
+func getSelectedMask():
+	var value = states[CONSTANTS.BAW].getSelectedMask()
+	for state in states.values():
+		if value != state.getSelectedMask():
+			return CONSTANTS.DIFFERENTSETTINGS
+	self.selectedMask = value
+	return self.selectedMask
+
+func getSelectedHomeOffice():
+	var value = states[CONSTANTS.BAW].getSelectedHomeOffice()
+	for state in states.values():
+		if value != state.getSelectedHomeOffice():
+			return CONSTANTS.DIFFERENTSETTINGS
+	self.selectedHomeOffice = value
+	return self.selectedHomeOffice
+
+func getSelectedTestRates():
+	var value = states[CONSTANTS.BAW].getSelectedTestRates()
+	for state in states.values():
+		if value != state.getSelectedTestRates():
+			return CONSTANTS.DIFFERENTSETTINGS
+	self.selectedTest = value
+	return self.selectedTest
+
+func setOptionChanged(isTrue:bool):
+	self.optionChanged = isTrue
+#	for state in states.values():
+#		state.setOptionChanged(isTrue)
+
+func getOptionChanged():
+	var value = states[CONSTANTS.BAW].getOptionChanged()
+	for state in states.values():
+		if value != state.getOptionChanged():
+			return true
+#	self.optionChanged = value
+	return self.optionChanged

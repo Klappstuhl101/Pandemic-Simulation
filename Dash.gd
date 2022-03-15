@@ -115,6 +115,7 @@ func _ready():
 	actionOutput[CONSTANTS.VAXPRODUCTIONSPINBOX] = get_node("PlayControls/GridContainer/GridContainer/VaxContainer/VaxProduction")
 	actionOutput[CONSTANTS.TESTOPTION] = get_node("PlayControls/GridContainer/TestOption/OptionButton")
 	actionOutput[CONSTANTS.BORDERCONTROL] = get_node("PlayControls/GridContainer/OptionContainer/HomeOfficeOption/BorderControl")
+	actionOutput[CONSTANTS.BORDERTIP] = get_node("PlayControls/GridContainer/OptionContainer/HomeOfficeOption/BorderControlTip")
 	actionOutput[CONSTANTS.OCCBEDS] = get_node("PlayControls/GridContainer/GridContainer/BedContainer/HospitalBedsNumber")
 	actionOutput[CONSTANTS.AVLBLVAX] = get_node("PlayControls/GridContainer/GridContainer/VaxContainer/VaxNumber")
 	

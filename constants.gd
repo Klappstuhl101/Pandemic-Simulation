@@ -23,6 +23,7 @@ const HOSPITALBEDSPINBOX = "HospitalBedSpinbox"
 const VAXPRODUCTIONSPINBOX = "VaxProductionSpinbox"
 const TESTOPTION = "TestOption"
 const BORDERCONTROL = "BorderControl"
+const BORDERTIP = "BorderTip"
 const OCCBEDS = "OccBeds"
 const AVLBLVAX = "AvailableVax"
 
@@ -113,11 +114,12 @@ const VAX1 = "1x Geimpft"
 const VAX2 = "2x Geimpft"
 
 const LOCKDOWNSTRICTNESS = [0, 1-0.816, 1-0.66, 1-0.451]
-const MASKFACTORS = [0,0.5,0.1,0.04]
+const MASKFACTORS = [0,1-0.5,1-0.1,1-0.04]
 const COMMUTERFACTORS = [1, 1-0.24, 1-0.42, (1 - 0.43) * 0.42]
 
 const TESTRATES = [0.0, 0.001, 0.0025, 0.005]
 
+const DIFFERENTSETTINGS = 5
 
 const VACDELAY = 10
 

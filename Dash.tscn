@@ -680,16 +680,16 @@ columns = 2
 
 [node name="Label" type="Label" parent="PlayControls/GridContainer/OptionContainer/MaskOption"]
 margin_top = 18.0
-margin_right = 238.0
+margin_right = 110.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 238, 0 )
+rect_min_size = Vector2( 110, 0 )
 text = "Maskenmandat: "
 
 [node name="OptionButton" type="OptionButton" parent="PlayControls/GridContainer/OptionContainer/MaskOption"]
-margin_left = 242.0
+margin_left = 114.0
 margin_right = 480.0
 margin_bottom = 50.0
-rect_min_size = Vector2( 238, 50 )
+rect_min_size = Vector2( 366, 50 )
 hint_tooltip = "Stellen sie ein, welche Masken in öffentlichen Räumen getragen werden sollen.
 
 Das Tragen von Masken verhindert Ansteckungen."
@@ -711,41 +711,50 @@ columns = 2
 
 [node name="Label" type="Label" parent="PlayControls/GridContainer/OptionContainer/HomeOfficeOption"]
 margin_top = 18.0
-margin_right = 238.0
+margin_right = 190.0
 margin_bottom = 32.0
-rect_min_size = Vector2( 238, 0 )
+rect_min_size = Vector2( 190, 0 )
 text = "Home-Office-Vorgabe"
 
 [node name="OptionButton" type="OptionButton" parent="PlayControls/GridContainer/OptionContainer/HomeOfficeOption"]
-margin_left = 242.0
+margin_left = 194.0
 margin_right = 480.0
 margin_bottom = 50.0
-rect_min_size = Vector2( 238, 50 )
+rect_min_size = Vector2( 286, 50 )
 hint_tooltip = "Stellen sie ein, welche Vorgaben hinsichtlich der Heimarbeit gemacht werden.
 
 Je strenger die Home-Office-Regelung, desto weniger Pendler wird es zwischen den Bundesländern geben."
+text = "Home-Office-Vorgabe"
 align = 1
 
 [node name="Empty" type="Label" parent="PlayControls/GridContainer/OptionContainer/HomeOfficeOption"]
 margin_top = 54.0
-margin_right = 238.0
+margin_right = 190.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 0, 10 )
 
 [node name="Empty2" type="Label" parent="PlayControls/GridContainer/OptionContainer/HomeOfficeOption"]
-margin_left = 242.0
+margin_left = 194.0
 margin_top = 54.0
 margin_right = 480.0
 margin_bottom = 68.0
 
 [node name="BorderControl" type="CheckBox" parent="PlayControls/GridContainer/OptionContainer/HomeOfficeOption"]
 margin_top = 72.0
-margin_right = 238.0
+margin_right = 190.0
 margin_bottom = 122.0
-rect_min_size = Vector2( 238, 50 )
+rect_min_size = Vector2( 190, 50 )
 hint_tooltip = "Schließen Sie die Grenze der Bundesländer, um Pendlerströme zu unterbrechen."
 text = "Ländergrenzen schließen"
 align = 1
+
+[node name="BorderControlTip" type="Label" parent="PlayControls/GridContainer/OptionContainer/HomeOfficeOption"]
+margin_left = 194.0
+margin_top = 81.0
+margin_right = 480.0
+margin_bottom = 112.0
+text = "Verschiedene Einstellungen für die Grenzen der Bundesländer."
+autowrap = true
 
 [node name="HSeparator2" type="HSeparator" parent="PlayControls/GridContainer"]
 margin_top = 288.0
@@ -999,6 +1008,9 @@ margin_right = 994.4
 margin_bottom = 312.0
 rect_min_size = Vector2( 512.4, 288 )
 Chart_Style/function_colors = PoolColorArray( 0.356863, 0.929412, 0.0313726, 1, 0, 0.501961, 0, 1, 1, 0, 0, 1, 0, 0.384314, 0.74902, 1, 1, 1, 1, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1075,6 +1087,9 @@ Chart_Properties/column_width = 12.0
 Chart_Properties/column_gap = 1.0
 Chart_Style/points_shape = [ 2, 2, 2 ]
 Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.352941, 0, 1, 0, 1, 0, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1109,9 +1124,6 @@ margin_top = 608.0
 margin_right = 994.0
 margin_bottom = 900.0
 Chart_Style/function_colors = PoolColorArray( 1, 0.960784, 0, 1, 0.658824, 0.0784314, 0, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 

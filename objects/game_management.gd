@@ -16,19 +16,21 @@ var paused:bool
 
 var godmode:bool
 
-var optionChanged:bool
+#var optionChanged:bool
+
+var optionAdded:bool
 
 var interval
 
-var selectedLockdown :Array
+#var selectedLockdown :Array
 
-var maskFactors :Array
-var commuterFactors :Array
+#var maskFactors :Array
+#var commuterFactors :Array
 
-var selectedMask :int
-var selectedHomeOffice :int
+#var selectedMask :int
+#var selectedHomeOffice :int
 
-var lockdownFactor :float
+#var lockdownFactor :float
 #var maskFactor :float
 
 
@@ -52,19 +54,19 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	
 	self.godmode = initGodmode
 	
-	self.selectedLockdown = [0, 1-0.816, 1-0.66, 1-0.451]
+#	self.selectedLockdown = [0, 1-0.816, 1-0.66, 1-0.451]
+#
+#	self.maskFactors = [0,0.5,0.1,0.04]
+#	self.commuterFactors = [1, 1-0.24, 1-0.42, (1 - 0.43) * 0.42]
 	
-	self.maskFactors = [0,0.5,0.1,0.04]
-	self.commuterFactors = [1, 1-0.24, 1-0.42, (1 - 0.43) * 0.42]
-	
-	self.lockdownFactor = 0
+#	self.lockdownFactor = 0
 #	self.maskFactor = 0
 	
 	self.interval = CONSTANTS.WEEK
 
 	setMode(CONSTANTS.STATMODE)
 	
-	self.optionChanged = false
+#	self.optionChanged = false
 	
 	self.paused = true
 	
@@ -72,10 +74,12 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	
 	establishActions()
 	
+	self.optionAdded = false
+	
 	self.active = entities.get(CONSTANTS.DEU)
 	
-	self.selectedMask = 0
-	self.selectedHomeOffice = 0
+#	self.selectedMask = 0
+#	self.selectedHomeOffice = 0
 	
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
@@ -87,14 +91,63 @@ func showAction():
 	
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	
-	if self.optionChanged:
-		actionOutput[CONSTANTS.USERDEFINED].pressed = self.optionChanged
-		self.optionChanged = false
+#	if self.optionChanged:
+#		actionOutput[CONSTANTS.USERDEFINED].pressed = self.optionChanged
+#		self.optionChanged = false
 	
+#	actionOutput[CONSTANTS.MASKOPTION].select(active.getSelectedMask())
+#	actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(active.getSelectedHomeOffice())
+	
+	if active.getName() == entities[CONSTANTS.DEU].getName():
+		if !optionAdded:
+			add_options(true)
+			optionAdded = true
+		actionOutput[CONSTANTS.BORDERTIP].visible = (true if entities[CONSTANTS.DEU].getBorderOpen() is int else false)
+		actionOutput[CONSTANTS.BORDERCONTROL].pressed = !entities[CONSTANTS.DEU].getBorderOpen() if entities[CONSTANTS.DEU].getBorderOpen() is bool else false
+		
+#		if entities[CONSTANTS.DEU].getSelectedMask() == entities[CONSTANTS.DEU].getSelectedHomeOffice() and entities[CONSTANTS.DEU].getOptionChanged: 
+#			match entities[CONSTANTS.DEU].getSelectedMask():
+#				0:
+#					actionOutput[CONSTANTS.NO].pressed = true
+#				1:
+#					actionOutput[CONSTANTS.LIGHT].pressed = true
+#				2:
+#					actionOutput[CONSTANTS.MEDIUM].pressed = true
+#				3:
+#					actionOutput[CONSTANTS.HEAVY].pressed = true
+#		else:
+#			actionOutput[CONSTANTS.USERDEFINED].pressed = true
+		
+	else:
+		if optionAdded:
+			add_options(false)
+			optionAdded = false
+		actionOutput[CONSTANTS.MASKOPTION].select(active.getSelectedMask())
+		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(active.getSelectedHomeOffice())
+		
+		actionOutput[CONSTANTS.BORDERCONTROL].pressed = !active.getBorderOpen()
+		actionOutput[CONSTANTS.BORDERTIP].visible = false
+	
+	if active.getSelectedMask() == active.getSelectedHomeOffice() and !active.getOptionChanged(): 
+		match active.getSelectedMask():
+			0:
+				actionOutput[CONSTANTS.NO].pressed = true
+			1:
+				actionOutput[CONSTANTS.LIGHT].pressed = true
+			2:
+				actionOutput[CONSTANTS.MEDIUM].pressed = true
+			3:
+				actionOutput[CONSTANTS.HEAVY].pressed = true
+	else:
+		actionOutput[CONSTANTS.USERDEFINED].pressed = true
+	
+	
+	actionOutput[CONSTANTS.TESTOPTION].select(active.getSelectedTestRates())
+	actionOutput[CONSTANTS.MASKOPTION].select(active.getSelectedMask())
+	actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(active.getSelectedHomeOffice())
 	
 	actionOutput[CONSTANTS.VAXPRODUCTIONSPINBOX].editable = active.getName() == entities[CONSTANTS.DEU].getName()
 	actionOutput[CONSTANTS.VAXPRODUCTIONSPINBOX].value = entities[CONSTANTS.DEU].getVaxProduction()
-	
 	
 	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].editable = active.getName() == entities[CONSTANTS.DEU].getName()
 	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].value = active.getHospitalBeds(self.days.max() if self.days.max() != null else 0)
@@ -106,6 +159,7 @@ func showAction():
 	
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
 	
+	updateInterventionWeight()
 	
 	
 
@@ -164,6 +218,8 @@ func showStats():
 		
 		
 		
+func updateInterventionWeight():
+	pass
 
 func updateMap():
 	var incidences = []
@@ -354,11 +410,11 @@ func getHospitalOccupation(dayArray):
 	output.append(hosp)
 	return output
 	
-func getLockdownStrictness():
-	return (2 * self.lockdownFactor + self.maskFactors[self.selectedMask]) / 3.0
-
-func getIsLockdown():
-	return !((self.lockdownFactor == 0) and (self.selectedMask == 0))
+#func getLockdownStrictness():
+#	return (2 * self.lockdownFactor + self.maskFactors[self.selectedMask]) / 3.0
+#
+#func getIsLockdown():
+#	return !((self.lockdownFactor == 0) and (self.selectedMask == 0))
 	
 func simulate():
 	entities[CONSTANTS.DEU].simulateALL()
@@ -368,7 +424,12 @@ func simulate():
 			showStats()
 		CONSTANTS.ACTIONMODE:
 			showAction()
+	
+#	if entities[CONSTANTS.DEU].infect[self.currentDay] < 1:
+#		print("PANDEMIE VORÜBER")
+		
 	updateDay()
+	
 
 func updateDay():
 	statOutput[CONSTANTS.DAYS].text = CONSTANTS.DAYS + CONSTANTS.BL + String(self.currentDay)
@@ -518,7 +579,18 @@ func _show_daily_legend():
 
 func _on_NO_toggled(pressed:bool):
 	if pressed:
-		pass
+		lockdownSelection(0)
+#		active.setSelectedMask(0)
+#		active.setSelectedHomeOffice(0)
+#
+#		actionOutput[CONSTANTS.MASKOPTION].select(0)
+#		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(0)
+#
+#		active.setOptionChanged(false)
+#		_on_mask_selected(0)
+#		_on_homeOffice_selected(0)
+		
+#		self.optionChanged = false
 #		self.lockdownFactor = self.selectedLockdown[0]
 #
 #		self.selectedMask = 0
@@ -534,7 +606,18 @@ func _on_NO_toggled(pressed:bool):
 
 func _on_LIGHT_toggled(pressed:bool):
 	if pressed:
-		pass
+		lockdownSelection(1)
+#		active.setSelectedMask(1)
+#		active.setSelectedHomeOffice(1)
+#
+#		actionOutput[CONSTANTS.MASKOPTION].select(1)
+#		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(1)
+#
+#		active.setOptionChanged(false)
+#		_on_mask_selected(1)
+#		_on_homeOffice_selected(1)
+		
+#		self.optionChanged = false
 #		self.lockdownFactor = self.selectedLockdown[1]
 #
 #		self.selectedMask = 1
@@ -550,7 +633,18 @@ func _on_LIGHT_toggled(pressed:bool):
 
 func _on_MEDIUM_toggled(pressed:bool):
 	if pressed:
-		pass
+		lockdownSelection(2)
+#		active.setSelectedMask(2)
+#		active.setSelectedHomeOffice(2)
+#
+#		actionOutput[CONSTANTS.MASKOPTION].select(2)
+#		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(2)
+#
+#		active.setOptionChanged(false)
+#		_on_mask_selected(2)
+#		_on_homeOffice_selected(2)
+		
+#		self.optionChanged = false
 #		self.lockdownFactor = self.selectedLockdown[2]
 #
 #		self.selectedMask = 2
@@ -566,7 +660,18 @@ func _on_MEDIUM_toggled(pressed:bool):
 
 func _on_HEAVY_toggled(pressed:bool):
 	if pressed:
-		pass
+		lockdownSelection(3)
+#		active.setSelectedMask(3)
+#		active.setSelectedHomeOffice(3)
+#
+#		actionOutput[CONSTANTS.MASKOPTION].select(3)
+#		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(3)
+#
+#		active.setOptionChanged(false)
+#		_on_mask_selected(3)
+#		_on_homeOffice_selected(3)
+		
+#		self.optionChanged = false
 #		self.lockdownFactor = self.selectedLockdown[3]
 #
 #		self.selectedMask = 3
@@ -590,11 +695,43 @@ func _on_USERDEFINED_toggled(pressed:bool):
 #
 #		active.setLockdown(getIsLockdown(), getLockdownStrictness())
 
+func lockdownSelection(index:int):
+	active.setSelectedMask(index)
+	active.setSelectedHomeOffice(index)
+	
+	actionOutput[CONSTANTS.MASKOPTION].select(index)
+	actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(index)
+	
+	entities[CONSTANTS.DEU].setOptionChanged(true)
+	active.setOptionChanged(false)
+
 func _on_borderControl_toggle(button_pressed:bool):
-	self.optionChanged = true
-	self.selectedHomeOffice = 4
+#	self.optionChanged = true
+#	self.selectedHomeOffice = 4
 #	print("Border Control ", button_pressed)
 	active.setBorderOpen(!button_pressed)
+
+
+func _on_mask_selected(index:int):
+	entities[CONSTANTS.DEU].setOptionChanged(true)
+	
+	active.setOptionChanged(true)
+	active.setSelectedMask(index)
+
+	showAction()
+
+func _on_homeOffice_selected(index:int):
+	entities[CONSTANTS.DEU].setOptionChanged(true)
+	
+	active.setOptionChanged(true)
+	active.setSelectedHomeOffice(index)
+
+	showAction()
+
+func _on_testScenario_selected(index:int):
+	active.setTestRates(index)
+#	showAction()
+
 
 func _on_vaxProduction_changed(value:float):
 	entities[CONSTANTS.DEU].setVaxProduction(int(value))
@@ -604,28 +741,40 @@ func _on_hospitalBed_changed(value:float):
 		entities[CONSTANTS.DEU].setHospitalBeds(self.days.max() if self.days.max() != null else 0, int(value))
 		actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].value = entities[CONSTANTS.DEU].getHospitalBeds(self.days.max() if self.days.max() != null else 0)
 
-func _on_mask_selected(index:int):
-	self.optionChanged = true
-	active.setSelectedMask(index)
 
-	active.setLockdown(getIsLockdown(), getLockdownStrictness())
-	showAction()
-
-func _on_homeOffice_selected(index:int):
-	self.optionChanged = true
-	active.setSelectedHomeOffice(index)
-
-	active.setLockdown(getIsLockdown(), getLockdownStrictness())
-	showAction()
-
-func _on_testScenario_selected(index:int):
-	active.setTestRates(index)
+func add_options(isGermany:bool):
+	if isGermany:
+		actionOutput[CONSTANTS.MASKOPTION].add_separator()
+		actionOutput[CONSTANTS.MASKOPTION].add_item("Verschiedene Regelungen in den Bundesländern")
+		actionOutput[CONSTANTS.MASKOPTION].set_item_disabled(5, true)
+		
+		actionOutput[CONSTANTS.HOMEOFFICEOPTION].add_separator()
+		actionOutput[CONSTANTS.HOMEOFFICEOPTION].add_item("Verschiedene Regelungen in den Bundesländern")
+		actionOutput[CONSTANTS.HOMEOFFICEOPTION].set_item_disabled(5, true)
+		
+		actionOutput[CONSTANTS.TESTOPTION].add_separator()
+		actionOutput[CONSTANTS.TESTOPTION].add_item("Verschiedene Regelungen in den Bundesländern")
+		actionOutput[CONSTANTS.TESTOPTION].set_item_disabled(5, true)
+		
+	else:
+		actionOutput[CONSTANTS.MASKOPTION].remove_item(5)
+		actionOutput[CONSTANTS.MASKOPTION].remove_item(4)
+		
+		actionOutput[CONSTANTS.HOMEOFFICEOPTION].remove_item(5)
+		actionOutput[CONSTANTS.HOMEOFFICEOPTION].remove_item(4)
+		
+		actionOutput[CONSTANTS.TESTOPTION].remove_item(5)
+		actionOutput[CONSTANTS.TESTOPTION].remove_item(4)
+		
+		
 
 func _establish_mask_options():
 	actionOutput[CONSTANTS.MASKOPTION].add_item("Keine Masken")
 	actionOutput[CONSTANTS.MASKOPTION].add_item("Stoffmasken, Schals, etc.")
 	actionOutput[CONSTANTS.MASKOPTION].add_item("OP-Masken")
 	actionOutput[CONSTANTS.MASKOPTION].add_item("FFP2-Masken")
+#	actionOutput[CONSTANTS.MASKOPTION].add_separator()
+#	actionOutput[CONSTANTS.MASKOPTION].add_item("Verschiedene Regelungen in den Bundesländern")
 	
 #	actionOutput[CONSTANTS.MASKOPTION].get_popup().set_item_tooltip(0, ".")
 
@@ -689,11 +838,8 @@ func connectSignals():
 	buttons[CONSTANTS.MONTH].connect("pressed", self, "_on_monthButton_press")
 	buttons[CONSTANTS.YEAR].connect("pressed", self, "_on_yearButton_press")
 	buttons[CONSTANTS.MAX].connect("pressed", self, "_on_maxButton_press")
-	
-#	buttons[CONSTANTS.PAUSEBUTTON].connect("pressed", self, "_on_Pause_pressed")
-#	buttons[CONSTANTS.PLAYBUTTON].connect("pressed", self, "_on_Play_pressed")
-#	buttons[CONSTANTS.PLAYX2BUTTON].connect("pressed", self, "_on_PlaySpeedx2_pressed")
-	
+
+
 	# Buttons for Map
 	entities[CONSTANTS.BAW].mapButton.connect("toggled", self, "_on_BAW_press")
 	entities[CONSTANTS.BAY].mapButton.connect("toggled", self, "_on_BAY_press")

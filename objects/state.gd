@@ -23,8 +23,11 @@ var borderOpen :bool
 
 var selectedMask :int
 var selectedHomeOffice :int
+var selectedTest :int
 
 var lockdown :bool = false
+
+var optionChanged :bool
 #var lockdownStrictness
 
 var suscept = [CONSTANTS.SUSCEPTIBLE]
@@ -127,8 +130,13 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	mapButton.texture_click_mask = bitmap
 	mapButton.toggle_mode = true
 	
-	setCommuterFactor(1)
+#	setCommuterFactor(1)
 	
+	self.selectedHomeOffice = 0
+	self.selectedMask = 0
+	self.selectedTest = 0
+	
+	self.optionChanged = false
 	
 	baseInfect = 0.2
 	baseRec = 0.02
@@ -328,15 +336,16 @@ func getDailyOccupiedBeds(day):
 	return hosp[day] + vax1hosp[day] + vax2hosp[day]
 
 func getInfectRate():
-	if !(self.selectedMask == 0 and self.selectedHomeOffice == 0):
-		var lockdownAverage = int(CONSTANTS.average([self.selectedMask, self.selectedHomeOffice]))
+	if self.selectedMask != 0 and self.selectedHomeOffice != 0:
+		var lockdownAverage = int(round(CONSTANTS.average([self.selectedMask, self.selectedHomeOffice])))
 		var lockdownStrictness = (2 * CONSTANTS.LOCKDOWNSTRICTNESS[lockdownAverage] + CONSTANTS.MASKFACTORS[self.selectedMask]) / 3.0
+#		print(lockdownStrictness)
 		return baseInfect * (1-lockdownStrictness)
 	else:
 		return baseInfect
 
 func getCommuteRate():
-	return self.commuterRate * self.commuterFactor
+	return self.commuterRate * CONSTANTS.COMMUTERFACTORS[self.selectedHomeOffice]
 
 func getBorderOpen():
 	return borderOpen
@@ -345,6 +354,7 @@ func setBorderOpen(open:bool):
 	self.borderOpen = open
 
 func setTestRates(index:int):
+	self.selectedTest = index
 	var value = CONSTANTS.TESTRATES[index]
 	self.testRate = [value, value, value]
 	
@@ -352,8 +362,8 @@ func setLockdown(isTrue:bool, strictness:float):
 	self.lockdown = isTrue
 #	self.lockdownStrictness = strictness
 
-func setCommuterFactor(value:float):
-	self.commuterFactor = value
+#func setCommuterFactor(value:float):
+#	self.commuterFactor = value
 
 func setSelectedMask(index:int):
 	self.selectedMask = index
@@ -361,6 +371,20 @@ func setSelectedMask(index:int):
 func setSelectedHomeOffice(index:int):
 	self.selectedHomeOffice = index
 
+func getSelectedMask():
+	return self.selectedMask
+
+func getSelectedHomeOffice():
+	return self.selectedHomeOffice
+
+func getSelectedTestRates():
+	return self.selectedTest
+
+func setOptionChanged(isTrue:bool):
+	self.optionChanged = isTrue
+
+func getOptionChanged():
+	return self.optionChanged
 
 
 

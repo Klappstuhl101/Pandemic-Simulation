@@ -22,6 +22,8 @@ var optionAdded:bool
 
 var interval
 
+var activePopulationToRealFactor
+
 #var selectedLockdown :Array
 
 #var maskFactors :Array
@@ -77,6 +79,7 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	self.optionAdded = false
 	
 	self.active = entities.get(CONSTANTS.DEU)
+	activate()
 	
 #	self.selectedMask = 0
 #	self.selectedHomeOffice = 0
@@ -195,7 +198,7 @@ func showStats():
 			
 			var hospitalOccupation = getHospitalOccupation(showInterval)
 			statOutput[CONSTANTS.HOSPBEDS].plot_from_array(hospitalOccupation)
-			statOutput[CONSTANTS.BEDSTATUS].text = String(hospitalOccupation[2][hospitalOccupation[2].size() - 1]) + CONSTANTS.BL + "/" + CONSTANTS.BL + String(active.getHospitalBeds())
+			statOutput[CONSTANTS.BEDSTATUS].text = String(hospitalOccupation[2][hospitalOccupation[2].size() - 1]) + CONSTANTS.BL + "/" + CONSTANTS.BL + String(getProjectedToRealPopulation(active.getHospitalBeds()))
 			
 			
 		if !establishedLegends:
@@ -239,7 +242,7 @@ func updateMap():
 #	print("Inzidenz Deutschland ", incidences[incidences.size() -1], " // Inzidenz Durchschnitt: " , float(CONSTANTS.sum(incidences) - incidences[incidences.size() -1]) / 16.0)
 	i = statOutput[CONSTANTS.INCIDENCELABELS].get_children().size()
 	for label in statOutput[CONSTANTS.INCIDENCELABELS].get_children():
-		label.text = String(int(incidences.max() * (i/4.0)))
+		label.text = String(int(incidences.max() * (i/float(statOutput[CONSTANTS.INCIDENCELABELS].get_children().size()))))
 		i -= 1
 
 func getMode():
@@ -247,6 +250,9 @@ func getMode():
 
 func setMode(newMode):
 	self.mode = newMode
+
+func getProjectedToRealPopulation(value):
+	return int(round(value * self.activePopulationToRealFactor))
 
 func getOutputArray():
 	pass
@@ -267,6 +273,7 @@ func getOutputInterval():
 					dayArray.append(days[days.size() - 1 - CONSTANTS.WEEK + i])
 		
 		CONSTANTS.MONTH:
+# warning-ignore:integer_division
 			for i in range(CONSTANTS.MONTH / 3):
 				if (days.size() - 1 - CONSTANTS.MONTH + (i*3)) <= 0:
 					continue
@@ -274,6 +281,7 @@ func getOutputInterval():
 					dayArray.append(days[days.size() - 1 - CONSTANTS.MONTH + (i*3)])
 		
 		CONSTANTS.YEAR:
+# warning-ignore:integer_division
 			for i in range(CONSTANTS.YEAR / 12):
 				if (days.size() - 1 - CONSTANTS.YEAR + (i*12)) <= 0:
 					continue
@@ -295,10 +303,10 @@ func getOutputOverview(dayArray):
 		var rec = [CONSTANTS.RECOVERED]
 		var dead = [CONSTANTS.DEAD]
 		for i in range(1, dayArray.size()):
-			sus.append(active.suscept[dayArray[i]])
-			inf.append(active.infect[dayArray[i]])
-			rec.append(active.recov[dayArray[i]])
-			dead.append(active.dead[dayArray[i]])
+			sus.append(getProjectedToRealPopulation(active.suscept[dayArray[i]]))
+			inf.append(getProjectedToRealPopulation(active.infect[dayArray[i]]))
+			rec.append(getProjectedToRealPopulation(active.recov[dayArray[i]]))
+			dead.append(getProjectedToRealPopulation(active.dead[dayArray[i]]))
 		output.append(sus)
 		output.append(inf)
 		output.append(rec)
@@ -334,10 +342,10 @@ func getOutputOverview(dayArray):
 		var rec = [CONSTANTS.RECOVERED]
 		var dead = [CONSTANTS.DEAD]
 		for i in range(1, dayArray.size()):
-			sus.append(active.suscept[dayArray[i]])
-			inf.append(active.infect[dayArray[i]])
-			rec.append(active.recov[dayArray[i]])
-			dead.append(active.dead[dayArray[i]])
+			sus.append(getProjectedToRealPopulation(active.suscept[dayArray[i]]))
+			inf.append(getProjectedToRealPopulation(active.infect[dayArray[i]]))
+			rec.append(getProjectedToRealPopulation(active.recov[dayArray[i]]))
+			dead.append(getProjectedToRealPopulation(active.dead[dayArray[i]]))
 		output.append(sus)
 		output.append(inf)
 		output.append(rec)
@@ -364,12 +372,12 @@ func getOutputR():
 	if casesGen2 == 0:
 		return 0
 	else:
-		return stepify(casesGen1/casesGen2, 0.01) if casesGen1/casesGen2 > 0 else 0
+		return stepify((casesGen1/casesGen2), 0.01) if (casesGen1/casesGen2) > 0 else 0.0
 
 func getOutputVaccinations():
-	var sumUnvax = active.getUnvaxedSum()
-	var sumV1 = active.getV1Sum()
-	var sumV2 = active.getV2Sum()
+	var sumUnvax = getProjectedToRealPopulation(active.getUnvaxedSum())
+	var sumV1 = getProjectedToRealPopulation(active.getV1Sum())
+	var sumV2 = getProjectedToRealPopulation(active.getV2Sum())
 	return [[CONSTANTS.VAXSTATUS, "Anzahl Personen"], [CONSTANTS.UNVAXED, sumUnvax], [CONSTANTS.VAX1, sumV1], [CONSTANTS.VAX2, sumV2]]
 
 func getDailyChanges(dayArray):
@@ -382,10 +390,12 @@ func getDailyChanges(dayArray):
 #		pass
 	
 	for i in range(1, dayArray.size()):
-		if dayArray[i] > 2:
-			newInfections.append(active.getDailyInfections(dayArray[i]))
-			newVaxxed1.append(active.getDailyV1Difference(dayArray[i]))
-			newVaxxed2.append(active.getDailyV2Difference(dayArray[i]))
+		if dayArray[i] >= 1:
+			newInfections.append(getProjectedToRealPopulation(active.getDailyInfections(dayArray[i])))
+			newVaxxed1.append(getProjectedToRealPopulation(active.getDailyV1Difference(dayArray[i])))
+			newVaxxed2.append(getProjectedToRealPopulation(active.getDailyV2Difference(dayArray[i])))
+#		elif dayArray[i] == 2:
+#			pass
 		else:
 			newInfections.append(0)
 			newVaxxed1.append(0)
@@ -403,8 +413,8 @@ func getHospitalOccupation(dayArray):
 	var maxBeds = [CONSTANTS.HOSPBEDS]
 	
 	for i in range(1, dayArray.size()):
-		hosp.append(active.getDailyOccupiedBeds(dayArray[i]))
-		maxBeds.append(active.getHospitalBeds(dayArray[i]))
+		hosp.append(getProjectedToRealPopulation(active.getDailyOccupiedBeds(dayArray[i])))
+		maxBeds.append(getProjectedToRealPopulation(active.getHospitalBeds(dayArray[i])))
 	
 	output.append(maxBeds)
 	output.append(hosp)
@@ -425,8 +435,9 @@ func simulate():
 		CONSTANTS.ACTIONMODE:
 			showAction()
 	
-#	if entities[CONSTANTS.DEU].infect[self.currentDay] < 1:
-#		print("PANDEMIE VORÜBER")
+	if self.days.size() > 3:
+		if entities[CONSTANTS.DEU].infect[self.currentDay] < 1:
+			print("Tag ", self.currentDay, ": PANDEMIE VORÜBER")
 		
 	updateDay()
 	
@@ -434,7 +445,7 @@ func simulate():
 func updateDay():
 	statOutput[CONSTANTS.DAYS].text = CONSTANTS.DAYS + CONSTANTS.BL + String(self.currentDay)
 	
-	print("Tag ", self.currentDay, "// getestete Personen Deutschland: ", entities[CONSTANTS.DEU].getTestedSum())
+#	print("Tag ", self.currentDay, "// getestete Personen Deutschland: ", entities[CONSTANTS.DEU].getTestedSum())
 	
 	if self.days.size() > 3:
 		buttons[CONSTANTS.STATBUTTON].disabled = false
@@ -442,6 +453,7 @@ func updateDay():
 	self.currentDay += 1
 
 func activate():
+	self.activePopulationToRealFactor = active.getPopulationToRealFactor()
 	match getMode():
 		CONSTANTS.STATMODE:
 			showStats()

@@ -90,6 +90,7 @@ func _init(initStates, initName, initButton):
 	self.states = initStates
 	recalculatePopulation()
 	self.populationBase = self.population
+	self.populationToRealFactor = float(self.realPopulation) / float(self.populationBase)
 	self.deaths = 0
 	
 	self.hospitalBedsDaily = {0:0}
@@ -165,6 +166,9 @@ func recalculatePopulation():
 func recalculateStatePopulation():
 	for state in states.values():
 		state.calculateLivingPopulation()
+
+func getPopulationToRealFactor():
+	return self.populationToRealFactor
 
 func recalculateDeaths():
 	self.deaths = 0
@@ -273,8 +277,14 @@ func distributeCommuters():
 					var rand = rnd.randi_range(0, avlblCommuters.size()-1)
 					
 					# PROBLEM: KEINE COMMUTER VEFÜGBAR WENN ALLE ERSTE IMPFUNG BEKOMMEN HABEN UND IM FLIEßBAND SIND
+					var randErrorCounter = 0
 					while !avlblCommuters[rand]:
-						rand = rnd.randi_range(0, avlblCommuters.size()-1)
+						rand += 1
+						rand = rand % avlblCommuters.size()
+						randErrorCounter += 1
+						if randErrorCounter > avlblCommuters.size():
+							rand = -1
+							break
 						
 					match rand:
 						# UNGEIMPFT
@@ -361,21 +371,21 @@ func getOpenBorderNeighborCount(state:State):
 	return sum
 	
 func checkAvlblCommuters(state):
-	var dict = {}
+	var arr = []
 	
-	dict[0] = !(state.S[0] == 0)
-	dict[1] = !(state.S[1] == 0)
-	dict[2] = !(state.I[0] == 0)
-	dict[3] = !(state.R[0] == 0)
-	dict[4] = !(state.R[1] == 0)
-	dict[5] = !(state.V1eligible[0] == 0)
-	dict[6] = !(state.V1eligible[1] == 0)
-	dict[7] = !(state.V1eligible[3] == 0)
-	dict[8] = !(state.V2[0] == 0)
-	dict[9] = !(state.V2[1] == 0)
-	dict[10] = !(state.V2[3] == 0)
+	arr.append(!(state.S[0] == 0))
+	arr.append(!(state.S[1] == 0))
+	arr.append(!(state.I[0] == 0))
+	arr.append(!(state.R[0] == 0))
+	arr.append(!(state.R[1] == 0))
+	arr.append(!(state.V1eligible[0] == 0))
+	arr.append(!(state.V1eligible[1] == 0))
+	arr.append(!(state.V1eligible[3] == 0))
+	arr.append(!(state.V2[0] == 0))
+	arr.append(!(state.V2[1] == 0))
+	arr.append(!(state.V2[3] == 0))
 	
-	return dict
+	return arr
 
 func homeCommuters():
 	for state in states.values():
@@ -539,12 +549,18 @@ func getDailyInfections(day:int):
 	return difference if difference > 0 else 0
 
 func getDailyV1Difference(day:int):
-	var difference = (vax1sus[day] + vax1inf[day] + vax1hosp[day] + vax1rec[day]) - (vax1sus[day-1] + vax1inf[day-1] + vax1hosp[day-1] + vax1rec[day-1])
-	return difference if difference > 0 else 0
+	if day == 1:
+		return (vax1sus[day] + vax1inf[day] + vax1hosp[day] + vax1rec[day])
+	else:
+		var difference = (vax1sus[day] + vax1inf[day] + vax1hosp[day] + vax1rec[day]) - (vax1sus[day-1] + vax1inf[day-1] + vax1hosp[day-1] + vax1rec[day-1])
+		return difference if difference > 0 else 0
 
 func getDailyV2Difference(day:int):
-	var difference = (vax2sus[day] + vax2inf[day] + vax2hosp[day] + vax2rec[day]) - (vax2sus[day-1] + vax2inf[day-1] + vax2hosp[day-1] + vax2rec[day-1])
-	return difference if difference > 0 else 0
+	if day == 1:
+		return (vax2sus[day] + vax2inf[day] + vax2hosp[day] + vax2rec[day])
+	else:
+		var difference = (vax2sus[day] + vax2inf[day] + vax2hosp[day] + vax2rec[day]) - (vax2sus[day-1] + vax2inf[day-1] + vax2hosp[day-1] + vax2rec[day-1])
+		return difference if difference > 0 else 0
 
 func getDailyOccupiedBeds(day):
 	return hosp[day] + vax1hosp[day] + vax2hosp[day]

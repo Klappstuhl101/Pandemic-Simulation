@@ -1,15 +1,6 @@
 extends Panel
 
-var label
-var pieChart
-var lineChart
-var lineChart2
-var lineChart3
-var lineChart4
-var lineChart5
-var lineChart6
-
-#var timer
+var calculationTimer :Timer
 
 var paused	:bool = false
 
@@ -40,13 +31,6 @@ var deu
 var states
 
 var game_manager
-var sim
-
-var tenthsec = 0
-var sec = 0
-var minute = 0
-
-var counter = 0
 
 var remainingDays
 
@@ -60,6 +44,9 @@ var populationFactor :float
 func _ready():
 	
 	populationFactor = 0.001
+#	populationFactor = 0.025
+#	populationFactor = 0.1
+#	populationFactor = 1
 	
 	remainingDays = -1
 	
@@ -78,7 +65,10 @@ func _ready():
 	
 	statOutput[CONSTANTS.TIMER] = get_node("Time")
 	
-	statOutput[CONSTANTS.CALCULATIONTIMER] = get_node("CalculationTimer")
+#	statOutput[CONSTANTS.CALCULATIONTIMER] = get_node("CalculationTimer")
+#	calculationTimer = get_node("CalculationTimer")
+#	calculationTimer.set_wait_time(0.5)
+#	calculationTimer.connect("timeout", self, "_on_calcTimer_timeout")
 	
 	statOutput[CONSTANTS.STATCONTAINER] = get_node("Statistics")
 	statOutput[CONSTANTS.COUNTRYNAME] = get_node("CountryName")
@@ -195,6 +185,7 @@ func _process(_delta):
 	#	game_manager.showStats()
 		if remainingDays > 0:
 			statOutput[CONSTANTS.PROGRESSPANEL].visible = true
+#			calculationTimer.start()
 			game_manager.simulate()
 			game_manager.showStats()
 			remainingDays -= 1
@@ -243,6 +234,13 @@ func _on_PlaySpeedx2_pressed():
 #			remainingDays = CONSTANTS.WEEK * 2 + 1
 			remainingDays = CONSTANTS.WEEK * 20 + 1
 			statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
+
+#func _on_calcTimer_timeout():
+#	calculationTimer.stop()
+#	game_manager.simulate()
+#	game_manager.showStats()
+#	remainingDays -= 1
+	
 
 func _on_menu_pressed():
 	get_tree().quit()

@@ -88,7 +88,6 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 #	self.selectedHomeOffice = 0
 	
 	connectSignals()
-	statOutput[CONSTANTS.CALCULATIONTIMER].start()
 	
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
@@ -477,12 +476,10 @@ func simulate():
 			print("Tag ", self.currentDay, ": PANDEMIE VORÜBER")
 		
 	updateDay()
-#	statOutput[CONSTANTS.CALCULATIONTIMER].stop()
 	var endTime = OS.get_ticks_msec()
 	var timeDiff = endTime - startTime
 	print("Simulation of Day ", days[-1], " took: ", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", timeDiff)
-#	print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes // ", OS.get_ticks_msec())
-#	print("Simulation of Day ", days[-1], " took: ",((calcTime/10)/60)/60, ":", (calcTime/10)/60, ":", calcTime/10)
+
 	
 
 func updateDay():
@@ -878,8 +875,6 @@ func connectSignals():
 	statOutput[CONSTANTS.TIMER].connect("timeout", self, "_on_Time_timeout")
 	statOutput[CONSTANTS.TIMER].start()
 	
-#	statOutput[CONSTANTS.CALCULATIONTIMER].set_wait_time(0.1)
-#	statOutput[CONSTANTS.CALCULATIONTIMER].connect("timeout", self, "_on_CalcTimer_timeout")
 	
 	actionOutput[CONSTANTS.NO].connect("toggled", self, "_on_NO_toggled")
 	actionOutput[CONSTANTS.LIGHT].connect("toggled", self, "_on_LIGHT_toggled")

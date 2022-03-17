@@ -477,8 +477,11 @@ func simulateALL():
 	distributeCommuters()
 	
 	for state in states.values():
-#		CONSTANTS.currentState = state.getName()
-		state.simulate()
+		state._thread.start(self, "simulateState", state.getName())
+#		state.simulate()
+	
+	for state in states.values():
+		state._thread.wait_to_finish()
 	
 	homeCommuters()
 	
@@ -520,7 +523,11 @@ func simulateALL():
 	
 	hosp.append(I[3])
 	
-		
+func simulateState(name):
+#	print(name)
+	states[name].simulate()
+
+
 func getNumbers():
 	for state in states.values():
 		S = CONSTANTS.add_arrays(S, state.S)

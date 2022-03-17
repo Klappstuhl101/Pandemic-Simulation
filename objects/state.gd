@@ -3,6 +3,8 @@ extends Object
 
 class_name State
 
+var _thread :Thread
+
 var name :String
 
 var neighbors :Array
@@ -130,7 +132,7 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	mapButton.texture_click_mask = bitmap
 	mapButton.toggle_mode = true
 	
-#	setCommuterFactor(1)
+	_thread = Thread.new()
 	
 	self.selectedHomeOffice = 0
 	self.selectedMask = 0

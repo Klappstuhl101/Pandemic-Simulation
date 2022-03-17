@@ -2,6 +2,8 @@ extends Object
 
 class_name Game_Management
 
+#var calcTime:float
+
 var entities :Dictionary # states + country
 var active # active state / country
 var mode # StatsMode or ActionMode
@@ -22,7 +24,8 @@ var optionAdded:bool
 
 var interval
 
-var activePopulationToRealFactor
+var activePopulationToRealFactor :float
+var activePopulationToCalculationFactor :float
 
 #var selectedLockdown :Array
 
@@ -40,9 +43,9 @@ var activePopulationToRealFactor
 var days = []
 var currentDay = 0
 
-var previous # previous activated button
+#var previous # previous activated button
 
-var counter = 0
+#var counter = 0
 
 func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodmode):
 #	self.sim = initSim
@@ -51,8 +54,8 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	self.actionOutput = initActionOutput
 #	self.statButtons = initStatButtons
 	self.buttons = initButtons
-	connectSignals()
-	previous = entities.get(CONSTANTS.DEU)
+	
+#	previous = entities.get(CONSTANTS.DEU)
 	
 	self.godmode = initGodmode
 	
@@ -84,6 +87,9 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 #	self.selectedMask = 0
 #	self.selectedHomeOffice = 0
 	
+	connectSignals()
+	statOutput[CONSTANTS.CALCULATIONTIMER].start()
+	
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
 	
@@ -91,6 +97,7 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 func showAction():
 	statOutput[CONSTANTS.COUNTRYNAME].text = active.name
 	updateMap()
+	updateInterventionWeight()
 	
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	
@@ -150,25 +157,26 @@ func showAction():
 	actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(active.getSelectedHomeOffice())
 	
 	actionOutput[CONSTANTS.VAXPRODUCTIONSPINBOX].editable = active.getName() == entities[CONSTANTS.DEU].getName()
-	actionOutput[CONSTANTS.VAXPRODUCTIONSPINBOX].value = entities[CONSTANTS.DEU].getVaxProduction()
+	actionOutput[CONSTANTS.VAXPRODUCTIONSPINBOX].value = getProjectedToRealPopulation(entities[CONSTANTS.DEU].getVaxProduction())
 	
 	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].editable = active.getName() == entities[CONSTANTS.DEU].getName()
-	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].value = active.getHospitalBeds(self.days.max() if self.days.max() != null else 0)
+	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].value = getProjectedToRealPopulation(active.getHospitalBeds(self.days.max() if self.days.max() != null else 0))
 	
-	actionOutput[CONSTANTS.OCCBEDS].text = String(active.getDailyOccupiedBeds(self.days.max() if self.days.max() != null else -1)) + " / " + String(active.getHospitalBeds())
-	actionOutput[CONSTANTS.AVLBLVAX].text = String(active.getAvlbVax())
+	actionOutput[CONSTANTS.OCCBEDS].text = String(getProjectedToRealPopulation(active.getDailyOccupiedBeds(self.days.max() if self.days.max() != null else -1))) + " / " + String(getProjectedToRealPopulation(active.getHospitalBeds()))
+	actionOutput[CONSTANTS.AVLBLVAX].text = String(getProjectedToRealPopulation(active.getAvlbVax()))
 	
 	
 	
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
 	
-	updateInterventionWeight()
+	
 	
 	
 
 func showStats():
 	statOutput[CONSTANTS.COUNTRYNAME].text = active.name
 	updateMap()
+	updateInterventionWeight()
 	
 	if getMode() == CONSTANTS.ACTIONMODE:
 		return
@@ -222,7 +230,20 @@ func showStats():
 		
 		
 func updateInterventionWeight():
-	pass
+	var value :int = 0
+	if active.getName() == entities[CONSTANTS.DEU].getName():
+		value += entities[CONSTANTS.DEU].getMaskAverage()
+		value += entities[CONSTANTS.DEU].getHomeOfficeAverage()
+		value += entities[CONSTANTS.DEU].getTestAverage()
+		value += entities[CONSTANTS.DEU].getBorderAverage() * 2
+	else:
+		value += active.getSelectedMask()
+		value += active.getSelectedHomeOffice()
+		value += active.getSelectedTestRates()
+		value += int(!active.getBorderOpen()) * 2 
+	
+	actionOutput[CONSTANTS.INTERVENTIONWEIGHT].value = value
+	
 
 func updateMap():
 	var incidences = []
@@ -242,7 +263,7 @@ func updateMap():
 #	print("Inzidenz Deutschland ", incidences[incidences.size() -1], " // Inzidenz Durchschnitt: " , float(CONSTANTS.sum(incidences) - incidences[incidences.size() -1]) / 16.0)
 	i = statOutput[CONSTANTS.INCIDENCELABELS].get_children().size()
 	for label in statOutput[CONSTANTS.INCIDENCELABELS].get_children():
-		label.text = String(int(incidences.max() * (i/float(statOutput[CONSTANTS.INCIDENCELABELS].get_children().size()))))
+		label.text = String(stepify(incidences.max() * (i/float(statOutput[CONSTANTS.INCIDENCELABELS].get_children().size())), 0.1))
 		i -= 1
 
 func getMode():
@@ -253,6 +274,9 @@ func setMode(newMode):
 
 func getProjectedToRealPopulation(value):
 	return int(round(value * self.activePopulationToRealFactor))
+
+func getProjectedToCalculationPopulation(value):
+	return int(round(round(value) * self.activePopulationToCalculationFactor))
 
 func getOutputArray():
 	pass
@@ -314,43 +338,53 @@ func getOutputOverview(dayArray):
 		return output
 	else:
 		# HIER STATT ALLEN ZAHLEN NUR GETESTETE FÄLLE
-#		var output = [dayArray]
-#		var sus = [CONSTANTS.SUSCEPTIBLE]
-#		var susTested = [CONSTANTS.SUSCEPTIBLE + CONSTANTS.BL + CONSTANTS.TESTED]
-#		var inf = [CONSTANTS.INFECTED + CONSTANTS.BL + CONSTANTS.TESTED]
-##		var rec = [CONSTANTS.RECOVERED]
-#		var recTested = [CONSTANTS.RECOVERED + CONSTANTS.BL + CONSTANTS.TESTED]
-#		var dead = [CONSTANTS.DEAD]
-#		for i in range(1, dayArray.size()):
-#			sus.append(active.suscept[dayArray[i]])
-#			susTested.append(active.sus1[dayArray[i]])
-#			inf.append(active.inf1[dayArray[i]] + active.getDailyOccupiedBeds(dayArray[i]))
-##			rec.append(active.recov[dayArray[i]])
-#			recTested.append(active.rec1[dayArray[i]] + active.rec2[dayArray[i]])
-#			dead.append(active.dead[dayArray[i]])
-#		output.append(sus)
-#		output.append(susTested)
-#		output.append(inf)
-##		output.append(rec)
-#		output.append(recTested)
-#		output.append(dead)
-#		return output
-		
 		var output = [dayArray]
 		var sus = [CONSTANTS.SUSCEPTIBLE]
-		var inf = [CONSTANTS.INFECTED]
-		var rec = [CONSTANTS.RECOVERED]
+		var susTested = [CONSTANTS.SUSCEPTIBLE + CONSTANTS.BL + CONSTANTS.TESTED]
+		var inf = [CONSTANTS.INFECTED + CONSTANTS.BL + CONSTANTS.TESTED]
+#		var rec = [CONSTANTS.RECOVERED]
+		var recTested = [CONSTANTS.RECOVERED + CONSTANTS.BL + CONSTANTS.TESTED]
 		var dead = [CONSTANTS.DEAD]
 		for i in range(1, dayArray.size()):
-			sus.append(getProjectedToRealPopulation(active.suscept[dayArray[i]]))
-			inf.append(getProjectedToRealPopulation(active.infect[dayArray[i]]))
-			rec.append(getProjectedToRealPopulation(active.recov[dayArray[i]]))
-			dead.append(getProjectedToRealPopulation(active.dead[dayArray[i]]))
+			var testedSus = active.sus1[dayArray[i]]
+			susTested.append(getProjectedToRealPopulation(testedSus))
+			
+			var testedInf = active.inf1[dayArray[i]] + active.getDailyOccupiedBeds(dayArray[i])
+			inf.append(getProjectedToRealPopulation(testedInf))
+#			rec.append(active.recov[dayArray[i]])
+			
+			var testedRec = active.rec1[dayArray[i]] + active.rec2[dayArray[i]]
+			recTested.append(getProjectedToRealPopulation(testedRec))
+			
+			var confirmedDead = active.dead[dayArray[i]]
+			dead.append(getProjectedToRealPopulation(confirmedDead))
+#			sus.append(getProjectedToRealPopulation(active.suscept[dayArray[i]]))
+			sus.append(getProjectedToRealPopulation(active.getPopulation() - (testedInf + testedRec + confirmedDead)))
+			
+			
 		output.append(sus)
+		output.append(susTested)
+		output.append(recTested)
 		output.append(inf)
-		output.append(rec)
+#		output.append(rec)
 		output.append(dead)
 		return output
+		
+#		var output = [dayArray]
+#		var sus = [CONSTANTS.SUSCEPTIBLE]
+#		var inf = [CONSTANTS.INFECTED]
+#		var rec = [CONSTANTS.RECOVERED]
+#		var dead = [CONSTANTS.DEAD]
+#		for i in range(1, dayArray.size()):
+#			sus.append(getProjectedToRealPopulation(active.suscept[dayArray[i]]))
+#			inf.append(getProjectedToRealPopulation(active.infect[dayArray[i]]))
+#			rec.append(getProjectedToRealPopulation(active.recov[dayArray[i]]))
+#			dead.append(getProjectedToRealPopulation(active.dead[dayArray[i]]))
+#		output.append(sus)
+#		output.append(inf)
+#		output.append(rec)
+#		output.append(dead)
+#		return output
 
 func getOutputIncidence():
 	return active.get7DayIncidence(godmode)
@@ -427,6 +461,9 @@ func getHospitalOccupation(dayArray):
 #	return !((self.lockdownFactor == 0) and (self.selectedMask == 0))
 	
 func simulate():
+	
+	var startTime = OS.get_ticks_msec()
+	
 	entities[CONSTANTS.DEU].simulateALL()
 	days.append(self.currentDay)
 	match getMode():
@@ -440,6 +477,12 @@ func simulate():
 			print("Tag ", self.currentDay, ": PANDEMIE VORÜBER")
 		
 	updateDay()
+#	statOutput[CONSTANTS.CALCULATIONTIMER].stop()
+	var endTime = OS.get_ticks_msec()
+	var timeDiff = endTime - startTime
+	print("Simulation of Day ", days[-1], " took: ", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", timeDiff)
+#	print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes // ", OS.get_ticks_msec())
+#	print("Simulation of Day ", days[-1], " took: ",((calcTime/10)/60)/60, ":", (calcTime/10)/60, ":", calcTime/10)
 	
 
 func updateDay():
@@ -454,6 +497,7 @@ func updateDay():
 
 func activate():
 	self.activePopulationToRealFactor = active.getPopulationToRealFactor()
+	self.activePopulationToCalculationFactor = active.getPopulationToCalculationFactor()
 	match getMode():
 		CONSTANTS.STATMODE:
 			showStats()
@@ -716,12 +760,14 @@ func lockdownSelection(index:int):
 	
 	entities[CONSTANTS.DEU].setOptionChanged(true)
 	active.setOptionChanged(false)
+	updateInterventionWeight()
 
 func _on_borderControl_toggle(button_pressed:bool):
 #	self.optionChanged = true
 #	self.selectedHomeOffice = 4
 #	print("Border Control ", button_pressed)
 	active.setBorderOpen(!button_pressed)
+	updateInterventionWeight()
 
 
 func _on_mask_selected(index:int):
@@ -742,16 +788,21 @@ func _on_homeOffice_selected(index:int):
 
 func _on_testScenario_selected(index:int):
 	active.setTestRates(index)
+	updateInterventionWeight()
 #	showAction()
 
 
 func _on_vaxProduction_changed(value:float):
-	entities[CONSTANTS.DEU].setVaxProduction(int(value))
+#	entities[CONSTANTS.DEU].setVaxProduction(int(value))
+	entities[CONSTANTS.DEU].setVaxProduction(getProjectedToCalculationPopulation(int(value)))
 
 func _on_hospitalBed_changed(value:float):
-	if actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].editable and value != entities[CONSTANTS.DEU].getHospitalBeds(self.days.max() if self.days.max() != null else 0):
-		entities[CONSTANTS.DEU].setHospitalBeds(self.days.max() if self.days.max() != null else 0, int(value))
-		actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].value = entities[CONSTANTS.DEU].getHospitalBeds(self.days.max() if self.days.max() != null else 0)
+	if actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].editable and value != getProjectedToRealPopulation(entities[CONSTANTS.DEU].getHospitalBeds(self.days.max() if self.days.max() != null else 0)):
+#		entities[CONSTANTS.DEU].setHospitalBeds(self.days.max() if self.days.max() != null else 0, int(value))
+#		actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].value = entities[CONSTANTS.DEU].getHospitalBeds(self.days.max() if self.days.max() != null else 0)
+		entities[CONSTANTS.DEU].setHospitalBeds(self.days.max() if self.days.max() != null else 0, getProjectedToCalculationPopulation(int(value)))
+#		actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].value = getProjectedToRealPopulation(entities[CONSTANTS.DEU].getHospitalBeds(self.days.max() if self.days.max() != null else 0))
+		actionOutput[CONSTANTS.OCCBEDS].text = String(getProjectedToRealPopulation(active.getDailyOccupiedBeds(self.days.max() if self.days.max() != null else -1))) + " / " + String(getProjectedToRealPopulation(active.getHospitalBeds()))
 
 
 func add_options(isGermany:bool):
@@ -827,6 +878,9 @@ func connectSignals():
 	statOutput[CONSTANTS.TIMER].connect("timeout", self, "_on_Time_timeout")
 	statOutput[CONSTANTS.TIMER].start()
 	
+#	statOutput[CONSTANTS.CALCULATIONTIMER].set_wait_time(0.1)
+#	statOutput[CONSTANTS.CALCULATIONTIMER].connect("timeout", self, "_on_CalcTimer_timeout")
+	
 	actionOutput[CONSTANTS.NO].connect("toggled", self, "_on_NO_toggled")
 	actionOutput[CONSTANTS.LIGHT].connect("toggled", self, "_on_LIGHT_toggled")
 	actionOutput[CONSTANTS.MEDIUM].connect("toggled", self, "_on_MEDIUM_toggled")
@@ -841,7 +895,10 @@ func connectSignals():
 	actionOutput[CONSTANTS.TESTOPTION].connect("item_selected", self, "_on_testScenario_selected")
 	
 	actionOutput[CONSTANTS.VAXPRODUCTIONSPINBOX].connect("value_changed", self, "_on_vaxProduction_changed")
+	actionOutput[CONSTANTS.VAXPRODUCTIONSPINBOX].step = int(round(self.activePopulationToRealFactor))
+	
 	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].connect("value_changed", self, "_on_hospitalBed_changed")
+	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].step = int(round(self.activePopulationToRealFactor)) * entities[CONSTANTS.DEU].states.values().size()
 	
 	buttons[CONSTANTS.STATBUTTON].connect("pressed", self, "_on_statButton_press")
 	buttons[CONSTANTS.ACTIONBUTTON].connect("pressed", self, "_on_actionButton_press")
@@ -870,4 +927,7 @@ func connectSignals():
 	entities[CONSTANTS.SLH].mapButton.connect("toggled", self, "_on_SLH_press")
 	entities[CONSTANTS.THU].mapButton.connect("toggled", self, "_on_THU_press")
 	entities[CONSTANTS.DEU].mapButton.connect("toggled", self, "_on_DEU_press")
-	
+
+
+#func _on_CalcTimer_timeout():
+#	calcTime += 0.1

@@ -7,6 +7,7 @@ var realPopulation :int
 var populationBase :int
 
 var populationToRealFactor :float
+var populationFactor :float
 var population :int
 var deaths :int
 
@@ -90,10 +91,12 @@ func _init(initStates, initName, initButton):
 	self.states = initStates
 	recalculatePopulation()
 	self.populationBase = self.population
+	self.populationFactor = float(self.populationBase) / float(self.realPopulation)
 	self.populationToRealFactor = float(self.realPopulation) / float(self.populationBase)
 	self.deaths = 0
 	
 	self.hospitalBedsDaily = {0:0}
+	setHospitalBeds(0, (27681 + 7436) * populationFactor)
 	recalculateHospitalBeds()
 	self.hospitalBedsDaily = {0:self.hospitalBeds}
 	
@@ -170,6 +173,9 @@ func recalculateStatePopulation():
 func getPopulationToRealFactor():
 	return self.populationToRealFactor
 
+func getPopulationToCalculationFactor():
+	return self.populationFactor
+	
 func recalculateDeaths():
 	self.deaths = 0
 	for state in states.values():
@@ -526,6 +532,7 @@ func getNumbers():
 		V2 = CONSTANTS.add_arrays(V2, state.V2)
 
 func getPopulation():
+	recalculatePopulation()
 	return self.population
 
 func getTestedSum():
@@ -563,7 +570,10 @@ func getDailyV2Difference(day:int):
 		return difference if difference > 0 else 0
 
 func getDailyOccupiedBeds(day):
-	return hosp[day] + vax1hosp[day] + vax2hosp[day]
+	if day < 1:
+		return 0
+	else:
+		return hosp[day] + vax1hosp[day] + vax2hosp[day]
 
 func get7DayIncidence(godmode = false):
 	var incidenceSum :float = 0
@@ -639,3 +649,27 @@ func getOptionChanged():
 			return true
 #	self.optionChanged = value
 	return self.optionChanged
+
+func getMaskAverage():
+	var sum = 0
+	for state in states.values():
+		sum += state.getSelectedMask()
+	return sum / float(states.values().size())
+
+func getHomeOfficeAverage():
+	var sum = 0
+	for state in states.values():
+		sum += state.getSelectedHomeOffice()
+	return sum / float(states.values().size())
+
+func getTestAverage():
+	var sum = 0
+	for state in states.values():
+		sum += state.getSelectedTestRates()
+	return sum / float(states.values().size())
+	
+func getBorderAverage():
+	var sum = 0
+	for state in states.values():
+		sum += int(!state.getBorderOpen())
+	return sum / float(states.values().size())

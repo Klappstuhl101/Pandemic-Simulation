@@ -59,7 +59,7 @@ var populationFactor :float
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	populationFactor = 0.0005
+	populationFactor = 0.001
 	
 	remainingDays = -1
 	
@@ -78,6 +78,7 @@ func _ready():
 	
 	statOutput[CONSTANTS.TIMER] = get_node("Time")
 	
+	statOutput[CONSTANTS.CALCULATIONTIMER] = get_node("CalculationTimer")
 	
 	statOutput[CONSTANTS.STATCONTAINER] = get_node("Statistics")
 	statOutput[CONSTANTS.COUNTRYNAME] = get_node("CountryName")
@@ -105,6 +106,8 @@ func _ready():
 	actionOutput[CONSTANTS.MEDIUM] = get_node("PlayControls/GridContainer/LockDownOptions/Medium")
 	actionOutput[CONSTANTS.HEAVY] = get_node("PlayControls/GridContainer/LockDownOptions/Heavy")
 	actionOutput[CONSTANTS.USERDEFINED] = get_node("PlayControls/GridContainer/LockDownOptions/Userdefined")
+	
+	actionOutput[CONSTANTS.INTERVENTIONWEIGHT] = get_node("InterventionWeight")
 	
 	actionOutput[CONSTANTS.ACTIONCONTAINER] = get_node("PlayControls")
 	actionOutput[CONSTANTS.OPTIONBUTTON] = get_node("PlayControls/GridContainer/OptionContainer/MaskOption/OptionButton")
@@ -237,6 +240,7 @@ func _on_PlaySpeedx2_pressed():
 		paused = false
 	else:
 		if remainingDays < 1:
+#			remainingDays = CONSTANTS.WEEK * 2 + 1
 			remainingDays = CONSTANTS.WEEK * 20 + 1
 			statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 

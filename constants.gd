@@ -6,8 +6,11 @@ const BL = " "
 
 const TIMER = "Timer"
 
+const CALCULATIONTIMER = "CalculationTimer"
+
 const PROGRESSBAR = "Progressbar"
 const PROGRESSPANEL = "ProgressPanel"
+const INTERVENTIONWEIGHT = "InterventionWeight"
 
 const NO = "No"
 const LIGHT = "Light"
@@ -48,13 +51,6 @@ const INCIDENCELABELS = "IncidenceLabels"
 const FIRSTVAX = "Erstimpfungen"
 const SECONDVAX = "Zweitimpfungen"
 
-const PIE = "Pie"
-const LINE = "Line"
-const LINE2 = "Line2"
-const LINE3 = "Line3"
-const LINE4 = "Line4"
-const LINE5 = "Line5"
-const LINE6 = "Line6"
 
 const RVALUE = "R-Wert"
 const INCIDENCE = "Inzidenz"
@@ -121,9 +117,10 @@ const TESTRATES = [0.0, 0.001, 0.0025, 0.005]
 
 const DIFFERENTSETTINGS = 5
 
-const VACDELAY = 10
+#const VACDELAY = 10
+const VACDELAY = 21
 
-var currentState: String
+
 
 # Calculate sum of an array
 static func sum(arr):

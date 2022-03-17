@@ -114,7 +114,7 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	self.realPopulation = initRealPopulation
 	self.populationFactor = initPopulationFactor
 	
-	self.populationBase = int(floor(self.realPopulation * self.populationFactor))
+	self.populationBase = int(round(self.realPopulation * self.populationFactor))
 #	self.populationBase = initPopulation
 	
 	self.populationToRealFactor = float(self.realPopulation) / float(self.populationBase)
@@ -140,7 +140,7 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	
 	baseInfect = 0.2
 	baseRec = 0.02
-	baseDeath = 0.01
+	baseDeath = 0.005
 	baseTest = 0.000 #0.005 für stärkste Teststufe, 0.0025 für mittlere Stufe, 0.001 für schwächste Stufe, 0.000 für keine Tests
 	baseHospital = 0.6
 	
@@ -285,6 +285,9 @@ func getPopulation():
 func getPopulationToRealFactor():
 	return self.populationToRealFactor
 
+func getPopulationToCalculationFactor():
+	return self.populationFactor
+
 func getAvlbVax():
 	return self.avlbVax
 
@@ -315,30 +318,26 @@ func get7DayIncidence(godmode = false):
 
 func getUnvaxedSum():
 	return CONSTANTS.sum(S) + CONSTANTS.sum(I) + CONSTANTS.sum(R)
-#	return (CONSTANTS.sum(S) + CONSTANTS.sum(I) + CONSTANTS.sum(R)) * self.populationToRealFactor
 
 func getV1Sum():
 	return CONSTANTS.sum(V1[0]) + CONSTANTS.sum(V1[1]) + CONSTANTS.sum(V1[2]) + CONSTANTS.sum(V1[3]) + V1eligible[0] + V1eligible[1] + V1eligible[2] + V1eligible[3]
-#	return (CONSTANTS.sum(V1[0]) + CONSTANTS.sum(V1[1]) + CONSTANTS.sum(V1[2]) + CONSTANTS.sum(V1[3]) + V1eligible[0] + V1eligible[1] + V1eligible[2] + V1eligible[3]) * self.populationToRealFactor
 
 func getV2Sum():
 	return V2[0] + V2[1] + V2[2] + V2[3]
-#	return (V2[0] + V2[1] + V2[2] + V2[3]) * self.populationToRealFactor
 
 func getDailyInfections(day:int):
 	if day == 1:
-		return infect[day]
-#		return infect[day] * self.populationToRealFactor
+		return inf1[day] + hosp[day] + vax1hosp[day] + vax2hosp[day]
+#		return infect[day]
 	else:
-		var difference = infect[day] - infect[day - 1] # zum Testen des Overlay
-#		var difference = inf1[day] - inf1[day-1] # später für Coronatests only
+#		var difference = infect[day] - infect[day - 1] # zum Testen des Overlay
+		var difference = (inf1[day] + hosp[day] + vax1hosp[day] + vax2hosp[day]) - (inf1[day-1] + hosp[day-1] + vax1hosp[day-1] + vax2hosp[day-1]) # später für Coronatests only
 		return difference if difference > 0 else 0
-#		return difference * self.populationToRealFactor if difference > 0 else 0
 
 func getDailyV1Difference(day:int):
 	if day == 1:
 		return (vax1sus[day] + vax1inf[day] + vax1hosp[day] + vax1rec[day])
-#		return (vax1sus[day] + vax1inf[day] + vax1hosp[day] + vax1rec[day]) * self.populationToRealFactor
+#		return (vax1sus[day] + vax1inf[day] + vax1hosp[day] + vax1rec[day])
 	else:
 		var difference = (vax1sus[day] + vax1inf[day] + vax1hosp[day] + vax1rec[day]) - (vax1sus[day-1] + vax1inf[day-1] + vax1hosp[day-1] + vax1rec[day-1])
 		return difference if difference > 0 else 0
@@ -351,7 +350,10 @@ func getDailyV2Difference(day:int):
 		return difference if difference > 0 else 0
 
 func getDailyOccupiedBeds(day):
-	return hosp[day] + vax1hosp[day] + vax2hosp[day]
+	if day < 1:
+		return 0
+	else:
+		return hosp[day] + vax1hosp[day] + vax2hosp[day]
 
 func getInfectRate():
 	if self.selectedMask != 0 and self.selectedHomeOffice != 0:

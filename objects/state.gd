@@ -5,6 +5,8 @@ class_name State
 
 var _thread :Thread
 
+var events :int
+
 var name :String
 
 var neighbors :Array
@@ -150,14 +152,14 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	self.population = populationBase
 	self.deaths = 0
 	
-#	# Hospitalisierung
+	
 	self.I = [1,0,0,0]
 	
-	
-	# für Test und Hospitalisierung
 	self.S = [self.populationBase - self.I[0],0]
 	self.R = [0,0,0]
 	self.D = [0,0,0]
+	
+	
 	informationLoss = 0.02
 	
 	infectFactorHosp = 0.2
@@ -413,12 +415,14 @@ func getOptionChanged():
 
 
 func simulate():
+	events = 0
 #	if I <= 0: # pandemic over
 #		return
 	infectRate = [getInfectRate(), getInfectRate()*infectTestFactor, getInfectRate()*infectFactorHosp, getInfectRate()*infectFactorV1, getInfectRate()*infectFactorV2] # Ungetestet, Getestet, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	var t = timeDifference
 	while t<1:
 		t = gillespieIteration(t)
+		events += 1
 #		print(t)
 #		print(t, " S ", S, " I ", I, " R ", R, " D ", D, " ", I+S+R+D)
 		if(t>1):
@@ -477,6 +481,11 @@ func simulate():
 	vax2dead.append(V2[4])
 	
 	hosp.append(I[3])
+	
+	
+	var format_name = "%-23s||" % getName()
+	var format_events = "%15d Events" % events
+	print(format_name + format_events)
 
 
 

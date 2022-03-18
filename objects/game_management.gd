@@ -486,7 +486,7 @@ func simulate():
 	updateDay()
 	var endTime = OS.get_ticks_msec()
 	var timeDiff = endTime - startTime
-	print("Simulation of Day ", days[-1], " took: ", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", timeDiff)
+	print("Simulation of Day ", days[-1], " took: ", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", int(timeDiff) % 1000)
 
 	
 

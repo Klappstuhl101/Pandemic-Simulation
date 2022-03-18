@@ -188,7 +188,10 @@ func _process(_delta):
 			statOutput[CONSTANTS.PROGRESSPANEL].visible = true
 #			calculationTimer.start()
 			game_manager.simulate()
-			game_manager.showStats()
+			
+			bawu._thread.start(self, "updateStats", null)
+			bawu._thread.wait_to_finish()
+#			game_manager.showStats()
 			remainingDays -= 1
 		else:
 			statOutput[CONSTANTS.PROGRESSPANEL].visible = false
@@ -209,6 +212,13 @@ func _process(_delta):
 #				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
 #				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
 
+func updateStats(userdata):
+	match game_manager.getMode():
+		CONSTANTS.STATMODE:
+			game_manager.showStats()
+		CONSTANTS.ACTIONMODE:
+			game_manager.showAction()
+#	game_manager.showStats()
 
 func updateProgress():
 	statOutput[CONSTANTS.PROGRESSBAR].value = statOutput[CONSTANTS.PROGRESSBAR].max_value - remainingDays
@@ -224,7 +234,7 @@ func _on_Play_pressed():
 		paused = false
 	else:
 		if remainingDays < 1:
-			remainingDays = CONSTANTS.WEEK + 1
+			remainingDays = CONSTANTS.WEEK
 			statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 
 func _on_PlaySpeedx2_pressed():
@@ -232,8 +242,8 @@ func _on_PlaySpeedx2_pressed():
 		paused = false
 	else:
 		if remainingDays < 1:
-#			remainingDays = CONSTANTS.WEEK * 2 + 1
-			remainingDays = CONSTANTS.WEEK * 20 + 1
+			remainingDays = CONSTANTS.WEEK * 2
+#			remainingDays = CONSTANTS.WEEK * 20
 			statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 
 #func _on_calcTimer_timeout():

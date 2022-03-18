@@ -8,6 +8,8 @@ const TIMER = "Timer"
 
 const CALCULATIONTIMER = "CalculationTimer"
 
+#const LINELENGTH = 80
+
 const PROGRESSBAR = "Progressbar"
 const PROGRESSPANEL = "ProgressPanel"
 const INTERVENTIONWEIGHT = "InterventionWeight"

@@ -87,3 +87,13 @@ text = "Hinweis:
 Im Spiel wird der Statistik-Tab erst ab Tag 3 verfügbar.
 Maßnahmen können ab dem ersten Tag ergriffen werden"
 autowrap = true
+
+[node name="ExitButton" type="Button" parent="."]
+margin_left = 1560.0
+margin_right = 1568.0
+margin_bottom = 18.0
+rect_min_size = Vector2( 40, 40 )
+text = "X"
+__meta__ = {
+"_edit_use_anchors_": false
+}

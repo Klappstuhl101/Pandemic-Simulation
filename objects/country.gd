@@ -523,9 +523,9 @@ func simulateALL():
 	
 	hosp.append(I[3])
 	
-func simulateState(name):
+func simulateState(stateName):
 #	print(name)
-	states[name].simulate()
+	states[stateName].simulate()
 
 
 func getNumbers():

@@ -89,6 +89,14 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	
 	connectSignals()
 	
+	var colors = PoolColorArray()
+#	colors.append(Color(0.12, 1.00, 0.12, 1.00))
+	colors.append(Color(0.0, 0.50, 0.0, 1.00))
+	colors.append(Color(0.0, 0.50, 1.0, 1.00))
+	colors.append(Color(1.0, 0.0, 0.0, 1.00))
+	colors.append(Color(1.0, 1.0, 1.0, 1.00))
+	statOutput[CONSTANTS.OVERVIEW].function_colors = colors
+	
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
 	
@@ -338,7 +346,7 @@ func getOutputOverview(dayArray):
 	else:
 		# HIER STATT ALLEN ZAHLEN NUR GETESTETE FÄLLE
 		var output = [dayArray]
-		var sus = [CONSTANTS.SUSCEPTIBLE]
+#		var sus = [CONSTANTS.SUSCEPTIBLE]
 		var susTested = [CONSTANTS.SUSCEPTIBLE + CONSTANTS.BL + CONSTANTS.TESTED]
 		var inf = [CONSTANTS.INFECTED + CONSTANTS.BL + CONSTANTS.TESTED]
 #		var rec = [CONSTANTS.RECOVERED]
@@ -357,16 +365,16 @@ func getOutputOverview(dayArray):
 			
 			var confirmedDead = active.dead[dayArray[i]]
 			dead.append(getProjectedToRealPopulation(confirmedDead))
-#			sus.append(getProjectedToRealPopulation(active.suscept[dayArray[i]]))
-			sus.append(getProjectedToRealPopulation(active.getPopulation() - (testedInf + testedRec + confirmedDead)))
+#			sus.append(getProjectedToRealPopulation(active.getPopulation() - (testedInf + testedRec + confirmedDead)))
 			
 			
-		output.append(sus)
+#		output.append(sus)
 		output.append(susTested)
 		output.append(recTested)
 		output.append(inf)
 #		output.append(rec)
 		output.append(dead)
+		
 		return output
 		
 #		var output = [dayArray]

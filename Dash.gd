@@ -43,10 +43,11 @@ var populationFactor :float
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	populationFactor = 0.001
+#	populationFactor = 0.001
 #	populationFactor = 0.025
 #	populationFactor = 0.1
 #	populationFactor = 1
+	populationFactor = Constants.POPULATIONFACTOR
 	
 	remainingDays = -1
 	

@@ -180,7 +180,8 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 #	# für Lockdown
 #	lockdownStrictness = 0.9
 	
-	self.V1 = [CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY),CONSTANTS.zeroes(CONSTANTS.VACDELAY)]
+#	self.V1 = [CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY)]
+	self.V1 = [CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY)]
 	self.V1eligible = [0,0,0,0,0]
 	
 	
@@ -429,7 +430,7 @@ func simulate():
 #	print(V1)
 	
 	waitDay += 1
-	waitDay = waitDay % CONSTANTS.VACDELAY
+	waitDay = waitDay % Constants.VACDELAY
 	
 	V1eligible[0] += V1[0][waitDay]
 	V1eligible[1] += V1[1][waitDay] 
@@ -519,13 +520,13 @@ func updatePersonNumbers(rule):
 			I[2] += 1
 			
 		26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38: # Infektion V1
-			var randomDay = rnd.randi() % CONSTANTS.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
+			var randomDay = rnd.randi() % Constants.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
 				if V1[0][randomDay] != 0:
 					break
 				else:
 					randomDay += 1
-					randomDay = randomDay % CONSTANTS.VACDELAY
+					randomDay = randomDay % Constants.VACDELAY
 			
 			V1[0][randomDay] -= 1
 			V1[1][randomDay] += 1
@@ -594,25 +595,25 @@ func updatePersonNumbers(rule):
 		
 		# Genesung Infizierte V1
 		108:
-			var randomDay = rnd.randi() % CONSTANTS.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
+			var randomDay = rnd.randi() % Constants.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
 				if V1[1][randomDay] != 0:
 					break
 				else:
 					randomDay += 1
-					randomDay = randomDay % CONSTANTS.VACDELAY
+					randomDay = randomDay % Constants.VACDELAY
 			
 			V1[1][randomDay] -= 1
 			V1[3][randomDay] += 1
 		
 		109:
-			var randomDay = rnd.randi() % CONSTANTS.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
+			var randomDay = rnd.randi() % Constants.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
 				if V1[2][randomDay] != 0:
 					break
 				else:
 					randomDay += 1
-					randomDay = randomDay % CONSTANTS.VACDELAY
+					randomDay = randomDay % Constants.VACDELAY
 			
 			V1[2][randomDay] -= 1
 			V1[3][randomDay] += 1
@@ -694,25 +695,25 @@ func updatePersonNumbers(rule):
 		
 		# Tod Infizierte V1
 		121:
-			var randomDay = rnd.randi() % CONSTANTS.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
+			var randomDay = rnd.randi() % Constants.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
 				if V1[1][randomDay] != 0:
 					break
 				else:
 					randomDay += 1
-					randomDay = randomDay % CONSTANTS.VACDELAY
+					randomDay = randomDay % Constants.VACDELAY
 			
 			V1[1][randomDay] -= 1
 			V1[4][randomDay] += 1
 			
 		122:
-			var randomDay = rnd.randi() % CONSTANTS.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
+			var randomDay = rnd.randi() % Constants.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
 				if V1[1][randomDay] != 0:
 					break
 				else:
 					randomDay += 1
-					randomDay = randomDay % CONSTANTS.VACDELAY
+					randomDay = randomDay % Constants.VACDELAY
 			
 			V1[2][randomDay] -= 1
 			V1[4][randomDay] += 1
@@ -817,13 +818,13 @@ func updatePersonNumbers(rule):
 		
 		# Hospitalisierung V1
 		139:
-			var randomDay = rnd.randi() % CONSTANTS.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
+			var randomDay = rnd.randi() % Constants.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
 				if V1[1][randomDay] != 0:
 					break
 				else:
 					randomDay += 1
-					randomDay = randomDay % CONSTANTS.VACDELAY
+					randomDay = randomDay % Constants.VACDELAY
 					
 			V1[1][randomDay] -= 1
 			V1[2][randomDay] += 1

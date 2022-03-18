@@ -118,7 +118,9 @@ const TESTRATES = [0.0, 0.001, 0.0025, 0.005]
 const DIFFERENTSETTINGS = 5
 
 #const VACDELAY = 10
-const VACDELAY = 21
+var VACDELAY :int = 21
+
+var POPULATIONFACTOR :float = 0.01
 
 
 

@@ -153,7 +153,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Corona-Simulation-Dashboard"
-run/main_scene="res://Dash.tscn"
+run/main_scene="res://Menu.tscn"
 config/icon="res://icon.png"
 
 [autoload]

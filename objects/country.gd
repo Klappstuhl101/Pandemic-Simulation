@@ -71,6 +71,10 @@ var vax2hosp = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.HOSPITALISED]	# 2x gei
 var vax2rec = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.RECOVERED]		# 2x geimpft genesen
 var vax2dead = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.DEAD]			# 2x geimpft tot
 
+var unvaxSum
+var v1sum
+var v2sum
+
 
 var rnd = RandomNumberGenerator.new()
 
@@ -530,6 +534,11 @@ func simulateALL():
 	
 	hosp.append(I[3])
 	
+	unvaxSum = CONSTANTS.sum(S) + CONSTANTS.sum(I) + CONSTANTS.sum(R)
+	v1sum = V1[0] + V1[1] + V1[2] + V1[3]
+	v2sum = V2[0] + V2[1] + V2[2] + V2[3]
+	
+	
 func simulateState(stateName):
 #	print(name)
 	states[stateName].simulate()
@@ -553,13 +562,16 @@ func getTestedSum():
 	return S[1] + I[1] + R[1]
 
 func getUnvaxedSum():
-	return CONSTANTS.sum(S) + CONSTANTS.sum(I) + CONSTANTS.sum(R)
+	return unvaxSum
+#	return CONSTANTS.sum(S) + CONSTANTS.sum(I) + CONSTANTS.sum(R)
 
 func getV1Sum():
-	return V1[0] + V1[1] + V1[2] + V1[3]
+	return v1sum
+#	return V1[0] + V1[1] + V1[2] + V1[3]
 
 func getV2Sum():
-	return V2[0] + V2[1] + V2[2] + V2[3]
+	return v2sum
+#	return V2[0] + V2[1] + V2[2] + V2[3]
 
 func getDailyInfections(day:int):
 	var difference = 0

@@ -8,6 +8,9 @@ var pause
 var play
 var playspeedx2
 
+var running :bool = false
+var statsLoading :bool = false
+
 var menu
 
 var bawu
@@ -83,6 +86,7 @@ func _ready():
 	
 	statOutput[CONSTANTS.PROGRESSBAR] = get_node("SimProgress")
 	statOutput[CONSTANTS.PROGRESSPANEL] = get_node("SimProgress/ProgressPanel")
+	statOutput[CONSTANTS.SIMANIMATION] = get_node("SimProgress/SimAnimation")
 	statOutput[CONSTANTS.DAYS] = get_node("CurrentDay")
 	
 	statOutput[CONSTANTS.INCIDENCELABELS] = get_node("Map/ScaleContainer/ScaleContainer/IncidenceLabels")
@@ -177,6 +181,9 @@ func _ready():
 	 }
 	game_manager = Game_Management.new(entities, statOutput, actionOutput, buttons, false)
 	
+	game_manager._simThread.start(self, "_start_thread_with_nothing", "simThread")
+	game_manager._statThread.start(self, "_start_thread_with_nothing", "statThread")
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -184,18 +191,32 @@ func _process(_delta):
 	if !paused:
 		updateProgress()
 	#	game_manager.showStats()
-		if remainingDays > 0:
+		if remainingDays > 0 and !running:
 			statOutput[CONSTANTS.PROGRESSPANEL].visible = true
 #			calculationTimer.start()
-			game_manager.simulate()
+			game_manager._simThread.wait_to_finish()
+
+			game_manager._simThread.start(self, "runSimulation", null)
 			
-			bawu._thread.start(self, "updateStats", null)
-			bawu._thread.wait_to_finish()
-#			game_manager.showStats()
-			remainingDays -= 1
+#			game_manager.simulate()
+#
+#			game_manager._statThread.start(self, "updateStats", null)
+#			game_manager._statThread.wait_to_finish()
+#			remainingDays -= 1
+#		elif !statsLoading:
+#			game_manager._statThread.wait_to_finish()
+#			game_manager._statThread.start(self, "updateStats", null)
+#			statsLoading = true
+		elif running:
+			statOutput[CONSTANTS.PROGRESSPANEL].visible = true
+			statOutput[CONSTANTS.SIMANIMATION].visible = true
+			statOutput[CONSTANTS.SIMANIMATION].playing = true
 		else:
 			statOutput[CONSTANTS.PROGRESSPANEL].visible = false
-	
+			statOutput[CONSTANTS.SIMANIMATION].visible = false
+			statOutput[CONSTANTS.SIMANIMATION].playing = false
+	else:
+		statOutput[CONSTANTS.SIMANIMATION].playing = false
 #	if game_manager.days.size() > 3:
 #		game_manager.showStats()
 	
@@ -212,7 +233,18 @@ func _process(_delta):
 #				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
 #				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
 
-func updateStats(userdata):
+func runSimulation(userdata = null):
+	self.running = true
+	game_manager.simulate()
+	self.remainingDays -= 1
+#	updateStats()
+	self.running = false
+#	game_manager._thread.wait_to_finish()
+	
+
+func updateStats(userdata = null):
+#	Constants.simSemaphore.wait()
+#	game_manager._simThread.wait_to_finish()
 	match game_manager.getMode():
 		CONSTANTS.STATMODE:
 			game_manager.showStats()
@@ -251,8 +283,12 @@ func _on_PlaySpeedx2_pressed():
 #	game_manager.simulate()
 #	game_manager.showStats()
 #	remainingDays -= 1
-	
+
 
 func _on_menu_pressed():
 	get_tree().quit()
 
+
+func _start_thread_with_nothing(userdata):
+	print(userdata + " Thread started")
+	return

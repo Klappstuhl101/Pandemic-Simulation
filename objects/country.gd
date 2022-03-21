@@ -2,6 +2,8 @@ extends Object
 
 class_name Country
 
+var simLock :Mutex
+
 var name
 var realPopulation :int
 var populationBase :int
@@ -107,9 +109,9 @@ func _init(initStates, initName, initButton):
 	
 	
 	# Hospital Bed array zum Anzeigen
-	beds.append("Available Hospital-Beds")
-	for _i in range(CONSTANTS.TRYOUT_DAYS):
-		beds.append(hospitalBeds)
+#	beds.append("Available Hospital-Beds")
+#	for _i in range(CONSTANTS.TRYOUT_DAYS):
+#		beds.append(hospitalBeds)
 	
 	S = [0,0]
 	I = [0,0,0,0]
@@ -476,12 +478,17 @@ func simulateALL():
 	distributeVax()
 	distributeCommuters()
 	
+#	simLock.lock()
 	for state in states.values():
 		state._thread.start(self, "simulateState", state.getName())
 #		state.simulate()
 	
 	for state in states.values():
 		state._thread.wait_to_finish()
+	
+#	Constants.simSemaphore.post()
+#	simLock.unlock()
+	
 	
 	homeCommuters()
 	

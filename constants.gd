@@ -12,6 +12,7 @@ const CALCULATIONTIMER = "CalculationTimer"
 
 const PROGRESSBAR = "Progressbar"
 const PROGRESSPANEL = "ProgressPanel"
+const SIMANIMATION = "SimAnimation"
 const INTERVENTIONWEIGHT = "InterventionWeight"
 
 const NO = "No"
@@ -94,7 +95,7 @@ const PAUSEBUTTON = "PauseButton"
 const PLAYBUTTON = "PlayButton"
 const PLAYX2BUTTON = "PlayX2Button"
 
-const TRYOUT_DAYS = 100
+#const TRYOUT_DAYS = 100
 const DAYS = "Tag"
 
 const SUSCEPTIBLE = "Gesund"
@@ -124,6 +125,9 @@ var VACDELAY :int = 21
 
 var POPULATIONFACTOR :float = 0.01
 
+var simLock :Mutex = Mutex.new()
+var simSemaphore :Semaphore = Semaphore.new()
+
 
 
 # Calculate sum of an array
@@ -131,6 +135,12 @@ static func sum(arr):
 	var sum = 0
 	for i in range(arr.size()):
 		sum += arr[i]
+	return sum
+
+static func sumIndex(arr, index):
+	var sum :float = 0
+	for entry in arr:
+		sum += entry[index]
 	return sum
 
 # Calculate cumulative sum for each entry of an array

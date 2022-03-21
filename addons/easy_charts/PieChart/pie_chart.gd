@@ -154,9 +154,18 @@ func build_chart():
 	radius = (SIZE.y/2 - 20) if SIZE.y < SIZE.x else (SIZE.x/2 - 20)
 
 func calculate_pass():
+#	Constants.simLock.lock()
 	var tot : float
 	for y_data in y_datas: tot+=y_data[0]
-	x_pass = 360/tot
+#	if tot == 0:
+#		x_pass = 360/y_datas[0][0]
+	if tot == 0:
+		x_pass = 0
+	else:
+		x_pass = 360/tot
+#	x_pass = 360/tot
+#	x_pass = 360 / CONSTANTS.sumIndex(y_datas, 0)
+#	Constants.simLock.unlock()
 
 func calculate_coordinates():
 	area_angles.clear()

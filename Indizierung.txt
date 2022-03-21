@@ -33,6 +33,9 @@ Tote komplett aus Bevölkerung streichen
 Weitere Ideen (für die Zukunft):
 "Gottmodus" Idee?
 Budget als Spielmechanismus
+
+GESAMTE GAME_MANAGER KLASSE ALS THREAD AUSLAGERN??
+
 Evaluierung schon im Vortrag erwähnen
 O-Notation für Algorithmus, Gillespie
 Evaluation der process-Funktion

@@ -4,6 +4,14 @@ class_name Game_Management
 
 #var calcTime:float
 
+var _simThread :Thread
+var _statThread :Thread
+
+var _simLock :Mutex
+
+var loading :bool
+var running :bool
+
 var entities :Dictionary # states + country
 var active # active state / country
 var mode # StatsMode or ActionMode
@@ -48,6 +56,11 @@ var currentDay = 0
 #var counter = 0
 
 func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodmode):
+	
+	self._simThread = Thread.new()
+#	self._simThread.start(self, "_start_thread_with_nothing", "Game_management")
+	self._statThread = Thread.new()
+	
 #	self.sim = initSim
 	self.entities = initEntities
 	self.statOutput = initStatOutput
@@ -58,6 +71,10 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 #	previous = entities.get(CONSTANTS.DEU)
 	
 	self.godmode = initGodmode
+	
+	
+	self.loading = false
+	self.running = false
 	
 #	self.selectedLockdown = [0, 1-0.816, 1-0.66, 1-0.451]
 #
@@ -99,10 +116,15 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
-	
+
+func _start_thread_with_nothing(userdata):
+	print(userdata + " Thread started")
+	return
+
+
 
 func showAction():
-	statOutput[CONSTANTS.COUNTRYNAME].text = active.name
+	
 	updateMap()
 	updateInterventionWeight()
 	
@@ -181,7 +203,8 @@ func showAction():
 	
 
 func showStats():
-	statOutput[CONSTANTS.COUNTRYNAME].text = active.name
+#	if _simThread.is_active():
+#		_simThread.wait_to_finish()
 	updateMap()
 	updateInterventionWeight()
 	
@@ -285,12 +308,12 @@ func getProjectedToRealPopulation(value):
 func getProjectedToCalculationPopulation(value):
 	return int(round(round(value) * self.activePopulationToCalculationFactor))
 
-func getOutputArray():
-	pass
+func getLoading():
+	return self.loading
 
 func getOutputInterval():
 	var dayArray = [CONSTANTS.DAYS]
-	if self.days.size() < CONSTANTS.WEEK:
+	if self.days.size() < CONSTANTS.WEEK + 1:
 		dayArray.append_array(self.days)
 		dayArray.remove(1)
 		return dayArray
@@ -299,6 +322,7 @@ func getOutputInterval():
 		CONSTANTS.WEEK:
 			for i in range(CONSTANTS.WEEK):
 				if (days.size() - 1 - CONSTANTS.WEEK + i) <= 0:
+#				if (days.size() - CONSTANTS.WEEK + i) <= 0:
 					continue
 				else:
 					dayArray.append(days[days.size() - 1 - CONSTANTS.WEEK + i])
@@ -501,8 +525,17 @@ func updateDay():
 	self.currentDay += 1
 
 func activate():
+#	self.loading = true
+	statOutput[CONSTANTS.COUNTRYNAME].text = active.name
 	self.activePopulationToRealFactor = active.getPopulationToRealFactor()
 	self.activePopulationToCalculationFactor = active.getPopulationToCalculationFactor()
+	
+#	if _simThread.is_active():
+#		_simThread.wait_to_finish()
+		
+#	self.loading = _simThread.is_active()
+	
+#	if !_simThread.is_active():
 	match getMode():
 		CONSTANTS.STATMODE:
 			showStats()

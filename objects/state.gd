@@ -222,10 +222,10 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	
 	timeDifference = 0
 	
-	suscept.append(S[0] + S[1])
-	infect.append(I[0] + I[1] + I[2])
-	recov.append(R[0] + R[1] + R[2])
-	dead.append(D[0] + D[1] + D[2])
+	suscept.append(S[0] + S[1]) # vaxxed omitted
+	infect.append(I[0] + I[1] + I[2]) # vaxxed Infected omitted, because there are none yet
+	recov.append(R[0] + R[1] + R[2]) # vaxxed omitted
+	dead.append(D[0] + D[1] + D[2]) # vaxxed omitted
 	
 	sus0.append(S[0])
 	sus1.append(S[1])
@@ -310,13 +310,19 @@ func getDeaths():
 func get7DayIncidence(godmode = false):
 	var newCases = 0
 	if godmode:
-		pass
+		for i in range(CONSTANTS.WEEK):
+			var index = sus0.size() - 1 - CONSTANTS.WEEK + i
+			if index < 2:
+				continue
+			else:
+				newCases += infect[index] - infect[index-1]
 	else:
 		for i in range(CONSTANTS.WEEK):
 			var index = sus0.size() - 1 - CONSTANTS.WEEK + i
 			if index < 2:
 				continue
-			newCases += (inf1[index] - inf1[index - 1]) + (hosp[index] - hosp[index - 1]) + (vax1hosp[index] - vax1hosp[index - 1]) + (vax2hosp[index] - vax2hosp[index - 1])
+			else:
+				newCases += (inf1[index] - inf1[index - 1]) + (hosp[index] - hosp[index - 1]) + (vax1hosp[index] - vax1hosp[index - 1]) + (vax2hosp[index] - vax2hosp[index - 1])
 	
 	var incidence = stepify((float(newCases)/float(getPopulation())) * 100000, 0.01)
 	return incidence if incidence > 0 else 0
@@ -330,14 +336,21 @@ func getV1Sum():
 func getV2Sum():
 	return V2[0] + V2[1] + V2[2] + V2[3]
 
-func getDailyInfections(day:int):
-	if day == 1:
-		return inf1[day] + hosp[day] + vax1hosp[day] + vax2hosp[day]
-#		return infect[day]
+func getDailyInfections(day:int, godmode:bool):
+	if godmode:
+		if day == 1:
+			return infect[day]
+		else:
+			var difference = infect[day] - infect[day - 1]
+			return difference if difference > 0 else 0
 	else:
-#		var difference = infect[day] - infect[day - 1] # zum Testen des Overlay
-		var difference = (inf1[day] + hosp[day] + vax1hosp[day] + vax2hosp[day]) - (inf1[day-1] + hosp[day-1] + vax1hosp[day-1] + vax2hosp[day-1]) # später für Coronatests only
-		return difference if difference > 0 else 0
+		if day == 1:
+			return inf1[day] + hosp[day] + vax1hosp[day] + vax2hosp[day]
+	#		return infect[day]
+		else:
+	#		var difference = infect[day] - infect[day - 1] # zum Testen des Overlay
+			var difference = (inf1[day] + hosp[day] + vax1hosp[day] + vax2hosp[day]) - (inf1[day-1] + hosp[day-1] + vax1hosp[day-1] + vax2hosp[day-1]) # später für Coronatests only
+			return difference if difference > 0 else 0
 
 func getDailyV1Difference(day:int):
 	if day == 1:

@@ -9,6 +9,8 @@ var startButton
 var populationFactor
 var vaxWaitDay
 
+var godmodeButton
+
 var exitButton
 
 
@@ -19,6 +21,9 @@ func _ready():
 	startButton = get_node("Button")
 	populationFactor = get_node("populationFactor")
 	vaxWaitDay = get_node("vaxWaitDay")
+	
+	godmodeButton = get_node("GodmodeButton")
+	godmodeButton.connect("toggled", self, "_on_godmode_toggled")
 	
 	exitButton.connect("pressed", self, "_on_exit_pressed")
 	
@@ -39,6 +44,9 @@ func _on_populationFactor_changed(value:float):
 	
 func _on_vaxWaitDay_changed(value:float):
 	Constants.VACDELAY = int(value)
+
+func _on_godmode_toggled(pressed:bool):
+	Constants.GODMODE = pressed
 
 
 func _on_exit_pressed():

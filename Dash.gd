@@ -89,6 +89,7 @@ func _ready():
 	statOutput[CONSTANTS.SIMANIMATION] = get_node("SimProgress/SimAnimation")
 	statOutput[CONSTANTS.DAYS] = get_node("CurrentDay")
 	
+	statOutput[CONSTANTS.INCIDENCESCALETITLE] = get_node("Map/ScaleContainer/IncidenceScaleTitle")
 	statOutput[CONSTANTS.INCIDENCELABELS] = get_node("Map/ScaleContainer/ScaleContainer/IncidenceLabels")
 	
 	statOutput[CONSTANTS.INCIDENCE] = get_node("Statistics/GridContainer/Indicators/IncidenceNr")
@@ -179,7 +180,7 @@ func _ready():
 	 CONSTANTS.SCN:sachsen, CONSTANTS.SCA:sacanh, CONSTANTS.SLH:schlHol, CONSTANTS.THU:thur, 
 	 CONSTANTS.DEU: deu
 	 }
-	game_manager = Game_Management.new(entities, statOutput, actionOutput, buttons, false)
+	game_manager = Game_Management.new(entities, statOutput, actionOutput, buttons, Constants.GODMODE)
 	
 	game_manager._simThread.start(self, "_start_thread_with_nothing", "simThread")
 	game_manager._statThread.start(self, "_start_thread_with_nothing", "statThread")
@@ -233,7 +234,7 @@ func _process(_delta):
 #				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
 #				actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
 
-func runSimulation(userdata = null):
+func runSimulation(_userdata = null):
 	self.running = true
 	game_manager.simulate()
 	self.remainingDays -= 1
@@ -242,7 +243,7 @@ func runSimulation(userdata = null):
 #	game_manager._thread.wait_to_finish()
 	
 
-func updateStats(userdata = null):
+func updateStats(_userdata = null):
 #	Constants.simSemaphore.wait()
 #	game_manager._simThread.wait_to_finish()
 	match game_manager.getMode():

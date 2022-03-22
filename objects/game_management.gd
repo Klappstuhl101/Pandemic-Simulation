@@ -106,13 +106,10 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	
 	connectSignals()
 	
-	var colors = PoolColorArray()
-#	colors.append(Color(0.12, 1.00, 0.12, 1.00))
-	colors.append(Color(0.0, 0.50, 0.0, 1.00))
-	colors.append(Color(0.0, 0.50, 1.0, 1.00))
-	colors.append(Color(1.0, 0.0, 0.0, 1.00))
-	colors.append(Color(1.0, 1.0, 1.0, 1.00))
-	statOutput[CONSTANTS.OVERVIEW].function_colors = colors
+	if !godmode:
+		var title :String = statOutput[CONSTANTS.INCIDENCESCALETITLE].text
+		statOutput[CONSTANTS.INCIDENCESCALETITLE].text = title + CONSTANTS.BL + "(" + CONSTANTS.TESTED + ")"
+	
 	
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
@@ -218,25 +215,23 @@ func showStats():
 	
 	if self.days.size() > 3:
 		buttons[CONSTANTS.STATBUTTON].disabled = false
-		if godmode:
-			pass
-		else:
-			var showInterval = getOutputInterval()
-			statOutput[CONSTANTS.OVERVIEW].plot_from_array(getOutputOverview(showInterval))
+		
+		var showInterval = getOutputInterval()
+		statOutput[CONSTANTS.OVERVIEW].plot_from_array(getOutputOverview(showInterval))
 #			statOutput[CONSTANTS.OVERVIEW].redraw()
-			
-			var incidence = String(getOutputIncidence())
-			statOutput[CONSTANTS.INCIDENCE].text = incidence
-			var rValue = String(getOutputR())
-			statOutput[CONSTANTS.RVALUE].text = rValue
-			
-			statOutput[CONSTANTS.VAXSTATUS].plot_from_array(getOutputVaccinations())
-			
-			statOutput[CONSTANTS.DAILYCHANGES].plot_from_array(getDailyChanges(showInterval))
-			
-			var hospitalOccupation = getHospitalOccupation(showInterval)
-			statOutput[CONSTANTS.HOSPBEDS].plot_from_array(hospitalOccupation)
-			statOutput[CONSTANTS.BEDSTATUS].text = String(hospitalOccupation[2][hospitalOccupation[2].size() - 1]) + CONSTANTS.BL + "/" + CONSTANTS.BL + String(getProjectedToRealPopulation(active.getHospitalBeds()))
+		
+		var incidence = String(getOutputIncidence())
+		statOutput[CONSTANTS.INCIDENCE].text = incidence
+		var rValue = String(getOutputR())
+		statOutput[CONSTANTS.RVALUE].text = rValue
+		
+		statOutput[CONSTANTS.VAXSTATUS].plot_from_array(getOutputVaccinations())
+		
+		statOutput[CONSTANTS.DAILYCHANGES].plot_from_array(getDailyChanges(showInterval))
+		
+		var hospitalOccupation = getHospitalOccupation(showInterval)
+		statOutput[CONSTANTS.HOSPBEDS].plot_from_array(hospitalOccupation)
+		statOutput[CONSTANTS.BEDSTATUS].text = String(hospitalOccupation[2][hospitalOccupation[2].size() - 1]) + CONSTANTS.BL + "/" + CONSTANTS.BL + String(getProjectedToRealPopulation(active.getHospitalBeds()))
 			
 			
 		if !establishedLegends:
@@ -353,26 +348,60 @@ func getOutputInterval():
 func getOutputOverview(dayArray):
 	if godmode:
 		var output = [dayArray]
-		var sus = [CONSTANTS.SUSCEPTIBLE]
+#		var sus = [CONSTANTS.SUSCEPTIBLE]
+		var susTested = [CONSTANTS.SUSCEPTIBLE + CONSTANTS.BL + CONSTANTS.TESTED]
 		var inf = [CONSTANTS.INFECTED]
+		var infTested = [CONSTANTS.INFECTED + CONSTANTS.BL + CONSTANTS.TESTED]
 		var rec = [CONSTANTS.RECOVERED]
+		var recTested = [CONSTANTS.RECOVERED + CONSTANTS.BL + CONSTANTS.TESTED]
 		var dead = [CONSTANTS.DEAD]
 		for i in range(1, dayArray.size()):
-			sus.append(getProjectedToRealPopulation(active.suscept[dayArray[i]]))
+#			sus.append(getProjectedToRealPopulation(active.suscept[dayArray[i]]))
+			
+			var testedSus = active.sus1[dayArray[i]]
+			susTested.append(getProjectedToRealPopulation(testedSus))
+			
+			var testedInf = active.inf1[dayArray[i]] + active.getDailyOccupiedBeds(dayArray[i])
+			infTested.append(getProjectedToRealPopulation(testedInf))
+			
+			var testedRec = active.rec1[dayArray[i]] + active.rec2[dayArray[i]]
+			recTested.append(getProjectedToRealPopulation(testedRec))
+			
 			inf.append(getProjectedToRealPopulation(active.infect[dayArray[i]]))
 			rec.append(getProjectedToRealPopulation(active.recov[dayArray[i]]))
 			dead.append(getProjectedToRealPopulation(active.dead[dayArray[i]]))
-		output.append(sus)
-		output.append(inf)
+#		output.append(sus)
+		output.append(susTested)
+		
 		output.append(rec)
+		output.append(recTested)
+		
+		output.append(inf)
+		output.append(infTested)
+		
 		output.append(dead)
+		
+		var colors = PoolColorArray()
+#		colors.append(Color(0.12, 1.00, 0.12, 1.00))
+		colors.append(Color(0.0, 0.50, 0.0, 1.00))
+		
+		colors.append(Color(0.0, 0.50, 1.0, 1.00))
+		colors.append(Color(0.0, 0.0, 0.5, 1.00))
+		
+		colors.append(Color(1.0, 0.0, 0.0, 1.00))
+		colors.append(Color(0.5, 0.0, 0.0, 1.00))
+		
+		colors.append(Color(1.0, 1.0, 1.0, 1.00))
+		statOutput[CONSTANTS.OVERVIEW].function_colors = colors
+		
 		return output
+		
 	else:
 		# HIER STATT ALLEN ZAHLEN NUR GETESTETE FÄLLE
 		var output = [dayArray]
 #		var sus = [CONSTANTS.SUSCEPTIBLE]
 		var susTested = [CONSTANTS.SUSCEPTIBLE + CONSTANTS.BL + CONSTANTS.TESTED]
-		var inf = [CONSTANTS.INFECTED + CONSTANTS.BL + CONSTANTS.TESTED]
+		var infTested = [CONSTANTS.INFECTED + CONSTANTS.BL + CONSTANTS.TESTED]
 #		var rec = [CONSTANTS.RECOVERED]
 		var recTested = [CONSTANTS.RECOVERED + CONSTANTS.BL + CONSTANTS.TESTED]
 		var dead = [CONSTANTS.DEAD]
@@ -381,7 +410,7 @@ func getOutputOverview(dayArray):
 			susTested.append(getProjectedToRealPopulation(testedSus))
 			
 			var testedInf = active.inf1[dayArray[i]] + active.getDailyOccupiedBeds(dayArray[i])
-			inf.append(getProjectedToRealPopulation(testedInf))
+			infTested.append(getProjectedToRealPopulation(testedInf))
 #			rec.append(active.recov[dayArray[i]])
 			
 			var testedRec = active.rec1[dayArray[i]] + active.rec2[dayArray[i]]
@@ -395,9 +424,17 @@ func getOutputOverview(dayArray):
 #		output.append(sus)
 		output.append(susTested)
 		output.append(recTested)
-		output.append(inf)
+		output.append(infTested)
 #		output.append(rec)
 		output.append(dead)
+		
+		var colors = PoolColorArray()
+#		colors.append(Color(0.12, 1.00, 0.12, 1.00))
+		colors.append(Color(0.0, 0.50, 0.0, 1.00))
+		colors.append(Color(0.0, 0.50, 1.0, 1.00))
+		colors.append(Color(1.0, 0.0, 0.0, 1.00))
+		colors.append(Color(1.0, 1.0, 1.0, 1.00))
+		statOutput[CONSTANTS.OVERVIEW].function_colors = colors
 		
 		return output
 		
@@ -424,7 +461,14 @@ func getOutputR():
 	var casesGen1:float = 0
 	var casesGen2:float = 0
 	if godmode:
-		pass
+		for i in range(CONSTANTS.WEEK):
+			var indexGen1 = self.days[days.size() - 1] - CONSTANTS.WEEK + i
+			var indexGen2 = indexGen1 - CONSTANTS.WEEK
+			if indexGen1 > 2:
+				casesGen1 += active.infect[indexGen1] - active.infect[indexGen1 - 1]
+			if indexGen2 > 2:
+				casesGen2 += active.infect[indexGen2] - active.infect[indexGen2 - 1] 
+	
 	else:
 		for i in range(CONSTANTS.WEEK):
 			var indexGen1 = self.days[days.size() - 1] - CONSTANTS.WEEK + i
@@ -447,7 +491,8 @@ func getOutputVaccinations():
 
 func getDailyChanges(dayArray):
 	var output = [dayArray]
-	var newInfections = [CONSTANTS.NEWINFECTIONS + CONSTANTS.BL + CONSTANTS.TESTED]
+	var newInfections = [CONSTANTS.NEWINFECTIONS]
+	var newInfectionsTested = [CONSTANTS.NEWINFECTIONS + CONSTANTS.BL + CONSTANTS.TESTED]
 	var newVaxxed1 = [CONSTANTS.FIRSTVAX]
 	var newVaxxed2 = [CONSTANTS.SECONDVAX]
 	
@@ -456,19 +501,39 @@ func getDailyChanges(dayArray):
 	
 	for i in range(1, dayArray.size()):
 		if dayArray[i] >= 1:
-			newInfections.append(getProjectedToRealPopulation(active.getDailyInfections(dayArray[i])))
+			if godmode:
+				newInfections.append(getProjectedToRealPopulation(active.getDailyInfections(dayArray[i], godmode)))
+			newInfectionsTested.append(getProjectedToRealPopulation(active.getDailyInfections(dayArray[i], false)))
 			newVaxxed1.append(getProjectedToRealPopulation(active.getDailyV1Difference(dayArray[i])))
 			newVaxxed2.append(getProjectedToRealPopulation(active.getDailyV2Difference(dayArray[i])))
 #		elif dayArray[i] == 2:
 #			pass
 		else:
-			newInfections.append(0)
+			if godmode:
+				newInfections.append(0)
+			newInfectionsTested.append(0)
 			newVaxxed1.append(0)
 			newVaxxed2.append(0)
-			
-	output.append(newInfections)
+	
+	
+	
+	if godmode:
+		output.append(newInfections)
+	output.append(newInfectionsTested)
 	output.append(newVaxxed1)
 	output.append(newVaxxed2)
+	
+	var colors = PoolColorArray()
+	
+	colors.append(Color(1.0, 0.0, 0.0, 1.00))
+	if godmode:
+		colors.append(Color(0.5, 0.0, 0.0, 1.0))
+	colors.append(Color(0.0, 0.50, 0.0, 1.00))
+	colors.append(Color(0.12, 1.00, 0.12, 1.00))
+#	colors.append(Color(0.0, 0.50, 1.0, 1.00))
+#	colors.append(Color(1.0, 0.0, 0.0, 1.00))
+#	colors.append(Color(1.0, 1.0, 1.0, 1.00))
+	statOutput[CONSTANTS.DAILYCHANGES].function_colors = colors
 	
 	return output
 
@@ -656,20 +721,7 @@ func _on_Time_timeout():
 	showStats()
 	statOutput[CONSTANTS.TIMER].stop()
 
-func _show_overview_legend():
-	if godmode:
-		statOutput[CONSTANTS.OVERVIEWHEADLINE].text = "Anzahl aller Fälle"
-	
-	for function in statOutput[CONSTANTS.OVERVIEW].get_legend():
-		statOutput[CONSTANTS.OVERVIEWLEGEND].add_child(function)
 
-func _show_vaxStatus_legend():
-	for function in statOutput[CONSTANTS.VAXSTATUS].get_legend():
-		statOutput[CONSTANTS.VAXSTATUSLEGEND].add_child(function)
-
-func _show_daily_legend():
-	for function in statOutput[CONSTANTS.DAILYCHANGES].get_legend():
-		statOutput[CONSTANTS.DAILYLEGEND].add_child(function)
 
 func _on_NO_toggled(pressed:bool):
 	if pressed:
@@ -906,10 +958,27 @@ func establishActions():
 #	actionOutput[CONSTANTS.OPTIONBUTTON].add_item("NR3")
 	
 
+func _show_overview_legend():
+#	if godmode:
+#		statOutput[CONSTANTS.OVERVIEWHEADLINE].text = "Anzahl aller Fälle"
+	
+	for function in statOutput[CONSTANTS.OVERVIEW].get_legend():
+		statOutput[CONSTANTS.OVERVIEWLEGEND].add_child(function)
+
+func _show_vaxStatus_legend():
+	for function in statOutput[CONSTANTS.VAXSTATUS].get_legend():
+		statOutput[CONSTANTS.VAXSTATUSLEGEND].add_child(function)
+
+func _show_daily_legend():
+	for function in statOutput[CONSTANTS.DAILYCHANGES].get_legend():
+		statOutput[CONSTANTS.DAILYLEGEND].add_child(function)
+
 func establishLegends():
 	_show_overview_legend()
 	_show_vaxStatus_legend()
 	_show_daily_legend()
+	
+	
 
 func connectSignals():
 	statOutput[CONSTANTS.TIMER].set_wait_time(0.5)

@@ -573,10 +573,10 @@ func getV2Sum():
 	return v2sum
 #	return V2[0] + V2[1] + V2[2] + V2[3]
 
-func getDailyInfections(day:int):
+func getDailyInfections(day:int, godmode:bool):
 	var difference = 0
 	for state in states.values():
-		difference += state.getDailyInfections(day)
+		difference += state.getDailyInfections(day, godmode)
 #	var difference = infect[day] - infect[day - 1] # zum Testen des Overlay
 #	var difference = inf1[day] - inf1[day-1] # später für Coronatests only
 	return difference if difference > 0 else 0

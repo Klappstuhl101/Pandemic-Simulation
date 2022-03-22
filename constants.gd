@@ -49,6 +49,7 @@ const DAILYCHANGES = "DailyChanges"
 const DAILYLEGEND = "DailyLegend"
 const NEWINFECTIONS = "Neuinfektionen"
 
+const INCIDENCESCALETITLE = "IncidenceScaleTitle"
 const INCIDENCELABELS = "IncidenceLabels"
 
 const FIRSTVAX = "Erstimpfungen"
@@ -125,8 +126,7 @@ var VACDELAY :int = 21
 
 var POPULATIONFACTOR :float = 0.01
 
-var simLock :Mutex = Mutex.new()
-var simSemaphore :Semaphore = Semaphore.new()
+var GODMODE :bool = false
 
 
 
@@ -137,11 +137,11 @@ static func sum(arr):
 		sum += arr[i]
 	return sum
 
-static func sumIndex(arr, index):
-	var sum :float = 0
-	for entry in arr:
-		sum += entry[index]
-	return sum
+#static func sumIndex(arr, index):
+#	var sum :float = 0
+#	for entry in arr:
+#		sum += entry[index]
+#	return sum
 
 # Calculate cumulative sum for each entry of an array
 static func cumulative_sum(arr):

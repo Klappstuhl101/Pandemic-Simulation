@@ -152,8 +152,8 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	self.population = populationBase
 	self.deaths = 0
 	
-	
-	self.I = [1,0,0,0]
+	var startInfected = int(self.populationBase * 0.0001) if int(self.populationBase * 0.0001) > 0 else 1
+	self.I = [startInfected,0,0,0]
 	
 	self.S = [self.populationBase - self.I[0],0]
 	self.R = [0,0,0]
@@ -495,6 +495,7 @@ func simulate():
 	
 	hosp.append(I[3])
 	
+	Constants.currentProgress += 1
 	
 	var format_name = "%-23s||" % getName()
 	var format_events = "%15d Events" % events

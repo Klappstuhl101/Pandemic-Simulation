@@ -275,6 +275,8 @@ func distributeCommuters():
 		var modCommuter = 0
 		if openBorderNeighborCount != 0:
 			modCommuter = commuteCount % openBorderNeighborCount
+		else:
+			continue
 		commuteCount -= modCommuter
 		var neighborIndices = [] # Index in Array neighbors vom Nachbarland
 		for neighborstateName in state.neighbors:
@@ -481,6 +483,8 @@ func simulateALL():
 	produceVax()
 	distributeVax()
 	distributeCommuters()
+	
+	
 	
 #	simLock.lock()
 	for state in states.values():

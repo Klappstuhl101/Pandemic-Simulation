@@ -853,11 +853,26 @@ func lockdownSelection(index:int):
 	updateInterventionWeight()
 
 func _on_borderControl_toggle(button_pressed:bool):
+	if active.getName() == entities[CONSTANTS.DEU].getName():
+		if entities[CONSTANTS.DEU].getBorderOpen() is int:
+			if button_pressed:
+				entities[CONSTANTS.DEU].setBorderOpen(false)
+		else:
+			active.setBorderOpen(!button_pressed)
+#	if active.getName() == entities[CONSTANTS.DEU].getName() and entities[CONSTANTS.DEU].getBorderOpen() is int:
+#		pass
+#	if active.getName() == entities[CONSTANTS.DEU].getName() and entities[CONSTANTS.DEU].getOptionChanged():
+#		pass
+#	else:
+#		active.setBorderOpen(!button_pressed)
 #	self.optionChanged = true
 #	self.selectedHomeOffice = 4
 #	print("Border Control ", button_pressed)
-	active.setBorderOpen(!button_pressed)
+	else:
+		active.setBorderOpen(!button_pressed)
+	
 	updateInterventionWeight()
+	showAction()
 
 
 func _on_mask_selected(index:int):

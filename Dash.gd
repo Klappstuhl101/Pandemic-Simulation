@@ -190,9 +190,9 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if !paused:
-		updateProgress()
 	#	game_manager.showStats()
 		if remainingDays > 0 and !running:
+			Constants.currentProgress = 0
 			statOutput[CONSTANTS.PROGRESSPANEL].visible = true
 #			calculationTimer.start()
 			game_manager._simThread.wait_to_finish()
@@ -216,6 +216,10 @@ func _process(_delta):
 			statOutput[CONSTANTS.PROGRESSPANEL].visible = false
 			statOutput[CONSTANTS.SIMANIMATION].visible = false
 			statOutput[CONSTANTS.SIMANIMATION].playing = false
+		
+		updateProgress()
+		
+		
 	else:
 		statOutput[CONSTANTS.SIMANIMATION].playing = false
 #	if game_manager.days.size() > 3:
@@ -236,11 +240,11 @@ func _process(_delta):
 
 func runSimulation(_userdata = null):
 	self.running = true
+	
 	game_manager.simulate()
 	self.remainingDays -= 1
-#	updateStats()
+	
 	self.running = false
-#	game_manager._thread.wait_to_finish()
 	
 
 func updateStats(_userdata = null):
@@ -254,8 +258,9 @@ func updateStats(_userdata = null):
 #	game_manager.showStats()
 
 func updateProgress():
-	statOutput[CONSTANTS.PROGRESSBAR].value = statOutput[CONSTANTS.PROGRESSBAR].max_value - remainingDays
-	pass
+	var value = float(Constants.currentProgress) / game_manager.entities.values().size()
+	statOutput[CONSTANTS.PROGRESSBAR].value = statOutput[CONSTANTS.PROGRESSBAR].max_value - remainingDays + value
+	
 
 func _on_Pause_pressed():
 	if remainingDays > 0:

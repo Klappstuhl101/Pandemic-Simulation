@@ -128,6 +128,7 @@ var POPULATIONFACTOR :float = 0.01
 
 var GODMODE :bool = false
 
+var currentProgress :int
 
 
 # Calculate sum of an array

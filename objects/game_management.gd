@@ -232,7 +232,8 @@ func showStats():
 		var hospitalOccupation = getHospitalOccupation(showInterval)
 		statOutput[CONSTANTS.HOSPBEDS].plot_from_array(hospitalOccupation)
 		statOutput[CONSTANTS.BEDSTATUS].text = String(hospitalOccupation[2][hospitalOccupation[2].size() - 1]) + CONSTANTS.BL + "/" + CONSTANTS.BL + String(getProjectedToRealPopulation(active.getHospitalBeds()))
-			
+		
+		statOutput[CONSTANTS.HOSPITALALLOCATION].plot_from_array(getHospitalAllocation(showInterval))
 			
 		if !establishedLegends:
 			establishedLegends = true
@@ -545,17 +546,21 @@ func getHospitalOccupation(dayArray):
 	for i in range(1, dayArray.size()):
 		hosp.append(getProjectedToRealPopulation(active.getDailyOccupiedBeds(dayArray[i])))
 		maxBeds.append(getProjectedToRealPopulation(active.getHospitalBeds(dayArray[i])))
-	
+		
 	output.append(maxBeds)
 	output.append(hosp)
+	
 	return output
-	
-#func getLockdownStrictness():
-#	return (2 * self.lockdownFactor + self.maskFactors[self.selectedMask]) / 3.0
-#
-#func getIsLockdown():
-#	return !((self.lockdownFactor == 0) and (self.selectedMask == 0))
-	
+
+
+func getHospitalAllocation(dayArray):
+	var allocation = active.getHospitalAllocation(dayArray[dayArray.size() - 1])
+	return [[CONSTANTS.VAXSTATUS, "Anzahl Personen"], [CONSTANTS.UNVAXED + CONSTANTS.BL + CONSTANTS.HOSPITALISED, getProjectedToRealPopulation(allocation[0])], [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.HOSPITALISED, getProjectedToRealPopulation(allocation[1])], [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.HOSPITALISED, getProjectedToRealPopulation(allocation[2])]]
+
+
+
+###############################################################################
+
 func simulate():
 	
 	var startTime = OS.get_ticks_msec()
@@ -974,9 +979,6 @@ func establishActions():
 	
 
 func _show_overview_legend():
-#	if godmode:
-#		statOutput[CONSTANTS.OVERVIEWHEADLINE].text = "Anzahl aller Fälle"
-	
 	for function in statOutput[CONSTANTS.OVERVIEW].get_legend():
 		statOutput[CONSTANTS.OVERVIEWLEGEND].add_child(function)
 
@@ -988,10 +990,21 @@ func _show_daily_legend():
 	for function in statOutput[CONSTANTS.DAILYCHANGES].get_legend():
 		statOutput[CONSTANTS.DAILYLEGEND].add_child(function)
 
+func _show_bedAllocation_legend():
+	for function in statOutput[CONSTANTS.HOSPITALALLOCATION].get_legend():
+		statOutput[CONSTANTS.ALLOCATIONLEGEND].add_child(function)
+
+func _show_beds_legend():
+	for function in statOutput[CONSTANTS.HOSPBEDS].get_legend():
+		statOutput[CONSTANTS.BEDSLEGEND].add_child(function)
+
+
 func establishLegends():
 	_show_overview_legend()
 	_show_vaxStatus_legend()
 	_show_daily_legend()
+	_show_bedAllocation_legend()
+	_show_beds_legend()
 	
 	
 

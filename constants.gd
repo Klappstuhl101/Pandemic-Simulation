@@ -60,6 +60,9 @@ const RVALUE = "R-Wert"
 const INCIDENCE = "Inzidenz"
 const HOSPBEDS = "Verfügbare Betten"
 const BEDSTATUS = "BedStatus"
+const HOSPITALALLOCATION = "HospitalAllocation"
+const ALLOCATIONLEGEND = "AllocationLegend"
+const BEDSLEGEND = "BedsLegend"
 
 const WEEK = 7
 const MONTH = 30

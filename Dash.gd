@@ -94,8 +94,11 @@ func _ready():
 	
 	statOutput[CONSTANTS.INCIDENCE] = get_node("Statistics/GridContainer/Indicators/IncidenceNr")
 	statOutput[CONSTANTS.RVALUE] = get_node("Statistics/GridContainer/Indicators/RNr")
-	statOutput[CONSTANTS.BEDSTATUS] = get_node("Statistics/GridContainer/BedsOverview/BedNr")
+	statOutput[CONSTANTS.BEDSTATUS] = get_node("Statistics/GridContainer/BedsOverview/BedsLegendContainer/BedNr")
 	statOutput[CONSTANTS.HOSPBEDS] = get_node("Statistics/GridContainer/HospBeds")
+	statOutput[CONSTANTS.HOSPITALALLOCATION] = get_node("Statistics/GridContainer/BedsOverview/HospitalAllocation")
+	statOutput[CONSTANTS.ALLOCATIONLEGEND] = get_node("Statistics/GridContainer/BedsOverview/BedAllocationContainer/AllocationLegend")
+	statOutput[CONSTANTS.BEDSLEGEND] = get_node("Statistics/GridContainer/BedsOverview/BedsLegendContainer/BedsLegend")
 	
 	actionOutput[CONSTANTS.NO] = get_node("PlayControls/GridContainer/LockDownOptions/No")
 	actionOutput[CONSTANTS.LIGHT] = get_node("PlayControls/GridContainer/LockDownOptions/Light")
@@ -222,6 +225,7 @@ func _process(_delta):
 		
 	else:
 		statOutput[CONSTANTS.SIMANIMATION].playing = false
+#		updateProgress()
 #	if game_manager.days.size() > 3:
 #		game_manager.showStats()
 	

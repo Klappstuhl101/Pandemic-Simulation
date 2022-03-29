@@ -373,6 +373,11 @@ func getDailyOccupiedBeds(day):
 	else:
 		return hosp[day] + vax1hosp[day] + vax2hosp[day]
 
+func getHospitalAllocation(day):
+	return [hosp[day], vax1hosp[day], vax2hosp[day]]
+
+
+
 func getInfectRate():
 	if self.selectedMask != 0 and self.selectedHomeOffice != 0:
 		var lockdownAverage = int(round(CONSTANTS.average([self.selectedMask, self.selectedHomeOffice])))

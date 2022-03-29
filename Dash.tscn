@@ -902,9 +902,9 @@ text = "Anzahl Impfdosen"
 clip_text = true
 
 [node name="Statistics" type="ScrollContainer" parent="."]
-margin_left = 599.0
+margin_left = 600.0
 margin_top = 115.0
-margin_right = 1605.0
+margin_right = 1606.0
 margin_bottom = 895.0
 rect_min_size = Vector2( 1000, 780 )
 scroll_horizontal_enabled = false
@@ -914,7 +914,7 @@ __meta__ = {
 
 [node name="GridContainer" type="GridContainer" parent="Statistics"]
 margin_right = 994.0
-margin_bottom = 900.0
+margin_bottom = 896.0
 rect_min_size = Vector2( 988, 0 )
 columns = 2
 
@@ -1041,9 +1041,6 @@ margin_right = 994.4
 margin_bottom = 312.0
 rect_min_size = Vector2( 512.4, 288 )
 Chart_Style/function_colors = PoolColorArray( 0.12549, 1, 0.12549, 1, 0, 0.501961, 0, 1, 0, 0.501961, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1120,34 +1117,75 @@ Chart_Properties/column_width = 12.0
 Chart_Properties/column_gap = 1.0
 Chart_Style/points_shape = [ 2, 2, 2, 2 ]
 Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.501961, 0, 1, 0.121569, 1, 0.121569, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
 [node name="BedsOverview" type="GridContainer" parent="Statistics/GridContainer"]
 margin_top = 608.0
 margin_right = 478.0
-margin_bottom = 900.0
+margin_bottom = 896.0
 rect_min_size = Vector2( 475.6, 288 )
+columns = 3
 
-[node name="BedNr" type="Label" parent="Statistics/GridContainer/BedsOverview"]
-margin_right = 475.0
-margin_bottom = 192.0
-rect_min_size = Vector2( 475, 192 )
+[node name="BedAllocationContainer" type="GridContainer" parent="Statistics/GridContainer/BedsOverview"]
+margin_right = 160.0
+margin_bottom = 288.0
+
+[node name="Label" type="Label" parent="Statistics/GridContainer/BedsOverview/BedAllocationContainer"]
+margin_right = 160.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 160, 0 )
+text = "Aufteilung Krankenhausbetten"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="AllocationLegend" parent="Statistics/GridContainer/BedsOverview/BedAllocationContainer" instance=ExtResource( 38 )]
+margin_top = 35.0
+margin_right = 160.0
+margin_bottom = 56.0
+
+[node name="HospitalAllocation" parent="Statistics/GridContainer/BedsOverview" instance=ExtResource( 43 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 164.0
+margin_right = 344.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 180, 288 )
+Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.501961, 0, 1, 0, 1, 0, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/font_color = Color( 1, 1, 1, 1 )
+
+[node name="BedsLegendContainer" type="GridContainer" parent="Statistics/GridContainer/BedsOverview"]
+margin_left = 348.0
+margin_right = 473.0
+margin_bottom = 288.0
+
+[node name="Label2" type="Label" parent="Statistics/GridContainer/BedsOverview/BedsLegendContainer"]
+margin_right = 125.0
+margin_bottom = 82.0
+rect_min_size = Vector2( 125, 0 )
+text = "
+Belegung Krankenhaus-
+Betten
+"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="BedNr" type="Label" parent="Statistics/GridContainer/BedsOverview/BedsLegendContainer"]
+margin_top = 86.0
+margin_right = 125.0
+margin_bottom = 117.0
+rect_min_size = Vector2( 105, 0 )
 text = "1111111111111111111111"
 align = 1
 valign = 1
+autowrap = true
 
-[node name="BedText" type="Label" parent="Statistics/GridContainer/BedsOverview"]
-margin_top = 196.0
-margin_right = 475.0
-margin_bottom = 292.0
-rect_min_size = Vector2( 475, 96 )
-text = "Belegte Intensivbetten"
-align = 1
-valign = 1
+[node name="BedsLegend" parent="Statistics/GridContainer/BedsOverview/BedsLegendContainer" instance=ExtResource( 38 )]
+margin_top = 121.0
+margin_right = 125.0
+margin_bottom = 142.0
 
 [node name="HospBeds" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
 anchor_right = 0.0
@@ -1155,8 +1193,11 @@ anchor_bottom = 0.0
 margin_left = 482.0
 margin_top = 608.0
 margin_right = 994.0
-margin_bottom = 900.0
-Chart_Style/function_colors = PoolColorArray( 1, 0.960784, 0, 1, 0.658824, 0.0784314, 0, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
+margin_bottom = 896.0
+Chart_Style/function_colors = PoolColorArray( 1, 0.960784, 0, 1, 0.658824, 0.137255, 0, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 

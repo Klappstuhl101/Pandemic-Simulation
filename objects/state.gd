@@ -429,8 +429,17 @@ func setOptionChanged(isTrue:bool):
 func getOptionChanged():
 	return self.optionChanged
 
+func getUnvaxedDead(day):
+	return dead0[day] + dead1[day] + dead2[day]
+
+func getVax1Dead(day):
+	return vax1dead[day]
+
+func getVax2Dead(day):
+	return vax2dead[day]
 
 
+###############################################################################
 
 func simulate():
 	events = 0

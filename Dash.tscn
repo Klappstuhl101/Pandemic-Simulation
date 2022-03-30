@@ -914,7 +914,7 @@ __meta__ = {
 
 [node name="GridContainer" type="GridContainer" parent="Statistics"]
 margin_right = 994.0
-margin_bottom = 896.0
+margin_bottom = 1188.0
 rect_min_size = Vector2( 988, 0 )
 columns = 2
 
@@ -1041,6 +1041,9 @@ margin_right = 994.4
 margin_bottom = 312.0
 rect_min_size = Vector2( 512.4, 288 )
 Chart_Style/function_colors = PoolColorArray( 0.12549, 1, 0.12549, 1, 0, 0.501961, 0, 1, 0, 0.501961, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1117,12 +1120,15 @@ Chart_Properties/column_width = 12.0
 Chart_Properties/column_gap = 1.0
 Chart_Style/points_shape = [ 2, 2, 2, 2 ]
 Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.501961, 0, 1, 0.121569, 1, 0.121569, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
 [node name="BedsOverview" type="GridContainer" parent="Statistics/GridContainer"]
 margin_top = 608.0
-margin_right = 478.0
+margin_right = 475.6
 margin_bottom = 896.0
 rect_min_size = Vector2( 475.6, 288 )
 columns = 3
@@ -1144,6 +1150,14 @@ autowrap = true
 margin_top = 35.0
 margin_right = 160.0
 margin_bottom = 56.0
+
+[node name="AllocationPlaceHolder" type="Label" parent="Statistics/GridContainer/BedsOverview"]
+visible = false
+margin_left = 164.0
+margin_top = 64.0
+margin_right = 344.0
+margin_bottom = 78.0
+rect_min_size = Vector2( 180, 0 )
 
 [node name="HospitalAllocation" parent="Statistics/GridContainer/BedsOverview" instance=ExtResource( 43 )]
 anchor_right = 0.0
@@ -1195,9 +1209,50 @@ margin_top = 608.0
 margin_right = 994.0
 margin_bottom = 896.0
 Chart_Style/function_colors = PoolColorArray( 1, 0.960784, 0, 1, 0.658824, 0.137255, 0, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/font_color = Color( 1, 1, 1, 1 )
+Chart_Style/use_template = false
+
+[node name="DeathContainer" type="GridContainer" parent="Statistics/GridContainer"]
+margin_top = 900.0
+margin_right = 478.0
+margin_bottom = 1188.0
+columns = 2
+
+[node name="Empty" type="Label" parent="Statistics/GridContainer/DeathContainer"]
+margin_top = 12.0
+margin_right = 236.0
+margin_bottom = 26.0
+rect_min_size = Vector2( 236, 0 )
+
+[node name="DeathLegendContainer" type="GridContainer" parent="Statistics/GridContainer/DeathContainer"]
+margin_left = 240.0
+margin_right = 476.0
+margin_bottom = 39.0
+
+[node name="Label" type="Label" parent="Statistics/GridContainer/DeathContainer/DeathLegendContainer"]
+margin_right = 236.0
+margin_bottom = 14.0
+text = "Übersicht Todesfälle"
+align = 1
+valign = 1
+autowrap = true
+
+[node name="DeathLegend" parent="Statistics/GridContainer/DeathContainer/DeathLegendContainer" instance=ExtResource( 38 )]
+margin_top = 18.0
+margin_right = 236.0
+margin_bottom = 39.0
+rect_min_size = Vector2( 236, 0 )
+
+[node name="DeathOverview" parent="Statistics/GridContainer" instance=ExtResource( 45 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 482.0
+margin_top = 900.0
+margin_right = 994.0
+margin_bottom = 1188.0
+rect_min_size = Vector2( 512, 288 )
+Chart_Style/points_shape = [ 0, 0, 0 ]
+Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.501961, 0, 1, 0, 1, 0, 1, 0.117647, 0.117647, 0.117647, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 

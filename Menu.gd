@@ -1,10 +1,5 @@
 extends Panel
 
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
 var startButton
 var populationFactor
 var vaxWaitDay
@@ -51,6 +46,8 @@ func _on_godmode_toggled(pressed:bool):
 
 func _on_exit_pressed():
 	get_tree().quit()
+	
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass

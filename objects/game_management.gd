@@ -216,6 +216,7 @@ func showStats():
 	if self.days.size() > 3:
 		buttons[CONSTANTS.STATBUTTON].disabled = false
 		
+		
 		var showInterval = getOutputInterval()
 		statOutput[CONSTANTS.OVERVIEW].plot_from_array(getOutputOverview(showInterval))
 #			statOutput[CONSTANTS.OVERVIEW].redraw()
@@ -233,7 +234,16 @@ func showStats():
 		statOutput[CONSTANTS.HOSPBEDS].plot_from_array(hospitalOccupation)
 		statOutput[CONSTANTS.BEDSTATUS].text = String(hospitalOccupation[2][hospitalOccupation[2].size() - 1]) + CONSTANTS.BL + "/" + CONSTANTS.BL + String(getProjectedToRealPopulation(active.getHospitalBeds()))
 		
-		statOutput[CONSTANTS.HOSPITALALLOCATION].plot_from_array(getHospitalAllocation(showInterval))
+		if hospitalOccupation[2][hospitalOccupation[2].size() - 1] > 0:
+			statOutput[CONSTANTS.HOSPITALALLOCATION].plot_from_array(getHospitalAllocation(showInterval))
+			statOutput[CONSTANTS.ALLOCATIONPLACEHOLER].visible = false
+			statOutput[CONSTANTS.HOSPITALALLOCATION].visible = true
+		else:
+			statOutput[CONSTANTS.HOSPITALALLOCATION].visible = false
+			statOutput[CONSTANTS.ALLOCATIONPLACEHOLER].visible = true
+		
+		statOutput[CONSTANTS.DEATHOVERVIEW].plot_from_array(getDeathOverview(showInterval))
+		
 			
 		if !establishedLegends:
 			establishedLegends = true
@@ -556,6 +566,24 @@ func getHospitalOccupation(dayArray):
 func getHospitalAllocation(dayArray):
 	var allocation = active.getHospitalAllocation(dayArray[dayArray.size() - 1])
 	return [[CONSTANTS.VAXSTATUS, "Anzahl Personen"], [CONSTANTS.UNVAXED + CONSTANTS.BL + CONSTANTS.HOSPITALISED, getProjectedToRealPopulation(allocation[0])], [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.HOSPITALISED, getProjectedToRealPopulation(allocation[1])], [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.HOSPITALISED, getProjectedToRealPopulation(allocation[2])]]
+
+func getDeathOverview(dayArray):
+	var output = [dayArray]
+	var unvaxDeath = [CONSTANTS.UNVAXED + CONSTANTS.BL + CONSTANTS.DEAD]
+	var vax1Death = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.DEAD]
+	var vax2Death = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.DEAD]
+	
+	
+	for i in range(1, dayArray.size()):
+		unvaxDeath.append(getProjectedToRealPopulation(active.getUnvaxedDead(dayArray[i])))
+		vax1Death.append(getProjectedToRealPopulation(active.getVax1Dead(dayArray[i])))
+		vax2Death.append(getProjectedToRealPopulation(active.getVax2Dead(dayArray[i])))
+	
+	output.append(unvaxDeath)
+	output.append(vax1Death)
+	output.append(vax2Death)
+	
+	return output
 
 
 
@@ -991,12 +1019,19 @@ func _show_daily_legend():
 		statOutput[CONSTANTS.DAILYLEGEND].add_child(function)
 
 func _show_bedAllocation_legend():
+	
+	statOutput[CONSTANTS.HOSPITALALLOCATION].plot_from_array(getHospitalAllocation([0,0]))
+	
 	for function in statOutput[CONSTANTS.HOSPITALALLOCATION].get_legend():
 		statOutput[CONSTANTS.ALLOCATIONLEGEND].add_child(function)
 
 func _show_beds_legend():
 	for function in statOutput[CONSTANTS.HOSPBEDS].get_legend():
 		statOutput[CONSTANTS.BEDSLEGEND].add_child(function)
+
+func _show_death_legend():
+	for function in statOutput[CONSTANTS.DEATHOVERVIEW].get_legend():
+		statOutput[CONSTANTS.DEATHLEGEND].add_child(function)
 
 
 func establishLegends():
@@ -1005,6 +1040,7 @@ func establishLegends():
 	_show_daily_legend()
 	_show_bedAllocation_legend()
 	_show_beds_legend()
+	_show_death_legend()
 	
 	
 

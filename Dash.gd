@@ -97,8 +97,11 @@ func _ready():
 	statOutput[CONSTANTS.BEDSTATUS] = get_node("Statistics/GridContainer/BedsOverview/BedsLegendContainer/BedNr")
 	statOutput[CONSTANTS.HOSPBEDS] = get_node("Statistics/GridContainer/HospBeds")
 	statOutput[CONSTANTS.HOSPITALALLOCATION] = get_node("Statistics/GridContainer/BedsOverview/HospitalAllocation")
+	statOutput[CONSTANTS.ALLOCATIONPLACEHOLER] = get_node("Statistics/GridContainer/BedsOverview/AllocationPlaceHolder")
 	statOutput[CONSTANTS.ALLOCATIONLEGEND] = get_node("Statistics/GridContainer/BedsOverview/BedAllocationContainer/AllocationLegend")
 	statOutput[CONSTANTS.BEDSLEGEND] = get_node("Statistics/GridContainer/BedsOverview/BedsLegendContainer/BedsLegend")
+	statOutput[CONSTANTS.DEATHOVERVIEW] = get_node("Statistics/GridContainer/DeathOverview")
+	statOutput[CONSTANTS.DEATHLEGEND] = get_node("Statistics/GridContainer/DeathContainer/DeathLegendContainer/DeathLegend")
 	
 	actionOutput[CONSTANTS.NO] = get_node("PlayControls/GridContainer/LockDownOptions/No")
 	actionOutput[CONSTANTS.LIGHT] = get_node("PlayControls/GridContainer/LockDownOptions/Light")

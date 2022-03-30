@@ -61,8 +61,11 @@ const INCIDENCE = "Inzidenz"
 const HOSPBEDS = "Verfügbare Betten"
 const BEDSTATUS = "BedStatus"
 const HOSPITALALLOCATION = "HospitalAllocation"
+const ALLOCATIONPLACEHOLER = "AllocationPlaceHolder"
 const ALLOCATIONLEGEND = "AllocationLegend"
 const BEDSLEGEND = "BedsLegend"
+const DEATHOVERVIEW = "DeathOverview"
+const DEATHLEGEND = "DeathLegend"
 
 const WEEK = 7
 const MONTH = 30

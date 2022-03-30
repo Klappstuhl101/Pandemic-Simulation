@@ -230,10 +230,10 @@ func recalculateHospitalBeds():
 		self.hospitalBedsDaily[maxKey.max()] = self.hospitalBeds
 	
 
-func setLockdown(isTrue:bool, lockdownStrictness:float):
-	self.lockdown = isTrue
-	for state in states.values():
-		state.setLockdown(isTrue, lockdownStrictness)
+#func setLockdown(isTrue:bool, lockdownStrictness:float):
+#	self.lockdown = isTrue
+#	for state in states.values():
+#		state.setLockdown(isTrue, lockdownStrictness)
 
 #func imposeLockdown():
 #	self.lockdown = true
@@ -633,10 +633,6 @@ func setTestRates(index:int):
 	for state in states.values():
 		state.setTestRates(index)
 
-#func setCommuterFactor(value:float):
-#	for state in states.values():
-#		state.setCommuterFactor(value)
-
 func setSelectedMask(index:int):
 	self.selectedMask = index
 	for state in states.values():
@@ -707,3 +703,13 @@ func getBorderAverage():
 	for state in states.values():
 		sum += int(!state.getBorderOpen())
 	return sum / float(states.values().size())
+
+func getUnvaxedDead(day):
+	return dead0[day] + dead1[day] + dead2[day]
+
+func getVax1Dead(day):
+	return vax1dead[day]
+
+func getVax2Dead(day):
+	return vax2dead[day]
+

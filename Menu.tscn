@@ -6,8 +6,9 @@
 [node name="Control" type="Panel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -1.41422
-margin_bottom = -1.41418
+margin_left = 1.0
+margin_right = 1.0
+rect_min_size = Vector2( 1600, 900 )
 theme = ExtResource( 2 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -21,6 +22,9 @@ margin_right = 168.0
 margin_bottom = 125.0
 text = "Hauptmenü"
 uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Label5" type="Label" parent="."]
 margin_left = 44.0165
@@ -33,62 +37,88 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="populationFactor" type="SpinBox" parent="."]
-margin_left = 443.372
-margin_top = 310.922
-margin_right = 517.372
-margin_bottom = 334.922
+[node name="GridContainer" type="GridContainer" parent="."]
+margin_left = 242.0
+margin_top = 230.0
+margin_right = 842.0
+margin_bottom = 342.0
+rect_min_size = Vector2( 600, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PopContainer" type="GridContainer" parent="GridContainer"]
+margin_right = 594.0
+margin_bottom = 24.0
+columns = 2
+
+[node name="Label2" type="Label" parent="GridContainer/PopContainer"]
+margin_top = 5.0
+margin_right = 295.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 295, 0 )
+text = "populationFactor"
+autowrap = true
+
+[node name="populationFactor" type="SpinBox" parent="GridContainer/PopContainer"]
+margin_left = 299.0
+margin_right = 594.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 295, 0 )
 max_value = 1.0
 step = 0.001
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="vaxWaitDay" type="SpinBox" parent="."]
-margin_left = 1057.36
-margin_top = 318.779
-margin_right = 1131.36
-margin_bottom = 342.779
+[node name="HSeparator" type="HSeparator" parent="GridContainer"]
+margin_top = 28.0
+margin_right = 594.0
+margin_bottom = 48.0
+custom_constants/separation = 20
+
+[node name="VaxWaitDayContainer" type="GridContainer" parent="GridContainer"]
+margin_top = 52.0
+margin_right = 594.0
+margin_bottom = 76.0
+columns = 2
+
+[node name="Label3" type="Label" parent="GridContainer/VaxWaitDayContainer"]
+margin_top = 5.0
+margin_right = 295.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 295, 0 )
+text = "vaxWaitDays"
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="vaxWaitDay" type="SpinBox" parent="GridContainer/VaxWaitDayContainer"]
+margin_left = 299.0
+margin_right = 594.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 295, 0 )
 allow_greater = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Button" type="Button" parent="."]
-margin_left = 1261.65
-margin_top = 602.762
-margin_right = 1499.65
-margin_bottom = 821.762
-text = "Start"
+[node name="HSeparator3" type="HSeparator" parent="GridContainer"]
+margin_top = 80.0
+margin_right = 594.0
+margin_bottom = 100.0
+custom_constants/separation = 20
 
-[node name="Label2" type="Label" parent="."]
-margin_left = 147.49
-margin_top = 288.857
-margin_right = 412.49
-margin_bottom = 489.857
-text = "populationFactor
-Je kleiner der Faktor, desto weniger Rechenleistung wird benötigt, aber desto ungenauer sind die simulierten Zahlen auch.
-
-Bsp.:
-1.0: Es wird mit 100% der Bevölkerung gerechnet.
-0.2: Es wird im Hintergrund mit 20% der tatsächlichen Bevölkerung gerechnet. Die Ergebnisse werden dann mit dem Faktor 5 hochgerechnet"
-autowrap = true
-
-[node name="Label3" type="Label" parent="."]
-margin_left = 809.449
-margin_top = 308.653
-margin_right = 1039.45
-margin_bottom = 356.653
-text = "vaxWaitDays
-Wartezeit zwischen erster und zweiter Impfung"
-autowrap = true
-
-[node name="Label4" type="Label" parent="."]
-margin_left = 990.715
-margin_top = 663.429
-margin_right = 1218.72
-margin_bottom = 772.429
-text = "Hinweis:
-Im Spiel wird der Statistik-Tab erst ab Tag 3 verfügbar.
-Maßnahmen können ab dem ersten Tag ergriffen werden"
-autowrap = true
+[node name="GodmodeButton" type="CheckBox" parent="GridContainer"]
+margin_top = 104.0
+margin_right = 594.0
+margin_bottom = 144.0
+rect_min_size = Vector2( 0, 40 )
+text = "\"Godmode\""
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ExitButton" type="Button" parent="."]
 margin_left = 1560.0
@@ -100,21 +130,59 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="GodmodeButton" type="CheckBox" parent="."]
-margin_left = 1254.41
-margin_top = 107.705
-margin_right = 1464.41
-margin_bottom = 220.705
-text = "\"Godmode\""
+[node name="Label4" type="Label" parent="."]
+margin_left = 1015.58
+margin_top = 790.735
+margin_right = 1315.58
+margin_bottom = 872.735
+text = "Hinweis:
+Im Spiel wird der Statistik-Tab erst ab Tag 3 verfügbar.
+Maßnahmen können ab dem ersten Tag ergriffen werden"
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StartButton" type="Button" parent="."]
+margin_left = 1338.0
+margin_top = 719.0
+margin_right = 1576.0
+margin_bottom = 881.0
+text = "Start"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="."]
+margin_left = 657.0
+margin_top = 50.0
+margin_right = 1028.0
+margin_bottom = 200.0
+text = "Je kleiner der Faktor, desto weniger Rechenleistung wird benötigt, aber desto ungenauer sind die simulierten Zahlen auch.
+
+Bsp.:
+1.0: Es wird mit 100% der Bevölkerung gerechnet.
+0.2: Es wird im Hintergrund mit 20% der tatsächlichen Bevölkerung gerechnet. Die Ergebnisse werden dann mit dem Faktor 5 hochgerechnet"
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label3" type="Label" parent="."]
+margin_left = 865.0
+margin_top = 278.0
+margin_right = 1168.0
+margin_bottom = 292.0
+text = "Wartezeit zwischen erster und zweiter Impfung"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label6" type="Label" parent="."]
-margin_left = 1283.27
-margin_top = 237.615
-margin_right = 1463.27
-margin_bottom = 353.615
+margin_left = 879.0
+margin_top = 339.0
+margin_right = 1473.0
+margin_bottom = 370.0
 text = "Beim \"godmode\"  tauchen in den Statistiken alle tatsächlichen Fälle auf, nicht nur die Getesteten. Damit hat man auch einen Überblick über die Dunkelziffer"
 autowrap = true
 __meta__ = {

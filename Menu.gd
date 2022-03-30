@@ -13,11 +13,11 @@ var exitButton
 func _ready():
 	exitButton = get_node("ExitButton")
 	
-	startButton = get_node("Button")
-	populationFactor = get_node("populationFactor")
-	vaxWaitDay = get_node("vaxWaitDay")
+	startButton = get_node("StartButton")
+	populationFactor = get_node("GridContainer/PopContainer/populationFactor")
+	vaxWaitDay = get_node("GridContainer/VaxWaitDayContainer/vaxWaitDay")
 	
-	godmodeButton = get_node("GodmodeButton")
+	godmodeButton = get_node("GridContainer/GodmodeButton")
 	godmodeButton.connect("toggled", self, "_on_godmode_toggled")
 	
 	exitButton.connect("pressed", self, "_on_exit_pressed")

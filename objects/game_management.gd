@@ -1020,7 +1020,7 @@ func _show_daily_legend():
 
 func _show_bedAllocation_legend():
 	
-	statOutput[CONSTANTS.HOSPITALALLOCATION].plot_from_array(getHospitalAllocation([0,0]))
+	statOutput[CONSTANTS.HOSPITALALLOCATION].plot_from_array(getHospitalAllocation([0,1]))
 	
 	for function in statOutput[CONSTANTS.HOSPITALALLOCATION].get_legend():
 		statOutput[CONSTANTS.ALLOCATIONLEGEND].add_child(function)
@@ -1041,6 +1041,8 @@ func establishLegends():
 	_show_bedAllocation_legend()
 	_show_beds_legend()
 	_show_death_legend()
+	
+	print("Legends established")
 	
 	
 
@@ -1096,7 +1098,8 @@ func connectSignals():
 	entities[CONSTANTS.SLH].mapButton.connect("toggled", self, "_on_SLH_press")
 	entities[CONSTANTS.THU].mapButton.connect("toggled", self, "_on_THU_press")
 	entities[CONSTANTS.DEU].mapButton.connect("toggled", self, "_on_DEU_press")
-
+	
+	print("Signals connected")
 
 #func _on_CalcTimer_timeout():
 #	calcTime += 0.1

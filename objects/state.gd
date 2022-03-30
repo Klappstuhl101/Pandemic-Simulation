@@ -367,13 +367,13 @@ func getDailyV2Difference(day:int):
 		var difference = (vax2sus[day] + vax2inf[day] + vax2hosp[day] + vax2rec[day]) - (vax2sus[day-1] + vax2inf[day-1] + vax2hosp[day-1] + vax2rec[day-1])
 		return difference if difference > 0 else 0
 
-func getDailyOccupiedBeds(day):
+func getDailyOccupiedBeds(day:int):
 	if day < 1:
 		return 0
 	else:
 		return hosp[day] + vax1hosp[day] + vax2hosp[day]
 
-func getHospitalAllocation(day):
+func getHospitalAllocation(day:int):
 	return [hosp[day], vax1hosp[day], vax2hosp[day]]
 
 

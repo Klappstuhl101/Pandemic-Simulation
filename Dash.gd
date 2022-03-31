@@ -198,7 +198,7 @@ func _process(_delta):
 #			game_manager.simulate()
 #			self.remainingDays -= 1
 #			self.running = false
-			
+#
 			# For RUNNING
 			game_manager._simThread.wait_to_finish()
 			game_manager._simThread.start(self, "runSimulation", null)

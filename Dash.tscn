@@ -206,7 +206,7 @@ margin_top = 830.0
 margin_right = 503.0
 margin_bottom = 898.0
 theme = ExtResource( 44 )
-text = "Tag 0"
+text = "Tag 1"
 align = 1
 valign = 1
 uppercase = true
@@ -1041,9 +1041,6 @@ margin_right = 994.4
 margin_bottom = 312.0
 rect_min_size = Vector2( 512.4, 288 )
 Chart_Style/function_colors = PoolColorArray( 0.12549, 1, 0.12549, 1, 0, 0.501961, 0, 1, 0, 0.501961, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1120,15 +1117,12 @@ Chart_Properties/column_width = 12.0
 Chart_Properties/column_gap = 1.0
 Chart_Style/points_shape = [ 2, 2, 2, 2 ]
 Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.501961, 0, 1, 0.121569, 1, 0.121569, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
 [node name="BedsOverview" type="GridContainer" parent="Statistics/GridContainer"]
 margin_top = 608.0
-margin_right = 475.6
+margin_right = 478.0
 margin_bottom = 896.0
 rect_min_size = Vector2( 475.6, 288 )
 columns = 3
@@ -1209,6 +1203,9 @@ margin_top = 608.0
 margin_right = 994.0
 margin_bottom = 896.0
 Chart_Style/function_colors = PoolColorArray( 1, 0.960784, 0, 1, 0.658824, 0.137255, 0, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1253,6 +1250,9 @@ margin_bottom = 1188.0
 rect_min_size = Vector2( 512, 288 )
 Chart_Style/points_shape = [ 0, 0, 0 ]
 Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.501961, 0, 1, 0, 1, 0, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 

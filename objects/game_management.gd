@@ -49,7 +49,7 @@ var activePopulationToCalculationFactor :float
 
 
 var days = []
-var currentDay = 0
+var currentDay = 1
 
 #var previous # previous activated button
 
@@ -257,14 +257,11 @@ func showStats():
 			
 		
 		statOutput[CONSTANTS.STATCONTAINER].visible = true
-	#	HIERHER DIE GANZEN SHADER EINSTELLUNGEN UND ÜBERGABE
-	#	active.mapButton.material.set_shader_param("vaccinated", counter)
-	#	active.mapButton.material.set_shader_param("infected", counter)
-	#	var color = active.mapButton.material.get_shader_param("infectGradient").get_gradient().interpolate(counter)
-	#	active.mapButton.material.get_shader_param("twoColorGradient").get_gradient().set_color(0,color)
-		
-		
-		
+
+
+
+
+
 func updateInterventionWeight():
 	var value :int = 0
 	if active.getName() == entities[CONSTANTS.DEU].getName():
@@ -327,27 +324,33 @@ func getOutputInterval():
 	match self.interval:
 		CONSTANTS.WEEK:
 			for i in range(CONSTANTS.WEEK):
-				if (days.size() - 1 - CONSTANTS.WEEK + i) <= 0:
+#				var index = (days.size() - 1 - CONSTANTS.WEEK + i)
+				var index = (days.size() - CONSTANTS.WEEK + i)
+				if index <= 0:
 #				if (days.size() - CONSTANTS.WEEK + i) <= 0:
 					continue
 				else:
-					dayArray.append(days[days.size() - 1 - CONSTANTS.WEEK + i])
+					dayArray.append(days[index])
 		
 		CONSTANTS.MONTH:
 # warning-ignore:integer_division
 			for i in range(CONSTANTS.MONTH / 3):
-				if (days.size() - 1 - CONSTANTS.MONTH + (i*3)) <= 0:
+#				var index = (days.size() - 1 - CONSTANTS.MONTH + (i*3))
+				var index = (days.size() - CONSTANTS.MONTH + (i*3))
+				if index <= 0:
 					continue
 				else:
-					dayArray.append(days[days.size() - 1 - CONSTANTS.MONTH + (i*3)])
+					dayArray.append(days[index])
 		
 		CONSTANTS.YEAR:
 # warning-ignore:integer_division
 			for i in range(CONSTANTS.YEAR / 12):
-				if (days.size() - 1 - CONSTANTS.YEAR + (i*12)) <= 0:
+#				var index = (days.size() - 1 - CONSTANTS.YEAR + (i*12))
+				var index = (days.size() - CONSTANTS.YEAR + (i*12))
+				if index <= 0:
 					continue
 				else:
-					dayArray.append(days[days.size() - 1 - CONSTANTS.YEAR + (i*12)])
+					dayArray.append(days[index])
 		
 		CONSTANTS.MAX:
 			dayArray.append_array(self.days)
@@ -590,22 +593,23 @@ func getDeathOverview(dayArray):
 ###############################################################################
 
 func simulate():
-	
 	var startTime = OS.get_ticks_msec()
 	
+	
 	entities[CONSTANTS.DEU].simulateALL()
-	days.append(self.currentDay)
+	
+	if self.days.size() > 2:
+		if entities[CONSTANTS.DEU].infect[self.currentDay] < 1:
+			print("Tag ", self.currentDay, ": PANDEMIE VORÜBER")
+		
+	updateDay()
+	
 	match getMode():
 		CONSTANTS.STATMODE:
 			showStats()
 		CONSTANTS.ACTIONMODE:
 			showAction()
 	
-	if self.days.size() > 3:
-		if entities[CONSTANTS.DEU].infect[self.currentDay] < 1:
-			print("Tag ", self.currentDay, ": PANDEMIE VORÜBER")
-		
-	updateDay()
 	var endTime = OS.get_ticks_msec()
 	var timeDiff = endTime - startTime
 	print("Simulation of Day ", days[-1], " took: ", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", int(timeDiff) % 1000)
@@ -613,14 +617,14 @@ func simulate():
 	
 
 func updateDay():
+	self.currentDay += 1
+	days.append(self.currentDay)
 	statOutput[CONSTANTS.DAYS].text = CONSTANTS.DAYS + CONSTANTS.BL + String(self.currentDay)
-	
-#	print("Tag ", self.currentDay, "// getestete Personen Deutschland: ", entities[CONSTANTS.DEU].getTestedSum())
 	
 	if self.days.size() > 3:
 		buttons[CONSTANTS.STATBUTTON].disabled = false
 		
-	self.currentDay += 1
+#	self.currentDay += 1
 
 func activate():
 #	self.loading = true

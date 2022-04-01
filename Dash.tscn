@@ -196,9 +196,6 @@ margin_bottom = 900.0
 rect_min_size = Vector2( 1600, 900 )
 theme = ExtResource( 44 )
 script = ExtResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="CurrentDay" type="Label" parent="."]
 margin_left = 220.0
@@ -616,7 +613,6 @@ __meta__ = {
 }
 
 [node name="PlayControls" type="ScrollContainer" parent="."]
-visible = false
 anchor_top = -0.00117716
 anchor_bottom = -0.00117716
 margin_left = 600.0
@@ -929,9 +925,11 @@ margin_left = 496.0
 margin_right = 988.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 492, 68 )
-text = "Godmode"
+pressed = true
+text = " Godmode"
 
 [node name="Statistics" type="ScrollContainer" parent="."]
+visible = false
 margin_left = 600.0
 margin_top = 115.0
 margin_right = 1606.0
@@ -1071,9 +1069,6 @@ margin_right = 994.4
 margin_bottom = 312.0
 rect_min_size = Vector2( 512.4, 288 )
 Chart_Style/function_colors = PoolColorArray( 0.12549, 1, 0.12549, 1, 0, 0.501961, 0, 1, 0, 0.501961, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1114,8 +1109,6 @@ margin_left = 109.0
 margin_right = 319.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 210, 288 )
-Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="DailyLegendContainer" type="GridContainer" parent="Statistics/GridContainer/VaxStatusContainer"]
 margin_left = 323.0
@@ -1150,9 +1143,6 @@ Chart_Properties/column_width = 12.0
 Chart_Properties/column_gap = 1.0
 Chart_Style/points_shape = [ 2, 2, 2, 2 ]
 Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.501961, 0, 1, 0.121569, 1, 0.121569, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1196,8 +1186,6 @@ margin_left = 164.0
 margin_right = 344.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 180, 288 )
-Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="BedsLegendContainer" type="GridContainer" parent="Statistics/GridContainer/BedsOverview"]
 margin_left = 348.0
@@ -1239,6 +1227,9 @@ margin_top = 608.0
 margin_right = 994.0
 margin_bottom = 896.0
 Chart_Style/function_colors = PoolColorArray( 1, 0.960784, 0, 1, 0.658824, 0.137255, 0, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1283,6 +1274,9 @@ margin_bottom = 1188.0
 rect_min_size = Vector2( 512, 288 )
 Chart_Style/points_shape = [ 0, 0, 0 ]
 Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.501961, 0, 1, 0, 1, 0, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1303,8 +1297,8 @@ margin_left = 100.0
 margin_right = 250.0
 margin_bottom = 48.0
 rect_min_size = Vector2( 150, 48 )
-custom_styles/normal = SubResource( 19 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_styles/normal = SubResource( 19 )
 text = "Simuliere"
 align = 1
 valign = 1
@@ -1325,9 +1319,9 @@ margin_top = 57.0
 margin_right = 1240.0
 margin_bottom = 105.0
 rect_min_size = Vector2( 500, 48 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_styles/fg = SubResource( 21 )
 custom_styles/bg = SubResource( 22 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
 max_value = 11.0
 step = 1.0
 value = 5.0

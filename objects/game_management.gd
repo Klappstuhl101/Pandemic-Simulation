@@ -25,7 +25,7 @@ var establishedLegends:bool
 var paused:bool
 
 var godmode:bool
-var godmodeChanged :bool
+var godmodeChanged :bool = false
 
 var optionAdded:bool
 
@@ -189,7 +189,8 @@ func showAction():
 	actionOutput[CONSTANTS.OCCBEDS].text = String(getProjectedToRealPopulation(active.getDailyOccupiedBeds(self.days.max() if self.days.max() != null else -1))) + " / " + String(getProjectedToRealPopulation(active.getHospitalBeds()))
 	actionOutput[CONSTANTS.AVLBLVAX].text = String(getProjectedToRealPopulation(active.getAvlbVax()))
 	
-	actionOutput[CONSTANTS.GODMODEBUTTON].pressed = self.godmode
+	actionOutput[CONSTANTS.GODMODEBUTTON].set_pressed_no_signal(self.godmode)
+#	actionOutput[CONSTANTS.GODMODEBUTTON].set_pressed(self.godmode)
 	
 	
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
@@ -245,12 +246,13 @@ func showStats():
 		
 			
 		if !establishedLegends:
-			establishedLegends = true
 			establishLegends()
+			establishedLegends = true
 		
 		if godmodeChanged:
-			self.godmodeChanged = false
 			_show_overview_legend()
+			_show_daily_legend()
+			self.godmodeChanged = false
 			
 		
 		
@@ -961,8 +963,8 @@ func _on_hospitalBed_changed(value:float):
 		actionOutput[CONSTANTS.OCCBEDS].text = String(getProjectedToRealPopulation(active.getDailyOccupiedBeds(self.days.max() if self.days.max() != null else -1))) + " / " + String(getProjectedToRealPopulation(active.getHospitalBeds()))
 
 func _on_godmode_toggled(pressed:bool):
-	self.godmode = pressed
 	self.godmodeChanged = true
+	self.godmode = pressed
 	updateMap()
 
 
@@ -1027,14 +1029,15 @@ func establishActions():
 	
 
 func _show_overview_legend():
-	var i :int = 0
-	for child in statOutput[CONSTANTS.OVERVIEWLEGEND].get_children():
-		if i < 2:
-			i += 1
-			continue
-		else:
-			statOutput[CONSTANTS.OVERVIEWLEGEND].remove_child(child)
-			child.queue_free()
+	if godmodeChanged:
+		var i :int = 0
+		for child in statOutput[CONSTANTS.OVERVIEWLEGEND].get_children():
+			if i < 2:
+				i += 1
+				continue
+			else:
+				statOutput[CONSTANTS.OVERVIEWLEGEND].remove_child(child)
+				child.queue_free()
 	
 	for function in statOutput[CONSTANTS.OVERVIEW].get_legend():
 		statOutput[CONSTANTS.OVERVIEWLEGEND].add_child(function)
@@ -1045,6 +1048,16 @@ func _show_vaxStatus_legend():
 		statOutput[CONSTANTS.VAXSTATUSLEGEND].add_child(function)
 
 func _show_daily_legend():
+	if godmodeChanged:
+		var i :int = 0
+		for child in statOutput[CONSTANTS.DAILYLEGEND].get_children():
+			if i < 2:
+				i += 1
+				continue
+			else:
+				statOutput[CONSTANTS.DAILYLEGEND].remove_child(child)
+				child.queue_free()
+	
 	for function in statOutput[CONSTANTS.DAILYCHANGES].get_legend():
 		statOutput[CONSTANTS.DAILYLEGEND].add_child(function)
 

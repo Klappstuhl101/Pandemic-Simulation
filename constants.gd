@@ -33,6 +33,8 @@ const BORDERTIP = "BorderTip"
 const OCCBEDS = "OccBeds"
 const AVLBLVAX = "AvailableVax"
 
+const GODMODEBUTTON = "GodmodeButton"
+
 const OPTIONBUTTON = "OptionButton"
 const MENUBUTTON = "MenuButton"
 
@@ -49,7 +51,7 @@ const DAILYCHANGES = "DailyChanges"
 const DAILYLEGEND = "DailyLegend"
 const NEWINFECTIONS = "Neuinfektionen"
 
-const INCIDENCESCALETITLE = "IncidenceScaleTitle"
+const INCIDENCESCALETITLE = "Inzidenz - Skala"
 const INCIDENCELABELS = "IncidenceLabels"
 
 const FIRSTVAX = "Erstimpfungen"

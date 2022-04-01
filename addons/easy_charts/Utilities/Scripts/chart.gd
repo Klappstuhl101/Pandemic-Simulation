@@ -472,6 +472,7 @@ func clear_points():
 		for function in Points.get_children():
 			function.queue_free()
 	for legend in $Legend.get_children():
+		$Legend.remove_child(legend)
 		legend.queue_free()
 
 func redraw():
@@ -506,13 +507,16 @@ func function_colors():
 	pass
 
 func create_legend():
+	legend.clear()
 	for function in functions:
 		var function_legend : LegendElement 
-		if legend.size() > function:
-			function_legend = legend[function] 
-		else:
-			function_legend = LegendElement.instance()
-			legend.append(function_legend)
+#		if legend.size() > function:
+#			function_legend = legend[function] 
+#		else:
+#			function_legend = LegendElement.instance()
+#			legend.append(function_legend)
+		function_legend = LegendElement.instance()
+		legend.append(function_legend)
 		var f_name : String = y_labels[function] if not are_values_columns else str(x_datas[function])
 		var legend_font : Font
 		if font != null:

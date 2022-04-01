@@ -116,6 +116,8 @@ func _ready():
 	actionOutput[CONSTANTS.OCCBEDS] = get_node("PlayControls/GridContainer/GridContainer/BedContainer/HospitalBedsNumber")
 	actionOutput[CONSTANTS.AVLBLVAX] = get_node("PlayControls/GridContainer/GridContainer/VaxContainer/VaxNumber")
 	
+	actionOutput[CONSTANTS.GODMODEBUTTON] = get_node("PlayControls/GridContainer/GodmodeContainer/GodmodeButton")
+	
 	buttons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
 	buttons[CONSTANTS.ACTIONBUTTON] = get_node("ModeControl/ActionMode")
 	buttons[CONSTANTS.PAUSEBUTTON] = get_node("TimeControls/Pause")

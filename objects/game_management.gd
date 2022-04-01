@@ -25,8 +25,7 @@ var establishedLegends:bool
 var paused:bool
 
 var godmode:bool
-
-#var optionChanged:bool
+var godmodeChanged :bool
 
 var optionAdded:bool
 
@@ -35,25 +34,14 @@ var interval
 var activePopulationToRealFactor :float
 var activePopulationToCalculationFactor :float
 
-#var selectedLockdown :Array
-
-#var maskFactors :Array
-#var commuterFactors :Array
-
-#var selectedMask :int
-#var selectedHomeOffice :int
-
-#var lockdownFactor :float
-#var maskFactor :float
-
 
 
 var days = []
 var currentDay = 1
 
-#var previous # previous activated button
 
-#var counter = 0
+var vaxColorScheme :PoolColorArray
+
 
 func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodmode):
 	
@@ -107,12 +95,22 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	connectSignals()
 	
 	if !godmode:
-		var title :String = statOutput[CONSTANTS.INCIDENCESCALETITLE].text
-		statOutput[CONSTANTS.INCIDENCESCALETITLE].text = title + CONSTANTS.BL + "(" + CONSTANTS.TESTED + ")"
+		statOutput[CONSTANTS.INCIDENCESCALETITLE].text = CONSTANTS.INCIDENCESCALETITLE + CONSTANTS.BL + "(" + CONSTANTS.TESTED + ")"
 	
 	
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
+	
+	vaxColorScheme.append(Color(1.0, 0.0, 0.0, 1.00))
+	vaxColorScheme.append(Color(0.0, 0.50, 0.0, 1.00))
+	vaxColorScheme.append(Color(0.0, 1.0, 0.0, 1.00))
+	
+	statOutput[CONSTANTS.VAXSTATUS].function_colors = vaxColorScheme
+	statOutput[CONSTANTS.VAXSTATUS].font_color = Color(1.0, 1.0, 1.0, 1.0)
+	statOutput[CONSTANTS.HOSPITALALLOCATION].function_colors = vaxColorScheme
+	statOutput[CONSTANTS.HOSPITALALLOCATION].font_color = Color(1.0, 1.0, 1.0, 1.0)
+	statOutput[CONSTANTS.DEATHOVERVIEW].function_colors = vaxColorScheme
+	
 
 func _start_thread_with_nothing(userdata):
 	print(userdata + " Thread started")
@@ -191,6 +189,7 @@ func showAction():
 	actionOutput[CONSTANTS.OCCBEDS].text = String(getProjectedToRealPopulation(active.getDailyOccupiedBeds(self.days.max() if self.days.max() != null else -1))) + " / " + String(getProjectedToRealPopulation(active.getHospitalBeds()))
 	actionOutput[CONSTANTS.AVLBLVAX].text = String(getProjectedToRealPopulation(active.getAvlbVax()))
 	
+	actionOutput[CONSTANTS.GODMODEBUTTON].pressed = self.godmode
 	
 	
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
@@ -249,6 +248,14 @@ func showStats():
 			establishedLegends = true
 			establishLegends()
 		
+		if godmodeChanged:
+			self.godmodeChanged = false
+			_show_overview_legend()
+			
+		
+		
+		
+		
 		if self.days.size() > 30:
 			buttons[CONSTANTS.MONTH].disabled = false
 		
@@ -279,6 +286,13 @@ func updateInterventionWeight():
 	
 
 func updateMap():
+	
+	if !godmode:
+		statOutput[CONSTANTS.INCIDENCESCALETITLE].text = CONSTANTS.INCIDENCESCALETITLE + CONSTANTS.BL + "(" + CONSTANTS.TESTED + ")"
+	else:
+		statOutput[CONSTANTS.INCIDENCESCALETITLE].text = CONSTANTS.INCIDENCESCALETITLE + "\n"
+	
+	
 	var incidences = []
 	for entity in entities.values():
 		incidences.append(entity.get7DayIncidence(godmode))
@@ -946,6 +960,11 @@ func _on_hospitalBed_changed(value:float):
 #		actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].value = getProjectedToRealPopulation(entities[CONSTANTS.DEU].getHospitalBeds(self.days.max() if self.days.max() != null else 0))
 		actionOutput[CONSTANTS.OCCBEDS].text = String(getProjectedToRealPopulation(active.getDailyOccupiedBeds(self.days.max() if self.days.max() != null else -1))) + " / " + String(getProjectedToRealPopulation(active.getHospitalBeds()))
 
+func _on_godmode_toggled(pressed:bool):
+	self.godmode = pressed
+	self.godmodeChanged = true
+	updateMap()
+
 
 func add_options(isGermany:bool):
 	if isGermany:
@@ -1005,14 +1024,21 @@ func establishActions():
 	_establish_mask_options()
 	_establish_homeOffice_options()
 	_establish_test_options()
-#	actionOutput[CONSTANTS.OPTIONBUTTON].add_item("NR1")
-#	actionOutput[CONSTANTS.OPTIONBUTTON].add_item("NR2")
-#	actionOutput[CONSTANTS.OPTIONBUTTON].add_item("NR3")
 	
 
 func _show_overview_legend():
+	var i :int = 0
+	for child in statOutput[CONSTANTS.OVERVIEWLEGEND].get_children():
+		if i < 2:
+			i += 1
+			continue
+		else:
+			statOutput[CONSTANTS.OVERVIEWLEGEND].remove_child(child)
+			child.queue_free()
+	
 	for function in statOutput[CONSTANTS.OVERVIEW].get_legend():
 		statOutput[CONSTANTS.OVERVIEWLEGEND].add_child(function)
+	
 
 func _show_vaxStatus_legend():
 	for function in statOutput[CONSTANTS.VAXSTATUS].get_legend():
@@ -1074,6 +1100,8 @@ func connectSignals():
 	
 	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].connect("value_changed", self, "_on_hospitalBed_changed")
 	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].step = int(round(self.activePopulationToRealFactor)) * entities[CONSTANTS.DEU].states.values().size()
+	
+	actionOutput[CONSTANTS.GODMODEBUTTON].connect("toggled", self, "_on_godmode_toggled")
 	
 	buttons[CONSTANTS.STATBUTTON].connect("pressed", self, "_on_statButton_press")
 	buttons[CONSTANTS.ACTIONBUTTON].connect("pressed", self, "_on_actionButton_press")

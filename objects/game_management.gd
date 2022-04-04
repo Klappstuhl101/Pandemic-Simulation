@@ -1090,7 +1090,7 @@ func establishLegends():
 	
 
 func connectSignals():
-	statOutput[CONSTANTS.TIMER].set_wait_time(0.5)
+	statOutput[CONSTANTS.TIMER].set_wait_time(0.01)
 	statOutput[CONSTANTS.TIMER].connect("timeout", self, "_on_Time_timeout")
 	statOutput[CONSTANTS.TIMER].start()
 	

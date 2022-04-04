@@ -177,3 +177,6 @@ static func zeroes(length : int):
 static func average(arr:Array):
 	var sum = sum(arr)
 	return float(sum) / float(arr.size())
+
+
+	

@@ -2,7 +2,8 @@ extends Object
 
 class_name Country
 
-var simLock :Mutex
+#var _thread :Thread
+#var waitTimer :Timer
 
 var name
 var realPopulation :int
@@ -82,6 +83,10 @@ var rnd = RandomNumberGenerator.new()
 
 func _init(initStates, initName, initButton):
 #func _init(initStates, initName, initButton).(initName, 0, initButton, [], 0):
+	
+#	_thread = Thread.new()
+#	waitTimer = Timer.new()
+#	waitTimer.set_wait_time(0.5)
 	
 	self.name = initName
 	self.mapButton = initButton
@@ -494,6 +499,14 @@ func simulateALL():
 		state._thread.start(self, "simulateState", state.getName())
 #		state.simulate()
 	
+#	var startTime = OS.get_ticks_msec()
+#	Constants.wait(0.5)
+#	var endTime = OS.get_ticks_msec()
+#	var timeDiff = endTime - startTime
+#	print("WaitTime ", timeDiff)
+#	waitTimer.start()
+#	yield(waitTimer, "timeout")
+	
 	for state in states.values():
 		state._thread.wait_to_finish()
 	
@@ -714,4 +727,3 @@ func getVax1Dead(day):
 
 func getVax2Dead(day):
 	return vax2dead[day]
-

@@ -478,7 +478,7 @@ func simulate():
 	
 #	suscept.append(S[0] + S[1] + S[2])
 	suscept.append(S[0] + S[1] + CONSTANTS.sum(V1[0]) + V1eligible[0] + V2[0])
-	infect.append(I[0] + I[1] + I[2] + CONSTANTS.sum(V1[1]) + CONSTANTS.sum(V1[2]) + V1eligible[1] + V1eligible[2] + V2[1] + V2[2])
+	infect.append(CONSTANTS.sum(I) + CONSTANTS.sum(V1[1]) + CONSTANTS.sum(V1[2]) + V1eligible[1] + V1eligible[2] + V2[1] + V2[2])
 	recov.append(R[0] + R[1] + R[2] + CONSTANTS.sum(V1[3]) + V1eligible[3] + V2[3])
 	dead.append(D[0] + D[1] + D[2] + CONSTANTS.sum(V1[4]) + V1eligible[4] + V2[4])
 	

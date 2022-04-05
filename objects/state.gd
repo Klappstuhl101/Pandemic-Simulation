@@ -229,7 +229,6 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	
 	sus0.append(S[0])
 	sus1.append(S[1])
-#	sus2.append(S[2])
 	inf0.append(I[0])
 	inf1.append(I[1])
 	inf2.append(I[2])
@@ -438,6 +437,8 @@ func getVax1Dead(day):
 func getVax2Dead(day):
 	return vax2dead[day]
 
+func getWaitDay():
+	return self.waitDay
 
 ###############################################################################
 
@@ -467,11 +468,13 @@ func simulate():
 	V1eligible[1] += V1[1][waitDay] 
 	V1eligible[2] += V1[2][waitDay] 
 	V1eligible[3] += V1[3][waitDay] 
+	V1eligible[4] += V1[4][waitDay]
 	
 	V1[0][waitDay] = 0
 	V1[1][waitDay] = 0
 	V1[2][waitDay] = 0
 	V1[3][waitDay] = 0
+	V1[4][waitDay] = 0
 	
 	
 	

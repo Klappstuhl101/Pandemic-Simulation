@@ -274,6 +274,9 @@ func _on_PlaySpeedx2_pressed():
 #			remainingDays = CONSTANTS.WEEK * 20
 			statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 
+#func _on_rewind_pressed():
+#	pass
+
 #func _on_calcTimer_timeout():
 #	calculationTimer.stop()
 #	game_manager.simulate()

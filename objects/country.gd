@@ -563,6 +563,98 @@ func simulateState(stateName):
 #	print(name)
 	states[stateName].simulate()
 
+#func rewindAll():
+#	var day = sus0.size() - 1
+#	for state in states.values():
+#		state.V1[0][state.getWaitDay()]
+#
+#
+#
+#
+#
+#		state.waitDay -= 1
+#		if state.getWaitDay() < 0:
+#			state.waitDay = Constants.VACDELAY - 1
+#
+#
+#		state.suscept.remove(day)
+#		state.infect.remove(day)
+#		state.recov.remove(day)
+#		state.dead.remove(day)
+#
+#		state.sus0.remove(day)
+#		state.sus1.remove(day)
+#		state.inf0.remove(day)
+#		state.inf1.remove(day)
+#		state.inf2.remove(day)
+#		state.rec0.remove(day)
+#		state.rec1.remove(day)
+#		state.rec2.remove(day)
+#		state.dead0.remove(day)
+#		state.dead1.remove(day)
+#		state.dead2.remove(day)
+#
+#		state.vax1sus.remove(day)
+#		state.vax1inf.remove(day)
+#		state.vax1hosp.remove(day)
+#		state.vax1rec.remove(day)
+#		state.vax1dead.remove(day)
+#
+#		state.vax2sus.remove(day)
+#		state.vax2inf.remove(day)
+#		state.vax2hosp.remove(day)
+#		state.vax2rec.remove(day)
+#		state.vax2dead.remove(day)
+#
+#		state.hosp.remove(day)
+#
+#
+#	suscept.remove(day)
+#	infect.remove(day)
+#	recov.remove(day)
+#	dead.remove(day)
+#
+#	sus0.remove(day)
+#	sus1.remove(day)
+#	inf0.remove(day)
+#	inf1.remove(day)
+#	inf2.remove(day)
+#	rec0.remove(day)
+#	rec1.remove(day)
+#	rec2.remove(day)
+#	dead0.remove(day)
+#	dead1.remove(day)
+#	dead2.remove(day)
+#
+#	vax1sus.remove(day)
+#	vax1inf.remove(day)
+#	vax1hosp.remove(day)
+#	vax1rec.remove(day)
+#	vax1dead.remove(day)
+#
+#	vax2sus.remove(day)
+#	vax2inf.remove(day)
+#	vax2hosp.remove(day)
+#	vax2rec.remove(day)
+#	vax2dead.remove(day)
+#
+#	hosp.remove(day)
+#
+#	S[0] = sus0[day-1]
+#	S[1] = sus1[day-1]
+#	I[0] = inf0[day-1]
+#	I[1] = inf1[day-1]
+#	I[2] = inf2[day-1]
+#	I[3] = hosp[day-1]
+#	R[0] = rec0[day-1]
+#	R[1] = rec1[day-1]
+#	R[2] = rec2[day-1]
+#	D[0] = dead0[day-1]
+#	D[1] = dead1[day-1]
+#	D[2] = dead2[day-1]
+#
+	
+
 
 func getNumbers():
 	for state in states.values():

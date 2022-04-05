@@ -7,7 +7,7 @@ class_name Game_Management
 var _simThread :Thread
 var _statThread :Thread
 
-var _simLock :Mutex
+#var _simLock :Mutex
 
 var loading :bool
 var running :bool
@@ -17,7 +17,7 @@ var active # active state / country
 var mode # StatsMode or ActionMode
 var statOutput # statOutput for stats
 var actionOutput
-var statButtons
+#var statButtons
 var buttons
 
 var establishedLegends:bool
@@ -266,6 +266,8 @@ func showStats():
 			
 		
 		statOutput[CONSTANTS.STATCONTAINER].visible = true
+	else:
+		statOutput[CONSTANTS.STATCONTAINER].visible = false
 
 
 
@@ -642,6 +644,12 @@ func updateDay():
 		
 #	self.currentDay += 1
 
+#func rewindWeek():
+#	for _i in range(CONSTANTS.WEEK):
+#		entities[CONSTANTS.DEU].rewindAll()
+
+
+
 func activate():
 #	self.loading = true
 	statOutput[CONSTANTS.COUNTRYNAME].text = active.name
@@ -769,10 +777,7 @@ func _on_maxButton_press():
 	self.interval = CONSTANTS.MAX
 	showStats()
 
-func _on_Time_timeout():
-#	print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes // ", OS.get_ticks_msec())
-	showStats()
-	statOutput[CONSTANTS.TIMER].stop()
+
 
 
 
@@ -1088,9 +1093,14 @@ func establishLegends():
 	print("Legends established")
 	
 	
+func _on_Time_timeout():
+#	print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes // ", OS.get_ticks_msec())
+	showStats()
+	statOutput[CONSTANTS.TIMER].stop()
+
 
 func connectSignals():
-	statOutput[CONSTANTS.TIMER].set_wait_time(0.01)
+	statOutput[CONSTANTS.TIMER].set_wait_time(0.05)
 	statOutput[CONSTANTS.TIMER].connect("timeout", self, "_on_Time_timeout")
 	statOutput[CONSTANTS.TIMER].start()
 	

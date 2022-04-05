@@ -13,7 +13,7 @@ var exitButton
 func _ready():
 	exitButton = get_node("ExitButton")
 	
-	startButton = get_node("StartButton")
+	startButton = get_node("GridContainer/GridContainer/StartButton")
 	populationFactor = get_node("GridContainer/PopContainer/populationFactor")
 	vaxWaitDay = get_node("GridContainer/VaxWaitDayContainer/vaxWaitDay")
 	

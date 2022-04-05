@@ -1,7 +1,27 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Menu.gd" type="Script" id=1]
 [ext_resource path="res://resources/standard_theme.theme" type="Theme" id=2]
+[ext_resource path="res://resources/map/Deutschland.png" type="Texture" id=3]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+uniform float factor = 0.1;
+uniform float minuend = 1.1;
+
+void fragment() {
+	float alpha = texture(TEXTURE, UV).a;
+	COLOR = vec4(vec3((1.1-UV.y) * 1.0, (minuend-UV.y)*factor, (minuend-UV.y)*factor) ,alpha*0.4);
+}
+
+"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/factor = 0.1
+shader_param/minuend = 1.1
 
 [node name="Control" type="Panel"]
 anchor_right = 1.0
@@ -9,45 +29,44 @@ anchor_bottom = 1.0
 rect_min_size = Vector2( 1600, 900 )
 theme = ExtResource( 2 )
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Label" type="Label" parent="."]
-margin_left = 42.0
-margin_top = 34.0
-margin_right = 168.0
-margin_bottom = 125.0
-text = "Hauptmenü"
+[node name="Panel" type="TextureRect" parent="."]
+material = SubResource( 2 )
+margin_left = 950.0
+margin_right = 1542.0
+margin_bottom = 801.0
+texture = ExtResource( 3 )
+
+[node name="GridContainer" type="GridContainer" parent="."]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 920.0
+margin_bottom = 182.0
+rect_min_size = Vector2( 900, 0 )
+
+[node name="Headline" type="Label" parent="GridContainer"]
+margin_right = 900.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 900, 0 )
+text = "
+Hauptmenü - wird noch schöner
+"
+align = 1
+valign = 1
 uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label5" type="Label" parent="."]
-margin_left = 44.0165
-margin_top = 80.3268
-margin_right = 248.017
-margin_bottom = 151.327
-text = "Das Hauptmenü wird noch verschönert. Es geht jetzt erst einmal um die Funktionalität."
-autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="GridContainer" type="GridContainer" parent="."]
-margin_left = 242.0
-margin_top = 230.0
-margin_right = 842.0
-margin_bottom = 342.0
-rect_min_size = Vector2( 600, 0 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Label" type="Label" parent="GridContainer"]
+margin_top = 52.0
+margin_right = 900.0
+margin_bottom = 66.0
 
 [node name="PopContainer" type="GridContainer" parent="GridContainer"]
-margin_right = 594.0
-margin_bottom = 24.0
+margin_top = 70.0
+margin_right = 900.0
+margin_bottom = 94.0
 columns = 2
 
 [node name="Label2" type="Label" parent="GridContainer/PopContainer"]
@@ -72,15 +91,15 @@ __meta__ = {
 }
 
 [node name="HSeparator" type="HSeparator" parent="GridContainer"]
-margin_top = 28.0
-margin_right = 594.0
-margin_bottom = 48.0
+margin_top = 98.0
+margin_right = 900.0
+margin_bottom = 118.0
 custom_constants/separation = 20
 
 [node name="VaxWaitDayContainer" type="GridContainer" parent="GridContainer"]
-margin_top = 52.0
-margin_right = 594.0
-margin_bottom = 76.0
+margin_top = 122.0
+margin_right = 900.0
+margin_bottom = 146.0
 columns = 2
 
 [node name="Label3" type="Label" parent="GridContainer/VaxWaitDayContainer"]
@@ -107,20 +126,55 @@ __meta__ = {
 }
 
 [node name="HSeparator3" type="HSeparator" parent="GridContainer"]
-margin_top = 80.0
-margin_right = 594.0
-margin_bottom = 100.0
+margin_top = 150.0
+margin_right = 900.0
+margin_bottom = 170.0
 custom_constants/separation = 20
 
 [node name="GodmodeButton" type="CheckBox" parent="GridContainer"]
-margin_top = 104.0
-margin_right = 594.0
-margin_bottom = 144.0
+margin_top = 174.0
+margin_right = 900.0
+margin_bottom = 214.0
 rect_min_size = Vector2( 0, 40 )
 text = "\"Godmode\""
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="HSeparator2" type="HSeparator" parent="GridContainer"]
+margin_top = 218.0
+margin_right = 900.0
+margin_bottom = 238.0
+rect_min_size = Vector2( 0, 20 )
+
+[node name="Empty" type="Panel" parent="GridContainer"]
+margin_top = 242.0
+margin_right = 900.0
+margin_bottom = 642.0
+rect_min_size = Vector2( 0, 400 )
+
+[node name="GridContainer" type="GridContainer" parent="GridContainer"]
+margin_top = 646.0
+margin_right = 900.0
+margin_bottom = 696.0
+columns = 2
+
+[node name="empty" type="Panel" parent="GridContainer/GridContainer"]
+margin_right = 196.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 196, 0 )
+
+[node name="StartButton" type="Button" parent="GridContainer/GridContainer"]
+margin_left = 200.0
+margin_right = 700.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 500, 50 )
+text = "Start"
+
+[node name="Label2" type="Label" parent="GridContainer"]
+margin_top = 700.0
+margin_right = 900.0
+margin_bottom = 714.0
 
 [node name="ExitButton" type="Button" parent="."]
 margin_left = 1560.0
@@ -133,58 +187,43 @@ __meta__ = {
 }
 
 [node name="Label4" type="Label" parent="."]
-margin_left = 1015.58
-margin_top = 790.735
-margin_right = 1315.58
-margin_bottom = 872.735
-text = "Hinweis:
+margin_left = 345.999
+margin_top = 716.573
+margin_right = 645.999
+margin_bottom = 798.573
+text = "
+Hinweis:
 Im Spiel wird der Statistik-Tab erst ab Tag 3 verfügbar.
 Maßnahmen können ab dem ersten Tag ergriffen werden"
 autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="StartButton" type="Button" parent="."]
-margin_left = 1338.0
-margin_top = 719.0
-margin_right = 1576.0
-margin_bottom = 881.0
-text = "Start"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Label2" type="Label" parent="."]
-margin_left = 657.0
-margin_top = 50.0
-margin_right = 1028.0
-margin_bottom = 200.0
+margin_left = 643.0
+margin_top = 13.0
+margin_right = 1399.0
+margin_bottom = 129.0
 text = "Je kleiner der Faktor, desto weniger Rechenleistung wird benötigt, aber desto ungenauer sind die simulierten Zahlen auch.
 
 Bsp.:
 1.0: Es wird mit 100% der Bevölkerung gerechnet.
 0.2: Es wird im Hintergrund mit 20% der tatsächlichen Bevölkerung gerechnet. Die Ergebnisse werden dann mit dem Faktor 5 hochgerechnet"
 autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Label3" type="Label" parent="."]
-margin_left = 865.0
-margin_top = 278.0
-margin_right = 1168.0
-margin_bottom = 292.0
+margin_left = 634.037
+margin_top = 144.508
+margin_right = 937.037
+margin_bottom = 158.508
 text = "Wartezeit zwischen erster und zweiter Impfung"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label6" type="Label" parent="."]
-margin_left = 879.0
-margin_top = 339.0
-margin_right = 1473.0
-margin_bottom = 370.0
+margin_left = 188.23
+margin_top = 268.016
+margin_right = 782.23
+margin_bottom = 299.016
 text = "Beim \"godmode\"  tauchen in den Statistiken alle tatsächlichen Fälle auf, nicht nur die Getesteten. Damit hat man auch einen Überblick über die Dunkelziffer"
 autowrap = true
 __meta__ = {

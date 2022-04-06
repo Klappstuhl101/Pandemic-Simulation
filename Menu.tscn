@@ -30,12 +30,66 @@ rect_min_size = Vector2( 1600, 900 )
 theme = ExtResource( 2 )
 script = ExtResource( 1 )
 
-[node name="Panel" type="TextureRect" parent="."]
+[node name="ImageTexture" type="TextureRect" parent="."]
 material = SubResource( 2 )
 margin_left = 950.0
 margin_right = 1542.0
 margin_bottom = 801.0
 texture = ExtResource( 3 )
+
+[node name="Infocontainer" type="GridContainer" parent="ImageTexture"]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 550, 0 )
+
+[node name="Empty" type="Panel" parent="ImageTexture/Infocontainer"]
+modulate = Color( 1, 1, 1, 0 )
+self_modulate = Color( 0, 0, 0, 0 )
+margin_right = 550.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 550, 200 )
+
+[node name="PopulationDescription" type="Label" parent="ImageTexture/Infocontainer"]
+margin_top = 204.0
+margin_right = 550.0
+margin_bottom = 388.0
+rect_min_size = Vector2( 550, 0 )
+text = "Erklärung Populationsfaktor:
+
+Je kleiner der Faktor, desto weniger Rechenleistung wird benötigt, aber desto ungenauer sind die simulierten Zahlen auch.
+
+Der Faktor kann später nicht mehr geändert werden.
+
+Bsp.:
+1.0: Es wird mit 100% der Bevölkerung gerechnet.
+0.2: Es wird im Hintergrund mit 20% der tatsächlichen Bevölkerung gerechnet. Die Ergebnisse werden dann mit dem Faktor 5 hochgerechnet"
+autowrap = true
+
+[node name="VaxWaitDayDescription" type="Label" parent="ImageTexture/Infocontainer"]
+margin_top = 392.0
+margin_right = 550.0
+margin_bottom = 474.0
+rect_min_size = Vector2( 550, 0 )
+text = "Erklärung Impfwartezeit:
+
+Wartezeit (in Tagen) zwischen erster und zweiter Impfung.
+
+Die Wartezeit kann später nicht mehr geändert werden."
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GodmodeDescription" type="Label" parent="ImageTexture/Infocontainer"]
+margin_top = 478.0
+margin_right = 550.0
+margin_bottom = 594.0
+rect_min_size = Vector2( 550, 0 )
+text = "Erklärung Godmode:
+
+Beim \"Godmode\"  tauchen in den Statistiken alle tatsächlichen Fälle auf, nicht nur die Getesteten. Damit hat man auch einen Überblick über die Dunkelziffer.
+
+Der Godmode kann später auch während der Simulation ein- und ausgeschaltet werden."
+autowrap = true
 
 [node name="GridContainer" type="GridContainer" parent="."]
 margin_left = 20.0
@@ -63,10 +117,16 @@ margin_top = 52.0
 margin_right = 900.0
 margin_bottom = 66.0
 
-[node name="PopContainer" type="GridContainer" parent="GridContainer"]
+[node name="Empty2" type="Panel" parent="GridContainer"]
 margin_top = 70.0
 margin_right = 900.0
-margin_bottom = 94.0
+margin_bottom = 170.0
+rect_min_size = Vector2( 0, 100 )
+
+[node name="PopContainer" type="GridContainer" parent="GridContainer"]
+margin_top = 174.0
+margin_right = 900.0
+margin_bottom = 198.0
 columns = 2
 
 [node name="Label2" type="Label" parent="GridContainer/PopContainer"]
@@ -74,7 +134,7 @@ margin_top = 5.0
 margin_right = 295.0
 margin_bottom = 19.0
 rect_min_size = Vector2( 295, 0 )
-text = "populationFactor"
+text = "Populationsfaktor"
 autowrap = true
 
 [node name="populationFactor" type="SpinBox" parent="GridContainer/PopContainer"]
@@ -91,15 +151,15 @@ __meta__ = {
 }
 
 [node name="HSeparator" type="HSeparator" parent="GridContainer"]
-margin_top = 98.0
+margin_top = 202.0
 margin_right = 900.0
-margin_bottom = 118.0
+margin_bottom = 222.0
 custom_constants/separation = 20
 
 [node name="VaxWaitDayContainer" type="GridContainer" parent="GridContainer"]
-margin_top = 122.0
+margin_top = 226.0
 margin_right = 900.0
-margin_bottom = 146.0
+margin_bottom = 250.0
 columns = 2
 
 [node name="Label3" type="Label" parent="GridContainer/VaxWaitDayContainer"]
@@ -107,7 +167,7 @@ margin_top = 5.0
 margin_right = 295.0
 margin_bottom = 19.0
 rect_min_size = Vector2( 295, 0 )
-text = "vaxWaitDays"
+text = "Impfwartezeit"
 autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -126,15 +186,15 @@ __meta__ = {
 }
 
 [node name="HSeparator3" type="HSeparator" parent="GridContainer"]
-margin_top = 150.0
+margin_top = 254.0
 margin_right = 900.0
-margin_bottom = 170.0
+margin_bottom = 274.0
 custom_constants/separation = 20
 
 [node name="GodmodeButton" type="CheckBox" parent="GridContainer"]
-margin_top = 174.0
+margin_top = 278.0
 margin_right = 900.0
-margin_bottom = 214.0
+margin_bottom = 318.0
 rect_min_size = Vector2( 0, 40 )
 text = "\"Godmode\""
 __meta__ = {
@@ -142,21 +202,21 @@ __meta__ = {
 }
 
 [node name="HSeparator2" type="HSeparator" parent="GridContainer"]
-margin_top = 218.0
+margin_top = 322.0
 margin_right = 900.0
-margin_bottom = 238.0
+margin_bottom = 342.0
 rect_min_size = Vector2( 0, 20 )
 
 [node name="Empty" type="Panel" parent="GridContainer"]
-margin_top = 242.0
+margin_top = 346.0
 margin_right = 900.0
-margin_bottom = 642.0
+margin_bottom = 746.0
 rect_min_size = Vector2( 0, 400 )
 
 [node name="GridContainer" type="GridContainer" parent="GridContainer"]
-margin_top = 646.0
+margin_top = 750.0
 margin_right = 900.0
-margin_bottom = 696.0
+margin_bottom = 800.0
 columns = 2
 
 [node name="empty" type="Panel" parent="GridContainer/GridContainer"]
@@ -172,9 +232,9 @@ rect_min_size = Vector2( 500, 50 )
 text = "Start"
 
 [node name="Label2" type="Label" parent="GridContainer"]
-margin_top = 700.0
+margin_top = 804.0
 margin_right = 900.0
-margin_bottom = 714.0
+margin_bottom = 818.0
 
 [node name="ExitButton" type="Button" parent="."]
 margin_left = 1560.0
@@ -187,45 +247,12 @@ __meta__ = {
 }
 
 [node name="Label4" type="Label" parent="."]
-margin_left = 345.999
-margin_top = 716.573
-margin_right = 645.999
-margin_bottom = 798.573
+margin_left = 752.809
+margin_top = 737.338
+margin_right = 1052.81
+margin_bottom = 836.338
 text = "
 Hinweis:
-Im Spiel wird der Statistik-Tab erst ab Tag 3 verfügbar.
+Im Spiel wird der Statistik-Tab erst ab Tag 5 verfügbar.
 Maßnahmen können ab dem ersten Tag ergriffen werden"
 autowrap = true
-
-[node name="Label2" type="Label" parent="."]
-margin_left = 643.0
-margin_top = 13.0
-margin_right = 1399.0
-margin_bottom = 129.0
-text = "Je kleiner der Faktor, desto weniger Rechenleistung wird benötigt, aber desto ungenauer sind die simulierten Zahlen auch.
-
-Bsp.:
-1.0: Es wird mit 100% der Bevölkerung gerechnet.
-0.2: Es wird im Hintergrund mit 20% der tatsächlichen Bevölkerung gerechnet. Die Ergebnisse werden dann mit dem Faktor 5 hochgerechnet"
-autowrap = true
-
-[node name="Label3" type="Label" parent="."]
-margin_left = 634.037
-margin_top = 144.508
-margin_right = 937.037
-margin_bottom = 158.508
-text = "Wartezeit zwischen erster und zweiter Impfung"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label6" type="Label" parent="."]
-margin_left = 188.23
-margin_top = 268.016
-margin_right = 782.23
-margin_bottom = 299.016
-text = "Beim \"godmode\"  tauchen in den Statistiken alle tatsächlichen Fälle auf, nicht nur die Getesteten. Damit hat man auch einen Überblick über die Dunkelziffer"
-autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}

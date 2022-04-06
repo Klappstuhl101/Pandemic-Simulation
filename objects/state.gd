@@ -86,7 +86,6 @@ var informationLoss
 
 var sus0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]	# ungetestet ansteckbar
 var sus1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]		# getestet ansteckbar
-#var sus2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]	# unbewusst ansteckbar (WIRD GESTRICHEN, NICHT MÖGLICH)
 var inf0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]		# ungetestet infiziert
 var inf1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]		# getestet infiziert
 var inf2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.INFECTED]		# unbewusst infiziert
@@ -443,6 +442,8 @@ func getWaitDay():
 ###############################################################################
 
 func simulate():
+	var startTime = OS.get_ticks_msec()
+	
 	events = 0
 #	if I <= 0: # pandemic over
 #		return
@@ -514,9 +515,13 @@ func simulate():
 	
 	Constants.currentProgress += 1
 	
+	var endTime = OS.get_ticks_msec()
+	var timeDiff = endTime - startTime
+	
 	var format_name = "%-23s||" % getName()
 	var format_events = "%15d Events" % events
-	print(format_name + format_events)
+	var format_time = String(floor(timeDiff/1000.0/60.0/60)) + ":" + String(int(timeDiff/1000.0/60.0)%60) + ":" + String(int(timeDiff/1000.0)%60) + ":" + String(int(timeDiff) % 1000)
+	print(format_name + format_events + CONSTANTS.BL + "||" + CONSTANTS.BL + format_time)
 
 
 
@@ -1153,3 +1158,130 @@ func sumVisitors(condition, vaxStatus): # condition: Krankheitsstatus, Impfstatu
 		sum += visitor[1][condition][vaxStatus]
 	return sum
 
+
+func restart():
+	self.selectedHomeOffice = 0
+	self.selectedMask = 0
+	self.selectedTest = 0
+	
+	self.optionChanged = false
+	
+	self.avlbVax = 0
+	self.population = self.populationBase
+	self.deaths = 0
+	
+	var startInfected = int(self.populationBase * 0.0001) if int(self.populationBase * 0.0001) > 0 else 1
+	self.I = [startInfected,0,0,0]
+	
+	self.S = [self.populationBase - self.I[0],0]
+	self.R = [0,0,0]
+	self.D = [0,0,0]
+	
+	self.V1 = [CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY)]
+	self.V1eligible = [0,0,0,0,0]
+	self.V2 = [0,0,0,0,0]
+	
+	self.hospitalBeds = self.hospitalBedsDaily[0]
+	self.hospitalBedsDaily = {0:self.hospitalBeds}
+	
+	self.timeDifference = 0
+	
+	self.visitors = []
+	for i in range(self.neighbors.size()):
+		var vis = [CONSTANTS.zeroes(3), CONSTANTS.zeroes(3), CONSTANTS.zeroes(3), CONSTANTS.zeroes(3)]
+		var neighborName = self.neighbors[i]
+		var arr = [neighborName, vis]
+		self.visitors.append(arr)
+
+	self.borderOpen = true
+	
+	self.suscept.clear()
+	self.infect.clear()
+	self.recov.clear()
+	self.dead.clear()
+
+	self.sus0.clear()
+	self.sus1.clear()
+	self.inf0.clear()
+	self.inf1.clear()
+	self.inf2.clear()
+	self.rec0.clear()
+	self.rec1.clear()
+	self.rec2.clear()
+	self.dead0.clear()
+	self.dead1.clear()
+	self.dead2.clear()
+
+	self.vax1sus.clear()
+	self.vax1inf.clear()
+	self.vax1hosp.clear()
+	self.vax1rec.clear()
+	self.vax1dead.clear()
+
+	self.vax2sus.clear()
+	self.vax2inf.clear()
+	self.vax2hosp.clear()
+	self.vax2rec.clear()
+	self.vax2dead.clear()
+
+	self.hosp.clear()
+	
+	suscept = [CONSTANTS.SUSCEPTIBLE]
+	infect = [CONSTANTS.INFECTED]
+	recov = [CONSTANTS.RECOVERED]
+	dead = [CONSTANTS.DEAD]
+	
+	sus0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]	# ungetestet ansteckbar
+	sus1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]		# getestet ansteckbar
+	inf0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]		# ungetestet infiziert
+	inf1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]		# getestet infiziert
+	inf2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.INFECTED]		# unbewusst infiziert
+	rec0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# ungetestet genesen 
+	rec1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# getestet genesen
+	rec2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# unbewusst genesen
+	dead0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.DEAD]			# ungetestet tot
+	dead1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.DEAD]			# getestet tot
+	dead2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.DEAD]			# unbewusst tot
+	vax1sus = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.SUSCEPTIBLE]	# 1x geimpft ansteckbar
+	vax1inf = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.INFECTED]		# 1x geimpft infiziert
+	vax1hosp = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.HOSPITALISED]	# 1x geimpft hospitalisiert
+	vax1rec = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.RECOVERED]		# 1x geimpft genesen
+	vax1dead = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.DEAD]			# 1x geimpft tot
+	vax2sus = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.SUSCEPTIBLE]	# 2x geimpft ansteckbar
+	vax2inf = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.INFECTED]		# 2x geimpft infiziert
+	vax2hosp = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.HOSPITALISED]	# 2x geimpft hospitalisiert
+	vax2rec = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.RECOVERED]		# 2x geimpft genesen
+	vax2dead = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.DEAD]			# 2x geimpft tot
+
+	hosp = [CONSTANTS.HOSPITALISED]										# ungeimpfte Hospitalisierte
+	
+	suscept.append(S[0] + S[1]) # vaxxed omitted
+	infect.append(I[0] + I[1] + I[2]) # vaxxed Infected omitted, because there are none yet
+	recov.append(R[0] + R[1] + R[2]) # vaxxed omitted
+	dead.append(D[0] + D[1] + D[2]) # vaxxed omitted
+	
+	sus0.append(S[0])
+	sus1.append(S[1])
+	inf0.append(I[0])
+	inf1.append(I[1])
+	inf2.append(I[2])
+	rec0.append(R[0])
+	rec1.append(R[1])
+	rec2.append(R[2])
+	dead0.append(D[0])
+	dead1.append(D[1])
+	dead2.append(D[2])
+	
+	vax1sus.append(CONSTANTS.sum(V1[0]) + V1eligible[0])
+	vax1inf.append(CONSTANTS.sum(V1[1]) + V1eligible[1])
+	vax1hosp.append(CONSTANTS.sum(V1[2]) + V1eligible[2])
+	vax1rec.append(CONSTANTS.sum(V1[3]) + V1eligible[3])
+	vax1dead.append(CONSTANTS.sum(V1[4]) + V1eligible[4])
+	
+	vax2sus.append(V2[0])
+	vax2inf.append(V2[1])
+	vax2hosp.append(V2[2])
+	vax2rec.append(V2[3])
+	vax2dead.append(V2[4])
+	
+	hosp.append(I[3])

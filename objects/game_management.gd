@@ -20,7 +20,8 @@ var actionOutput
 #var statButtons
 var buttons
 
-var establishedLegends:bool
+#var establishedLegends:bool
+var restarted:bool
 
 var paused:bool
 
@@ -59,10 +60,11 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 #	previous = entities.get(CONSTANTS.DEU)
 	
 	self.godmode = initGodmode
+	self.godmodeChanged = true
 	
-	
-	self.loading = false
-	self.running = false
+	self.restarted = false
+#	self.loading = false
+#	self.running = false
 	
 #	self.selectedLockdown = [0, 1-0.816, 1-0.66, 1-0.451]
 #
@@ -80,7 +82,7 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	
 	self.paused = true
 	
-	self.establishedLegends = false
+#	self.establishedLegends = false
 	
 	establishActions()
 	
@@ -245,13 +247,14 @@ func showStats():
 		statOutput[CONSTANTS.DEATHOVERVIEW].plot_from_array(getDeathOverview(showInterval))
 		
 			
-		if !establishedLegends:
-			establishLegends()
-			establishedLegends = true
+#		if !establishedLegends:
+#			establishLegends()
+#			establishedLegends = true
 		
 		if godmodeChanged:
-			_show_overview_legend()
-			_show_daily_legend()
+			establishLegends()
+#			_show_overview_legend()
+#			_show_daily_legend()
 			self.godmodeChanged = false
 			
 		
@@ -267,7 +270,12 @@ func showStats():
 		
 		statOutput[CONSTANTS.STATCONTAINER].visible = true
 	else:
+		buttons[CONSTANTS.STATBUTTON].disabled = true
+		
 		statOutput[CONSTANTS.STATCONTAINER].visible = false
+		
+		buttons[CONSTANTS.MONTH].disabled = true
+		buttons[CONSTANTS.YEAR].disabled = true
 
 
 
@@ -323,14 +331,17 @@ func getMode():
 func setMode(newMode):
 	self.mode = newMode
 
+func isRestarted():
+	return self.restarted
+
 func getProjectedToRealPopulation(value):
 	return int(round(value * self.activePopulationToRealFactor))
 
 func getProjectedToCalculationPopulation(value):
 	return int(round(round(value) * self.activePopulationToCalculationFactor))
 
-func getLoading():
-	return self.loading
+#func getLoading():
+#	return self.loading
 
 func getOutputInterval():
 	var dayArray = [CONSTANTS.DAYS]
@@ -611,8 +622,8 @@ func getDeathOverview(dayArray):
 ###############################################################################
 
 func simulate():
+	print("DAY ", currentDay + 1, " HAS STARTED")
 	var startTime = OS.get_ticks_msec()
-	
 	
 	entities[CONSTANTS.DEU].simulateALL()
 	
@@ -630,7 +641,7 @@ func simulate():
 	
 	var endTime = OS.get_ticks_msec()
 	var timeDiff = endTime - startTime
-	print("Simulation of Day ", days[-1], " took: ", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", int(timeDiff) % 1000)
+	print("%24s SIMULATION OF DAY " % "", days[-1], " TOOK: ", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", int(timeDiff) % 1000, "\n")
 
 	
 
@@ -648,6 +659,34 @@ func updateDay():
 #	for _i in range(CONSTANTS.WEEK):
 #		entities[CONSTANTS.DEU].rewindAll()
 
+func restart():
+	self.restarted = true
+	buttons[CONSTANTS.STATBUTTON].disabled = true
+	statOutput[CONSTANTS.STATCONTAINER].visible = false
+	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
+	
+	self.godmodeChanged = true
+#	self.establishedLegends = false
+	
+	entities[CONSTANTS.DEU].restartAll()
+	
+	self.currentDay = 1
+	self.days.clear()
+	statOutput[CONSTANTS.DAYS].text = CONSTANTS.DAYS + CONSTANTS.BL + String(self.currentDay)
+	
+	self.interval = CONSTANTS.WEEK
+	
+	setMode(CONSTANTS.STATMODE)
+	
+	active = entities[CONSTANTS.DEU]
+	activate()
+	
+	statOutput[CONSTANTS.STATCONTAINER].visible = false
+	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
+	self.restarted = false
+	
+	
+	
 
 
 func activate():
@@ -1049,6 +1088,16 @@ func _show_overview_legend():
 	
 
 func _show_vaxStatus_legend():
+	if godmodeChanged:
+		var i :int = 0
+		for child in statOutput[CONSTANTS.VAXSTATUSLEGEND].get_children():
+			if i < 2:
+				i += 1
+				continue
+			else:
+				statOutput[CONSTANTS.VAXSTATUSLEGEND].remove_child(child)
+				child.queue_free()
+				
 	for function in statOutput[CONSTANTS.VAXSTATUS].get_legend():
 		statOutput[CONSTANTS.VAXSTATUSLEGEND].add_child(function)
 
@@ -1070,14 +1119,44 @@ func _show_bedAllocation_legend():
 	
 	statOutput[CONSTANTS.HOSPITALALLOCATION].plot_from_array(getHospitalAllocation([0,1]))
 	
+	if godmodeChanged:
+		var i :int = 0
+		for child in statOutput[CONSTANTS.ALLOCATIONLEGEND].get_children():
+			if i < 2:
+				i += 1
+				continue
+			else:
+				statOutput[CONSTANTS.ALLOCATIONLEGEND].remove_child(child)
+				child.queue_free()
+	
 	for function in statOutput[CONSTANTS.HOSPITALALLOCATION].get_legend():
 		statOutput[CONSTANTS.ALLOCATIONLEGEND].add_child(function)
 
 func _show_beds_legend():
+	if godmodeChanged:
+		var i :int = 0
+		for child in statOutput[CONSTANTS.BEDSLEGEND].get_children():
+			if i < 2:
+				i += 1
+				continue
+			else:
+				statOutput[CONSTANTS.BEDSLEGEND].remove_child(child)
+				child.queue_free()
+	
 	for function in statOutput[CONSTANTS.HOSPBEDS].get_legend():
 		statOutput[CONSTANTS.BEDSLEGEND].add_child(function)
 
 func _show_death_legend():
+	if godmodeChanged:
+		var i :int = 0
+		for child in statOutput[CONSTANTS.DEATHLEGEND].get_children():
+			if i < 2:
+				i += 1
+				continue
+			else:
+				statOutput[CONSTANTS.DEATHLEGEND].remove_child(child)
+				child.queue_free()
+	
 	for function in statOutput[CONSTANTS.DEATHOVERVIEW].get_legend():
 		statOutput[CONSTANTS.DEATHLEGEND].add_child(function)
 
@@ -1092,7 +1171,14 @@ func establishLegends():
 	
 	print("Legends established")
 	
+func _on_restart_pressed():
+	actionOutput[CONSTANTS.CONFIRMRESTART].popup_centered_ratio(0.2)
+
+func _on_restart_confirmed():
+	print("Restarting")
+	restart()
 	
+
 func _on_Time_timeout():
 #	print(OS.get_ticks_msec()/1000, " secs // or ", OS.get_ticks_msec()/60000, " minutes // ", OS.get_ticks_msec())
 	showStats()
@@ -1125,6 +1211,8 @@ func connectSignals():
 	actionOutput[CONSTANTS.HOSPITALBEDSPINBOX].step = int(round(self.activePopulationToRealFactor)) * entities[CONSTANTS.DEU].states.values().size()
 	
 	actionOutput[CONSTANTS.GODMODEBUTTON].connect("toggled", self, "_on_godmode_toggled")
+	actionOutput[CONSTANTS.RESTARTBUTTON].connect("pressed", self, "_on_restart_pressed")
+	actionOutput[CONSTANTS.CONFIRMRESTART].connect("confirmed", self, "_on_restart_confirmed")
 	
 	buttons[CONSTANTS.STATBUTTON].connect("pressed", self, "_on_statButton_press")
 	buttons[CONSTANTS.ACTIONBUTTON].connect("pressed", self, "_on_actionButton_press")

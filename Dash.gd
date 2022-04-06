@@ -117,6 +117,8 @@ func _ready():
 	actionOutput[CONSTANTS.AVLBLVAX] = get_node("PlayControls/GridContainer/GridContainer/VaxContainer/VaxNumber")
 	
 	actionOutput[CONSTANTS.GODMODEBUTTON] = get_node("PlayControls/GridContainer/GodmodeContainer/GodmodeButton")
+	actionOutput[CONSTANTS.RESTARTBUTTON] = get_node("PlayControls/GridContainer/GodmodeContainer/RestartButton")
+	actionOutput[CONSTANTS.CONFIRMRESTART] = get_node("PlayControls/GridContainer/GodmodeContainer/RestartButton/ConfirmRestart")
 	
 	buttons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
 	buttons[CONSTANTS.ACTIONBUTTON] = get_node("ModeControl/ActionMode")
@@ -190,6 +192,11 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if !paused:
+#		if game_manager.isRestarted():
+#			self.remainingDays = -1
+##			game_manager._simThread.wait_to_finish()
+##			game_manager.restart()
+			
 		if remainingDays > 0 and !running:
 			Constants.currentProgress = 0
 			statOutput[CONSTANTS.PROGRESSPANEL].visible = true
@@ -206,10 +213,12 @@ func _process(_delta):
 			game_manager._simThread.start(self, "runSimulation", null)
 			
 		elif running:
+			actionOutput[CONSTANTS.RESTARTBUTTON].disabled = true
 			statOutput[CONSTANTS.PROGRESSPANEL].visible = true
 			statOutput[CONSTANTS.SIMANIMATION].visible = true
 			statOutput[CONSTANTS.SIMANIMATION].playing = true
 		else:
+			actionOutput[CONSTANTS.RESTARTBUTTON].disabled = false
 			statOutput[CONSTANTS.PROGRESSPANEL].visible = false
 			statOutput[CONSTANTS.SIMANIMATION].visible = false
 			statOutput[CONSTANTS.SIMANIMATION].playing = false

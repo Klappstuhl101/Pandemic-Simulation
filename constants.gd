@@ -6,7 +6,7 @@ const BL = " "
 
 const TIMER = "Timer"
 
-const CALCULATIONTIMER = "CalculationTimer"
+#const CALCULATIONTIMER = "CalculationTimer"
 
 #const LINELENGTH = 80
 
@@ -34,6 +34,8 @@ const OCCBEDS = "OccBeds"
 const AVLBLVAX = "AvailableVax"
 
 const GODMODEBUTTON = "GodmodeButton"
+const RESTARTBUTTON = "RestartButton"
+const CONFIRMRESTART = "ConfirmRestart"
 
 const OPTIONBUTTON = "OptionButton"
 const MENUBUTTON = "MenuButton"

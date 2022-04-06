@@ -108,20 +108,14 @@ func _init(initStates, initName, initButton):
 	self.deaths = 0
 	
 	self.hospitalBedsDaily = {0:0}
-	setHospitalBeds(0, (27681 + 7436) * populationFactor)
+	setHospitalBeds(0, (27681 + 7436) * populationFactor) # Anzahl Krankenhausbetten in Deutschland, nachgeschauter Wert
 	recalculateHospitalBeds()
 	self.hospitalBedsDaily = {0:self.hospitalBeds}
 	
-	# ZURÜCKSETZEN BEVOR ABSCHLUSS
 	self.avlbVax = 0
 	setVaxProduction(0)
 #	setVaxProduction(20)
 	
-	
-	# Hospital Bed array zum Anzeigen
-#	beds.append("Available Hospital-Beds")
-#	for _i in range(CONSTANTS.TRYOUT_DAYS):
-#		beds.append(hospitalBeds)
 	
 	S = [0,0]
 	I = [0,0,0,0]
@@ -487,35 +481,33 @@ func simulateALL():
 	V2 = [0,0,0,0,0]
 	
 #	recalculateHospitalBeds()
+	var startTime = OS.get_ticks_msec()
 	
 	produceVax()
 	distributeVax()
 	distributeCommuters()
 	
+	var endTime = OS.get_ticks_msec()
+	var timeDiff = endTime - startTime
+	print("%31s Distribution took: " % "", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", int(timeDiff) % 1000)
 	
 	
-#	simLock.lock()
+	
+	startTime = OS.get_ticks_msec()
+	
 	for state in states.values():
 		state._thread.start(self, "simulateState", state.getName())
-#		state.simulate()
-	
-#	var startTime = OS.get_ticks_msec()
-#	Constants.wait(0.5)
-#	var endTime = OS.get_ticks_msec()
-#	var timeDiff = endTime - startTime
-#	print("WaitTime ", timeDiff)
-#	waitTimer.start()
-#	yield(waitTimer, "timeout")
 	
 	for state in states.values():
 		state._thread.wait_to_finish()
 	
-#	Constants.simSemaphore.post()
-#	simLock.unlock()
+	
+	endTime = OS.get_ticks_msec()
+	timeDiff = endTime - startTime
+	print("%28s Main Simulation took: " % "", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", int(timeDiff) % 1000)
 	
 	
 	homeCommuters()
-	
 	
 	getNumbers()
 	
@@ -560,8 +552,135 @@ func simulateALL():
 	
 	
 func simulateState(stateName):
-#	print(name)
+#	print(stateName + "-Simulation Thread started")
 	states[stateName].simulate()
+
+func restartAll():
+	for state in states.values():
+		state.restart()
+		
+		
+	recalculatePopulation()
+	self.populationBase = self.population
+	self.populationFactor = float(self.populationBase) / float(self.realPopulation)
+	self.populationToRealFactor = float(self.realPopulation) / float(self.populationBase)
+	self.deaths = 0
+	
+	self.hospitalBedsDaily = {0:0}
+	setHospitalBeds(0, (27681 + 7436) * populationFactor) # Anzahl Krankenhausbetten in Deutschland, nachgeschauter Wert
+	recalculateHospitalBeds()
+	self.hospitalBedsDaily = {0:self.hospitalBeds}
+	
+	# ZURÜCKSETZEN BEVOR ABSCHLUSS
+	self.avlbVax = 0
+	setVaxProduction(0)
+	
+	suscept.clear()
+	infect.clear()
+	recov.clear()
+	dead.clear()
+	
+	sus0.clear()
+	sus1.clear()
+	inf0.clear()
+	inf1.clear()
+	inf2.clear()
+	rec0.clear()
+	rec1.clear()
+	rec2.clear()
+	dead0.clear()
+	dead1.clear()
+	dead2.clear()
+	
+	
+	vax1sus.clear()
+	vax1inf.clear()
+	vax1hosp.clear()
+	vax1rec.clear()
+	vax1dead.clear()
+	
+	vax2sus.clear()
+	vax2inf.clear()
+	vax2hosp.clear()
+	vax2rec.clear()
+	vax2dead.clear()
+	
+	hosp.clear()
+	
+	
+	suscept = [CONSTANTS.SUSCEPTIBLE]
+	infect = [CONSTANTS.INFECTED]
+	recov = [CONSTANTS.RECOVERED]
+	dead = [CONSTANTS.DEAD]
+	
+	sus0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]	# ungetestet ansteckbar
+	sus1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]		# getestet ansteckbar
+	sus2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]	# unbewusst ansteckbar (WIRD GESTRICHEN, NICHT MÖGLICH)
+	inf0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]		# ungetestet infiziert
+	inf1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]		# getestet infiziert
+	inf2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.INFECTED]		# unbewusst infiziert
+	rec0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# ungetestet genesen 
+	rec1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# getestet genesen
+	rec2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# unbewusst genesen
+	dead0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.DEAD]			# ungetestet tot
+	dead1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.DEAD]			# getestet tot
+	dead2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.DEAD]			# unbewusst tot
+
+	hosp = [CONSTANTS.HOSPITALISED]										# ungeimpfte Hospitalisierte
+
+	vax1sus = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.SUSCEPTIBLE]	# 1x geimpft ansteckbar
+	vax1inf = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.INFECTED]		# 1x geimpft infiziert
+	vax1hosp = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.HOSPITALISED]	# 1x geimpft hospitalisiert
+	vax1rec = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.RECOVERED]		# 1x geimpft genesen
+	vax1dead = [CONSTANTS.VAX1 + CONSTANTS.BL + CONSTANTS.DEAD]			# 1x geimpft tot
+
+	vax2sus = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.SUSCEPTIBLE]	# 2x geimpft ansteckbar
+	vax2inf = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.INFECTED]		# 2x geimpft infiziert
+	vax2hosp = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.HOSPITALISED]	# 2x geimpft hospitalisiert
+	vax2rec = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.RECOVERED]		# 2x geimpft genesen
+	vax2dead = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.DEAD]			# 2x geimpft tot
+	
+	S = [0,0]
+	I = [0,0,0,0]
+	R = [0,0,0]
+	D = [0,0,0]
+	V1 = [0,0,0,0,0]
+	V2 = [0,0,0,0,0]
+	
+	getNumbers()
+	# für Gesamtübersicht
+	suscept.append(S[0] + S[1] + V1[0] + V2[0])
+	infect.append(I[0] + I[1] + I[2] + I[3] + V1[1] + V1[2] + V2[1] + V2[2])
+	recov.append(R[0] + R[1] + R[2] + V1[3] + V2[3])
+	dead.append(D[0] + D[1] + D[2] + V1[4] + V2[4])
+	
+	sus0.append(S[0])
+	sus1.append(S[1])
+	inf0.append(I[0])
+	inf1.append(I[1])
+	inf2.append(I[2])
+	rec0.append(R[0])
+	rec1.append(R[1])
+	rec2.append(R[2])
+	dead0.append(D[0])
+	dead1.append(D[1])
+	dead2.append(D[2])
+	
+	
+	vax1sus.append(V1[0])
+	vax1inf.append(V1[1])
+	vax1hosp.append(V1[2])
+	vax1rec.append(V1[3])
+	vax1dead.append(V1[4])
+	
+	vax2sus.append(V2[0])
+	vax2inf.append(V2[1])
+	vax2hosp.append(V2[2])
+	vax2rec.append(V2[3])
+	vax2dead.append(V2[4])
+	
+	hosp.append(I[3])
+	
 
 #func rewindAll():
 #	var day = sus0.size() - 1

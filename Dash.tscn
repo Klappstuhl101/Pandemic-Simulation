@@ -621,13 +621,10 @@ margin_right = 1600.0
 margin_bottom = 895.059
 rect_min_size = Vector2( 1000, 780 )
 scroll_horizontal_enabled = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="GridContainer" type="GridContainer" parent="PlayControls"]
 margin_right = 988.0
-margin_bottom = 764.0
+margin_bottom = 670.0
 rect_min_size = Vector2( 988, 0 )
 
 [node name="HSeparator3" type="HSeparator" parent="PlayControls/GridContainer"]
@@ -901,32 +898,49 @@ clip_text = true
 margin_top = 518.0
 margin_right = 988.0
 margin_bottom = 568.0
+rect_min_size = Vector2( 0, 50 )
 custom_constants/separation = 50
 
-[node name="Empty" type="Panel" parent="PlayControls/GridContainer"]
+[node name="GodmodeContainer" type="GridContainer" parent="PlayControls/GridContainer"]
 margin_top = 572.0
 margin_right = 988.0
-margin_bottom = 692.0
-rect_min_size = Vector2( 0, 120 )
-
-[node name="GodmodeContainer" type="GridContainer" parent="PlayControls/GridContainer"]
-margin_top = 696.0
-margin_right = 988.0
-margin_bottom = 764.0
+margin_bottom = 642.0
 columns = 2
 
-[node name="Empty" type="Panel" parent="PlayControls/GridContainer/GodmodeContainer"]
+[node name="RestartButton" type="Button" parent="PlayControls/GridContainer/GodmodeContainer"]
 margin_right = 492.0
-margin_bottom = 68.0
+margin_bottom = 70.0
 rect_min_size = Vector2( 492, 0 )
+hint_tooltip = "Neustart kann nicht während laufender Simulation initiiert werden."
+text = "Von Tag 0 neu beginnen"
+
+[node name="ConfirmRestart" type="ConfirmationDialog" parent="PlayControls/GridContainer/GodmodeContainer/RestartButton"]
+visible = true
+margin_top = 98.0
+margin_right = 200.0
+margin_bottom = 171.0
+window_title = ""
+dialog_text = "Wirklich von Neuem beginnen?"
+dialog_autowrap = true
 
 [node name="GodmodeButton" type="CheckButton" parent="PlayControls/GridContainer/GodmodeContainer"]
 margin_left = 496.0
 margin_right = 988.0
-margin_bottom = 68.0
-rect_min_size = Vector2( 492, 68 )
+margin_bottom = 70.0
+rect_min_size = Vector2( 492, 70 )
 pressed = true
 text = " Godmode"
+
+[node name="HSeparator6" type="HSeparator" parent="PlayControls/GridContainer"]
+margin_top = 646.0
+margin_right = 988.0
+margin_bottom = 666.0
+rect_min_size = Vector2( 0, 20 )
+
+[node name="EmptyContainer" type="GridContainer" parent="PlayControls/GridContainer"]
+margin_top = 670.0
+margin_right = 988.0
+margin_bottom = 670.0
 
 [node name="Statistics" type="ScrollContainer" parent="."]
 visible = false
@@ -1069,6 +1083,9 @@ margin_right = 994.4
 margin_bottom = 312.0
 rect_min_size = Vector2( 512.4, 288 )
 Chart_Style/function_colors = PoolColorArray( 0.12549, 1, 0.12549, 1, 0, 0.501961, 0, 1, 0, 0.501961, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1109,6 +1126,8 @@ margin_left = 109.0
 margin_right = 319.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 210, 288 )
+Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="DailyLegendContainer" type="GridContainer" parent="Statistics/GridContainer/VaxStatusContainer"]
 margin_left = 323.0
@@ -1143,6 +1162,9 @@ Chart_Properties/column_width = 12.0
 Chart_Properties/column_gap = 1.0
 Chart_Style/points_shape = [ 2, 2, 2, 2 ]
 Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.501961, 0, 1, 0.121569, 1, 0.121569, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1186,6 +1208,8 @@ margin_left = 164.0
 margin_right = 344.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 180, 288 )
+Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="BedsLegendContainer" type="GridContainer" parent="Statistics/GridContainer/BedsOverview"]
 margin_left = 348.0
@@ -1227,9 +1251,6 @@ margin_top = 608.0
 margin_right = 994.0
 margin_bottom = 896.0
 Chart_Style/function_colors = PoolColorArray( 1, 0.960784, 0, 1, 0.658824, 0.137255, 0, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1274,9 +1295,6 @@ margin_bottom = 1188.0
 rect_min_size = Vector2( 512, 288 )
 Chart_Style/points_shape = [ 0, 0, 0 ]
 Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.501961, 0, 1, 0, 1, 0, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 

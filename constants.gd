@@ -70,12 +70,14 @@ const ALLOCATIONLEGEND = "AllocationLegend"
 const BEDSLEGEND = "BedsLegend"
 const DEATHOVERVIEW = "DeathOverview"
 const DEATHLEGEND = "DeathLegend"
+const DEATHNUMBERS = "DeathNumbers"
 
 const WEEK = 7
 const MONTH = 30
 const YEAR = 360
 const MAX = INF
 
+const MAPBACKGROUND = "MapBackground"
 
 const BAW = "Baden-Württemberg"
 const BAY = "Bayern"
@@ -130,6 +132,8 @@ const COMMUTERFACTORS = [1, 1-0.24, 1-0.42, (1 - 0.43) * 0.42]
 const TESTRATES = [0.0, 0.001, 0.0025, 0.005]
 
 const DIFFERENTSETTINGS = 5
+
+const SUPERINDICATORSTEPS = [0,10,25,50,100,250,500,1000,2500,5000,10000]
 
 #const VACDELAY = 10
 var VACDELAY :int = 21

@@ -251,7 +251,7 @@ func getVaxProduction():
 	return self.vaxProduction
 	
 func produceVax():
-	if getAvlbVax() > populationBase * 3:
+	if getAvlbVax() > populationBase * 2:
 		setVaxProduction(0)
 	self.avlbVax += vaxProduction
 	

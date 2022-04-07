@@ -312,12 +312,24 @@ func updateMap():
 	var i = 0
 	for entity in entities.values():
 		if incidences.max() > 0:
-#			print(entity.getName()," MapFaktor //", float(incidences[i]) / float(incidences.max()), " // ", float(log(incidences[i])) / float(log(incidences.max())))
 			entity.mapButton.material.set_shader_param("incidenceRatio", float(incidences[i]) / float(incidences.max()))
-#			entity.mapButton.material.set_shader_param("incidenceRatio", float(log(incidences[i])) / float(log(incidences.max())))
 		else:
 			entity.mapButton.material.set_shader_param("incidenceRatio", 0)
 		i += 1
+	
+	# Berechnung Wert Superindikator: ((Höchste Inzidenz / Wert Superindikatorstufe) + Stufe Superindikator) / Anzahl Superindikatorstufen
+	var superindicator :float
+	var superindicatorStep = CONSTANTS.SUPERINDICATORSTEPS.bsearch(incidences.max())
+#	print("SUPERINDICATORSTEP ", superindicatorStep)
+	if superindicatorStep > 0:
+		if superindicatorStep == CONSTANTS.SUPERINDICATORSTEPS.size():
+			superindicator = ((incidences.max() / CONSTANTS.SUPERINDICATORSTEPS[superindicatorStep - 1]) + superindicatorStep) / float(CONSTANTS.SUPERINDICATORSTEPS.size())
+		else:
+			superindicator = ((incidences.max() / CONSTANTS.SUPERINDICATORSTEPS[superindicatorStep]) + superindicatorStep) / float(CONSTANTS.SUPERINDICATORSTEPS.size())
+	else:
+		superindicator = 0
+	statOutput[CONSTANTS.MAPBACKGROUND].material.set_shader_param("superindicator", superindicator)
+	
 	
 #	print("Inzidenz Deutschland ", incidences[incidences.size() -1], " // Inzidenz Durchschnitt: " , float(CONSTANTS.sum(incidences) - incidences[incidences.size() -1]) / 16.0)
 	i = statOutput[CONSTANTS.INCIDENCELABELS].get_children().size()
@@ -615,6 +627,16 @@ func getDeathOverview(dayArray):
 	output.append(vax1Death)
 	output.append(vax2Death)
 	
+	var i :int = 0
+	for child in statOutput[CONSTANTS.DEATHNUMBERS].get_children():
+		if i % 2 == 0:
+			i += 1
+			continue
+		else:
+			child.text = String(output[int(floor(i/2.0)) + 1][-1])
+			i += 1
+	
+	
 	return output
 
 
@@ -641,9 +663,9 @@ func simulate():
 	
 	var endTime = OS.get_ticks_msec()
 	var timeDiff = endTime - startTime
-	print("%24s SIMULATION OF DAY " % "", days[-1], " TOOK: ", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", int(timeDiff) % 1000, "\n")
+	print("%23s SIMULATION OF DAY " % "", days[-1], " TOOK: ", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", int(timeDiff) % 1000, "\n")
 
-	
+
 
 func updateDay():
 	self.currentDay += 1

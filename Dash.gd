@@ -65,6 +65,7 @@ func _ready():
 	
 	statOutput[CONSTANTS.TIMER] = get_node("Time")
 	
+	statOutput[CONSTANTS.MAPBACKGROUND] = get_node("Map")
 	
 	statOutput[CONSTANTS.STATCONTAINER] = get_node("Statistics")
 	statOutput[CONSTANTS.COUNTRYNAME] = get_node("CountryName")
@@ -78,8 +79,8 @@ func _ready():
 	
 	statOutput[CONSTANTS.PROGRESSBAR] = get_node("SimProgress")
 	statOutput[CONSTANTS.PROGRESSPANEL] = get_node("SimProgress/ProgressPanel")
-	statOutput[CONSTANTS.SIMANIMATION] = get_node("SimProgress/SimAnimation")
-	statOutput[CONSTANTS.DAYS] = get_node("CurrentDay")
+	statOutput[CONSTANTS.SIMANIMATION] = get_node("SimProgress/ProgressPanel/SimAnimation")
+	statOutput[CONSTANTS.DAYS] = get_node("SimProgress/CurrentDay")
 	
 	statOutput[CONSTANTS.INCIDENCESCALETITLE] = get_node("Map/ScaleContainer/IncidenceScaleTitle")
 	statOutput[CONSTANTS.INCIDENCELABELS] = get_node("Map/ScaleContainer/ScaleContainer/IncidenceLabels")
@@ -94,6 +95,7 @@ func _ready():
 	statOutput[CONSTANTS.BEDSLEGEND] = get_node("Statistics/GridContainer/BedsOverview/BedsLegendContainer/BedsLegend")
 	statOutput[CONSTANTS.DEATHOVERVIEW] = get_node("Statistics/GridContainer/DeathOverview")
 	statOutput[CONSTANTS.DEATHLEGEND] = get_node("Statistics/GridContainer/DeathContainer/DeathLegendContainer/DeathLegend")
+	statOutput[CONSTANTS.DEATHNUMBERS] = get_node("Statistics/GridContainer/DeathContainer/DeathLegendContainer/DeathNumbers")
 	
 	actionOutput[CONSTANTS.NO] = get_node("PlayControls/GridContainer/LockDownOptions/No")
 	actionOutput[CONSTANTS.LIGHT] = get_node("PlayControls/GridContainer/LockDownOptions/Light")

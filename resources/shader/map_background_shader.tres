@@ -1,0 +1,35 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+uniform float superindicator = 0.0;
+uniform sampler2D superindicatorGradient;
+
+
+void fragment() {
+	float alphaFactorX;
+	
+	if (UV.x <= 0.1) {
+		alphaFactorX = UV.x / 0.1;
+	} else if (UV.x >= 0.9) {
+		alphaFactorX = (1.0 - UV.x) / 0.1;
+	} else {
+		alphaFactorX = 1.0;
+	}
+	
+	float alphaFactorY;
+	if (UV.y <= 0.1) {
+		alphaFactorY = UV.y / 0.1;
+	} else if (UV.y >= 0.9) {
+		alphaFactorY = (1.0 - UV.y) / 0.1;
+	} else {
+		alphaFactorY = 1.0;
+	}
+	
+	float alpha = texture(TEXTURE, UV).a * alphaFactorX *alphaFactorY;
+	vec3 sampled = texture(superindicatorGradient, vec2(superindicator,0)).rgb;
+	COLOR = vec4(sampled,alpha);
+}
+"

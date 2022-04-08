@@ -173,7 +173,7 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*infectFactorHosp, getInfectRate()*infectFactorV1, getInfectRate()*infectFactorV2] 	# Ungetestet, Getestet, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	recRate = [baseRec, baseRec*1.2, baseRec*1.3, baseRec*1.6] 																# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	deathRate = [baseDeath, baseDeath*deathFactorHosp, baseDeath*0.2, baseDeath*0.1]														# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
-	testRate = [baseTest, baseTest, baseTest]
+	setTestRates(baseTest)
 	hospitalBeds = 20
 	hospitalBedsDaily = {0:hospitalBeds}
 	hospitalRate = [baseHospital, baseHospital*0.2, baseHospital*0.1]
@@ -397,7 +397,7 @@ func setBorderOpen(open:bool):
 func setTestRates(index:int):
 	self.selectedTest = index
 	var value = CONSTANTS.TESTRATES[index]
-	self.testRate = [value, value, value]
+	self.testRate = [value, value * 30, value]
 	
 #func setLockdown(isTrue:bool, strictness:float):
 #	self.lockdown = isTrue

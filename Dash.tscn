@@ -635,6 +635,7 @@ __meta__ = {
 }
 
 [node name="PlayControls" type="ScrollContainer" parent="."]
+visible = false
 anchor_top = -0.00117716
 anchor_bottom = -0.00117716
 margin_left = 600.0
@@ -965,7 +966,6 @@ margin_right = 988.0
 margin_bottom = 670.0
 
 [node name="Statistics" type="ScrollContainer" parent="."]
-visible = false
 margin_left = 600.0
 margin_top = 115.0
 margin_right = 1606.0
@@ -978,7 +978,7 @@ __meta__ = {
 
 [node name="GridContainer" type="GridContainer" parent="Statistics"]
 margin_right = 994.0
-margin_bottom = 1188.0
+margin_bottom = 1480.0
 rect_min_size = Vector2( 988, 0 )
 columns = 2
 
@@ -1105,6 +1105,74 @@ margin_right = 994.4
 margin_bottom = 312.0
 rect_min_size = Vector2( 512.4, 288 )
 Chart_Style/function_colors = PoolColorArray( 0.12549, 1, 0.12549, 1, 0, 0.501961, 0, 1, 0, 0.501961, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1 )
+Chart_Style/font_color = Color( 1, 1, 1, 1 )
+Chart_Style/use_template = false
+
+[node name="DailyInfectionsContainer" type="GridContainer" parent="Statistics/GridContainer"]
+margin_top = 316.0
+margin_right = 478.0
+margin_bottom = 604.0
+rect_min_size = Vector2( 478, 288 )
+
+[node name="Label" type="Label" parent="Statistics/GridContainer/DailyInfectionsContainer"]
+margin_right = 478.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 478, 0 )
+text = "Tägliche Neuinfektionen"
+align = 1
+
+[node name="GridContainer" type="GridContainer" parent="Statistics/GridContainer/DailyInfectionsContainer"]
+margin_top = 18.0
+margin_right = 478.0
+margin_bottom = 80.0
+columns = 2
+
+[node name="DailyInfectionsLegend" parent="Statistics/GridContainer/DailyInfectionsContainer/GridContainer" instance=ExtResource( 38 )]
+margin_right = 237.0
+margin_bottom = 62.0
+rect_min_size = Vector2( 237, 0 )
+
+[node name="DailyInfectionNumbers" type="GridContainer" parent="Statistics/GridContainer/DailyInfectionsContainer/GridContainer"]
+margin_left = 241.0
+margin_right = 478.0
+margin_bottom = 62.0
+rect_min_size = Vector2( 237, 0 )
+
+[node name="Empty" type="Panel" parent="Statistics/GridContainer/DailyInfectionsContainer/GridContainer/DailyInfectionNumbers"]
+margin_right = 237.0
+margin_bottom = 18.0
+rect_min_size = Vector2( 0, 18 )
+
+[node name="Label" type="Label" parent="Statistics/GridContainer/DailyInfectionsContainer/GridContainer/DailyInfectionNumbers"]
+margin_top = 22.0
+margin_right = 237.0
+margin_bottom = 36.0
+rect_min_size = Vector2( 237, 0 )
+align = 1
+
+[node name="HSeparator" type="HSeparator" parent="Statistics/GridContainer/DailyInfectionsContainer/GridContainer/DailyInfectionNumbers"]
+margin_top = 40.0
+margin_right = 237.0
+margin_bottom = 44.0
+
+[node name="Label2" type="Label" parent="Statistics/GridContainer/DailyInfectionsContainer/GridContainer/DailyInfectionNumbers"]
+margin_top = 48.0
+margin_right = 237.0
+margin_bottom = 62.0
+align = 1
+
+[node name="DailyInfections" parent="Statistics/GridContainer" instance=ExtResource( 47 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 482.0
+margin_top = 316.0
+margin_right = 994.0
+margin_bottom = 604.0
+rect_min_size = Vector2( 512, 288 )
+Chart_Properties/column_width = 12.0
+Chart_Properties/column_gap = 1.0
+Chart_Style/points_shape = [ 2, 2 ]
+Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0.501961, 0, 0, 1 )
 Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
@@ -1112,9 +1180,9 @@ Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
 [node name="VaxStatusContainer" type="GridContainer" parent="Statistics/GridContainer"]
-margin_top = 316.0
+margin_top = 608.0
 margin_right = 478.0
-margin_bottom = 604.0
+margin_bottom = 896.0
 rect_min_size = Vector2( 475.6, 288 )
 columns = 3
 __meta__ = {
@@ -1148,8 +1216,6 @@ margin_left = 109.0
 margin_right = 319.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 210, 288 )
-Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="DailyLegendContainer" type="GridContainer" parent="Statistics/GridContainer/VaxStatusContainer"]
 margin_left = 323.0
@@ -1161,7 +1227,7 @@ rect_min_size = Vector2( 150, 288 )
 margin_right = 150.0
 margin_bottom = 31.0
 rect_min_size = Vector2( 150, 0 )
-text = "Tägliche Veränderungen"
+text = "Tägliche Neuimpfungen"
 align = 1
 valign = 1
 autowrap = true
@@ -1176,24 +1242,21 @@ rect_min_size = Vector2( 150, 0 )
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 482.0
-margin_top = 316.0
+margin_top = 608.0
 margin_right = 994.0
-margin_bottom = 604.0
+margin_bottom = 896.0
 rect_min_size = Vector2( 512, 288 )
 Chart_Properties/column_width = 12.0
 Chart_Properties/column_gap = 1.0
 Chart_Style/points_shape = [ 2, 2, 2, 2 ]
-Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.501961, 0, 1, 0.121569, 1, 0.121569, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/function_colors = PoolColorArray( 0, 0.501961, 0, 1, 0.121569, 1, 0.121569, 1, 0.117647, 0.117647, 0.117647, 1, 0, 0, 0, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
 [node name="BedsOverview" type="GridContainer" parent="Statistics/GridContainer"]
-margin_top = 608.0
+margin_top = 900.0
 margin_right = 478.0
-margin_bottom = 896.0
+margin_bottom = 1188.0
 rect_min_size = Vector2( 475.6, 288 )
 columns = 3
 
@@ -1230,8 +1293,6 @@ margin_left = 164.0
 margin_right = 344.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 180, 288 )
-Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="BedsLegendContainer" type="GridContainer" parent="Statistics/GridContainer/BedsOverview"]
 margin_left = 348.0
@@ -1269,17 +1330,20 @@ margin_bottom = 142.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 482.0
-margin_top = 608.0
+margin_top = 900.0
 margin_right = 994.0
-margin_bottom = 896.0
+margin_bottom = 1188.0
 Chart_Style/function_colors = PoolColorArray( 1, 0.960784, 0, 1, 0.658824, 0.137255, 0, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
 [node name="DeathContainer" type="GridContainer" parent="Statistics/GridContainer"]
-margin_top = 900.0
+margin_top = 1192.0
 margin_right = 478.0
-margin_bottom = 1188.0
+margin_bottom = 1480.0
 
 [node name="Label" type="Label" parent="Statistics/GridContainer/DeathContainer"]
 margin_right = 478.0
@@ -1353,12 +1417,15 @@ align = 1
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 482.0
-margin_top = 900.0
+margin_top = 1192.0
 margin_right = 994.0
-margin_bottom = 1188.0
+margin_bottom = 1480.0
 rect_min_size = Vector2( 512, 288 )
 Chart_Style/points_shape = [ 0, 0, 0 ]
 Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.501961, 0, 1, 0, 1, 0, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 

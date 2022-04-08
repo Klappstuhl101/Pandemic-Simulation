@@ -49,9 +49,12 @@ const OVERVIEWLEGEND = "OverviewLegend"
 const OVERVIEWHEADLINE = "Anzahl getesteter Fälle"
 const VAXSTATUS = "Impfstatus"
 const VAXSTATUSLEGEND = "VaxStatusLegend"
-const DAILYCHANGES = "DailyChanges"
+
+const DAILYVAXCHANGES = "DailyChanges"
 const DAILYLEGEND = "DailyLegend"
 const NEWINFECTIONS = "Neuinfektionen"
+const NEWINFECTIONSLEGEND = "NewInfectionsLegend"
+const DAILYINFECTIONNUMBERS = "DailyInfectionNumbers"
 
 const INCIDENCESCALETITLE = "Inzidenz - Skala"
 const INCIDENCELABELS = "IncidenceLabels"

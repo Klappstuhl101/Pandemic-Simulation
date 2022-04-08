@@ -74,7 +74,10 @@ func _ready():
 	statOutput[CONSTANTS.OVERVIEWHEADLINE] = get_node("Statistics/GridContainer/Indicators/OverviewContainer/Overview")
 	statOutput[CONSTANTS.VAXSTATUS] = get_node("Statistics/GridContainer/VaxStatusContainer/VaxStatus")
 	statOutput[CONSTANTS.VAXSTATUSLEGEND] = get_node("Statistics/GridContainer/VaxStatusContainer/VaxLegendContainer/VaxStatusLegend")
-	statOutput[CONSTANTS.DAILYCHANGES] = get_node("Statistics/GridContainer/DailyChanges")
+	statOutput[CONSTANTS.NEWINFECTIONS] = get_node("Statistics/GridContainer/DailyInfections")
+	statOutput[CONSTANTS.NEWINFECTIONSLEGEND] = get_node("Statistics/GridContainer/DailyInfectionsContainer/GridContainer/DailyInfectionsLegend")
+	statOutput[CONSTANTS.DAILYINFECTIONNUMBERS] = get_node("Statistics/GridContainer/DailyInfectionsContainer/GridContainer/DailyInfectionNumbers")
+	statOutput[CONSTANTS.DAILYVAXCHANGES] = get_node("Statistics/GridContainer/DailyChanges")
 	statOutput[CONSTANTS.DAILYLEGEND] = get_node("Statistics/GridContainer/VaxStatusContainer/DailyLegendContainer/DailyLegend")
 	
 	statOutput[CONSTANTS.PROGRESSBAR] = get_node("SimProgress")

@@ -5,16 +5,16 @@ class_name Game_Management
 #var calcTime:float
 
 var _simThread :Thread
-var _statThread :Thread
+#var _statThread :Thread
 
 #var _simLock :Mutex
-
-var loading :bool
-var running :bool
+#
+#var loading :bool
+#var running :bool
 
 var entities :Dictionary # states + country
 var active # active state / country
-var mode # StatsMode or ActionMode
+var mode # StatsMode or ActionMode or Endmode
 var statOutput # statOutput for stats
 var actionOutput
 #var statButtons
@@ -23,7 +23,7 @@ var buttons
 #var establishedLegends:bool
 var restarted:bool
 
-var paused:bool
+#var paused:bool
 
 var godmode:bool
 var godmodeChanged :bool = false
@@ -38,7 +38,9 @@ var activePopulationToCalculationFactor :float
 
 
 var days = []
-var currentDay = 1
+var currentDay :int = 1
+var endDay :int
+var ended :bool = false
 
 
 var vaxColorScheme :PoolColorArray
@@ -48,7 +50,7 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	
 	self._simThread = Thread.new()
 #	self._simThread.start(self, "_start_thread_with_nothing", "Game_management")
-	self._statThread = Thread.new()
+#	self._statThread = Thread.new()
 	
 #	self.sim = initSim
 	self.entities = initEntities
@@ -80,7 +82,7 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	
 #	self.optionChanged = false
 	
-	self.paused = true
+#	self.paused = true
 	
 #	self.establishedLegends = false
 	
@@ -112,6 +114,10 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 	statOutput[CONSTANTS.HOSPITALALLOCATION].function_colors = vaxColorScheme
 	statOutput[CONSTANTS.HOSPITALALLOCATION].font_color = Color(1.0, 1.0, 1.0, 1.0)
 	statOutput[CONSTANTS.DEATHOVERVIEW].function_colors = vaxColorScheme
+	statOutput[CONSTANTS.VAXSUMMARY].function_colors = vaxColorScheme
+	statOutput[CONSTANTS.VAXSUMMARY].font_color = Color(1.0, 1.0, 1.0, 1.0)
+	statOutput[CONSTANTS.DEATHSUMMARY].function_colors = vaxColorScheme
+	statOutput[CONSTANTS.DEATHSUMMARY].font_color = Color(1.0, 1.0, 1.0, 1.0)
 	
 
 func _start_thread_with_nothing(userdata):
@@ -126,6 +132,7 @@ func showAction():
 	updateInterventionWeight()
 	
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
+	statOutput[CONSTANTS.ENDCONTAINER].visible = false
 	
 #	if self.optionChanged:
 #		actionOutput[CONSTANTS.USERDEFINED].pressed = self.optionChanged
@@ -211,6 +218,7 @@ func showStats():
 		return
 	
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
+	statOutput[CONSTANTS.ENDCONTAINER].visible = false
 	
 	if statOutput[CONSTANTS.TIMER].is_stopped():
 		statOutput[CONSTANTS.TIMER].start()
@@ -250,11 +258,11 @@ func showStats():
 		
 			
 #		if !establishedLegends:
-#			establishLegends()
+#			establishStatLegends()
 #			establishedLegends = true
 		
 		if godmodeChanged:
-			establishLegends()
+			establishStatLegends()
 #			_show_overview_legend()
 #			_show_daily_legend()
 			self.godmodeChanged = false
@@ -280,6 +288,30 @@ func showStats():
 		buttons[CONSTANTS.YEAR].disabled = true
 
 
+func showEnd():
+	statOutput[CONSTANTS.STATCONTAINER].visible = false
+	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
+	
+	
+	var summaryOverview = getSummaryOverview()
+	statOutput[CONSTANTS.SUMMARYOVERVIEW].plot_from_array(summaryOverview)
+	statOutput[CONSTANTS.SUMMARY].text = getSummaryText(summaryOverview)
+	
+	var vaxSummary = getOutputVaccinations()
+	statOutput[CONSTANTS.VAXSUMMARY].plot_from_array(vaxSummary)
+	statOutput[CONSTANTS.VAXSUMMARYTEXT].text = getVaxSummaryText(vaxSummary)
+	
+	var deathSummary = getDeathSummary()
+	statOutput[CONSTANTS.DEATHSUMMARY].plot_from_array(deathSummary)
+	statOutput[CONSTANTS.DEATHSUMMARYTEXT].text = getDeathSummaryText(deathSummary)
+	
+	if !ended:
+		ended = true
+		establishEndLegends()
+	
+	statOutput[CONSTANTS.ENDCONTAINER].visible = true
+	
+	
 
 
 
@@ -675,17 +707,57 @@ func getDeathOverview(dayArray):
 	return output
 
 
+func getSummaryOverview():
+	var sumSus = getProjectedToRealPopulation(active.getSusceptibles())
+	var sumRecov = getProjectedToRealPopulation(active.getRecovered())
+	var sumDead = getProjectedToRealPopulation(active.getDeaths())
+	return [[CONSTANTS.HEALTHSTATUS, "Anzahl Personen"], [CONSTANTS.SUSCEPTIBLE, sumSus], [CONSTANTS.RECOVERED, sumRecov], [CONSTANTS.DEAD, sumDead]]
 
+func getSummaryText(summary):
+	var sum :int = summary[1][1] + summary[2][1] + summary[3][1]
+	var str0 :String = "Die Pandemie hat %d Tage gedauert. \n \n" % self.endDay 
+	var str1 :String = "%.2f%% der Bevölkerung haben sich nicht angesteckt. \n \n" % ((float(summary[1][1])/sum) * 100)
+	var str2 :String = "%.2f%% der Bevölkerung sind Genesen. \n \n" % ((float(summary[2][1])/sum) * 100)
+	var str3 :String = "%.2f%% der Bevölkerung sind am Virus gestorben.\n \n" % ((float(summary[3][1])/sum) * 100)
+	var str4 :String = "Damit wurden %.2f%% der Menschen mit dem Virus infiziert." % ((float(summary[2][1] + summary[3][1])/sum) * 100)
+	
+	return str0 + str1 + str2 + str3 + str4
+
+func getVaxSummaryText(summary):
+	var sum :int = summary[1][1] + summary[2][1] + summary[3][1]
+	var vaxSum = summary[2][1] + summary[3][1]
+	var str0 :String = "Insgesamt haben %.2f%% der Bevölkerung Impfungen erhalten. Dabei wurden %d Impfdosen verbraucht. \n \n" %  [((float(vaxSum) / getProjectedToRealPopulation(active.getPopulation())) * 100), summary[2][1] + summary[3][1] * 2]
+	var str1 :String = "%.2f%% der Bevölkerung wurden nicht geimpft. \n \n" % ((float(summary[1][1])/sum) * 100)
+	var str2 :String = "%.2f%% der Bevölkerung wurden 1x geimpft. \n \n" % ((float(summary[2][1])/sum) * 100)
+	var str3 :String = "%.2f%% der Bevölkerung wurden 2x geimpft." % ((float(summary[3][1])/sum) * 100)
+	
+	return str0 + str1 + str2 + str3
+
+func getDeathSummary():
+	return [[CONSTANTS.VAXSTATUS, "Anzahl Personen"], [CONSTANTS.UNVAXED, getProjectedToRealPopulation(active.getUnvaxedDead())], [CONSTANTS.VAX1, getProjectedToRealPopulation(active.getVax1Dead())], [CONSTANTS.VAX2, getProjectedToRealPopulation(active.getVax2Dead())]]
+
+func getDeathSummaryText(summary):
+	var sum :int = summary[1][1] + summary[2][1] + summary[3][1]
+	var str0 :String = "Insgesamt sind %.2f%% der Bevölkerung verstorben. Davon waren %.2f%% mindestens einmal geimpft. \n \n" %  [(float(sum) / getProjectedToRealPopulation(active.getPopulationBase())) * 100, (float(summary[2][1] + summary[3][1]) / sum) * 100]
+	var str1 :String = "%.2f%% der Verstorbenen war nicht geimpft. \n \n" % ((float(summary[1][1])/sum) * 100)
+	var str2 :String = "%.2f%% der Verstorbenen war 1x geimpft. \n \n" % ((float(summary[2][1])/sum) * 100)
+	var str3 :String = "%.2f%% der Verstorbenen war 2x geimpft." % ((float(summary[3][1])/sum) * 100)
+	
+	return str0 + str1 + str2 + str3
 ###############################################################################
 
 func simulate():
-	print("DAY ", currentDay + 1, " HAS STARTED")
+	print("\n", "DAY ", currentDay + 1, " HAS STARTED")
 	var startTime = OS.get_ticks_msec()
 	
 	entities[CONSTANTS.DEU].simulateALL()
 	
 	if self.days.size() > 2:
 		if entities[CONSTANTS.DEU].infect[self.currentDay] < 1:
+			setMode(CONSTANTS.ENDMODE)
+			if !ended:
+				endDay = currentDay
+#				ended = true
 			print("Tag ", self.currentDay, ": PANDEMIE VORÜBER")
 		
 	updateDay()
@@ -695,10 +767,12 @@ func simulate():
 			showStats()
 		CONSTANTS.ACTIONMODE:
 			showAction()
+		CONSTANTS.ENDMODE:
+			showEnd()
 	
 	var endTime = OS.get_ticks_msec()
 	var timeDiff = endTime - startTime
-	print("%23s SIMULATION OF DAY " % "", days[-1], " TOOK: ", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", int(timeDiff) % 1000, "\n")
+	print("%23s SIMULATION OF DAY " % "", days[-1], " TOOK: ", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", int(timeDiff) % 1000)
 
 
 
@@ -741,34 +815,24 @@ func restart():
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
 	self.restarted = false
-	
-	
-	
+
+
 
 
 func activate():
-#	self.loading = true
 	statOutput[CONSTANTS.COUNTRYNAME].text = active.name
 	self.activePopulationToRealFactor = active.getPopulationToRealFactor()
 	self.activePopulationToCalculationFactor = active.getPopulationToCalculationFactor()
-	
-#	if _simThread.is_active():
-#		_simThread.wait_to_finish()
-		
-#	self.loading = _simThread.is_active()
-	
-#	if !_simThread.is_active():
+
 	match getMode():
 		CONSTANTS.STATMODE:
 			showStats()
 		CONSTANTS.ACTIONMODE:
 			showAction()
+		CONSTANTS.ENDMODE:
+			showEnd()
 
-#func resetAll(exception = ""):
-#	for entity in entities.values():
-#		if (entity.name != exception):
-#			entity.mapButton.pressed = false
-			
+
 func _on_BAW_press(_toggle):
 	active = entities.get(CONSTANTS.BAW)
 	activate()
@@ -1232,7 +1296,7 @@ func _show_death_legend():
 		statOutput[CONSTANTS.DEATHLEGEND].add_child(function)
 
 
-func establishLegends():
+func establishStatLegends():
 	_show_overview_legend()
 	_show_vaxStatus_legend()
 	_show_newInfections_legend()
@@ -1241,8 +1305,28 @@ func establishLegends():
 	_show_beds_legend()
 	_show_death_legend()
 	
-	print("Legends established")
+	print("StatLegends established")
+
+
+func _show_summary_legend():
+	for function in statOutput[CONSTANTS.SUMMARYOVERVIEW].get_legend():
+		statOutput[CONSTANTS.SUMMARYOVERVIEWLEGEND].add_child(function)
+
+func _show_vaxSummary_legend():
+	for function in statOutput[CONSTANTS.VAXSUMMARY].get_legend():
+		statOutput[CONSTANTS.VAXSUMMARYLEGEND].add_child(function)
+
+func _show_deathSummary_legend():
+	for function in statOutput[CONSTANTS.DEATHSUMMARY].get_legend():
+		statOutput[CONSTANTS.DEATHSUMMARYLEGEND].add_child(function)
+
+func establishEndLegends():
+	_show_summary_legend()
+	_show_vaxSummary_legend()
+	_show_deathSummary_legend()
 	
+	print("EndLegends established")
+
 func _on_restart_pressed():
 	actionOutput[CONSTANTS.CONFIRMRESTART].popup_centered_ratio(0.2)
 

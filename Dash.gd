@@ -100,6 +100,21 @@ func _ready():
 	statOutput[CONSTANTS.DEATHLEGEND] = get_node("Statistics/GridContainer/DeathContainer/DeathLegendContainer/DeathLegend")
 	statOutput[CONSTANTS.DEATHNUMBERS] = get_node("Statistics/GridContainer/DeathContainer/DeathLegendContainer/DeathNumbers")
 	
+	
+	statOutput[CONSTANTS.ENDCONTAINER] = get_node("EndScreen")
+	statOutput[CONSTANTS.SUMMARYOVERVIEW] = get_node("EndScreen/GridContainer/SummaryContainer/SummaryOverview")
+	statOutput[CONSTANTS.SUMMARYOVERVIEWLEGEND] = get_node("EndScreen/GridContainer/SummaryContainer/SummaryOverviewLegend")
+	statOutput[CONSTANTS.SUMMARY] = get_node("EndScreen/GridContainer/SummaryContainer/Summary")
+	
+	statOutput[CONSTANTS.VAXSUMMARY] = get_node("EndScreen/GridContainer/VaxSummaryContainer/VaxSummary")
+	statOutput[CONSTANTS.VAXSUMMARYLEGEND] = get_node("EndScreen/GridContainer/VaxSummaryContainer/VaxSummaryLegend")
+	statOutput[CONSTANTS.VAXSUMMARYTEXT] = get_node("EndScreen/GridContainer/VaxSummaryContainer/VaxSummaryText")
+	
+	statOutput[CONSTANTS.DEATHSUMMARY] = get_node("EndScreen/GridContainer/DeathSummaryContainer/DeathSummary")
+	statOutput[CONSTANTS.DEATHSUMMARYLEGEND] = get_node("EndScreen/GridContainer/DeathSummaryContainer/DeathSummaryLegend")
+	statOutput[CONSTANTS.DEATHSUMMARYTEXT] = get_node("EndScreen/GridContainer/DeathSummaryContainer/DeathSummaryText")
+	
+	
 	actionOutput[CONSTANTS.NO] = get_node("PlayControls/GridContainer/LockDownOptions/No")
 	actionOutput[CONSTANTS.LIGHT] = get_node("PlayControls/GridContainer/LockDownOptions/Light")
 	actionOutput[CONSTANTS.MEDIUM] = get_node("PlayControls/GridContainer/LockDownOptions/Medium")
@@ -196,6 +211,9 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+	if game_manager.ended:
+		paused = true
+		
 	if !paused:
 #		if game_manager.isRestarted():
 #			self.remainingDays = -1
@@ -212,7 +230,7 @@ func _process(_delta):
 #			game_manager.simulate()
 #			self.remainingDays -= 1
 #			self.running = false
-#
+
 			# For RUNNING
 			game_manager._simThread.wait_to_finish()
 			game_manager._simThread.start(self, "runSimulation", null)
@@ -233,6 +251,8 @@ func _process(_delta):
 		
 	else:
 		statOutput[CONSTANTS.SIMANIMATION].playing = false
+	
+	
 
 
 func _input(event):
@@ -284,8 +304,8 @@ func _on_PlaySpeedx2_pressed():
 		paused = false
 	else:
 		if remainingDays < 1:
-			remainingDays = CONSTANTS.WEEK * 2
-#			remainingDays = CONSTANTS.WEEK * 20
+#			remainingDays = CONSTANTS.WEEK * 2
+			remainingDays = CONSTANTS.WEEK * 45
 			statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 
 #func _on_rewind_pressed():

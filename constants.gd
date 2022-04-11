@@ -40,7 +40,7 @@ const CONFIRMRESTART = "ConfirmRestart"
 const OPTIONBUTTON = "OptionButton"
 const MENUBUTTON = "MenuButton"
 
-const LEGEND = "Legend"
+#const LEGEND = "Legend"
 
 const COUNTRYNAME = "Countryname"
 const STATCONTAINER = "StatContainer"
@@ -75,6 +75,23 @@ const DEATHOVERVIEW = "DeathOverview"
 const DEATHLEGEND = "DeathLegend"
 const DEATHNUMBERS = "DeathNumbers"
 
+
+const ENDCONTAINER = "EndContainer"
+const SUMMARYOVERVIEW = "SummaryOverview"
+const SUMMARYOVERVIEWLEGEND = "SummaryOverviewLegend"
+
+const SUMMARY = "Summary"
+
+const VAXSUMMARY = "VaxSummary"
+const VAXSUMMARYLEGEND = "VaxSummaryLegend"
+const VAXSUMMARYTEXT = "VaxSummaryText"
+
+const DEATHSUMMARY = "DeathSummary"
+const DEATHSUMMARYLEGEND = "DeathSummaryLegend"
+const DEATHSUMMARYTEXT = "DeathSummaryText"
+
+
+
 const WEEK = 7
 const MONTH = 30
 const YEAR = 360
@@ -103,6 +120,7 @@ const DEU = "Deutschland"
 
 const STATMODE = "Stats"
 const ACTIONMODE = "Action"
+const ENDMODE = "End"
 
 const STATBUTTON = "StatButton"
 const ACTIONBUTTON = "ActionButton"
@@ -114,6 +132,7 @@ const PLAYX2BUTTON = "PlayX2Button"
 #const TRYOUT_DAYS = 100
 const DAYS = "Tag"
 
+const HEALTHSTATUS = "Gesundheitsstatus"
 const SUSCEPTIBLE = "Gesund"
 const INFECTED = "Infiziert"
 const RECOVERED = "Genesen"

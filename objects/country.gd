@@ -181,7 +181,10 @@ func getPopulationToRealFactor():
 
 func getPopulationToCalculationFactor():
 	return self.populationFactor
-	
+
+func getPopulationBase():
+	return self.populationBase
+
 func recalculateDeaths():
 	self.deaths = 0
 	for state in states.values():
@@ -228,21 +231,6 @@ func recalculateHospitalBeds():
 	if self.hospitalBedsDaily[keys.max()] != self.hospitalBeds:
 		self.hospitalBedsDaily[maxKey.max()] = self.hospitalBeds
 	
-
-#func setLockdown(isTrue:bool, lockdownStrictness:float):
-#	self.lockdown = isTrue
-#	for state in states.values():
-#		state.setLockdown(isTrue, lockdownStrictness)
-
-#func imposeLockdown():
-#	self.lockdown = true
-#	for state in states.values():
-#		state.lockdown = true
-#
-#func stopLockdown():
-#	self.lockdown = false
-#	for state in states.values():
-#		state.lockdown = false
 	
 func setVaxProduction(value):
 	self.vaxProduction = value
@@ -250,6 +238,189 @@ func setVaxProduction(value):
 func getVaxProduction():
 	return self.vaxProduction
 	
+func getPopulation():
+	recalculatePopulation()
+	return self.population
+
+func getTestedSum():
+	return S[1] + I[1] + R[1]
+
+func getUnvaxedSum():
+	return unvaxSum
+#	return CONSTANTS.sum(S) + CONSTANTS.sum(I) + CONSTANTS.sum(R)
+
+func getV1Sum():
+	return v1sum
+#	return V1[0] + V1[1] + V1[2] + V1[3]
+
+func getV2Sum():
+	return v2sum
+#	return V2[0] + V2[1] + V2[2] + V2[3]
+
+func getDailyInfections(day:int, godmode:bool):
+	var difference = 0
+	for state in states.values():
+		difference += state.getDailyInfections(day, godmode)
+#	var difference = infect[day] - infect[day - 1] # zum Testen des Overlay
+#	var difference = inf1[day] - inf1[day-1] # später für Coronatests only
+	return difference if difference > 0 else 0
+
+func getDailyV1Difference(day:int):
+	if day == 1:
+		return (vax1sus[day] + vax1inf[day] + vax1hosp[day] + vax1rec[day])
+	else:
+		var difference = (vax1sus[day] + vax1inf[day] + vax1hosp[day] + vax1rec[day]) - (vax1sus[day-1] + vax1inf[day-1] + vax1hosp[day-1] + vax1rec[day-1])
+		return difference if difference > 0 else 0
+
+func getDailyV2Difference(day:int):
+	if day == 1:
+		return (vax2sus[day] + vax2inf[day] + vax2hosp[day] + vax2rec[day])
+	else:
+		var difference = (vax2sus[day] + vax2inf[day] + vax2hosp[day] + vax2rec[day]) - (vax2sus[day-1] + vax2inf[day-1] + vax2hosp[day-1] + vax2rec[day-1])
+		return difference if difference > 0 else 0
+
+func getDailyOccupiedBeds(day):
+	if day < 1:
+		return 0
+	else:
+		return hosp[day] + vax1hosp[day] + vax2hosp[day]
+
+func getHospitalAllocation(day):
+	return [hosp[day], vax1hosp[day], vax2hosp[day]]
+
+func get7DayIncidence(godmode = false):
+	var incidenceSum :float = 0
+	for state in states.values():
+		incidenceSum += state.get7DayIncidence(godmode)
+	
+	return stepify(incidenceSum/states.values().size(), 0.01)
+
+func setBorderOpen(open:bool):
+	for state in states.values():
+		state.setBorderOpen(open)
+
+func getBorderOpen():
+	var value = states[CONSTANTS.BAW].getBorderOpen()
+	for state in states.values():
+		if value != state.getBorderOpen():
+			return CONSTANTS.DIFFERENTSETTINGS
+	self.openBorder = value
+	return self.openBorder
+
+func setTestRates(index:int):
+	self.selectedTest = index
+	for state in states.values():
+		state.setTestRates(index)
+
+func setSelectedMask(index:int):
+	self.selectedMask = index
+	for state in states.values():
+		state.setSelectedMask(index)
+		
+func setSelectedHomeOffice(index:int):
+	self.selectedHomeOffice = index
+	for state in states.values():
+		state.setSelectedHomeOffice(index)
+
+func getSelectedMask():
+	var value = states[CONSTANTS.BAW].getSelectedMask()
+	for state in states.values():
+		if value != state.getSelectedMask():
+			return CONSTANTS.DIFFERENTSETTINGS
+	self.selectedMask = value
+	return self.selectedMask
+
+func getSelectedHomeOffice():
+	var value = states[CONSTANTS.BAW].getSelectedHomeOffice()
+	for state in states.values():
+		if value != state.getSelectedHomeOffice():
+			return CONSTANTS.DIFFERENTSETTINGS
+	self.selectedHomeOffice = value
+	return self.selectedHomeOffice
+
+func getSelectedTestRates():
+	var value = states[CONSTANTS.BAW].getSelectedTestRates()
+	for state in states.values():
+		if value != state.getSelectedTestRates():
+			return CONSTANTS.DIFFERENTSETTINGS
+	self.selectedTest = value
+	return self.selectedTest
+
+func setOptionChanged(isTrue:bool):
+	self.optionChanged = isTrue
+#	for state in states.values():
+#		state.setOptionChanged(isTrue)
+
+func getOptionChanged():
+	var value = states[CONSTANTS.BAW].getOptionChanged()
+	for state in states.values():
+		if value != state.getOptionChanged():
+			return true
+#	self.optionChanged = value
+	return self.optionChanged
+
+func getMaskAverage():
+	var sum = 0
+	for state in states.values():
+		sum += state.getSelectedMask()
+	return sum / float(states.values().size())
+
+func getHomeOfficeAverage():
+	var sum = 0
+	for state in states.values():
+		sum += state.getSelectedHomeOffice()
+	return sum / float(states.values().size())
+
+func getTestAverage():
+	var sum = 0
+	for state in states.values():
+		sum += state.getSelectedTestRates()
+	return sum / float(states.values().size())
+	
+func getBorderAverage():
+	var sum = 0
+	for state in states.values():
+		sum += int(!state.getBorderOpen())
+	return sum / float(states.values().size())
+
+func getUnvaxedDead(day = -1):
+	var sum :int = 0
+	for state in states.values():
+		sum += state.getUnvaxedDead(day)
+	return sum
+
+func getVax1Dead(day = -1):
+	var sum :int = 0
+	for state in states.values():
+		sum += state.getVax1Dead(day)
+	return sum
+
+func getVax2Dead(day = -1):
+	var sum :int = 0
+	for state in states.values():
+		sum += state.getVax2Dead(day)
+	return sum
+
+func getDeaths():
+	var sum :int = 0
+	for state in states.values():
+		sum += state.getDeaths()
+	return sum
+
+func getRecovered():
+	var sum :int = 0
+	for state in states.values():
+		sum += state.getRecovered()
+	return sum
+
+func getSusceptibles():
+	var sum :int = 0
+	for state in states.values():
+		sum += state.getSusceptibles()
+	return sum
+
+###############################################################################
+
 func produceVax():
 	if getAvlbVax() > populationBase * 2:
 		setVaxProduction(0)
@@ -682,99 +853,6 @@ func restartAll():
 	hosp.append(I[3])
 	
 
-#func rewindAll():
-#	var day = sus0.size() - 1
-#	for state in states.values():
-#		state.V1[0][state.getWaitDay()]
-#
-#
-#
-#
-#
-#		state.waitDay -= 1
-#		if state.getWaitDay() < 0:
-#			state.waitDay = Constants.VACDELAY - 1
-#
-#
-#		state.suscept.remove(day)
-#		state.infect.remove(day)
-#		state.recov.remove(day)
-#		state.dead.remove(day)
-#
-#		state.sus0.remove(day)
-#		state.sus1.remove(day)
-#		state.inf0.remove(day)
-#		state.inf1.remove(day)
-#		state.inf2.remove(day)
-#		state.rec0.remove(day)
-#		state.rec1.remove(day)
-#		state.rec2.remove(day)
-#		state.dead0.remove(day)
-#		state.dead1.remove(day)
-#		state.dead2.remove(day)
-#
-#		state.vax1sus.remove(day)
-#		state.vax1inf.remove(day)
-#		state.vax1hosp.remove(day)
-#		state.vax1rec.remove(day)
-#		state.vax1dead.remove(day)
-#
-#		state.vax2sus.remove(day)
-#		state.vax2inf.remove(day)
-#		state.vax2hosp.remove(day)
-#		state.vax2rec.remove(day)
-#		state.vax2dead.remove(day)
-#
-#		state.hosp.remove(day)
-#
-#
-#	suscept.remove(day)
-#	infect.remove(day)
-#	recov.remove(day)
-#	dead.remove(day)
-#
-#	sus0.remove(day)
-#	sus1.remove(day)
-#	inf0.remove(day)
-#	inf1.remove(day)
-#	inf2.remove(day)
-#	rec0.remove(day)
-#	rec1.remove(day)
-#	rec2.remove(day)
-#	dead0.remove(day)
-#	dead1.remove(day)
-#	dead2.remove(day)
-#
-#	vax1sus.remove(day)
-#	vax1inf.remove(day)
-#	vax1hosp.remove(day)
-#	vax1rec.remove(day)
-#	vax1dead.remove(day)
-#
-#	vax2sus.remove(day)
-#	vax2inf.remove(day)
-#	vax2hosp.remove(day)
-#	vax2rec.remove(day)
-#	vax2dead.remove(day)
-#
-#	hosp.remove(day)
-#
-#	S[0] = sus0[day-1]
-#	S[1] = sus1[day-1]
-#	I[0] = inf0[day-1]
-#	I[1] = inf1[day-1]
-#	I[2] = inf2[day-1]
-#	I[3] = hosp[day-1]
-#	R[0] = rec0[day-1]
-#	R[1] = rec1[day-1]
-#	R[2] = rec2[day-1]
-#	D[0] = dead0[day-1]
-#	D[1] = dead1[day-1]
-#	D[2] = dead2[day-1]
-#
-	
-
-
 func getNumbers():
 	for state in states.values():
 		S = CONSTANTS.add_arrays(S, state.S)
@@ -785,156 +863,3 @@ func getNumbers():
 		V1 = CONSTANTS.add_arrays(V1, stateV1)
 		V2 = CONSTANTS.add_arrays(V2, state.V2)
 
-func getPopulation():
-	recalculatePopulation()
-	return self.population
-
-func getTestedSum():
-	return S[1] + I[1] + R[1]
-
-func getUnvaxedSum():
-	return unvaxSum
-#	return CONSTANTS.sum(S) + CONSTANTS.sum(I) + CONSTANTS.sum(R)
-
-func getV1Sum():
-	return v1sum
-#	return V1[0] + V1[1] + V1[2] + V1[3]
-
-func getV2Sum():
-	return v2sum
-#	return V2[0] + V2[1] + V2[2] + V2[3]
-
-func getDailyInfections(day:int, godmode:bool):
-	var difference = 0
-	for state in states.values():
-		difference += state.getDailyInfections(day, godmode)
-#	var difference = infect[day] - infect[day - 1] # zum Testen des Overlay
-#	var difference = inf1[day] - inf1[day-1] # später für Coronatests only
-	return difference if difference > 0 else 0
-
-func getDailyV1Difference(day:int):
-	if day == 1:
-		return (vax1sus[day] + vax1inf[day] + vax1hosp[day] + vax1rec[day])
-	else:
-		var difference = (vax1sus[day] + vax1inf[day] + vax1hosp[day] + vax1rec[day]) - (vax1sus[day-1] + vax1inf[day-1] + vax1hosp[day-1] + vax1rec[day-1])
-		return difference if difference > 0 else 0
-
-func getDailyV2Difference(day:int):
-	if day == 1:
-		return (vax2sus[day] + vax2inf[day] + vax2hosp[day] + vax2rec[day])
-	else:
-		var difference = (vax2sus[day] + vax2inf[day] + vax2hosp[day] + vax2rec[day]) - (vax2sus[day-1] + vax2inf[day-1] + vax2hosp[day-1] + vax2rec[day-1])
-		return difference if difference > 0 else 0
-
-func getDailyOccupiedBeds(day):
-	if day < 1:
-		return 0
-	else:
-		return hosp[day] + vax1hosp[day] + vax2hosp[day]
-
-func getHospitalAllocation(day):
-	return [hosp[day], vax1hosp[day], vax2hosp[day]]
-
-func get7DayIncidence(godmode = false):
-	var incidenceSum :float = 0
-	for state in states.values():
-		incidenceSum += state.get7DayIncidence(godmode)
-	
-	return stepify(incidenceSum/states.values().size(), 0.01)
-
-func setBorderOpen(open:bool):
-	for state in states.values():
-		state.setBorderOpen(open)
-
-func getBorderOpen():
-	var value = states[CONSTANTS.BAW].getBorderOpen()
-	for state in states.values():
-		if value != state.getBorderOpen():
-			return CONSTANTS.DIFFERENTSETTINGS
-	self.openBorder = value
-	return self.openBorder
-
-func setTestRates(index:int):
-	self.selectedTest = index
-	for state in states.values():
-		state.setTestRates(index)
-
-func setSelectedMask(index:int):
-	self.selectedMask = index
-	for state in states.values():
-		state.setSelectedMask(index)
-		
-func setSelectedHomeOffice(index:int):
-	self.selectedHomeOffice = index
-	for state in states.values():
-		state.setSelectedHomeOffice(index)
-
-func getSelectedMask():
-	var value = states[CONSTANTS.BAW].getSelectedMask()
-	for state in states.values():
-		if value != state.getSelectedMask():
-			return CONSTANTS.DIFFERENTSETTINGS
-	self.selectedMask = value
-	return self.selectedMask
-
-func getSelectedHomeOffice():
-	var value = states[CONSTANTS.BAW].getSelectedHomeOffice()
-	for state in states.values():
-		if value != state.getSelectedHomeOffice():
-			return CONSTANTS.DIFFERENTSETTINGS
-	self.selectedHomeOffice = value
-	return self.selectedHomeOffice
-
-func getSelectedTestRates():
-	var value = states[CONSTANTS.BAW].getSelectedTestRates()
-	for state in states.values():
-		if value != state.getSelectedTestRates():
-			return CONSTANTS.DIFFERENTSETTINGS
-	self.selectedTest = value
-	return self.selectedTest
-
-func setOptionChanged(isTrue:bool):
-	self.optionChanged = isTrue
-#	for state in states.values():
-#		state.setOptionChanged(isTrue)
-
-func getOptionChanged():
-	var value = states[CONSTANTS.BAW].getOptionChanged()
-	for state in states.values():
-		if value != state.getOptionChanged():
-			return true
-#	self.optionChanged = value
-	return self.optionChanged
-
-func getMaskAverage():
-	var sum = 0
-	for state in states.values():
-		sum += state.getSelectedMask()
-	return sum / float(states.values().size())
-
-func getHomeOfficeAverage():
-	var sum = 0
-	for state in states.values():
-		sum += state.getSelectedHomeOffice()
-	return sum / float(states.values().size())
-
-func getTestAverage():
-	var sum = 0
-	for state in states.values():
-		sum += state.getSelectedTestRates()
-	return sum / float(states.values().size())
-	
-func getBorderAverage():
-	var sum = 0
-	for state in states.values():
-		sum += int(!state.getBorderOpen())
-	return sum / float(states.values().size())
-
-func getUnvaxedDead(day):
-	return dead0[day] + dead1[day] + dead2[day]
-
-func getVax1Dead(day):
-	return vax1dead[day]
-
-func getVax2Dead(day):
-	return vax2dead[day]

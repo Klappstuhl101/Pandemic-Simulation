@@ -118,7 +118,6 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	self.populationFactor = initPopulationFactor
 	
 	self.populationBase = int(round(self.realPopulation * self.populationFactor))
-#	self.populationBase = initPopulation
 	
 	self.populationToRealFactor = float(self.realPopulation) / float(self.populationBase)
 	
@@ -281,6 +280,9 @@ func getOccupiedBeds():
 func getRealPopulation():
 	return self.realPopulation
 
+func getPopulationBase():
+	return self.populationBase
+
 func getPopulation():
 	calculateLivingPopulation()
 	return self.population
@@ -427,17 +429,23 @@ func setOptionChanged(isTrue:bool):
 func getOptionChanged():
 	return self.optionChanged
 
-func getUnvaxedDead(day):
+func getUnvaxedDead(day = -1):
 	return dead0[day] + dead1[day] + dead2[day]
 
-func getVax1Dead(day):
+func getVax1Dead(day = -1):
 	return vax1dead[day]
 
-func getVax2Dead(day):
+func getVax2Dead(day = -1):
 	return vax2dead[day]
 
 func getWaitDay():
 	return self.waitDay
+
+func getRecovered():
+	return recov[-1]
+
+func getSusceptibles():
+	return suscept[-1]
 
 ###############################################################################
 

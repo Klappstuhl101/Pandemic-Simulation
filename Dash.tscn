@@ -182,9 +182,6 @@ animations = [ {
 "speed": 10.0
 } ]
 
-[sub_resource type="StyleBoxFlat" id=18]
-bg_color = Color( 0.266667, 0.266667, 0.266667, 1 )
-
 [sub_resource type="StyleBoxFlat" id=21]
 bg_color = Color( 1, 0, 0, 1 )
 corner_radius_top_left = 5
@@ -198,6 +195,9 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id=18]
+bg_color = Color( 0.266667, 0.266667, 0.266667, 1 )
 
 [node name="Panel" type="Panel"]
 margin_right = 1600.0
@@ -515,7 +515,7 @@ margin_top = 5.0
 margin_right = 1120.0
 margin_bottom = 53.0
 rect_min_size = Vector2( 620, 48 )
-text = "Countryname"
+text = "Name des Bundeslandes"
 align = 1
 valign = 1
 uppercase = true
@@ -557,6 +557,32 @@ text = "Tag 1"
 align = 1
 valign = 1
 uppercase = true
+
+[node name="InterventionWeight" type="ProgressBar" parent="."]
+margin_left = 620.0
+margin_top = 57.0
+margin_right = 1240.0
+margin_bottom = 105.0
+rect_min_size = Vector2( 620, 48 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_styles/fg = SubResource( 21 )
+custom_styles/bg = SubResource( 22 )
+max_value = 11.0
+step = 1.0
+value = 5.0
+percent_visible = false
+
+[node name="Label" type="Label" parent="InterventionWeight"]
+margin_left = 210.0
+margin_right = 410.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 200, 48 )
+text = "Schwere der Maßnahmen"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="TimeControls" type="GridContainer" parent="."]
 margin_top = 830.0
@@ -966,15 +992,13 @@ margin_right = 988.0
 margin_bottom = 670.0
 
 [node name="Statistics" type="ScrollContainer" parent="."]
+visible = false
 margin_left = 600.0
 margin_top = 115.0
 margin_right = 1606.0
 margin_bottom = 895.0
 rect_min_size = Vector2( 1000, 780 )
 scroll_horizontal_enabled = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="GridContainer" type="GridContainer" parent="Statistics"]
 margin_right = 994.0
@@ -1041,8 +1065,8 @@ columns = 3
 [node name="IncidenceNr" type="Label" parent="Statistics/GridContainer/Indicators"]
 margin_top = 17.0
 margin_right = 155.0
-margin_bottom = 209.0
-rect_min_size = Vector2( 150, 192 )
+margin_bottom = 157.0
+rect_min_size = Vector2( 150, 140 )
 text = "1111111111111"
 align = 1
 valign = 1
@@ -1051,8 +1075,8 @@ valign = 1
 margin_left = 159.0
 margin_top = 17.0
 margin_right = 324.0
-margin_bottom = 209.0
-rect_min_size = Vector2( 150, 192 )
+margin_bottom = 157.0
+rect_min_size = Vector2( 150, 140 )
 text = "1111111111111"
 align = 1
 valign = 1
@@ -1060,7 +1084,7 @@ valign = 1
 [node name="OverviewContainer" type="GridContainer" parent="Statistics/GridContainer/Indicators"]
 margin_left = 328.0
 margin_right = 478.0
-margin_bottom = 227.0
+margin_bottom = 175.0
 
 [node name="Overview" type="Label" parent="Statistics/GridContainer/Indicators/OverviewContainer"]
 margin_right = 150.0
@@ -1074,13 +1098,13 @@ autowrap = true
 [node name="OverviewLegend" parent="Statistics/GridContainer/Indicators/OverviewContainer" instance=ExtResource( 38 )]
 margin_top = 35.0
 margin_right = 150.0
-margin_bottom = 227.0
-rect_min_size = Vector2( 150, 192 )
+margin_bottom = 175.0
+rect_min_size = Vector2( 150, 140 )
 
 [node name="IncidenceText" type="Label" parent="Statistics/GridContainer/Indicators"]
-margin_top = 231.0
+margin_top = 179.0
 margin_right = 155.0
-margin_bottom = 262.0
+margin_bottom = 210.0
 text = "7-Tage Inzidenz
 pro 100.000 Einwohnern"
 align = 1
@@ -1088,9 +1112,9 @@ valign = 1
 
 [node name="RText" type="Label" parent="Statistics/GridContainer/Indicators"]
 margin_left = 159.0
-margin_top = 231.0
+margin_top = 179.0
 margin_right = 324.0
-margin_bottom = 262.0
+margin_bottom = 210.0
 text = "7 Tage Reproduktionswert
 "
 align = 1
@@ -1429,28 +1453,143 @@ Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
-[node name="InterventionWeight" type="ProgressBar" parent="."]
-margin_left = 620.0
-margin_top = 57.0
-margin_right = 1240.0
-margin_bottom = 105.0
-rect_min_size = Vector2( 620, 48 )
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_styles/fg = SubResource( 21 )
-custom_styles/bg = SubResource( 22 )
-max_value = 11.0
-step = 1.0
-value = 5.0
-percent_visible = false
+[node name="EndScreen" type="ScrollContainer" parent="."]
+margin_left = 600.0
+margin_top = 115.0
+margin_right = 1606.0
+margin_bottom = 895.0
+rect_min_size = Vector2( 1006, 780 )
 
-[node name="Label" type="Label" parent="InterventionWeight"]
-margin_left = 210.0
-margin_right = 410.0
-margin_bottom = 48.0
-rect_min_size = Vector2( 200, 48 )
-text = "Schwere der Maßnahmen"
+[node name="GridContainer" type="GridContainer" parent="EndScreen"]
+margin_right = 1000.0
+margin_bottom = 980.0
+rect_min_size = Vector2( 1000, 0 )
+
+[node name="TitleContainer" type="GridContainer" parent="EndScreen/GridContainer"]
+margin_right = 1000.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 1000, 0 )
+
+[node name="EndTitle" type="Label" parent="EndScreen/GridContainer/TitleContainer"]
+margin_right = 1000.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 1000, 100 )
+text = "Pandemie vorüber"
 align = 1
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+
+[node name="SummaryContainer" type="GridContainer" parent="EndScreen/GridContainer"]
+margin_top = 104.0
+margin_right = 1000.0
+margin_bottom = 392.0
+rect_min_size = Vector2( 1000, 0 )
+columns = 4
+
+[node name="SummaryOverview" parent="EndScreen/GridContainer/SummaryContainer" instance=ExtResource( 43 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 396.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 396, 288 )
+Chart_Style/function_colors = PoolColorArray( 0, 1, 0, 1, 0, 0.498039, 1, 1, 1, 1, 1, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/font_color = Color( 1, 1, 1, 1 )
+
+[node name="SummaryOverviewLegend" parent="EndScreen/GridContainer/SummaryContainer" instance=ExtResource( 38 )]
+margin_left = 400.0
+margin_right = 580.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 180, 0 )
+
+[node name="VSeparator" type="VSeparator" parent="EndScreen/GridContainer/SummaryContainer"]
+margin_left = 584.0
+margin_right = 598.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 14, 0 )
+
+[node name="Summary" type="Label" parent="EndScreen/GridContainer/SummaryContainer"]
+margin_left = 602.0
+margin_right = 998.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 396, 288 )
+text = "Hier kommt ein Text rein"
+valign = 1
+autowrap = true
+
+[node name="VaxSummaryContainer" type="GridContainer" parent="EndScreen/GridContainer"]
+margin_top = 396.0
+margin_right = 1000.0
+margin_bottom = 684.0
+rect_min_size = Vector2( 1000, 0 )
+columns = 4
+
+[node name="VaxSummary" parent="EndScreen/GridContainer/VaxSummaryContainer" instance=ExtResource( 43 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 396.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 396, 288 )
+Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+
+[node name="VaxSummaryLegend" parent="EndScreen/GridContainer/VaxSummaryContainer" instance=ExtResource( 38 )]
+margin_left = 400.0
+margin_right = 580.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 180, 0 )
+
+[node name="VSeparator" type="VSeparator" parent="EndScreen/GridContainer/VaxSummaryContainer"]
+margin_left = 584.0
+margin_right = 598.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 14, 0 )
+
+[node name="VaxSummaryText" type="Label" parent="EndScreen/GridContainer/VaxSummaryContainer"]
+margin_left = 602.0
+margin_right = 998.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 396, 288 )
+text = "Hier kommt ein Text rein"
+valign = 1
+autowrap = true
+
+[node name="DeathSummaryContainer" type="GridContainer" parent="EndScreen/GridContainer"]
+margin_top = 688.0
+margin_right = 1000.0
+margin_bottom = 976.0
+rect_min_size = Vector2( 1000, 0 )
+columns = 4
+
+[node name="DeathSummary" parent="EndScreen/GridContainer/DeathSummaryContainer" instance=ExtResource( 43 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 396.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 396, 288 )
+Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+
+[node name="DeathSummaryLegend" parent="EndScreen/GridContainer/DeathSummaryContainer" instance=ExtResource( 38 )]
+margin_left = 400.0
+margin_right = 580.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 180, 0 )
+
+[node name="VSeparator" type="VSeparator" parent="EndScreen/GridContainer/DeathSummaryContainer"]
+margin_left = 584.0
+margin_right = 598.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 14, 0 )
+
+[node name="DeathSummaryText" type="Label" parent="EndScreen/GridContainer/DeathSummaryContainer"]
+margin_left = 602.0
+margin_right = 998.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 396, 288 )
+text = "Hier kommt ein Text rein"
+valign = 1
+autowrap = true
+
+[node name="GridContainer2" type="GridContainer" parent="EndScreen/GridContainer"]
+margin_top = 980.0
+margin_right = 1000.0
+margin_bottom = 980.0

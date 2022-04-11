@@ -292,6 +292,11 @@ func showEnd():
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
 	
+	for button in buttons.values():
+		button.disabled = true
+#	buttons[CONSTANTS.STATBUTTON].disabled = true
+#	buttons[CONSTANTS.ACTIONBUTTON].disabled = true
+	
 	
 	var summaryOverview = getSummaryOverview()
 	statOutput[CONSTANTS.SUMMARYOVERVIEW].plot_from_array(summaryOverview)
@@ -711,15 +716,18 @@ func getSummaryOverview():
 	var sumSus = getProjectedToRealPopulation(active.getSusceptibles())
 	var sumRecov = getProjectedToRealPopulation(active.getRecovered())
 	var sumDead = getProjectedToRealPopulation(active.getDeaths())
-	return [[CONSTANTS.HEALTHSTATUS, "Anzahl Personen"], [CONSTANTS.SUSCEPTIBLE, sumSus], [CONSTANTS.RECOVERED, sumRecov], [CONSTANTS.DEAD, sumDead]]
+	var sumInf = getProjectedToRealPopulation(active.getInfected())
+	return [[CONSTANTS.HEALTHSTATUS, "Anzahl Personen"], [CONSTANTS.SUSCEPTIBLE, sumSus], [CONSTANTS.RECOVERED, sumRecov], [CONSTANTS.DEAD, sumDead], [CONSTANTS.INFECTED, sumInf]]
 
 func getSummaryText(summary):
-	var sum :int = summary[1][1] + summary[2][1] + summary[3][1]
+#	var sum :int = summary[1][1] + summary[2][1] + summary[3][1]
+	var sum :int = getProjectedToRealPopulation(active.getPopulationBase())
 	var str0 :String = "Die Pandemie hat %d Tage gedauert. \n \n" % self.endDay 
 	var str1 :String = "%.2f%% der Bevölkerung haben sich nicht angesteckt. \n \n" % ((float(summary[1][1])/sum) * 100)
 	var str2 :String = "%.2f%% der Bevölkerung sind Genesen. \n \n" % ((float(summary[2][1])/sum) * 100)
 	var str3 :String = "%.2f%% der Bevölkerung sind am Virus gestorben.\n \n" % ((float(summary[3][1])/sum) * 100)
-	var str4 :String = "Damit wurden %.2f%% der Menschen mit dem Virus infiziert." % ((float(summary[2][1] + summary[3][1])/sum) * 100)
+#	var str4 :String = "Damit wurden %.2f%% der Menschen mit dem Virus infiziert." % ((float(summary[2][1] + summary[3][1])/sum) * 100)
+	var str4 :String = "Damit wurden %.2f%% der Menschen mit dem Virus infiziert." % (((float(summary[2][1])/sum) * 100) + ((float(summary[3][1])/sum) * 100))
 	
 	return str0 + str1 + str2 + str3 + str4
 
@@ -772,7 +780,7 @@ func simulate():
 	
 	var endTime = OS.get_ticks_msec()
 	var timeDiff = endTime - startTime
-	print("%23s SIMULATION OF DAY " % "", days[-1], " TOOK: ", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", int(timeDiff) % 1000)
+	print("%23s SIMULATION OF DAY " % "", days[-1], " TOOK: ", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":%003d" % (int(timeDiff) % 1000))
 
 
 
@@ -792,6 +800,10 @@ func updateDay():
 
 func restart():
 	self.restarted = true
+	
+	for button in buttons.values():
+		button.disabled = false
+	
 	buttons[CONSTANTS.STATBUTTON].disabled = true
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
@@ -808,6 +820,7 @@ func restart():
 	self.interval = CONSTANTS.WEEK
 	
 	setMode(CONSTANTS.STATMODE)
+	self.ended = false
 	
 	active = entities[CONSTANTS.DEU]
 	activate()
@@ -1369,6 +1382,7 @@ func connectSignals():
 	actionOutput[CONSTANTS.GODMODEBUTTON].connect("toggled", self, "_on_godmode_toggled")
 	actionOutput[CONSTANTS.RESTARTBUTTON].connect("pressed", self, "_on_restart_pressed")
 	actionOutput[CONSTANTS.CONFIRMRESTART].connect("confirmed", self, "_on_restart_confirmed")
+	actionOutput[CONSTANTS.ENDRESTART].connect("pressed", self, "_on_restart_pressed")
 	
 	buttons[CONSTANTS.STATBUTTON].connect("pressed", self, "_on_statButton_press")
 	buttons[CONSTANTS.ACTIONBUTTON].connect("pressed", self, "_on_actionButton_press")

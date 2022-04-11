@@ -107,6 +107,8 @@ func _init(initStates, initName, initButton):
 	self.populationToRealFactor = float(self.realPopulation) / float(self.populationBase)
 	self.deaths = 0
 	
+	print(self.name, " || ", "Real Population %d" % self.realPopulation, " populationBase %d" % self.populationBase)
+	
 	self.hospitalBedsDaily = {0:0}
 	setHospitalBeds(0, (27681 + 7436) * populationFactor) # Anzahl Krankenhausbetten in Deutschland, nachgeschauter Wert
 	recalculateHospitalBeds()
@@ -419,6 +421,11 @@ func getSusceptibles():
 		sum += state.getSusceptibles()
 	return sum
 
+func getInfected():
+	var sum :int = 0
+	for state in states.values():
+		sum += state.getInfected()
+	return sum
 ###############################################################################
 
 func produceVax():
@@ -660,25 +667,30 @@ func simulateALL():
 	
 	var endTime = OS.get_ticks_msec()
 	var timeDiff = endTime - startTime
-	print("%31s Distribution took: " % "", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", int(timeDiff) % 1000)
+	print("%31s Distribution took: " % "", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":%003d" % (int(timeDiff) % 1000))
 	
 	
 	
 	startTime = OS.get_ticks_msec()
 	
 	for state in states.values():
+#		state.simulate()
 		state._thread.start(self, "simulateState", state.getName())
-	
+
 	for state in states.values():
 		state._thread.wait_to_finish()
 	
 	
 	endTime = OS.get_ticks_msec()
 	timeDiff = endTime - startTime
-	print("%28s Main Simulation took: " % "", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":", int(timeDiff) % 1000)
+	print("%28s Main Simulation took: " % "", floor(timeDiff/1000.0/60.0/60), ":", int(timeDiff/1000.0/60.0)%60, ":", int(timeDiff/1000.0)%60, ":%003d" % (int(timeDiff) % 1000))
 	
 	
 	homeCommuters()
+	
+	
+	for state in states.values():
+		state.collectNumbers()
 	
 	getNumbers()
 	

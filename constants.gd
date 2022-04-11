@@ -90,6 +90,7 @@ const DEATHSUMMARY = "DeathSummary"
 const DEATHSUMMARYLEGEND = "DeathSummaryLegend"
 const DEATHSUMMARYTEXT = "DeathSummaryText"
 
+const ENDRESTART = "EndRestart"
 
 
 const WEEK = 7

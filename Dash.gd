@@ -139,6 +139,7 @@ func _ready():
 	actionOutput[CONSTANTS.GODMODEBUTTON] = get_node("PlayControls/GridContainer/GodmodeContainer/GodmodeButton")
 	actionOutput[CONSTANTS.RESTARTBUTTON] = get_node("PlayControls/GridContainer/GodmodeContainer/RestartButton")
 	actionOutput[CONSTANTS.CONFIRMRESTART] = get_node("PlayControls/GridContainer/GodmodeContainer/RestartButton/ConfirmRestart")
+	actionOutput[CONSTANTS.ENDRESTART] = get_node("EndScreen/GridContainer/RestartContainer/EndRestartButton")
 	
 	buttons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
 	buttons[CONSTANTS.ACTIONBUTTON] = get_node("ModeControl/ActionMode")
@@ -215,11 +216,6 @@ func _process(_delta):
 		paused = true
 		
 	if !paused:
-#		if game_manager.isRestarted():
-#			self.remainingDays = -1
-##			game_manager._simThread.wait_to_finish()
-##			game_manager.restart()
-			
 		if remainingDays > 0 and !running:
 			Constants.currentProgress = 0
 			statOutput[CONSTANTS.PROGRESSPANEL].visible = true

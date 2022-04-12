@@ -1000,6 +1000,7 @@ margin_right = 995.0
 margin_bottom = 675.0
 
 [node name="Statistics" type="ScrollContainer" parent="."]
+visible = false
 margin_left = 600.0
 margin_top = 115.0
 margin_right = 1606.0
@@ -1491,7 +1492,6 @@ Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
 [node name="EndScreen" type="ScrollContainer" parent="."]
-visible = false
 margin_left = 600.0
 margin_top = 115.0
 margin_right = 1606.0
@@ -1500,7 +1500,7 @@ rect_min_size = Vector2( 1006, 780 )
 
 [node name="GridContainer" type="GridContainer" parent="EndScreen"]
 margin_right = 1000.0
-margin_bottom = 980.0
+margin_bottom = 1272.0
 rect_min_size = Vector2( 1000, 0 )
 
 [node name="TitleContainer" type="GridContainer" parent="EndScreen/GridContainer"]
@@ -1641,3 +1641,49 @@ rect_min_size = Vector2( 396, 288 )
 text = "Hier kommt ein Text rein"
 valign = 1
 autowrap = true
+
+[node name="ChronicContainer" type="GridContainer" parent="EndScreen/GridContainer"]
+margin_top = 980.0
+margin_right = 1000.0
+margin_bottom = 1268.0
+rect_min_size = Vector2( 1000, 0 )
+columns = 4
+
+[node name="Chronic" parent="EndScreen/GridContainer/ChronicContainer" instance=ExtResource( 45 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 476.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 476, 288 )
+Chart_Style/function_colors = PoolColorArray( 0, 1, 0, 1, 1, 0, 0, 1, 0, 0.501961, 1, 1, 1, 1, 1, 1 )
+Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
+Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
+Chart_Style/font_color = Color( 1, 1, 1, 1 )
+Chart_Style/use_template = false
+
+[node name="ChronicLegend" parent="EndScreen/GridContainer/ChronicContainer" instance=ExtResource( 38 )]
+margin_left = 480.0
+margin_right = 580.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 100, 0 )
+
+[node name="VSeparator" type="VSeparator" parent="EndScreen/GridContainer/ChronicContainer"]
+margin_left = 584.0
+margin_right = 598.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 14, 0 )
+
+[node name="ChronicSummary" type="Label" parent="EndScreen/GridContainer/ChronicContainer"]
+margin_left = 602.0
+margin_right = 998.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 396, 288 )
+text = "Hier kommt ein Text rein"
+valign = 1
+autowrap = true
+
+[node name="GridContainer" type="GridContainer" parent="EndScreen/GridContainer"]
+margin_top = 1272.0
+margin_right = 1000.0
+margin_bottom = 1272.0

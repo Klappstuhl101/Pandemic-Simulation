@@ -114,6 +114,10 @@ func _ready():
 	statOutput[CONSTANTS.DEATHSUMMARYLEGEND] = get_node("EndScreen/GridContainer/DeathSummaryContainer/DeathSummaryLegend")
 	statOutput[CONSTANTS.DEATHSUMMARYTEXT] = get_node("EndScreen/GridContainer/DeathSummaryContainer/DeathSummaryText")
 	
+	statOutput[CONSTANTS.CHRONIC] = get_node("EndScreen/GridContainer/ChronicContainer/Chronic")
+	statOutput[CONSTANTS.CHRONICLEGEND] = get_node("EndScreen/GridContainer/ChronicContainer/ChronicLegend")
+	statOutput[CONSTANTS.CHRONICSUMMARYTEXT] = get_node("EndScreen/GridContainer/ChronicContainer/ChronicSummary")
+	
 	
 	actionOutput[CONSTANTS.NO] = get_node("PlayControls/GridContainer/LockDownOptions/No")
 	actionOutput[CONSTANTS.LIGHT] = get_node("PlayControls/GridContainer/LockDownOptions/Light")

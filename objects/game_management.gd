@@ -292,6 +292,10 @@ func showEnd():
 	statOutput[CONSTANTS.DEATHSUMMARY].plot_from_array(deathSummary)
 	statOutput[CONSTANTS.DEATHSUMMARYTEXT].text = getDeathSummaryText(deathSummary)
 	
+	var chronicSummary = getChronic()
+	statOutput[CONSTANTS.CHRONIC].plot_from_array(chronicSummary)
+	statOutput[CONSTANTS.CHRONICSUMMARYTEXT].text = getChronicText(chronicSummary)
+	
 	if !ended:
 		ended = true
 		establishEndLegends()
@@ -694,13 +698,13 @@ func getDeathOverview(dayArray):
 	
 	return output
 
+###############################################################################
 
 func getSummaryOverview():
 	var sumSus = getProjectedToRealPopulation(active.getSusceptibles())
 	var sumRecov = getProjectedToRealPopulation(active.getRecovered())
 	var sumDead = getProjectedToRealPopulation(active.getDeaths())
-	var sumInf = getProjectedToRealPopulation(active.getInfected())
-	return [[CONSTANTS.HEALTHSTATUS, "Anzahl Personen"], [CONSTANTS.SUSCEPTIBLE, sumSus], [CONSTANTS.RECOVERED, sumRecov], [CONSTANTS.DEAD, sumDead], [CONSTANTS.INFECTED, sumInf]]
+	return [[CONSTANTS.HEALTHSTATUS, "Anzahl Personen"], [CONSTANTS.SUSCEPTIBLE, sumSus], [CONSTANTS.RECOVERED, sumRecov], [CONSTANTS.DEAD, sumDead]]
 
 func getSummaryText(summary):
 #	var sum :int = summary[1][1] + summary[2][1] + summary[3][1]
@@ -735,6 +739,48 @@ func getDeathSummaryText(summary):
 	var str3 :String = "%.2f%% der Verstorbenen war 2x geimpft." % ((float(summary[3][1])/sum) * 100)
 	
 	return str0 + str1 + str2 + str3
+	
+
+func getChronic():
+	var output = []
+	var time = self.days.duplicate(true)
+	time.append(currentDay)
+	time.push_front(CONSTANTS.DAYS)
+	var sus = active.suscept.duplicate(true)
+	var inf = active.infect.duplicate(true)
+	var recov = active.recov.duplicate(true)
+	var dead = active.dead.duplicate(true)
+	
+	for i in range(1, sus.size()):
+		sus[i] = getProjectedToRealPopulation(sus[i])
+		inf[i] = getProjectedToRealPopulation(inf[i])
+		recov[i] = getProjectedToRealPopulation(recov[i])
+		dead[i] = getProjectedToRealPopulation(dead[i])
+	
+	output.append(time)
+	output.append(sus)
+	output.append(inf)
+	output.append(recov)
+	output.append(dead)
+	
+	return output
+
+func getChronicText(summary):
+	summary[2].pop_front()
+	var str0 :String = "An Tag %d waren mit %d die meisten Personen aktiv infiziert. \n \n " % [summary[2].find(summary[2].max()), summary[2].max()]
+	var newInfections = []
+	for i in range(1, summary[2].size()):
+		newInfections.append(summary[2][i] - summary[2][i-1])
+	
+	var str1 :String = "Die meisten Neuansteckungen innerhalb eines Tages waren an Tag %d mit %d Neuinfektionen. \n \n" % [newInfections.find(newInfections.max()) + 2, newInfections.max()]
+	
+	return str0 + str1
+
+
+
+
+
+
 ###############################################################################
 
 func simulate():
@@ -1193,10 +1239,15 @@ func _show_deathSummary_legend():
 	for function in statOutput[CONSTANTS.DEATHSUMMARY].get_legend():
 		statOutput[CONSTANTS.DEATHSUMMARYLEGEND].add_child(function)
 
+func _show_chronic_legend():
+	for function in statOutput[CONSTANTS.CHRONIC].get_legend():
+		statOutput[CONSTANTS.CHRONICLEGEND].add_child(function)
+
 func establishEndLegends():
 	_show_summary_legend()
 	_show_vaxSummary_legend()
 	_show_deathSummary_legend()
+	_show_chronic_legend()
 	
 	print("EndLegends established")
 

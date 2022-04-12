@@ -90,6 +90,10 @@ const DEATHSUMMARY = "DeathSummary"
 const DEATHSUMMARYLEGEND = "DeathSummaryLegend"
 const DEATHSUMMARYTEXT = "DeathSummaryText"
 
+const CHRONIC = "Chronic"
+const CHRONICLEGEND = "ChronicLegend"
+const CHRONICSUMMARYTEXT = "ChronicSummaryText"
+
 const ENDRESTART = "EndRestart"
 
 

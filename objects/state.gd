@@ -121,7 +121,7 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	
 	self.populationToRealFactor = float(self.realPopulation) / float(self.populationBase)
 	
-	print(self.name, " || ", "Real Population %d" % self.realPopulation, " populationBase %d" % self.populationBase)
+#	print(self.name, " || ", "Real Population %d" % self.realPopulation, " populationBase %d" % self.populationBase)
 	
 	self.mapButton = initButton
 	self.neighbors = initNeighbors
@@ -326,7 +326,7 @@ func get7DayIncidence(godmode = false):
 			else:
 				newCases += (inf1[index] - inf1[index - 1]) + (hosp[index] - hosp[index - 1]) + (vax1hosp[index] - vax1hosp[index - 1]) + (vax2hosp[index] - vax2hosp[index - 1])
 	
-	var incidence = stepify((float(newCases)/float(getPopulation())) * 100000, 0.01)
+	var incidence = stepify((float(newCases)/float(getPopulation())) * 100000, 0.1)
 	return incidence if incidence > 0 else 0
 
 func getUnvaxedSum():
@@ -491,41 +491,6 @@ func simulate():
 	V1[3][waitDay] = 0
 	V1[4][waitDay] = 0
 	
-	
-	
-	
-#	suscept.append(S[0] + S[1] + S[2])
-#	suscept.append(S[0] + S[1] + CONSTANTS.sum(V1[0]) + V1eligible[0] + V2[0])
-#	infect.append(CONSTANTS.sum(I) + CONSTANTS.sum(V1[1]) + CONSTANTS.sum(V1[2]) + V1eligible[1] + V1eligible[2] + V2[1] + V2[2])
-#	recov.append(R[0] + R[1] + R[2] + CONSTANTS.sum(V1[3]) + V1eligible[3] + V2[3])
-#	dead.append(D[0] + D[1] + D[2] + CONSTANTS.sum(V1[4]) + V1eligible[4] + V2[4])
-#
-#	sus0.append(S[0])
-#	sus1.append(S[1])
-##	sus2.append(S[2])
-#	inf0.append(I[0])
-#	inf1.append(I[1])
-#	inf2.append(I[2])
-#	rec0.append(R[0])
-#	rec1.append(R[1])
-#	rec2.append(R[2])
-#	dead0.append(D[0])
-#	dead1.append(D[1])
-#	dead2.append(D[2])
-#
-#	vax1sus.append(CONSTANTS.sum(V1[0]) + V1eligible[0])
-#	vax1inf.append(CONSTANTS.sum(V1[1]) + V1eligible[1])
-#	vax1hosp.append(CONSTANTS.sum(V1[2]) + V1eligible[2])
-#	vax1rec.append(CONSTANTS.sum(V1[3]) + V1eligible[3])
-#	vax1dead.append(CONSTANTS.sum(V1[4]) + V1eligible[4])
-#
-#	vax2sus.append(V2[0])
-#	vax2inf.append(V2[1])
-#	vax2hosp.append(V2[2])
-#	vax2rec.append(V2[3])
-#	vax2dead.append(V2[4])
-#
-#	hosp.append(I[3])
 	
 	Constants.currentProgress += 1
 	

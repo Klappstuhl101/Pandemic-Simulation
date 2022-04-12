@@ -134,12 +134,6 @@ func showAction():
 	statOutput[CONSTANTS.STATCONTAINER].visible = false
 	statOutput[CONSTANTS.ENDCONTAINER].visible = false
 	
-#	if self.optionChanged:
-#		actionOutput[CONSTANTS.USERDEFINED].pressed = self.optionChanged
-#		self.optionChanged = false
-	
-#	actionOutput[CONSTANTS.MASKOPTION].select(active.getSelectedMask())
-#	actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(active.getSelectedHomeOffice())
 	
 	if active.getName() == entities[CONSTANTS.DEU].getName():
 		if !optionAdded:
@@ -148,18 +142,6 @@ func showAction():
 		actionOutput[CONSTANTS.BORDERTIP].visible = (true if entities[CONSTANTS.DEU].getBorderOpen() is int else false)
 		actionOutput[CONSTANTS.BORDERCONTROL].pressed = !entities[CONSTANTS.DEU].getBorderOpen() if entities[CONSTANTS.DEU].getBorderOpen() is bool else false
 		
-#		if entities[CONSTANTS.DEU].getSelectedMask() == entities[CONSTANTS.DEU].getSelectedHomeOffice() and entities[CONSTANTS.DEU].getOptionChanged: 
-#			match entities[CONSTANTS.DEU].getSelectedMask():
-#				0:
-#					actionOutput[CONSTANTS.NO].pressed = true
-#				1:
-#					actionOutput[CONSTANTS.LIGHT].pressed = true
-#				2:
-#					actionOutput[CONSTANTS.MEDIUM].pressed = true
-#				3:
-#					actionOutput[CONSTANTS.HEAVY].pressed = true
-#		else:
-#			actionOutput[CONSTANTS.USERDEFINED].pressed = true
 		
 	else:
 		if optionAdded:
@@ -373,7 +355,8 @@ func updateMap():
 #	print("Inzidenz Deutschland ", incidences[incidences.size() -1], " // Inzidenz Durchschnitt: " , float(CONSTANTS.sum(incidences) - incidences[incidences.size() -1]) / 16.0)
 	i = statOutput[CONSTANTS.INCIDENCELABELS].get_children().size()
 	for label in statOutput[CONSTANTS.INCIDENCELABELS].get_children():
-		label.text = String(stepify(incidences.max() * (i/float(statOutput[CONSTANTS.INCIDENCELABELS].get_children().size())), 0.1))
+		var output :float = incidences.max() * (i/float(statOutput[CONSTANTS.INCIDENCELABELS].get_children().size()))
+		label.text = String(stepify(output,0.1)) if output < 1000 else String(int(output))
 		i -= 1
 
 func getMode():
@@ -852,22 +835,12 @@ func _on_BAW_press(_toggle):
 func _on_BAY_press(_toggle):
 	active = entities.get(CONSTANTS.BAY)
 	activate()
-#	if _toggle:
-#		active = entities.get(CONSTANTS.BAY)
-#		activate()
-#	else:
-#		active.mapButton.pressed = true
 func _on_BER_press(_toggle):
 	active = entities.get(CONSTANTS.BER)
 	activate()
 func _on_BRA_press(_toggle):
 	active = entities.get(CONSTANTS.BRA)
 	activate()
-#	if _toggle:
-#		active = entities.get(CONSTANTS.BRA)
-#		activate()
-#	else:
-#		active.mapButton.pressed = true
 func _on_BRE_press(_toggle):
 	active = entities.get(CONSTANTS.BRE)
 	activate()
@@ -883,18 +856,6 @@ func _on_MVP_press(_toggle):
 func _on_NIE_press(_toggle):
 	active = entities.get(CONSTANTS.NIE)
 	activate()
-#	if _toggle:
-#		active = entities.get(CONSTANTS.NIE)
-##		self.material.set_shader_param("testcolor", Color(1.0,0.0,0.0))
-#		active.mapButton.material.set_shader_param("vaccinated", counter)
-#		active.mapButton.material.set_shader_param("infected", counter)
-#		var color = active.mapButton.material.get_shader_param("infectGradient").get_gradient().interpolate(counter)
-#		active.mapButton.material.get_shader_param("twoColorGradient").get_gradient().set_color(0,color)
-#		print(counter)
-#		counter += 0.01
-#		activate()
-#	else:
-#		active.mapButton.pressed = true
 func _on_NRW_press(_toggle):
 	active = entities.get(CONSTANTS.NRW)
 	activate()
@@ -923,14 +884,10 @@ func _on_DEU_press(_toggle):
 		
 func _on_statButton_press():
 	setMode(CONSTANTS.STATMODE)
-#	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = false
-#	statOutput[CONSTANTS.STATCONTAINER].visible = true
 	showStats()
 	
 func _on_actionButton_press():
 	setMode(CONSTANTS.ACTIONMODE)
-#	statOutput[CONSTANTS.STATCONTAINER].visible = false
-#	actionOutput[CONSTANTS.ACTIONCONTAINER].visible = true
 	showAction()
 	
 
@@ -957,120 +914,27 @@ func _on_maxButton_press():
 func _on_NO_toggled(pressed:bool):
 	if pressed:
 		lockdownSelection(0)
-#		active.setSelectedMask(0)
-#		active.setSelectedHomeOffice(0)
-#
-#		actionOutput[CONSTANTS.MASKOPTION].select(0)
-#		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(0)
-#
-#		active.setOptionChanged(false)
-#		_on_mask_selected(0)
-#		_on_homeOffice_selected(0)
-		
-#		self.optionChanged = false
-#		self.lockdownFactor = self.selectedLockdown[0]
-#
-#		self.selectedMask = 0
-#		self.selectedHomeOffice = 0
-#
-#		actionOutput[CONSTANTS.MASKOPTION].select(self.selectedMask)
-#		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(self.selectedHomeOffice)
-#		active.setCommuterFactor(commuterFactors[self.selectedHomeOffice])
-#
-#		self.optionChanged = false
-#
-#		active.setLockdown(getIsLockdown(), getLockdownStrictness())
+
 
 func _on_LIGHT_toggled(pressed:bool):
 	if pressed:
 		lockdownSelection(1)
-#		active.setSelectedMask(1)
-#		active.setSelectedHomeOffice(1)
-#
-#		actionOutput[CONSTANTS.MASKOPTION].select(1)
-#		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(1)
-#
-#		active.setOptionChanged(false)
-#		_on_mask_selected(1)
-#		_on_homeOffice_selected(1)
-		
-#		self.optionChanged = false
-#		self.lockdownFactor = self.selectedLockdown[1]
-#
-#		self.selectedMask = 1
-#		self.selectedHomeOffice = 1
-#
-#		actionOutput[CONSTANTS.MASKOPTION].select(self.selectedMask)
-#		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(self.selectedHomeOffice)
-#		active.setCommuterFactor(commuterFactors[self.selectedHomeOffice])
-#
-#		self.optionChanged = false
-#
-#		active.setLockdown(getIsLockdown(), getLockdownStrictness())
+
 
 func _on_MEDIUM_toggled(pressed:bool):
 	if pressed:
 		lockdownSelection(2)
-#		active.setSelectedMask(2)
-#		active.setSelectedHomeOffice(2)
-#
-#		actionOutput[CONSTANTS.MASKOPTION].select(2)
-#		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(2)
-#
-#		active.setOptionChanged(false)
-#		_on_mask_selected(2)
-#		_on_homeOffice_selected(2)
-		
-#		self.optionChanged = false
-#		self.lockdownFactor = self.selectedLockdown[2]
-#
-#		self.selectedMask = 2
-#		self.selectedHomeOffice = 2
-#
-#		actionOutput[CONSTANTS.MASKOPTION].select(self.selectedMask)
-#		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(self.selectedHomeOffice)
-#		active.setCommuterFactor(commuterFactors[self.selectedHomeOffice])
-#
-#		self.optionChanged = false
-#
-#		active.setLockdown(getIsLockdown(), getLockdownStrictness())
+
 
 func _on_HEAVY_toggled(pressed:bool):
 	if pressed:
 		lockdownSelection(3)
-#		active.setSelectedMask(3)
-#		active.setSelectedHomeOffice(3)
-#
-#		actionOutput[CONSTANTS.MASKOPTION].select(3)
-#		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(3)
-#
-#		active.setOptionChanged(false)
-#		_on_mask_selected(3)
-#		_on_homeOffice_selected(3)
-		
-#		self.optionChanged = false
-#		self.lockdownFactor = self.selectedLockdown[3]
-#
-#		self.selectedMask = 3
-#		self.selectedHomeOffice = 3
-#		actionOutput[CONSTANTS.MASKOPTION].select(self.selectedMask)
-#		actionOutput[CONSTANTS.HOMEOFFICEOPTION].select(self.selectedHomeOffice)
-#		active.setCommuterFactor(commuterFactors[self.selectedHomeOffice])
-#
-#
-#
-#		self.optionChanged = false
-#
-#		active.setLockdown(getIsLockdown(), getLockdownStrictness())
+
 
 func _on_USERDEFINED_toggled(pressed:bool):
 	if pressed:
 		pass
-#		self.optionChanged = false
-#		self.lockdownFactor = self.selectedLockdown[int(CONSTANTS.average([self.selectedMask, self.selectedHomeOffice]))]
-##		active.setCommuterFactor(commuterFactors[self.selectedHomeOffice])
-#
-#		active.setLockdown(getIsLockdown(), getLockdownStrictness())
+
 
 func lockdownSelection(index:int):
 	active.setSelectedMask(index)
@@ -1081,6 +945,11 @@ func lockdownSelection(index:int):
 	
 	entities[CONSTANTS.DEU].setOptionChanged(true)
 	active.setOptionChanged(false)
+	
+	if active.getName() == entities[CONSTANTS.DEU].getName():
+		for state in entities[CONSTANTS.DEU].states.values():
+			state.setOptionChanged(false)
+	
 	updateInterventionWeight()
 
 func _on_borderControl_toggle(button_pressed:bool):
@@ -1090,15 +959,6 @@ func _on_borderControl_toggle(button_pressed:bool):
 				entities[CONSTANTS.DEU].setBorderOpen(false)
 		else:
 			active.setBorderOpen(!button_pressed)
-#	if active.getName() == entities[CONSTANTS.DEU].getName() and entities[CONSTANTS.DEU].getBorderOpen() is int:
-#		pass
-#	if active.getName() == entities[CONSTANTS.DEU].getName() and entities[CONSTANTS.DEU].getOptionChanged():
-#		pass
-#	else:
-#		active.setBorderOpen(!button_pressed)
-#	self.optionChanged = true
-#	self.selectedHomeOffice = 4
-#	print("Border Control ", button_pressed)
 	else:
 		active.setBorderOpen(!button_pressed)
 	

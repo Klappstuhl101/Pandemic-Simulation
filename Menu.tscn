@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Menu.gd" type="Script" id=1]
 [ext_resource path="res://resources/standard_theme.theme" type="Theme" id=2]
 [ext_resource path="res://resources/map/Deutschland.png" type="Texture" id=3]
+[ext_resource path="res://resources/fonts/sansation_bold_big.tres" type="DynamicFont" id=4]
+[ext_resource path="res://resources/fonts/sansation_bold_normal.tres" type="DynamicFont" id=5]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -46,13 +48,25 @@ rect_min_size = Vector2( 550, 0 )
 modulate = Color( 1, 1, 1, 0 )
 self_modulate = Color( 0, 0, 0, 0 )
 margin_right = 550.0
-margin_bottom = 300.0
-rect_min_size = Vector2( 550, 300 )
+margin_bottom = 150.0
+rect_min_size = Vector2( 550, 150 )
+
+[node name="Explanation" type="Label" parent="ImageTexture/Infocontainer"]
+margin_top = 154.0
+margin_right = 550.0
+margin_bottom = 481.0
+text = "Ausführliche Statistiken, eine Übersichtkarte und verschiedene Eindämmungsmaßnahmen sind verfügbar. Fast jede Maßnahme kann auch für einzelne Bundesländer ausgewählt werden. 
+
+Die Übersichtskarte färbt sich entsprechend der Inzidenz des zu Grunde liegenden (Bundes-)Landes ein. Der Hintergrund der Karte wird sich entsprechend an Eskalationsstufen der Pandemie ebenso einfärben.
+
+Die Simulation umfasst gesunde, infizierte, genesene und tote Personen. Infizierte Personen können auch ins Krankenhaus eingeliefert werden. Impfungen sind als Maßnahmen ebenso verfügbar, wie Infektionstests von ungeimpften Personen. Außerdem gibt es Pendlerströme zwischen den einzelnen Bundesländern, die durch die ergreifbaren Maßnahmen geschwächt oder gestoppt werden können.
+"
+autowrap = true
 
 [node name="PopulationDescription" type="Label" parent="ImageTexture/Infocontainer"]
-margin_top = 304.0
+margin_top = 485.0
 margin_right = 550.0
-margin_bottom = 488.0
+margin_bottom = 724.0
 rect_min_size = Vector2( 550, 0 )
 text = "Erklärung Populationsfaktor:
 
@@ -66,9 +80,9 @@ Bsp.:
 autowrap = true
 
 [node name="VaxWaitDayDescription" type="Label" parent="ImageTexture/Infocontainer"]
-margin_top = 492.0
+margin_top = 728.0
 margin_right = 550.0
-margin_bottom = 574.0
+margin_bottom = 835.0
 rect_min_size = Vector2( 550, 0 )
 text = "Erklärung Impfwartezeit:
 
@@ -80,9 +94,9 @@ __meta__ = {
 }
 
 [node name="GodmodeDescription" type="Label" parent="ImageTexture/Infocontainer"]
-margin_top = 578.0
+margin_top = 839.0
 margin_right = 550.0
-margin_bottom = 694.0
+margin_bottom = 1012.0
 rect_min_size = Vector2( 550, 0 )
 text = "Erklärung Godmode:
 
@@ -98,52 +112,59 @@ margin_right = 920.0
 margin_bottom = 182.0
 rect_min_size = Vector2( 900, 0 )
 
-[node name="Headline" type="Label" parent="GridContainer"]
+[node name="Empty" type="Panel" parent="GridContainer"]
 margin_right = 900.0
-margin_bottom = 48.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 0, 60 )
+
+[node name="Welcome" type="Label" parent="GridContainer"]
+margin_top = 64.0
+margin_right = 900.0
+margin_bottom = 171.0
+text = "Herzlich Willkommen beim Pandemie-Simulator.
+
+Mit diesem Tool können Sie die Dynamik und den Ablauf einer Pandemie in Deutschland erfahren. Dabei ist es möglich selbst Eindämmungsmaßnahmen zu ergreifen. Als Vorbild diente die seit Frühjahr 2020 in Deutschland anhaltende Covid-19-Pandemie."
+autowrap = true
+
+[node name="ExplanationContainer" type="GridContainer" parent="GridContainer"]
+margin_top = 175.0
+margin_right = 900.0
+margin_bottom = 235.0
 rect_min_size = Vector2( 900, 0 )
-text = "
-Hauptmenü - wird noch schöner
-"
-align = 1
-valign = 1
-uppercase = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="Explanation" type="Label" parent="GridContainer"]
-margin_top = 52.0
+[node name="ExplanationActivation" type="Label" parent="GridContainer/ExplanationContainer"]
 margin_right = 900.0
-margin_bottom = 304.0
-text = "Herzlich Willkommen beim Corona-Pandemie-Simulator.
-Mit diesem Tool können Sie die Dynamik und den Ablauf einer Pandemie erfahren. Dabei ist es möglich selbst Eindämmungsmaßnahmen zu ergreifen. Als Vorbild diente die seit Frühjahr 2020 in Deutschland anhaltende Covid-19-Pandemie. 
+margin_bottom = 60.0
+rect_min_size = Vector2( 900, 60 )
+custom_fonts/font = ExtResource( 5 )
+text = "Weitere Information über die Funktionen"
+valign = 1
+autowrap = true
 
-Ausführliche Statistiken, eine Übersichtkarte und verschiedene Eindämmungsmaßnahmen sind verfügbar. Fast jede Maßnahme kann auch für einzelne Bundesländer ausgewählt werden. 
-
-Die Simulation umfasst gesunde, infizierte, genesene und tote Personen. Infizierte Personen können auch ins Krankenhaus eingeliefert werden. Impfungen sind als Maßnahmen ebenso verfügbar, wie Infektionstests von ungeimpften Personen. Außerdem gibt es Pendlerströme zwischen den einzelnen Bundesländern, womit die Simulation noch realitätsnaher wird. 
-
-Vor dem Beginn der Simulation gibt es weiter unten Einstellungen, die das Erlebnis beeinflussen. Weitere Erklärungen zu den Einstellungen werden beim Drüberfahren mit der Maus über die jeweilige Einstellung angezeigt.
-
-"
+[node name="SettingHint" type="Label" parent="GridContainer"]
+margin_top = 239.0
+margin_right = 900.0
+margin_bottom = 280.0
+rect_min_size = Vector2( 0, 30 )
+text = "Vor dem Beginn der Simulation gibt es Einstellungen, die das Erlebnis beeinflussen. Weitere Erklärungen zu den Einstellungen werden beim Drüberfahren mit der Maus über die jeweilige Einstellung angezeigt."
 autowrap = true
 
 [node name="HSeparator4" type="HSeparator" parent="GridContainer"]
-margin_top = 308.0
+margin_top = 284.0
 margin_right = 900.0
-margin_bottom = 322.0
+margin_bottom = 298.0
 custom_constants/separation = 14
 
 [node name="PopContainer" type="GridContainer" parent="GridContainer"]
-margin_top = 326.0
+margin_top = 302.0
 margin_right = 900.0
-margin_bottom = 350.0
+margin_bottom = 331.0
 columns = 2
 
 [node name="Label2" type="Label" parent="GridContainer/PopContainer"]
 margin_top = 5.0
 margin_right = 295.0
-margin_bottom = 19.0
+margin_bottom = 24.0
 rect_min_size = Vector2( 295, 0 )
 text = "Populationsfaktor"
 autowrap = true
@@ -151,7 +172,7 @@ autowrap = true
 [node name="populationFactor" type="SpinBox" parent="GridContainer/PopContainer"]
 margin_left = 299.0
 margin_right = 594.0
-margin_bottom = 24.0
+margin_bottom = 29.0
 rect_min_size = Vector2( 295, 0 )
 min_value = 0.001
 max_value = 1.0
@@ -162,21 +183,21 @@ __meta__ = {
 }
 
 [node name="HSeparator" type="HSeparator" parent="GridContainer"]
-margin_top = 354.0
+margin_top = 335.0
 margin_right = 900.0
-margin_bottom = 374.0
+margin_bottom = 355.0
 custom_constants/separation = 20
 
 [node name="VaxWaitDayContainer" type="GridContainer" parent="GridContainer"]
-margin_top = 378.0
+margin_top = 359.0
 margin_right = 900.0
-margin_bottom = 402.0
+margin_bottom = 388.0
 columns = 2
 
 [node name="Label3" type="Label" parent="GridContainer/VaxWaitDayContainer"]
 margin_top = 5.0
 margin_right = 295.0
-margin_bottom = 19.0
+margin_bottom = 24.0
 rect_min_size = Vector2( 295, 0 )
 text = "Impfwartezeit (Tage)"
 autowrap = true
@@ -187,7 +208,7 @@ __meta__ = {
 [node name="vaxWaitDay" type="SpinBox" parent="GridContainer/VaxWaitDayContainer"]
 margin_left = 299.0
 margin_right = 594.0
-margin_bottom = 24.0
+margin_bottom = 29.0
 rect_min_size = Vector2( 295, 0 )
 min_value = 1.0
 value = 1.0
@@ -197,15 +218,15 @@ __meta__ = {
 }
 
 [node name="HSeparator3" type="HSeparator" parent="GridContainer"]
-margin_top = 406.0
+margin_top = 392.0
 margin_right = 900.0
-margin_bottom = 426.0
+margin_bottom = 412.0
 custom_constants/separation = 20
 
 [node name="GodmodeButton" type="CheckBox" parent="GridContainer"]
-margin_top = 430.0
+margin_top = 416.0
 margin_right = 900.0
-margin_bottom = 470.0
+margin_bottom = 456.0
 rect_min_size = Vector2( 0, 40 )
 text = "\"Godmode\""
 __meta__ = {
@@ -213,23 +234,23 @@ __meta__ = {
 }
 
 [node name="HSeparator2" type="HSeparator" parent="GridContainer"]
-margin_top = 474.0
+margin_top = 460.0
 margin_right = 900.0
-margin_bottom = 494.0
+margin_bottom = 480.0
 rect_min_size = Vector2( 0, 20 )
 
-[node name="Empty" type="Label" parent="GridContainer"]
-margin_top = 498.0
+[node name="Disclaimer" type="Label" parent="GridContainer"]
+margin_top = 484.0
 margin_right = 900.0
-margin_bottom = 748.0
+margin_bottom = 734.0
 rect_min_size = Vector2( 0, 250 )
 text = "DISCLAIMER: Diese Simulation ist der Wirklichkeit nachempfunden und entspricht somit nicht 100%ig der Realität. Die ausgegebenen Daten sind insbesonders vom ausgewählten Populationsfaktor abhängig, was der Benutzer in seiner Interpretation zu beachten hat. "
 autowrap = true
 
 [node name="GridContainer" type="GridContainer" parent="GridContainer"]
-margin_top = 752.0
+margin_top = 738.0
 margin_right = 900.0
-margin_bottom = 802.0
+margin_bottom = 788.0
 columns = 2
 
 [node name="Empty" type="Panel" parent="GridContainer/GridContainer"]
@@ -244,10 +265,27 @@ margin_bottom = 50.0
 rect_min_size = Vector2( 500, 50 )
 text = "Start"
 
-[node name="Label2" type="Label" parent="GridContainer"]
-margin_top = 806.0
-margin_right = 900.0
-margin_bottom = 820.0
+[node name="Hinweis" type="Label" parent="."]
+margin_left = 737.755
+margin_top = 721.327
+margin_right = 1037.76
+margin_bottom = 872.327
+rect_min_size = Vector2( 300, 130 )
+text = "Hinweis:
+
+Im Spiel wird der Statistik-Tab auf Grund von noch zu wenigen simulierten Daten erst ab Tag 5 verfügbar.
+Maßnahmen können ab dem ersten Tag ergriffen werden."
+autowrap = true
+
+[node name="Title" type="Label" parent="."]
+margin_right = 1550.0
+margin_bottom = 75.0
+rect_min_size = Vector2( 1550, 75 )
+custom_fonts/font = ExtResource( 4 )
+text = "Pandemie-Simulation Hauptmenü"
+align = 1
+valign = 1
+uppercase = true
 
 [node name="ExitButton" type="Button" parent="."]
 margin_left = 1560.0
@@ -258,16 +296,3 @@ text = "X"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="Label4" type="Label" parent="."]
-margin_left = 740.0
-margin_top = 730.0
-margin_right = 1040.0
-margin_bottom = 863.0
-rect_min_size = Vector2( 300, 130 )
-text = "Hinweis:
-
-Im Spiel wird der Statistik-Tab auf Grund von noch zu wenigen simulierten Daten erst ab Tag 5 verfügbar.
-
-Maßnahmen können ab dem ersten Tag ergriffen werden"
-autowrap = true

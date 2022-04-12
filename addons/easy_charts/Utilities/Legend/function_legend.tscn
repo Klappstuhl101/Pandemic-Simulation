@@ -7,22 +7,19 @@ margin_right = 80.0
 margin_bottom = 26.0
 alignment = 1
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Function" type="Label" parent="."]
 margin_top = 2.0
 margin_right = 80.0
 margin_bottom = 16.0
-custom_colors/font_color = Color( 0.184314, 0.192157, 0.262745, 1 )
-text = "Function"
+custom_colors/font_color = Color( 0, 0, 0, 1 )
 align = 1
 valign = 1
+autowrap = true
 
 [node name="Color" type="ColorRect" parent="."]
 margin_top = 20.0
 margin_right = 80.0
 margin_bottom = 23.0
 rect_min_size = Vector2( 15, 3 )
-color = Color( 0.184314, 0.192157, 0.262745, 1 )
+color = Color( 0, 0, 0, 1 )

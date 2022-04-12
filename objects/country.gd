@@ -295,7 +295,7 @@ func get7DayIncidence(godmode = false):
 	for state in states.values():
 		incidenceSum += state.get7DayIncidence(godmode)
 	
-	return stepify(incidenceSum/states.values().size(), 0.01)
+	return stepify(incidenceSum/states.values().size(), 0.1)
 
 func setBorderOpen(open:bool):
 	for state in states.values():

@@ -88,8 +88,8 @@ func _ready():
 	statOutput[CONSTANTS.INCIDENCESCALETITLE] = get_node("Map/ScaleContainer/IncidenceScaleTitle")
 	statOutput[CONSTANTS.INCIDENCELABELS] = get_node("Map/ScaleContainer/ScaleContainer/IncidenceLabels")
 	
-	statOutput[CONSTANTS.INCIDENCE] = get_node("Statistics/GridContainer/Indicators/IncidenceNr")
-	statOutput[CONSTANTS.RVALUE] = get_node("Statistics/GridContainer/Indicators/RNr")
+	statOutput[CONSTANTS.INCIDENCE] = get_node("Statistics/GridContainer/Indicators/IncidenceContainer/IncidenceNr")
+	statOutput[CONSTANTS.RVALUE] = get_node("Statistics/GridContainer/Indicators/RContainer/RNr")
 	statOutput[CONSTANTS.BEDSTATUS] = get_node("Statistics/GridContainer/BedsOverview/BedsLegendContainer/BedNr")
 	statOutput[CONSTANTS.HOSPBEDS] = get_node("Statistics/GridContainer/HospBeds")
 	statOutput[CONSTANTS.HOSPITALALLOCATION] = get_node("Statistics/GridContainer/BedsOverview/HospitalAllocation")
@@ -139,7 +139,7 @@ func _ready():
 	actionOutput[CONSTANTS.GODMODEBUTTON] = get_node("PlayControls/GridContainer/GodmodeContainer/GodmodeButton")
 	actionOutput[CONSTANTS.RESTARTBUTTON] = get_node("PlayControls/GridContainer/GodmodeContainer/RestartButton")
 	actionOutput[CONSTANTS.CONFIRMRESTART] = get_node("PlayControls/GridContainer/GodmodeContainer/RestartButton/ConfirmRestart")
-	actionOutput[CONSTANTS.ENDRESTART] = get_node("EndScreen/GridContainer/RestartContainer/EndRestartButton")
+	actionOutput[CONSTANTS.ENDRESTART] = get_node("EndScreen/GridContainer/TitleContainer/EndRestartButton")
 	
 	buttons[CONSTANTS.STATBUTTON] = get_node("ModeControl/StatMode")
 	buttons[CONSTANTS.ACTIONBUTTON] = get_node("ModeControl/ActionMode")
@@ -204,6 +204,8 @@ func _ready():
 	 CONSTANTS.DEU: deu
 	 }
 	game_manager = Game_Management.new(entities, statOutput, actionOutput, buttons, Constants.GODMODE)
+	
+	actionOutput[CONSTANTS.CONFIRMRESTART].connect("confirmed", self, "_on_confirmed_restart")
 	
 	game_manager._simThread.start(self, "_start_thread_with_nothing", "simThread")
 #	game_manager._statThread.start(self, "_start_thread_with_nothing", "statThread")
@@ -270,14 +272,6 @@ func runSimulation(_userdata = null):
 	self.running = false
 	
 
-#func updateStats(_userdata = null):
-#	match game_manager.getMode():
-#		CONSTANTS.STATMODE:
-#			game_manager.showStats()
-#		CONSTANTS.ACTIONMODE:
-#			game_manager.showAction()
-
-
 func updateProgress():
 	var value = float(Constants.currentProgress) / game_manager.entities.values().size()
 	statOutput[CONSTANTS.PROGRESSBAR].value = statOutput[CONSTANTS.PROGRESSBAR].max_value - remainingDays + value
@@ -300,18 +294,18 @@ func _on_PlaySpeedx2_pressed():
 		paused = false
 	else:
 		if remainingDays < 1:
-#			remainingDays = CONSTANTS.WEEK * 2
-			remainingDays = CONSTANTS.WEEK * 45
+			remainingDays = CONSTANTS.WEEK * 2
+#			remainingDays = CONSTANTS.WEEK * 45
 			statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 
-#func _on_rewind_pressed():
-#	pass
 
-#func _on_calcTimer_timeout():
-#	calculationTimer.stop()
-#	game_manager.simulate()
-#	game_manager.showStats()
-#	remainingDays -= 1
+func _on_confirmed_restart():
+	self.remainingDays = 0
+	updateProgress()
+	
+	self.running = false
+	self.paused = false
+	
 
 
 func _on_menu_pressed():

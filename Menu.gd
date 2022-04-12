@@ -2,6 +2,10 @@ extends Panel
 
 var startButton
 
+var moreInformation
+var explanationContainer
+var explanation
+
 var popContainer
 var populationFactor
 var populationDescription
@@ -20,6 +24,10 @@ var exitButton
 func _ready():
 	exitButton = get_node("ExitButton")
 	
+	moreInformation = get_node("GridContainer/ExplanationContainer/ExplanationActivation")
+	explanationContainer = get_node("GridContainer/ExplanationContainer")
+	explanation = get_node("ImageTexture/Infocontainer/Explanation")
+	
 	startButton = get_node("GridContainer/GridContainer/StartButton")
 	
 	popContainer = get_node("GridContainer/PopContainer")
@@ -36,6 +44,7 @@ func _ready():
 	_hide_godmodeDescription()
 	_hide_popDescription()
 	_hide_vaxWaitDescription()
+	_hide_explanation()
 	
 	connectSignals()
 	
@@ -79,6 +88,12 @@ func _show_godmodeDescription():
 func _hide_godmodeDescription():
 	godmodeDescription.visible = false
 
+func _show_explanation():
+	explanation.visible = true
+
+func _hide_explanation():
+	explanation.visible = false
+
 
 func connectSignals():
 	
@@ -101,8 +116,11 @@ func connectSignals():
 	godmodeButton.connect("mouse_entered", self, "_show_godmodeDescription")
 	godmodeButton.connect("mouse_exited", self, "_hide_godmodeDescription")
 	
+	moreInformation.connect("mouse_entered", self, "_show_explanation")
+	moreInformation.connect("mouse_exited", self, "_hide_explanation")
+	explanationContainer.connect("mouse_entered", self, "_show_explanation")
+	explanationContainer.connect("mouse_exited", self, "_hide_explanation")
+	
 	
 	print("Main Menu Signals connected")
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+

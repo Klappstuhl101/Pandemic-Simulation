@@ -142,9 +142,11 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	
 	self.optionChanged = false
 	
-	baseInfect = 0.2
+#	baseInfect = 0.2
+	baseInfect = 0.1 # with popFactor 0.1 at Day ~175 at peak, bit higher maybe
 	baseRec = 0.02
-	baseDeath = 0.005
+#	baseDeath = 0.005 # zu hoch: 0.005 (ca 20% tot ohne Maßnahmen), 0,0025 (10-11%), 0,0003125 (1-1.5%)
+	baseDeath = 0.0003125
 	baseTest = 0.000 #0.005 für stärkste Teststufe, 0.0025 für mittlere Stufe, 0.001 für schwächste Stufe, 0.000 für keine Tests
 	baseHospital = 0.6
 	
@@ -152,8 +154,12 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	self.population = populationBase
 	self.deaths = 0
 	
-	var startInfected = int(self.populationBase * 0.0001) if int(self.populationBase * 0.0001) > 0 else 1
-	self.I = [startInfected,0,0,0]
+	if getName() == CONSTANTS.BAY:
+		var startInfectedFactor = 0.00001 # 0,0001 zu schnell, 
+		var startInfected = int(self.populationBase * startInfectedFactor) if int(self.populationBase * startInfectedFactor) > 0 else 1
+		self.I = [startInfected,0,0,0]
+	else:
+		self.I = [0,0,0,0]
 	
 	self.S = [int(self.populationBase - self.I[0]),0]
 	self.R = [0,0,0]

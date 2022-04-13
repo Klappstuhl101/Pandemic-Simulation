@@ -733,6 +733,9 @@ func simulateALL():
 	v1sum = V1[0] + V1[1] + V1[2] + V1[3]
 	v2sum = V2[0] + V2[1] + V2[2] + V2[3]
 	
+	return # for debugging purposes, breakpoint can be set here
+	
+	
 	
 func simulateState(stateName):
 #	print(stateName + "-Simulation Thread started")

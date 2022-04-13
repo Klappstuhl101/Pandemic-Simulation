@@ -767,7 +767,7 @@ func getChronic():
 
 func getChronicText(summary):
 	summary[2].pop_front()
-	var str0 :String = "An Tag %d waren mit %d die meisten Personen aktiv infiziert. \n \n " % [summary[2].find(summary[2].max()), summary[2].max()]
+	var str0 :String = "An Tag %d waren mit %d die meisten Personen aktiv infiziert. \n \n " % [summary[2].find(summary[2].max()) + 2, summary[2].max()]
 	var newInfections = []
 	for i in range(1, summary[2].size()):
 		newInfections.append(summary[2][i] - summary[2][i-1])
@@ -1228,18 +1228,54 @@ func establishStatLegends():
 
 
 func _show_summary_legend():
+	var i :int = 0
+	for child in statOutput[CONSTANTS.SUMMARYOVERVIEWLEGEND].get_children():
+		if i < 2:
+			i += 1
+			continue
+		else:
+			statOutput[CONSTANTS.SUMMARYOVERVIEWLEGEND].remove_child(child)
+			child.queue_free()
+			
 	for function in statOutput[CONSTANTS.SUMMARYOVERVIEW].get_legend():
 		statOutput[CONSTANTS.SUMMARYOVERVIEWLEGEND].add_child(function)
 
 func _show_vaxSummary_legend():
+	var i :int = 0
+	for child in statOutput[CONSTANTS.VAXSUMMARYLEGEND].get_children():
+		if i < 2:
+			i += 1
+			continue
+		else:
+			statOutput[CONSTANTS.VAXSUMMARYLEGEND].remove_child(child)
+			child.queue_free()
+			
 	for function in statOutput[CONSTANTS.VAXSUMMARY].get_legend():
 		statOutput[CONSTANTS.VAXSUMMARYLEGEND].add_child(function)
 
 func _show_deathSummary_legend():
+	var i :int = 0
+	for child in statOutput[CONSTANTS.DEATHSUMMARYLEGEND].get_children():
+		if i < 2:
+			i += 1
+			continue
+		else:
+			statOutput[CONSTANTS.DEATHSUMMARYLEGEND].remove_child(child)
+			child.queue_free()
+			
 	for function in statOutput[CONSTANTS.DEATHSUMMARY].get_legend():
 		statOutput[CONSTANTS.DEATHSUMMARYLEGEND].add_child(function)
 
 func _show_chronic_legend():
+	var i :int = 0
+	for child in statOutput[CONSTANTS.CHRONICLEGEND].get_children():
+		if i < 2:
+			i += 1
+			continue
+		else:
+			statOutput[CONSTANTS.CHRONICLEGEND].remove_child(child)
+			child.queue_free()
+			
 	for function in statOutput[CONSTANTS.CHRONIC].get_legend():
 		statOutput[CONSTANTS.CHRONICLEGEND].add_child(function)
 

@@ -298,8 +298,8 @@ func _on_PlaySpeedx2_pressed():
 		paused = false
 	else:
 		if remainingDays < 1:
-#			remainingDays = CONSTANTS.WEEK * 2
-			remainingDays = CONSTANTS.WEEK * 45
+			remainingDays = CONSTANTS.WEEK * 2
+#			remainingDays = CONSTANTS.WEEK * 45
 			statOutput[CONSTANTS.PROGRESSBAR].max_value = remainingDays
 
 

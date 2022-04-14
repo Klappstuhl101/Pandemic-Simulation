@@ -445,116 +445,236 @@ func distributeVax():
 func distributeCommuters():
 	recalculatePopulation()
 	for state in states.values():
-		if !state.getBorderOpen():
-			continue
+		state._thread.start(self, "distributeThread", state.getName())
+	
+	for state in states.values():
+		state._thread.wait_to_finish()
+	
+		# hier Threads!!!!!!!!!!!!!!!!!!!!!!!!!
+#		if !state.getBorderOpen():
+#			continue
+##		print(state.name)
+#
+#		# Anzahl der Pendler
+#		var commuteCount = int(floor(state.getCommuteRate() * state.getPopulation()))
+#		var openBorderNeighborCount = getOpenBorderNeighborCount(state) # Anzahl der Nachbarstaaten, deren Grenze offen ist
+#		var modCommuter = 0
+#		if openBorderNeighborCount != 0:
+#			modCommuter = commuteCount % openBorderNeighborCount
+#		else:
+#			continue
+#		commuteCount -= modCommuter
+#		var neighborIndices = [] # Index in Array neighbors vom Nachbarland
+#		for neighborstateName in state.neighbors:
+##			print(neighborstateName)
+#			neighborIndices.append(states.get(neighborstateName).neighbors.find(state.name))
+#
+#		while commuteCount > 0:
+#			var index = 0
+#			for neighborstate in state.neighbors:
+#				if states.get(neighborstate).getBorderOpen():
+#					var avlblCommuters = checkAvlblCommuters(state)
+#					var rand = rnd.randi_range(0, avlblCommuters.size()-1)
+#
+#					# PROBLEM: KEINE COMMUTER VEFÜGBAR WENN ALLE ERSTE IMPFUNG BEKOMMEN HABEN UND IM FLIEßBAND SIND
+#					var randErrorCounter = 0
+#					while !avlblCommuters[rand]:
+#						rand += 1
+#						rand = rand % avlblCommuters.size()
+#						randErrorCounter += 1
+#						if randErrorCounter > avlblCommuters.size():
+#							rand = -1
+#							break
+#
+#					match rand:
+#						# UNGEIMPFT
+#						0: # aus S
+#							state.S[0] -= 1
+#							state.population -= 1
+#							states.get(neighborstate).visitors[neighborIndices[index]][1][0][0] += 1 
+#							states.get(neighborstate).population += 1
+#
+#						1: 
+#							state.S[1] -= 1
+#							state.population -= 1
+#							states.get(neighborstate).visitors[neighborIndices[index]][1][0][0] += 1 
+#							states.get(neighborstate).population += 1
+#
+#						2: 
+#							state.I[0] -= 1
+#							state.population -= 1
+#							states.get(neighborstate).visitors[neighborIndices[index]][1][1][0] += 1 
+#							states.get(neighborstate).population += 1
+#
+#						3: 
+#							state.R[0] -= 1
+#							state.population -= 1
+#							states.get(neighborstate).visitors[neighborIndices[index]][1][2][0] += 1 
+#							states.get(neighborstate).population += 1
+#
+#						4: 
+#							state.R[1] -= 1
+#							state.population -= 1
+#							states.get(neighborstate).visitors[neighborIndices[index]][1][2][0] += 1 
+#							states.get(neighborstate).population += 1
+#
+#
+#						# 1x GEIMPFT
+#						5: 
+#							state.V1eligible[0] -= 1
+#							state.population -= 1
+#							states.get(neighborstate).visitors[neighborIndices[index]][1][0][1] += 1 
+#							states.get(neighborstate).population += 1
+#
+#						6: 
+#							state.V1eligible[1] -= 1
+#							state.population -= 1
+#							states.get(neighborstate).visitors[neighborIndices[index]][1][1][1] += 1 
+#							states.get(neighborstate).population += 1
+#
+#						7:
+#							state.V1eligible[3] -= 1
+#							state.population -= 1
+#							states.get(neighborstate).visitors[neighborIndices[index]][1][2][1] += 1 
+#							states.get(neighborstate).population += 1
+#
+#						8:
+#							state.V2[0] -= 1
+#							state.population -= 1
+#							states.get(neighborstate).visitors[neighborIndices[index]][1][0][2] += 1 
+#							states.get(neighborstate).population += 1
+#
+#						9:
+#							state.V2[1] -= 1
+#							state.population -= 1
+#							states.get(neighborstate).visitors[neighborIndices[index]][1][1][2] += 1
+#							states.get(neighborstate).population += 1
+#
+#						10:
+#							state.V2[3] -= 1
+#							state.population -= 1
+#							states.get(neighborstate).visitors[neighborIndices[index]][1][2][2] += 1
+#							states.get(neighborstate).population += 1
+#
+#					index += 1
+#					commuteCount -= 1
+#
+#				else:
+#					index += 1
+
+func distributeThread(stateName):
+	var state = states[stateName]
+	if !state.getBorderOpen():
+		return
 #		print(state.name)
-		
-		# Anzahl der Pendler
-		var commuteCount = int(floor(state.getCommuteRate() * state.getPopulation()))
-		var openBorderNeighborCount = getOpenBorderNeighborCount(state) # Anzahl der Nachbarstaaten, deren Grenze offen ist
-		var modCommuter = 0
-		if openBorderNeighborCount != 0:
-			modCommuter = commuteCount % openBorderNeighborCount
-		else:
-			continue
-		commuteCount -= modCommuter
-		var neighborIndices = [] # Index in Array neighbors vom Nachbarland
-		for neighborstateName in state.neighbors:
+	
+	# Anzahl der Pendler
+	var commuteCount = int(floor(state.getCommuteRate() * state.getPopulation()))
+	var openBorderNeighborCount = getOpenBorderNeighborCount(state) # Anzahl der Nachbarstaaten, deren Grenze offen ist
+	var modCommuter = 0
+	if openBorderNeighborCount != 0:
+		modCommuter = commuteCount % openBorderNeighborCount
+	else:
+		return
+	commuteCount -= modCommuter
+	var neighborIndices = [] # Index in Array neighbors vom Nachbarland
+	for neighborstateName in state.neighbors:
 #			print(neighborstateName)
-			neighborIndices.append(states.get(neighborstateName).neighbors.find(state.name))
-		
-		while commuteCount > 0:
-			var index = 0
-			for neighborstate in state.neighbors:
-				if states.get(neighborstate).getBorderOpen():
-					var avlblCommuters = checkAvlblCommuters(state)
-					var rand = rnd.randi_range(0, avlblCommuters.size()-1)
+		neighborIndices.append(states.get(neighborstateName).neighbors.find(state.name))
+	
+	while commuteCount > 0:
+		var index = 0
+		for neighborstate in state.neighbors:
+			if states.get(neighborstate).getBorderOpen():
+				var avlblCommuters = checkAvlblCommuters(state)
+				var rand = rnd.randi_range(0, avlblCommuters.size()-1)
+				
+				# PROBLEM: KEINE COMMUTER VEFÜGBAR WENN ALLE ERSTE IMPFUNG BEKOMMEN HABEN UND IM FLIEßBAND SIND
+				var randErrorCounter = 0
+				while !avlblCommuters[rand]:
+					rand += 1
+					rand = rand % avlblCommuters.size()
+					randErrorCounter += 1
+					if randErrorCounter > avlblCommuters.size():
+						rand = -1
+						break
 					
-					# PROBLEM: KEINE COMMUTER VEFÜGBAR WENN ALLE ERSTE IMPFUNG BEKOMMEN HABEN UND IM FLIEßBAND SIND
-					var randErrorCounter = 0
-					while !avlblCommuters[rand]:
-						rand += 1
-						rand = rand % avlblCommuters.size()
-						randErrorCounter += 1
-						if randErrorCounter > avlblCommuters.size():
-							rand = -1
-							break
-						
-					match rand:
-						# UNGEIMPFT
-						0: # aus S
-							state.S[0] -= 1
-							state.population -= 1
-							states.get(neighborstate).visitors[neighborIndices[index]][1][0][0] += 1 
-							states.get(neighborstate).population += 1
-						
-						1: 
-							state.S[1] -= 1
-							state.population -= 1
-							states.get(neighborstate).visitors[neighborIndices[index]][1][0][0] += 1 
-							states.get(neighborstate).population += 1
-						
-						2: 
-							state.I[0] -= 1
-							state.population -= 1
-							states.get(neighborstate).visitors[neighborIndices[index]][1][1][0] += 1 
-							states.get(neighborstate).population += 1
-						
-						3: 
-							state.R[0] -= 1
-							state.population -= 1
-							states.get(neighborstate).visitors[neighborIndices[index]][1][2][0] += 1 
-							states.get(neighborstate).population += 1
-						
-						4: 
-							state.R[1] -= 1
-							state.population -= 1
-							states.get(neighborstate).visitors[neighborIndices[index]][1][2][0] += 1 
-							states.get(neighborstate).population += 1
-						
-						
-						# 1x GEIMPFT
-						5: 
-							state.V1eligible[0] -= 1
-							state.population -= 1
-							states.get(neighborstate).visitors[neighborIndices[index]][1][0][1] += 1 
-							states.get(neighborstate).population += 1
-						
-						6: 
-							state.V1eligible[1] -= 1
-							state.population -= 1
-							states.get(neighborstate).visitors[neighborIndices[index]][1][1][1] += 1 
-							states.get(neighborstate).population += 1
-						
-						7:
-							state.V1eligible[3] -= 1
-							state.population -= 1
-							states.get(neighborstate).visitors[neighborIndices[index]][1][2][1] += 1 
-							states.get(neighborstate).population += 1
-						
-						8:
-							state.V2[0] -= 1
-							state.population -= 1
-							states.get(neighborstate).visitors[neighborIndices[index]][1][0][2] += 1 
-							states.get(neighborstate).population += 1
-						
-						9:
-							state.V2[1] -= 1
-							state.population -= 1
-							states.get(neighborstate).visitors[neighborIndices[index]][1][1][2] += 1
-							states.get(neighborstate).population += 1
-						
-						10:
-							state.V2[3] -= 1
-							state.population -= 1
-							states.get(neighborstate).visitors[neighborIndices[index]][1][2][2] += 1
-							states.get(neighborstate).population += 1
-						
-					index += 1
-					commuteCount -= 1
+				match rand:
+					# UNGEIMPFT
+					0: # aus S
+						state.S[0] -= 1
+						state.population -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][0][0] += 1 
+						states.get(neighborstate).population += 1
 					
-				else:
-					index += 1
+					1: 
+						state.S[1] -= 1
+						state.population -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][0][0] += 1 
+						states.get(neighborstate).population += 1
+					
+					2: 
+						state.I[0] -= 1
+						state.population -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][1][0] += 1 
+						states.get(neighborstate).population += 1
+					
+					3: 
+						state.R[0] -= 1
+						state.population -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][2][0] += 1 
+						states.get(neighborstate).population += 1
+					
+					4: 
+						state.R[1] -= 1
+						state.population -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][2][0] += 1 
+						states.get(neighborstate).population += 1
+					
+					
+					# 1x GEIMPFT
+					5: 
+						state.V1eligible[0] -= 1
+						state.population -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][0][1] += 1 
+						states.get(neighborstate).population += 1
+					
+					6: 
+						state.V1eligible[1] -= 1
+						state.population -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][1][1] += 1 
+						states.get(neighborstate).population += 1
+					
+					7:
+						state.V1eligible[3] -= 1
+						state.population -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][2][1] += 1 
+						states.get(neighborstate).population += 1
+					
+					8:
+						state.V2[0] -= 1
+						state.population -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][0][2] += 1 
+						states.get(neighborstate).population += 1
+					
+					9:
+						state.V2[1] -= 1
+						state.population -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][1][2] += 1
+						states.get(neighborstate).population += 1
+					
+					10:
+						state.V2[3] -= 1
+						state.population -= 1
+						states.get(neighborstate).visitors[neighborIndices[index]][1][2][2] += 1
+						states.get(neighborstate).population += 1
+					
+				index += 1
+				commuteCount -= 1
+				
+			else:
+				index += 1
+#	print(name + " distribution done")
 
 func getOpenBorderNeighborCount(state:State):
 	var sum = 0

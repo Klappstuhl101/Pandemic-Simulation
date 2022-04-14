@@ -282,23 +282,22 @@ func showEnd():
 	
 	var summaryOverview = getSummaryOverview()
 	statOutput[CONSTANTS.SUMMARYOVERVIEW].plot_from_array(summaryOverview)
-	statOutput[CONSTANTS.SUMMARY].text = getSummaryText(summaryOverview)
-	
 	var vaxSummary = getOutputVaccinations()
 	statOutput[CONSTANTS.VAXSUMMARY].plot_from_array(vaxSummary)
-	statOutput[CONSTANTS.VAXSUMMARYTEXT].text = getVaxSummaryText(vaxSummary)
-	
 	var deathSummary = getDeathSummary()
 	statOutput[CONSTANTS.DEATHSUMMARY].plot_from_array(deathSummary)
-	statOutput[CONSTANTS.DEATHSUMMARYTEXT].text = getDeathSummaryText(deathSummary)
-	
 	var chronicSummary = getChronic()
 	statOutput[CONSTANTS.CHRONIC].plot_from_array(chronicSummary)
-	statOutput[CONSTANTS.CHRONICSUMMARYTEXT].text = getChronicText(chronicSummary)
 	
 	if !ended:
 		ended = true
 		establishEndLegends()
+	
+	statOutput[CONSTANTS.SUMMARY].text = getSummaryText(summaryOverview)
+	statOutput[CONSTANTS.VAXSUMMARYTEXT].text = getVaxSummaryText(vaxSummary)
+	statOutput[CONSTANTS.DEATHSUMMARYTEXT].text = getDeathSummaryText(deathSummary)
+	statOutput[CONSTANTS.CHRONICSUMMARYTEXT].text = getChronicText(chronicSummary)
+	
 	
 	statOutput[CONSTANTS.ENDCONTAINER].visible = true
 	
@@ -420,7 +419,15 @@ func getOutputInterval():
 					dayArray.append(days[index])
 		
 		CONSTANTS.MAX:
-			dayArray.append_array(self.days)
+			if self.days.max() < CONSTANTS.YEAR:
+				dayArray.append_array(self.days)
+			else:
+				for i in range(int(CONSTANTS.YEAR / 12.0)):
+					var index = (days.size() - CONSTANTS.YEAR + (i*12))
+					if index <= 0:
+						continue
+					else:
+						dayArray.append(days[index])
 			dayArray.remove(1)
 			return dayArray
 			
@@ -709,7 +716,7 @@ func getSummaryOverview():
 func getSummaryText(summary):
 #	var sum :int = summary[1][1] + summary[2][1] + summary[3][1]
 	var sum :int = getProjectedToRealPopulation(active.getPopulationBase())
-	var str0 :String = "Die Pandemie hat %d Tage gedauert. \n \n" % self.endDay 
+	var str0 :String = "Es haben seit %d Tagen keine Neuinfektionen stattgefunden. \n \nDie Pandemie hat %d Tage gedauert. \n \n" % [int(CONSTANTS.MONTH * CONSTANTS.ENDEMICTIMEFACTOR), self.endDay] 
 	var str1 :String = "%.2f%% der Bevölkerung haben sich nicht angesteckt. \n \n" % ((float(summary[1][1])/sum) * 100)
 	var str2 :String = "%.2f%% der Bevölkerung sind Genesen. \n \n" % ((float(summary[2][1])/sum) * 100)
 	var str3 :String = "%.2f%% der Bevölkerung sind am Virus gestorben.\n \n" % ((float(summary[3][1])/sum) * 100)
@@ -733,10 +740,10 @@ func getDeathSummary():
 
 func getDeathSummaryText(summary):
 	var sum :int = summary[1][1] + summary[2][1] + summary[3][1]
-	var str0 :String = "Insgesamt sind %.2f%% der Bevölkerung verstorben. Davon waren %.2f%% mindestens einmal geimpft. \n \n" %  [(float(sum) / getProjectedToRealPopulation(active.getPopulationBase())) * 100, (float(summary[2][1] + summary[3][1]) / sum) * 100]
-	var str1 :String = "%.2f%% der Verstorbenen war nicht geimpft. \n \n" % ((float(summary[1][1])/sum) * 100)
-	var str2 :String = "%.2f%% der Verstorbenen war 1x geimpft. \n \n" % ((float(summary[2][1])/sum) * 100)
-	var str3 :String = "%.2f%% der Verstorbenen war 2x geimpft." % ((float(summary[3][1])/sum) * 100)
+	var str0 :String = "Insgesamt sind %.2f%% der Bevölkerung verstorben. Davon waren %.2f%% mindestens einmal geimpft. \n \n" %  [(float(sum) / getProjectedToRealPopulation(active.getPopulationBase())) * 100, (float(summary[2][1] + summary[3][1]) / sum) * 100 if sum > 0 else 0.0]
+	var str1 :String = "%.2f%% der Verstorbenen war nicht geimpft. \n \n" % ((float(summary[1][1])/sum) * 100 if sum > 0 else 0.0)
+	var str2 :String = "%.2f%% der Verstorbenen war 1x geimpft. \n \n" % ((float(summary[2][1])/sum) * 100 if sum > 0 else 0.0)
+	var str3 :String = "%.2f%% der Verstorbenen war 2x geimpft." % ((float(summary[3][1])/sum) * 100 if sum > 0 else 0.0)
 	
 	return str0 + str1 + str2 + str3
 	
@@ -789,8 +796,15 @@ func simulate():
 	
 	entities[CONSTANTS.DEU].simulateALL()
 	
-	if self.days.size() > 2:
-		if entities[CONSTANTS.DEU].infect[self.currentDay] < 1:
+	if self.days.size() > 10:
+		var checkNewInfections = []
+		for i in range(self.days.max() - int(CONSTANTS.MONTH * CONSTANTS.ENDEMICTIMEFACTOR), self.days.max()):
+			if i < 2:
+				continue
+			else:
+				checkNewInfections.append(entities[CONSTANTS.DEU].getDailyInfections(i, true))
+			
+		if checkNewInfections.max() < 1:
 			setMode(CONSTANTS.ENDMODE)
 			if !ended:
 				endDay = currentDay
@@ -859,7 +873,7 @@ func restart():
 	self.restarted = false
 
 
-
+################################################################################
 
 func activate():
 	statOutput[CONSTANTS.COUNTRYNAME].text = active.name

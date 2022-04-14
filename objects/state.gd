@@ -143,10 +143,10 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	self.optionChanged = false
 	
 #	baseInfect = 0.2
-	baseInfect = 0.1 # with popFactor 0.1 at Day ~175 at peak, bit higher maybe
+	baseInfect = 0.12 # with popFactor 0.1 infect 0.1 at Day ~175 at peak, bit higher maybe, popFactor 0.1 infect 0.15 peak at 118
 	baseRec = 0.02
 #	baseDeath = 0.005 # zu hoch: 0.005 (ca 20% tot ohne Maßnahmen), 0,0025 (10-11%), 0,0003125 (1-1.5%)
-	baseDeath = 0.0003125
+	baseDeath = 0.0006
 	baseTest = 0.000 #0.005 für stärkste Teststufe, 0.0025 für mittlere Stufe, 0.001 für schwächste Stufe, 0.000 für keine Tests
 	baseHospital = 0.6
 	
@@ -387,9 +387,9 @@ func getHospitalAllocation(day:int):
 
 
 func getInfectRate():
-	if self.selectedMask != 0 and self.selectedHomeOffice != 0:
-		var lockdownAverage = int(round(CONSTANTS.average([self.selectedMask, self.selectedHomeOffice])))
-		var lockdownStrictness = (2 * CONSTANTS.LOCKDOWNSTRICTNESS[lockdownAverage] + CONSTANTS.MASKFACTORS[self.selectedMask]) / 3.0
+	if self.selectedMask != 0 or self.selectedHomeOffice != 0:
+#		var lockdownAverage = int(round(CONSTANTS.average([self.selectedMask, self.selectedHomeOffice])))
+		var lockdownStrictness = (CONSTANTS.LOCKDOWNSTRICTNESS[self.selectedHomeOffice] + 2 * CONSTANTS.MASKFACTORS[self.selectedMask]) / 3.0
 #		print(lockdownStrictness)
 		return baseInfect * (1-lockdownStrictness)
 	else:

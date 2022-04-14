@@ -102,6 +102,8 @@ const MONTH = 30
 const YEAR = 360
 const MAX = INF
 
+const ENDEMICTIMEFACTOR = 2.5
+
 const MAPBACKGROUND = "MapBackground"
 
 const BAW = "Baden-Württemberg"

@@ -244,7 +244,7 @@ margin_top = 484.0
 margin_right = 900.0
 margin_bottom = 734.0
 rect_min_size = Vector2( 0, 250 )
-text = "DISCLAIMER: Diese Simulation ist der Wirklichkeit nachempfunden und entspricht somit nicht 100%ig der Realität. Die ausgegebenen Daten sind insbesonders vom ausgewählten Populationsfaktor abhängig, was der Benutzer in seiner Interpretation zu beachten hat. "
+text = "DISCLAIMER: Diese Simulation ist der Wirklichkeit nachempfunden und entspricht somit nicht 100%ig der Realität. Die ausgegebenen Daten sind insbesonders vom ausgewählten Populationsfaktor abhängig, was der Benutzer in seiner Interpretation zu beachten hat. Die ausgegebenen Daten sind zu keiner Zeit als realistisch oder medizinisch korrekt zu verstehen, sondern dienen lediglich als Indikation der Wirklichkeit. "
 autowrap = true
 
 [node name="GridContainer" type="GridContainer" parent="GridContainer"]

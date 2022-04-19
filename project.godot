@@ -153,8 +153,10 @@ _global_script_class_icons={
 [application]
 
 config/name="Corona-Simulation-Dashboard"
+config/description="Simulation of a pandemic. Modeled after the Corona-Pandemic 2020"
 run/main_scene="res://Menu.tscn"
 config/icon="res://icon.png"
+config/windows_native_icon="res://icon.ico"
 
 [autoload]
 

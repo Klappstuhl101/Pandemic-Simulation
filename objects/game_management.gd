@@ -422,8 +422,9 @@ func getOutputInterval():
 			if self.days.max() < CONSTANTS.YEAR:
 				dayArray.append_array(self.days)
 			else:
-				for i in range(int(CONSTANTS.YEAR / 12.0)):
-					var index = (days.size() - CONSTANTS.YEAR + (i*12))
+				for i in range(int(days.size() / 12.0)):
+#					var index = (days.size() - CONSTANTS.YEAR + (i*12))
+					var index = i*12
 					if index <= 0:
 						continue
 					else:

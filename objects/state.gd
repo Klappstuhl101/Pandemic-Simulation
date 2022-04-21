@@ -270,7 +270,7 @@ func setHospitalBeds(day, value):
 
 func getHospitalBeds(day = 0):
 	var keys = self.hospitalBedsDaily.keys()
-	if day != 0:
+	if day > 0:
 		
 		var key = keys.size() - 1
 		for i in range(keys.size()):
@@ -583,7 +583,7 @@ func updatePersonNumbers(rule):
 		26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38: # Infektion V1
 			var randomDay = rnd.randi() % Constants.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
-				if V1[0][randomDay] != 0:
+				if V1[0][randomDay] > 0:
 					break
 				else:
 					randomDay += 1
@@ -604,7 +604,7 @@ func updatePersonNumbers(rule):
 		65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77: # Infektion ungeimpfte Pendler
 			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
 			while true:
-				if visitors[randomNeighbor][1][0][0] != 0:
+				if visitors[randomNeighbor][1][0][0] > 0:
 					break
 				else:
 					randomNeighbor += 1
@@ -616,7 +616,7 @@ func updatePersonNumbers(rule):
 		78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90: # Infektion 1x geimpfte Pendler
 			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
 			while true:
-				if visitors[randomNeighbor][1][0][1] != 0:
+				if visitors[randomNeighbor][1][0][1] > 0:
 					break
 				else:
 					randomNeighbor += 1
@@ -628,7 +628,7 @@ func updatePersonNumbers(rule):
 		91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103: # Infektion 2x geimpfte Pendler
 			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
 			while true:
-				if visitors[randomNeighbor][1][0][2] != 0:
+				if visitors[randomNeighbor][1][0][2] > 0:
 					break
 				else:
 					randomNeighbor += 1
@@ -658,7 +658,7 @@ func updatePersonNumbers(rule):
 		108:
 			var randomDay = rnd.randi() % Constants.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
-				if V1[1][randomDay] != 0:
+				if V1[1][randomDay] > 0:
 					break
 				else:
 					randomDay += 1
@@ -670,7 +670,7 @@ func updatePersonNumbers(rule):
 		109:
 			var randomDay = rnd.randi() % Constants.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
-				if V1[2][randomDay] != 0:
+				if V1[2][randomDay] > 0:
 					break
 				else:
 					randomDay += 1
@@ -702,7 +702,7 @@ func updatePersonNumbers(rule):
 		114: 
 			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
 			while true:
-				if visitors[randomNeighbor][1][1][0] != 0:
+				if visitors[randomNeighbor][1][1][0] > 0:
 					break
 				else:
 					randomNeighbor += 1
@@ -715,7 +715,7 @@ func updatePersonNumbers(rule):
 		115:
 			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
 			while true:
-				if visitors[randomNeighbor][1][1][1] != 0:
+				if visitors[randomNeighbor][1][1][1] > 0:
 					break
 				else:
 					randomNeighbor += 1
@@ -728,7 +728,7 @@ func updatePersonNumbers(rule):
 		116:
 			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
 			while true:
-				if visitors[randomNeighbor][1][1][2] != 0:
+				if visitors[randomNeighbor][1][1][2] > 0:
 					break
 				else:
 					randomNeighbor += 1
@@ -758,7 +758,7 @@ func updatePersonNumbers(rule):
 		121:
 			var randomDay = rnd.randi() % Constants.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
-				if V1[1][randomDay] != 0:
+				if V1[1][randomDay] > 0:
 					break
 				else:
 					randomDay += 1
@@ -770,7 +770,7 @@ func updatePersonNumbers(rule):
 		122:
 			var randomDay = rnd.randi() % Constants.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
-				if V1[1][randomDay] != 0:
+				if V1[1][randomDay] > 0:
 					break
 				else:
 					randomDay += 1
@@ -802,7 +802,7 @@ func updatePersonNumbers(rule):
 		127:
 			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
 			while true:
-				if visitors[randomNeighbor][1][1][0] != 0:
+				if visitors[randomNeighbor][1][1][0] > 0:
 					break
 				else:
 					randomNeighbor += 1
@@ -815,7 +815,7 @@ func updatePersonNumbers(rule):
 		128:
 			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
 			while true:
-				if visitors[randomNeighbor][1][1][1] != 0:
+				if visitors[randomNeighbor][1][1][1] > 0:
 					break
 				else:
 					randomNeighbor += 1
@@ -828,7 +828,7 @@ func updatePersonNumbers(rule):
 		129:
 			var randomNeighbor = rnd.randi_range(0, visitors.size() - 1)
 			while true:
-				if visitors[randomNeighbor][1][1][2] != 0:
+				if visitors[randomNeighbor][1][1][2] > 0:
 					break
 				else:
 					randomNeighbor += 1
@@ -881,7 +881,7 @@ func updatePersonNumbers(rule):
 		139:
 			var randomDay = rnd.randi() % Constants.VACDELAY # random einem Block im Fließband zuweisen, bei dem V1[0], also Ansteckbare nicht null sind
 			while true:
-				if V1[1][randomDay] != 0:
+				if V1[1][randomDay] > 0:
 					break
 				else:
 					randomDay += 1

@@ -936,11 +936,6 @@ func updatePersonNumbers(rule):
 			self.avlbVax -= 1
 		
 		148:
-			V1eligible[2] -= 1
-			V2[2] += 1
-			self.avlbVax -= 1
-		
-		149:
 			V1eligible[3] -= 1
 			V2[3] += 1
 			self.avlbVax -= 1
@@ -1160,9 +1155,8 @@ func updateReactionRates():
 	rates.append(vacRate1*avlbVax*R[1])
 	rates.append(vacRate1*avlbVax*R[2])
 
-	# 147 148 149 von V1eligible zu V2 (nur noch nicht Angesteckte und Genesene bekommen zweite Impfung)
+	# 147 148 von V1eligible zu V2 (nur noch nicht Angesteckte und Genesene bekommen zweite Impfung)
 	rates.append(vacRate2*avlbVax*V1eligible[0])
-	rates.append(vacRate2*avlbVax*V1eligible[2])
 	rates.append(vacRate2*avlbVax*V1eligible[3])
 	
 	return rates

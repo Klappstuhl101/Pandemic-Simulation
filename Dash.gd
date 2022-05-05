@@ -210,8 +210,8 @@ func _ready():
 	game_manager = Game_Management.new(entities, statOutput, actionOutput, buttons, Constants.GODMODE)
 	
 	actionOutput[CONSTANTS.CONFIRMRESTART].connect("confirmed", self, "_on_confirmed_restart")
-	
-	game_manager._simThread.start(self, "_start_thread_with_nothing", "simThread")
+#
+#	game_manager._simThread.start(self, "_start_thread_with_nothing", "simThread")
 #	game_manager._statThread.start(self, "_start_thread_with_nothing", "statThread")
 	
 

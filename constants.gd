@@ -100,7 +100,7 @@ const ENDRESTART = "EndRestart"
 const WEEK = 7
 const MONTH = 30
 const YEAR = 360
-const MAX = INF
+const MAX = int(INF)
 
 const ENDEMICTIMEFACTOR = 2.5
 

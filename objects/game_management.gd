@@ -2,45 +2,32 @@ extends Object
 
 class_name Game_Management
 
-#var calcTime:float
-
 var _simThread :Thread
-#var _statThread :Thread
 
-#var _simLock :Mutex
-#
-#var loading :bool
-#var running :bool
+var entities :Dictionary 
+var active
+var mode :String
+var statOutput :Dictionary 
+var actionOutput :Dictionary
+var buttons :Dictionary
 
-var entities :Dictionary # states + country
-var active # active state / country
-var mode # StatsMode or ActionMode or Endmode
-var statOutput # statOutput for stats
-var actionOutput
-#var statButtons
-var buttons
-
-#var establishedLegends:bool
 var restarted:bool
 
-#var paused:bool
 
 var godmode:bool
-var godmodeChanged :bool = false
+var godmodeChanged :bool
 
 var optionAdded:bool
 
-var interval
+var interval :int
 
 var activePopulationToRealFactor :float
 var activePopulationToCalculationFactor :float
 
-
-
-var days = []
-var currentDay :int = 1
+var days :Array
+var currentDay :int
 var endDay :int
-var ended :bool = false
+var ended :bool
 
 
 var vaxColorScheme :PoolColorArray
@@ -76,8 +63,12 @@ func _init(initEntities, initStatOutput, initActionOutput, initButtons, initGodm
 #	self.lockdownFactor = 0
 #	self.maskFactor = 0
 	
+	self.days = []
+	self.currentDay = 1
 	self.interval = CONSTANTS.WEEK
-
+	
+	self.ended = false
+	
 	setMode(CONSTANTS.STATMODE)
 	
 #	self.optionChanged = false
@@ -191,8 +182,6 @@ func showAction():
 	
 
 func showStats():
-#	if _simThread.is_active():
-#		_simThread.wait_to_finish()
 	updateMap()
 	updateInterventionWeight()
 	

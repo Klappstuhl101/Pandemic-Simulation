@@ -5,6 +5,8 @@ class_name State
 
 var _thread :Thread
 
+var mapButton :TextureButton
+
 var events :int
 
 var name :String
@@ -12,9 +14,6 @@ var name :String
 var neighbors :Array
 var visitors :Array
 var commuterRate :float
-var commuterFactor :float
-
-var mapButton :TextureButton
 
 var realPopulation :int
 var populationBase :int
@@ -29,10 +28,7 @@ var selectedMask :int
 var selectedHomeOffice :int
 var selectedTest :int
 
-var lockdown :bool = false
-
 var optionChanged :bool
-#var lockdownStrictness
 
 var suscept = [CONSTANTS.SUSCEPTIBLE]
 var infect = [CONSTANTS.INFECTED]
@@ -54,34 +50,34 @@ var V1
 var V1eligible
 var V2
 
-var vacRate1
-var vacRate2
-var waitDay :int = 0
+var vacRate1 :float
+var vacRate2 :float
+var waitDay :int
 
 var avlbVax :int
 
-var infectRate
-var recRate
-var deathRate
+var infectRate :Array
+var recRate :Array
+var deathRate :Array
 
-var deathFactorHosp
-var infectFactorHosp
-var infectFactorV1
-var infectFactorV2
-var infectTestFactor
+var deathFactorHosp :float
+var infectFactorHosp :float
+var infectFactorV1 :float
+var infectFactorV2 :float
+var infectTestFactor :float
 
 var hospitalBeds :int
 var hospitalBedsDaily :Dictionary
-var hospitalRate
+var hospitalRate :Array
 
-var baseInfect
-var baseRec
-var baseDeath
-var baseTest
-var baseHospital
+var baseInfect :float
+var baseRec :float
+var baseDeath :float
+var baseTest :float
+var baseHospital :float
 
-var testRate
-var informationLoss
+var testRate :Array
+var informationLoss :float
 
 
 var sus0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]	# ungetestet ansteckbar
@@ -191,9 +187,9 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 #	self.V1 = [CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY)]
 	self.V1 = [CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY),CONSTANTS.zeroes(Constants.VACDELAY)]
 	self.V1eligible = [0,0,0,0,0]
-	
-	
 	self.V2 = [0,0,0,0,0]
+	
+	self.waitDay = 0
 	
 	# Indizierung V1, V1eligible und V2 (zweimal geimpft)
 	# 0: Ansteckbar (S)
@@ -408,13 +404,6 @@ func setTestRates(index:int):
 	self.selectedTest = index
 	var value = CONSTANTS.TESTRATES[index]
 	self.testRate = [value, value * 30, value]
-	
-#func setLockdown(isTrue:bool, strictness:float):
-#	self.lockdown = isTrue
-#	self.lockdownStrictness = strictness
-
-#func setCommuterFactor(value:float):
-#	self.commuterFactor = value
 
 func setSelectedMask(index:int):
 	self.selectedMask = index

@@ -454,22 +454,17 @@ func simulate():
 	var startTime = OS.get_ticks_msec()
 	
 	events = 0
-#	if I <= 0: # pandemic over
-#		return
+
 	infectRate = [getInfectRate(), getInfectRate()*infectTestFactor, getInfectRate()*infectFactorHosp, getInfectRate()*infectFactorV1, getInfectRate()*infectFactorV2] # Ungetestet, Getestet, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	var t = timeDifference
+	
 	while t<1:
 		t = gillespieIteration(t)
 		events += 1
-#		print(t)
-#		print(t, " S ", S, " I ", I, " R ", R, " D ", D, " ", I+S+R+D)
 		if(t>1):
 			timeDifference = fmod(t,1)
 			continue
 			
-	
-#	simulateV1()
-#	print(V1)
 	
 	waitDay += 1
 	waitDay = waitDay % Constants.VACDELAY
@@ -486,12 +481,10 @@ func simulate():
 	V1[3][waitDay] = 0
 	V1[4][waitDay] = 0
 	
-	
 	Constants.currentProgress += 1
 	
 	var endTime = OS.get_ticks_msec()
 	var timeDiff = endTime - startTime
-	
 	var format_name = "%-23s||" % getName()
 	var format_events = "%15d Events" % events
 	var format_time = String(floor(timeDiff/1000.0/60.0/60)) + ":" + String(int(timeDiff/1000.0/60.0)%60) + ":" + String(int(timeDiff/1000.0)%60) + ":%003d" % (int(timeDiff) % 1000)
@@ -554,8 +547,6 @@ func gillespieIteration(t):
 			break
 	
 	updatePersonNumbers(rule)
-	
-#	print(t, " t    r ", rule)
 	
 	return t
 

@@ -85,6 +85,7 @@ var sus1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.SUSCEPTIBLE]		# getestet 
 var inf0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]		# ungetestet infiziert
 var inf1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.INFECTED]		# getestet infiziert
 var inf2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.INFECTED]		# unbewusst infiziert
+var hosp = [CONSTANTS.HOSPITALISED]										# ungeimpfte Hospitalisierte
 var rec0 = [CONSTANTS.NTESTED + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# ungetestet genesen 
 var rec1 = [CONSTANTS.TESTED + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# getestet genesen
 var rec2 = [CONSTANTS.UNAWARE + CONSTANTS.BL+ CONSTANTS.RECOVERED]		# unbewusst genesen
@@ -102,7 +103,7 @@ var vax2hosp = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.HOSPITALISED]	# 2x gei
 var vax2rec = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.RECOVERED]		# 2x geimpft genesen
 var vax2dead = [CONSTANTS.VAX2 + CONSTANTS.BL + CONSTANTS.DEAD]			# 2x geimpft tot
 
-var hosp = [CONSTANTS.HOSPITALISED]										# ungeimpfte Hospitalisierte
+
 
 var timeDifference
 
@@ -143,7 +144,7 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	baseRec = 0.02
 #	baseDeath = 0.005 # zu hoch: 0.005 (ca 20% tot ohne Maßnahmen), 0,0025 (10-11%), 0,0003125 (1-1.5%)
 	baseDeath = 0.0006
-	baseTest = 0.000 #0.005 für stärkste Teststufe, 0.0025 für mittlere Stufe, 0.001 für schwächste Stufe, 0.000 für keine Tests
+#	baseTest = 0.000 #0.005 für stärkste Teststufe, 0.0025 für mittlere Stufe, 0.001 für schwächste Stufe, 0.000 für keine Tests
 	baseHospital = 0.6
 	
 	self.avlbVax = 0
@@ -173,10 +174,10 @@ func _init(initName, initRealPopulation, initPopulationFactor, initButton, initN
 	
 	
 #	# für Hospitalisierung
-	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*infectFactorHosp, getInfectRate()*infectFactorV1, getInfectRate()*infectFactorV2] 	# Ungetestet, Getestet, Hospitalisiert, 1x Geimpft, 2x Geimpft
+#	infectRate = [getInfectRate(), getInfectRate(), getInfectRate()*infectFactorHosp, getInfectRate()*infectFactorV1, getInfectRate()*infectFactorV2] 	# Ungetestet, Getestet, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	recRate = [baseRec, baseRec*1.2, baseRec*1.3, baseRec*1.6] 																# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
 	deathRate = [baseDeath, baseDeath*deathFactorHosp, baseDeath*0.2, baseDeath*0.1]														# Ungeimpft, Hospitalisiert, 1x Geimpft, 2x Geimpft
-	setTestRates(baseTest)
+	setTestRates(0)
 	hospitalBeds = 20
 	hospitalBedsDaily = {0:hospitalBeds}
 	hospitalRate = [baseHospital, baseHospital*0.2, baseHospital*0.1]

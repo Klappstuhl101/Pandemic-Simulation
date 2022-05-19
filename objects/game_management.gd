@@ -798,7 +798,6 @@ func simulate():
 			setMode(CONSTANTS.ENDMODE)
 			if !ended:
 				endDay = currentDay
-#				ended = true
 			print("Tag ", self.currentDay, ": PANDEMIE VORÜBER")
 		
 	updateDay()

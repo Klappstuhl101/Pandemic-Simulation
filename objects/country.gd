@@ -457,13 +457,11 @@ func distributeThread(stateName):
 	
 	# Anzahl der Pendler
 	var commuteCount = int(floor(state.getCommuteRate() * state.getPopulation()))
-	var openBorderNeighborCount = getOpenBorderNeighborCount(state) # Anzahl der Nachbarstaaten, deren Grenze offen ist
-	var modCommuter = 0
+	var openBorderNeighborCount = getOpenBorderNeighborCount(state) # Number of neighboring states, that have an open border
 	if openBorderNeighborCount != 0:
-		modCommuter = commuteCount % openBorderNeighborCount
+		commuteCount -= commuteCount % openBorderNeighborCount
 	else:
 		return
-	commuteCount -= modCommuter
 	var neighborIndices = [] # Index in Array neighbors vom Nachbarland
 	for neighborstateName in state.neighbors:
 #			print(neighborstateName)
@@ -477,6 +475,7 @@ func distributeThread(stateName):
 				var rand = rnd.randi_range(0, avlblCommuters.size()-1)
 				
 				# PROBLEM: KEINE COMMUTER VEFÜGBAR WENN ALLE ERSTE IMPFUNG BEKOMMEN HABEN UND IM FLIEßBAND SIND
+				# Wenn alle avlblCommuter == false sind
 				var randErrorCounter = 0
 				while !avlblCommuters[rand]:
 					rand += 1
@@ -574,17 +573,17 @@ func getOpenBorderNeighborCount(state:State):
 func checkAvlblCommuters(state:State):
 	var arr = []
 	
-	arr.append(!(state.S[0] == 0))
-	arr.append(!(state.S[1] == 0))
-	arr.append(!(state.I[0] == 0))
-	arr.append(!(state.R[0] == 0))
-	arr.append(!(state.R[1] == 0))
-	arr.append(!(state.V1eligible[0] == 0))
-	arr.append(!(state.V1eligible[1] == 0))
-	arr.append(!(state.V1eligible[3] == 0))
-	arr.append(!(state.V2[0] == 0))
-	arr.append(!(state.V2[1] == 0))
-	arr.append(!(state.V2[3] == 0))
+	arr.append((state.S[0] > 0))
+	arr.append((state.S[1] > 0))
+	arr.append((state.I[0] > 0))
+	arr.append((state.R[0] > 0))
+	arr.append((state.R[1] > 0))
+	arr.append((state.V1eligible[0] > 0))
+	arr.append((state.V1eligible[1] > 0))
+	arr.append((state.V1eligible[3] > 0))
+	arr.append((state.V2[0] > 0))
+	arr.append((state.V2[1] > 0))
+	arr.append((state.V2[3] > 0))
 	
 	return arr
 
@@ -681,7 +680,7 @@ func simulateALL():
 	startTime = OS.get_ticks_msec()
 	
 	for state in states.values():
-#		state.simulate()
+#		state.simulate() # for easier debugging
 		state._thread.start(self, "simulateState", state.getName())
 
 	for state in states.values():

@@ -516,7 +516,7 @@ margin_right = 1120.0
 margin_bottom = 53.0
 rect_min_size = Vector2( 620, 48 )
 custom_fonts/font = ExtResource( 86 )
-text = "Somtehing went very wrong"
+text = "Countryname"
 align = 1
 valign = 1
 clip_text = true
@@ -1149,9 +1149,6 @@ margin_right = 994.4
 margin_bottom = 315.0
 rect_min_size = Vector2( 512.4, 288 )
 Chart_Style/function_colors = PoolColorArray( 0.12549, 1, 0.12549, 1, 0, 0.501961, 0, 1, 0, 0.501961, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1222,9 +1219,6 @@ Chart_Properties/column_width = 12.0
 Chart_Properties/column_gap = 1.0
 Chart_Style/points_shape = [ 2, 2 ]
 Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0.501961, 0, 0, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1266,8 +1260,6 @@ margin_left = 109.0
 margin_right = 319.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 210, 288 )
-Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="DailyLegendContainer" type="GridContainer" parent="Statistics/GridContainer/VaxStatusContainer"]
 margin_left = 323.0
@@ -1303,9 +1295,6 @@ Chart_Properties/column_width = 12.0
 Chart_Properties/column_gap = 1.0
 Chart_Style/points_shape = [ 2, 2, 2, 2 ]
 Chart_Style/function_colors = PoolColorArray( 0, 0.501961, 0, 1, 0.121569, 1, 0.121569, 1, 0.117647, 0.117647, 0.117647, 1, 0, 0, 0, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1350,8 +1339,6 @@ margin_left = 164.0
 margin_right = 344.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 180, 288 )
-Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="BedsLegendContainer" type="GridContainer" parent="Statistics/GridContainer/BedsOverview"]
 margin_left = 348.0
@@ -1395,9 +1382,6 @@ margin_top = 903.0
 margin_right = 994.0
 margin_bottom = 1191.0
 Chart_Style/function_colors = PoolColorArray( 1, 0.960784, 0, 1, 0.658824, 0.137255, 0, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1485,9 +1469,6 @@ margin_bottom = 1483.0
 rect_min_size = Vector2( 512, 288 )
 Chart_Style/points_shape = [ 0, 0, 0 ]
 Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0, 0.501961, 0, 1, 0, 1, 0, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 
@@ -1583,7 +1564,6 @@ margin_right = 396.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 396, 288 )
 Chart_Style/function_colors = PoolColorArray( 1, 0, 0, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="VaxSummaryLegend" parent="EndScreen/GridContainer/VaxSummaryContainer" instance=ExtResource( 38 )]
 margin_left = 400.0
@@ -1619,8 +1599,6 @@ anchor_bottom = 0.0
 margin_right = 396.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 396, 288 )
-Chart_Style/function_colors = PoolColorArray( 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1, 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/font_color = Color( 0.117647, 0.117647, 0.117647, 1 )
 
 [node name="DeathSummaryLegend" parent="EndScreen/GridContainer/DeathSummaryContainer" instance=ExtResource( 38 )]
 margin_left = 400.0
@@ -1657,9 +1635,6 @@ margin_right = 476.0
 margin_bottom = 288.0
 rect_min_size = Vector2( 476, 288 )
 Chart_Style/function_colors = PoolColorArray( 0, 1, 0, 1, 1, 0, 0, 1, 0, 0.501961, 1, 1, 1, 1, 1, 1 )
-Chart_Style/box_color = Color( 0.117647, 0.117647, 0.117647, 1 )
-Chart_Style/v_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
-Chart_Style/h_lines_color = Color( 0.792157, 0.792157, 0.792157, 1 )
 Chart_Style/font_color = Color( 1, 1, 1, 1 )
 Chart_Style/use_template = false
 

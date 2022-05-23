@@ -385,8 +385,7 @@ func getHospitalAllocation(day:int):
 
 func getInfectRate():
 	if self.selectedMask != 0 or self.selectedHomeOffice != 0:
-#		var lockdownAverage = int(round(CONSTANTS.average([self.selectedMask, self.selectedHomeOffice])))
-		var lockdownStrictness = (CONSTANTS.LOCKDOWNSTRICTNESS[self.selectedHomeOffice] + 2 * CONSTANTS.MASKFACTORS[self.selectedMask]) / 3.0
+		var lockdownStrictness = (CONSTANTS.LOCKDOWNSTRICTNESS[self.selectedHomeOffice] + (2 * CONSTANTS.MASKFACTORS[self.selectedMask])) / 3.0
 #		print(lockdownStrictness)
 		return baseInfect * (1-lockdownStrictness)
 	else:
